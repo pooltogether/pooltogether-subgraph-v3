@@ -1,0 +1,18 @@
+{
+  "name": "pooltogether",
+  "license": "MIT",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "auth": "graph auth https://api.thegraph.com/deploy/",
+    "create-local": "graph create --node http://127.0.0.1:8020 pooltogether/pooltogether subgraph.local.yaml",
+    "remove-local": "graph remove --node http://127.0.0.1:8020 pooltogether/pooltogether subgraph.local.yaml",
+    "deploy-local": "graph deploy --node http://127.0.0.1:8020 --ipfs http://localhost:5001 pooltogether/pooltogether-v2-rinkeby subgraph.local.yaml",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether subgraph.yaml",
+    "deploy-kovan": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-kovan subgraph.kovan.yaml"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.17.1",
+    "@graphprotocol/graph-ts": "^0.17.0"
+  }
+}

@@ -1,0 +1,67 @@
+type PrizePoolBuilder @entity {
+  id: ID!
+  trustedForwarder: Bytes!
+
+  ownableModuleManagerFactory: Bytes!
+  compoundYieldServiceFactory: Bytes!
+  periodicPrizePoolFactory: Bytes!
+  ticketFactory: Bytes!
+  loyaltyFactory: Bytes!
+  timelockFactory: Bytes!
+  sponsorshipFactory: Bytes!
+
+  governorInterface: Bytes!
+  rngInterface: Bytes!
+}
+
+type PoolModule @entity {
+  id: ID!
+  creator: Bytes!
+
+  moduleManager: Bytes!
+
+  # draws: [Draw!]! @derivedFrom(field: "poolContract")
+  # admins: [Admin!]! @derivedFrom(field: "poolContract")
+  # players: [Player!]! @derivedFrom(field: "poolContract")
+
+  # cToken? or does this just live in the yieldService?
+
+  prizeStrategy: Bytes!
+  periodicPrizePoolModule: Bytes!
+  compoundYieldServiceModule: Bytes!
+  loyaltyModule: Bytes!
+  timelockModule: Bytes!
+  ticketModule: Bytes!
+  sponsorshipModule: Bytes!
+
+  # drawsCount: BigInt
+  # openDrawId: BigInt!
+  # committedDrawId: BigInt!
+  # poolToken: PoolTokenContract
+
+  # openBalance: BigInt!
+  # committedBalance: BigInt!
+  # sponsorshipAndFeeBalance: BigInt!
+}
+
+
+# type Player @entity {
+#   id: ID!
+#   address: Bytes!
+#   poolContract: PoolContract!
+#   balance: BigInt!
+# }
+
+# type Sponsor @entity {
+#   id: ID! 
+#   address: Bytes!
+#   poolContract: PoolContract!
+#   sponsorshipAndFeeBalance: BigInt!
+# }
+
+# type Admin @entity {
+#   id: ID!
+#   address: Bytes!
+#   addedAt: BigInt!
+#   poolContract: PoolContract!
+# }
