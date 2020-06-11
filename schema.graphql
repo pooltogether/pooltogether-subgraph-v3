@@ -17,6 +17,7 @@ type PrizePoolBuilder @entity {
 type PoolModule @entity {
   id: ID!
   creator: Bytes!
+  # block: BigInt!
 
   moduleManager: Bytes!
 

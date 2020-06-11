@@ -60,13 +60,14 @@ $ cp subgraph.yaml subgraph.local.yaml
 // subgraph.local.yaml
 dataSources:
   - kind: ethereum/contract
-    name: PoolTogether
+    name: PrizePoolBuilder
     network: mainnet
     source:
       address: "<Your locally deployed address here>"
-      abi: Pool
+      abi: PrizePoolBuilder
+...
 ```
-
+  
 5. Allocate the subgraph in the local Graph node
 
 ```bash
