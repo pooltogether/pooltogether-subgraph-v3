@@ -5,10 +5,10 @@ import {
 import {
   PoolModule,
 } from '../generated/schema'
-import { loadOrCreateSingleRandomWinnerPrizePoolBuilder } from './helpers/loadOrCreateSingleRandomWinnerPrizePoolBuilder'
+// import { loadOrCreateSingleRandomWinnerPrizePoolBuilder } from './helpers/loadOrCreateSingleRandomWinnerPrizePoolBuilder'
 
 export function handleSingleRandomWinnerPrizePoolCreated(event: SingleRandomWinnerPrizePoolCreated): void {
-  loadOrCreateSingleRandomWinnerPrizePoolBuilder(event.address)
+  // loadOrCreateSingleRandomWinnerPrizePoolBuilder(event.address)
 
   log.debug('Block number: {}, block hash: {}, transaction hash: {}', [
     event.block.number.toString(), // "47596000"

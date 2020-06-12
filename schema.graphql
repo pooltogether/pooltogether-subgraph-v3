@@ -35,12 +35,12 @@ type PoolModule @entity {
   # cToken? or does this just live in the yieldService?
 
   prizeStrategy: Bytes!
-  periodicPrizePoolModule: Bytes!
-  compoundYieldServiceModule: Bytes!
-  loyaltyModule: Bytes!
-  timelockModule: Bytes!
-  ticketModule: Bytes!
-  sponsorshipModule: Bytes!
+  periodicPrizePoolModule: Bytes
+  compoundYieldServiceModule: Bytes
+  loyaltyModule: Bytes
+  timelockModule: Bytes
+  ticketModule: Bytes
+  sponsorshipModule: Bytes
 
   # drawsCount: BigInt
   # openDrawId: BigInt!

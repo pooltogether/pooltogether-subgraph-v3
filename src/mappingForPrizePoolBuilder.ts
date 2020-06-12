@@ -1,19 +1,14 @@
-import { Address, Bytes } from "@graphprotocol/graph-ts"
 import {
-  PrizePoolBuilder as PrizePoolBuilderContract,
   PrizePoolCreated,
 } from '../generated/PrizePoolBuilder/PrizePoolBuilder'
 import {
   PoolModule,
-  PrizePoolBuilder,
+  // PrizePoolBuilder,
 } from '../generated/schema'
-import { loadOrCreatePrizePoolBuilder } from './helpers/loadOrCreatePrizePoolBuilder'
-// import { createPrizePoolBuilder } from './helpers/createPrizePoolBuilder'
-// import { loadOrCreatePoolModule } from './helpers/loadOrCreatePoolModule'
+// import { loadOrCreatePrizePoolBuilder } from './helpers/loadOrCreatePrizePoolBuilder'
 
 export function handlePrizePoolCreated(event: PrizePoolCreated): void {
-  // const prizePoolBuilder = loadOrCreatePrizePoolBuilder(event.address.toHex())
-  loadOrCreatePrizePoolBuilder(event.address)
+  // loadOrCreatePrizePoolBuilder(event.address)
 
   const poolModule = new PoolModule(event.params.moduleManager.toHex())
   poolModule.moduleManager = event.params.moduleManager
