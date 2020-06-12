@@ -2,7 +2,7 @@ type PrizePoolBuilder @entity {
   id: ID!
   trustedForwarder: Bytes!
 
-  ownableModuleManagerFactory: Bytes!
+  prizePoolModuleManagerFactory: Bytes!
   compoundYieldServiceFactory: Bytes!
   periodicPrizePoolFactory: Bytes!
   ticketFactory: Bytes!
@@ -12,6 +12,13 @@ type PrizePoolBuilder @entity {
 
   governorInterface: Bytes!
   rngInterface: Bytes!
+}
+
+type SingleRandomWinnerPrizePoolBuilder @entity {
+  id: ID!
+
+  prizePoolBuilder: Bytes!
+  prizeStrategyFactory: Bytes!
 }
 
 type PoolModule @entity {

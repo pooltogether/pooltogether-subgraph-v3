@@ -65,9 +65,9 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
   }
 
   createPeriodicPrizePool(
-    cToken: Address,
+    _cToken: Address,
     _prizeStrategy: Address,
-    prizePeriodSeconds: BigInt,
+    _prizePeriodSeconds: BigInt,
     _ticketName: string,
     _ticketSymbol: string,
     _sponsorshipName: string,
@@ -77,9 +77,9 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
       "createPeriodicPrizePool",
       "createPeriodicPrizePool(address,address,uint256,string,string,string,string):(address)",
       [
-        ethereum.Value.fromAddress(cToken),
+        ethereum.Value.fromAddress(_cToken),
         ethereum.Value.fromAddress(_prizeStrategy),
-        ethereum.Value.fromUnsignedBigInt(prizePeriodSeconds),
+        ethereum.Value.fromUnsignedBigInt(_prizePeriodSeconds),
         ethereum.Value.fromString(_ticketName),
         ethereum.Value.fromString(_ticketSymbol),
         ethereum.Value.fromString(_sponsorshipName),
@@ -91,9 +91,9 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
   }
 
   try_createPeriodicPrizePool(
-    cToken: Address,
+    _cToken: Address,
     _prizeStrategy: Address,
-    prizePeriodSeconds: BigInt,
+    _prizePeriodSeconds: BigInt,
     _ticketName: string,
     _ticketSymbol: string,
     _sponsorshipName: string,
@@ -103,9 +103,9 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
       "createPeriodicPrizePool",
       "createPeriodicPrizePool(address,address,uint256,string,string,string,string):(address)",
       [
-        ethereum.Value.fromAddress(cToken),
+        ethereum.Value.fromAddress(_cToken),
         ethereum.Value.fromAddress(_prizeStrategy),
-        ethereum.Value.fromUnsignedBigInt(prizePeriodSeconds),
+        ethereum.Value.fromUnsignedBigInt(_prizePeriodSeconds),
         ethereum.Value.fromString(_ticketName),
         ethereum.Value.fromString(_ticketSymbol),
         ethereum.Value.fromString(_sponsorshipName),
@@ -153,29 +153,6 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  ownableModuleManagerFactory(): Address {
-    let result = super.call(
-      "ownableModuleManagerFactory",
-      "ownableModuleManagerFactory():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_ownableModuleManagerFactory(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "ownableModuleManagerFactory",
-      "ownableModuleManagerFactory():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   periodicPrizePoolFactory(): Address {
     let result = super.call(
       "periodicPrizePoolFactory",
@@ -190,6 +167,29 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
     let result = super.tryCall(
       "periodicPrizePoolFactory",
       "periodicPrizePoolFactory():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  prizePoolModuleManagerFactory(): Address {
+    let result = super.call(
+      "prizePoolModuleManagerFactory",
+      "prizePoolModuleManagerFactory():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_prizePoolModuleManagerFactory(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "prizePoolModuleManagerFactory",
+      "prizePoolModuleManagerFactory():(address)",
       []
     );
     if (result.reverted) {
@@ -320,7 +320,7 @@ export class CreatePeriodicPrizePoolCall__Inputs {
     this._call = call;
   }
 
-  get cToken(): Address {
+  get _cToken(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
@@ -328,7 +328,7 @@ export class CreatePeriodicPrizePoolCall__Inputs {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get prizePeriodSeconds(): BigInt {
+  get _prizePeriodSeconds(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
 
@@ -378,7 +378,7 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get _ownableModuleManagerFactory(): Address {
+  get _prizePoolModuleManagerFactory(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 

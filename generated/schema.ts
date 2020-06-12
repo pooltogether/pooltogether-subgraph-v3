@@ -51,13 +51,13 @@ export class PrizePoolBuilder extends Entity {
     this.set("trustedForwarder", Value.fromBytes(value));
   }
 
-  get ownableModuleManagerFactory(): Bytes {
-    let value = this.get("ownableModuleManagerFactory");
+  get prizePoolModuleManagerFactory(): Bytes {
+    let value = this.get("prizePoolModuleManagerFactory");
     return value.toBytes();
   }
 
-  set ownableModuleManagerFactory(value: Bytes) {
-    this.set("ownableModuleManagerFactory", Value.fromBytes(value));
+  set prizePoolModuleManagerFactory(value: Bytes) {
+    this.set("prizePoolModuleManagerFactory", Value.fromBytes(value));
   }
 
   get compoundYieldServiceFactory(): Bytes {
@@ -130,6 +130,61 @@ export class PrizePoolBuilder extends Entity {
 
   set rngInterface(value: Bytes) {
     this.set("rngInterface", Value.fromBytes(value));
+  }
+}
+
+export class SingleRandomWinnerPrizePoolBuilder extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save SingleRandomWinnerPrizePoolBuilder entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SingleRandomWinnerPrizePoolBuilder entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SingleRandomWinnerPrizePoolBuilder", id.toString(), this);
+  }
+
+  static load(id: string): SingleRandomWinnerPrizePoolBuilder | null {
+    return store.get(
+      "SingleRandomWinnerPrizePoolBuilder",
+      id
+    ) as SingleRandomWinnerPrizePoolBuilder | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get prizePoolBuilder(): Bytes {
+    let value = this.get("prizePoolBuilder");
+    return value.toBytes();
+  }
+
+  set prizePoolBuilder(value: Bytes) {
+    this.set("prizePoolBuilder", Value.fromBytes(value));
+  }
+
+  get prizeStrategyFactory(): Bytes {
+    let value = this.get("prizeStrategyFactory");
+    return value.toBytes();
+  }
+
+  set prizeStrategyFactory(value: Bytes) {
+    this.set("prizeStrategyFactory", Value.fromBytes(value));
   }
 }
 
