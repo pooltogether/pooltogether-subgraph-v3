@@ -87,15 +87,6 @@ export class PrizePoolBuilder extends Entity {
     this.set("ticketFactory", Value.fromBytes(value));
   }
 
-  get loyaltyFactory(): Bytes {
-    let value = this.get("loyaltyFactory");
-    return value.toBytes();
-  }
-
-  set loyaltyFactory(value: Bytes) {
-    this.set("loyaltyFactory", Value.fromBytes(value));
-  }
-
   get timelockFactory(): Bytes {
     let value = this.get("timelockFactory");
     return value.toBytes();
@@ -112,6 +103,24 @@ export class PrizePoolBuilder extends Entity {
 
   set sponsorshipFactory(value: Bytes) {
     this.set("sponsorshipFactory", Value.fromBytes(value));
+  }
+
+  get interestTrackerFactory(): Bytes {
+    let value = this.get("interestTrackerFactory");
+    return value.toBytes();
+  }
+
+  set interestTrackerFactory(value: Bytes) {
+    this.set("interestTrackerFactory", Value.fromBytes(value));
+  }
+
+  get creditFactory(): Bytes {
+    let value = this.get("creditFactory");
+    return value.toBytes();
+  }
+
+  set creditFactory(value: Bytes) {
+    this.set("creditFactory", Value.fromBytes(value));
   }
 
   get governorInterface(): Bytes {
@@ -169,13 +178,13 @@ export class SingleRandomWinnerPrizePoolBuilder extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get prizePoolBuilder(): Bytes {
+  get prizePoolBuilder(): string {
     let value = this.get("prizePoolBuilder");
-    return value.toBytes();
+    return value.toString();
   }
 
-  set prizePoolBuilder(value: Bytes) {
-    this.set("prizePoolBuilder", Value.fromBytes(value));
+  set prizePoolBuilder(value: string) {
+    this.set("prizePoolBuilder", Value.fromString(value));
   }
 
   get prizeStrategyFactory(): Bytes {
@@ -188,7 +197,7 @@ export class SingleRandomWinnerPrizePoolBuilder extends Entity {
   }
 }
 
-export class PoolModule extends Entity {
+export class PoolManager extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -196,17 +205,17 @@ export class PoolModule extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save PoolModule entity without an ID");
+    assert(id !== null, "Cannot save PoolManager entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save PoolModule entity with non-string ID. " +
+      "Cannot save PoolManager entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("PoolModule", id.toString(), this);
+    store.set("PoolManager", id.toString(), this);
   }
 
-  static load(id: string): PoolModule | null {
-    return store.get("PoolModule", id) as PoolModule | null;
+  static load(id: string): PoolManager | null {
+    return store.get("PoolManager", id) as PoolManager | null;
   }
 
   get id(): string {
@@ -227,15 +236,6 @@ export class PoolModule extends Entity {
     this.set("creator", Value.fromBytes(value));
   }
 
-  get moduleManager(): Bytes {
-    let value = this.get("moduleManager");
-    return value.toBytes();
-  }
-
-  set moduleManager(value: Bytes) {
-    this.set("moduleManager", Value.fromBytes(value));
-  }
-
   get prizeStrategy(): Bytes {
     let value = this.get("prizeStrategy");
     return value.toBytes();
@@ -245,105 +245,66 @@ export class PoolModule extends Entity {
     this.set("prizeStrategy", Value.fromBytes(value));
   }
 
-  get periodicPrizePoolModule(): Bytes | null {
-    let value = this.get("periodicPrizePoolModule");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
+  get yieldService(): Bytes {
+    let value = this.get("yieldService");
+    return value.toBytes();
   }
 
-  set periodicPrizePoolModule(value: Bytes | null) {
-    if (value === null) {
-      this.unset("periodicPrizePoolModule");
-    } else {
-      this.set("periodicPrizePoolModule", Value.fromBytes(value as Bytes));
-    }
+  set yieldService(value: Bytes) {
+    this.set("yieldService", Value.fromBytes(value));
   }
 
-  get compoundYieldServiceModule(): Bytes | null {
-    let value = this.get("compoundYieldServiceModule");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
+  get ticket(): Bytes {
+    let value = this.get("ticket");
+    return value.toBytes();
   }
 
-  set compoundYieldServiceModule(value: Bytes | null) {
-    if (value === null) {
-      this.unset("compoundYieldServiceModule");
-    } else {
-      this.set("compoundYieldServiceModule", Value.fromBytes(value as Bytes));
-    }
+  set ticket(value: Bytes) {
+    this.set("ticket", Value.fromBytes(value));
   }
 
-  get loyaltyModule(): Bytes | null {
-    let value = this.get("loyaltyModule");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
+  get credit(): Bytes {
+    let value = this.get("credit");
+    return value.toBytes();
   }
 
-  set loyaltyModule(value: Bytes | null) {
-    if (value === null) {
-      this.unset("loyaltyModule");
-    } else {
-      this.set("loyaltyModule", Value.fromBytes(value as Bytes));
-    }
+  set credit(value: Bytes) {
+    this.set("credit", Value.fromBytes(value));
   }
 
-  get timelockModule(): Bytes | null {
-    let value = this.get("timelockModule");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
+  get sponsorship(): Bytes {
+    let value = this.get("sponsorship");
+    return value.toBytes();
   }
 
-  set timelockModule(value: Bytes | null) {
-    if (value === null) {
-      this.unset("timelockModule");
-    } else {
-      this.set("timelockModule", Value.fromBytes(value as Bytes));
-    }
+  set sponsorship(value: Bytes) {
+    this.set("sponsorship", Value.fromBytes(value));
   }
 
-  get ticketModule(): Bytes | null {
-    let value = this.get("ticketModule");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
+  get timelock(): Bytes {
+    let value = this.get("timelock");
+    return value.toBytes();
   }
 
-  set ticketModule(value: Bytes | null) {
-    if (value === null) {
-      this.unset("ticketModule");
-    } else {
-      this.set("ticketModule", Value.fromBytes(value as Bytes));
-    }
+  set timelock(value: Bytes) {
+    this.set("timelock", Value.fromBytes(value));
   }
 
-  get sponsorshipModule(): Bytes | null {
-    let value = this.get("sponsorshipModule");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
+  get prizePool(): Bytes {
+    let value = this.get("prizePool");
+    return value.toBytes();
   }
 
-  set sponsorshipModule(value: Bytes | null) {
-    if (value === null) {
-      this.unset("sponsorshipModule");
-    } else {
-      this.set("sponsorshipModule", Value.fromBytes(value as Bytes));
-    }
+  set prizePool(value: Bytes) {
+    this.set("prizePool", Value.fromBytes(value));
+  }
+
+  get interestTracker(): Bytes {
+    let value = this.get("interestTracker");
+    return value.toBytes();
+  }
+
+  set interestTracker(value: Bytes) {
+    this.set("interestTracker", Value.fromBytes(value));
   }
 }

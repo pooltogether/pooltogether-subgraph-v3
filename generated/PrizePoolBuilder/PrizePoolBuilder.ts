@@ -119,6 +119,25 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  creditFactory(): Address {
+    let result = super.call("creditFactory", "creditFactory():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_creditFactory(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "creditFactory",
+      "creditFactory():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   governor(): Address {
     let result = super.call("governor", "governor():(address)", []);
 
@@ -134,16 +153,20 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  loyaltyFactory(): Address {
-    let result = super.call("loyaltyFactory", "loyaltyFactory():(address)", []);
+  interestTrackerFactory(): Address {
+    let result = super.call(
+      "interestTrackerFactory",
+      "interestTrackerFactory():(address)",
+      []
+    );
 
     return result[0].toAddress();
   }
 
-  try_loyaltyFactory(): ethereum.CallResult<Address> {
+  try_interestTrackerFactory(): ethereum.CallResult<Address> {
     let result = super.tryCall(
-      "loyaltyFactory",
-      "loyaltyFactory():(address)",
+      "interestTrackerFactory",
+      "interestTrackerFactory():(address)",
       []
     );
     if (result.reverted) {
@@ -406,16 +429,20 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[6].value.toAddress();
   }
 
-  get _loyaltyFactory(): Address {
+  get _creditFactory(): Address {
     return this._call.inputValues[7].value.toAddress();
   }
 
-  get _rng(): Address {
+  get _interestTrackerFactory(): Address {
     return this._call.inputValues[8].value.toAddress();
   }
 
-  get _trustedForwarder(): Address {
+  get _rng(): Address {
     return this._call.inputValues[9].value.toAddress();
+  }
+
+  get _trustedForwarder(): Address {
+    return this._call.inputValues[10].value.toAddress();
   }
 }
 

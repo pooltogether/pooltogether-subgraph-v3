@@ -20,7 +20,7 @@ export function loadOrCreateSingleRandomWinnerPrizePoolBuilder(singleRandomWinne
     ])
     loadOrCreatePrizePoolBuilder(boundSingleRandomWinnerPrizePoolBuilder.prizePoolBuilder())
 
-    singleRandomWinnerPrizePoolBuilder.prizePoolBuilder = boundSingleRandomWinnerPrizePoolBuilder.prizePoolBuilder()
+    singleRandomWinnerPrizePoolBuilder.prizePoolBuilder = boundSingleRandomWinnerPrizePoolBuilder.prizePoolBuilder().toHex()
     singleRandomWinnerPrizePoolBuilder.prizeStrategyFactory = boundSingleRandomWinnerPrizePoolBuilder.prizeStrategyFactory()
 
     singleRandomWinnerPrizePoolBuilder.save()

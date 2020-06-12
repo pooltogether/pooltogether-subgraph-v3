@@ -19,12 +19,15 @@ export function loadOrCreatePrizePoolBuilder(prizePoolBuilderAddress: Address): 
     prizePoolBuilder.compoundYieldServiceFactory = boundPrizePoolBuilder.compoundYieldServiceFactory()
     prizePoolBuilder.periodicPrizePoolFactory = boundPrizePoolBuilder.periodicPrizePoolFactory()
     prizePoolBuilder.ticketFactory = boundPrizePoolBuilder.ticketFactory()
-    prizePoolBuilder.loyaltyFactory = boundPrizePoolBuilder.loyaltyFactory()
     prizePoolBuilder.timelockFactory = boundPrizePoolBuilder.timelockFactory()
     prizePoolBuilder.sponsorshipFactory = boundPrizePoolBuilder.sponsorshipFactory()
 
+    prizePoolBuilder.interestTrackerFactory = boundPrizePoolBuilder.interestTrackerFactory()
+    prizePoolBuilder.creditFactory = boundPrizePoolBuilder.creditFactory()
+
     prizePoolBuilder.rngInterface = boundPrizePoolBuilder.rng()
     prizePoolBuilder.governorInterface = boundPrizePoolBuilder.governor()
+    
     prizePoolBuilder.save()
   }
 

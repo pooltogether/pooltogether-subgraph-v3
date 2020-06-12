@@ -1,21 +1,21 @@
+import { log } from '@graphprotocol/graph-ts'
 import {
   PrizePoolCreated,
 } from '../generated/PrizePoolBuilder/PrizePoolBuilder'
-import {
-  PoolModule,
-  // PrizePoolBuilder,
-} from '../generated/schema'
-// import { loadOrCreatePrizePoolBuilder } from './helpers/loadOrCreatePrizePoolBuilder'
+
+import { loadOrCreatePoolManager } from './helpers/loadOrCreatePoolManager'
+import { loadOrCreatePrizePoolBuilder } from './helpers/loadOrCreatePrizePoolBuilder'
 
 export function handlePrizePoolCreated(event: PrizePoolCreated): void {
-  // loadOrCreatePrizePoolBuilder(event.address)
+  log.info('creator: {}', [event.params.creator.toHex()])
+  log.info('moduleManager: {}', [event.params.moduleManager.toHex()])
+  log.info('prizeStrategy: {}', [event.params.prizeStrategy.toHex()])
+  
+  loadOrCreatePrizePoolBuilder(event.address)
 
-  const poolModule = new PoolModule(event.params.moduleManager.toHex())
-  poolModule.moduleManager = event.params.moduleManager
-  poolModule.creator = event.params.creator
-  poolModule.prizeStrategy = event.params.prizeStrategy
-
-  // poolModule.block = event.block.number
-
-  poolModule.save()
+  const poolManager = loadOrCreatePoolManager(
+    event.params.creator,
+    event.params.moduleManager,
+    event.params.prizeStrategy,
+  )
 }

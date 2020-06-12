@@ -6,9 +6,11 @@ type PrizePoolBuilder @entity {
   compoundYieldServiceFactory: Bytes!
   periodicPrizePoolFactory: Bytes!
   ticketFactory: Bytes!
-  loyaltyFactory: Bytes!
   timelockFactory: Bytes!
   sponsorshipFactory: Bytes!
+
+  interestTrackerFactory: Bytes!
+  creditFactory: Bytes!
 
   governorInterface: Bytes!
   rngInterface: Bytes!
@@ -17,30 +19,30 @@ type PrizePoolBuilder @entity {
 type SingleRandomWinnerPrizePoolBuilder @entity {
   id: ID!
 
-  prizePoolBuilder: Bytes!
+  prizePoolBuilder: PrizePoolBuilder!
+  # prizePoolBuilder: Bytes!
   prizeStrategyFactory: Bytes!
 }
 
-type PoolModule @entity {
+type PoolManager @entity {
   id: ID!
-  creator: Bytes!
+
   # block: BigInt!
 
-  moduleManager: Bytes!
+  creator: Bytes!
+  prizeStrategy: Bytes!
+
+  yieldService: Bytes!
+  ticket: Bytes!
+  credit: Bytes!
+  sponsorship: Bytes!
+  timelock: Bytes!
+  prizePool: Bytes!
+  interestTracker: Bytes!
 
   # draws: [Draw!]! @derivedFrom(field: "poolContract")
   # admins: [Admin!]! @derivedFrom(field: "poolContract")
   # players: [Player!]! @derivedFrom(field: "poolContract")
-
-  # cToken? or does this just live in the yieldService?
-
-  prizeStrategy: Bytes!
-  periodicPrizePoolModule: Bytes
-  compoundYieldServiceModule: Bytes
-  loyaltyModule: Bytes
-  timelockModule: Bytes
-  ticketModule: Bytes
-  sponsorshipModule: Bytes
 
   # drawsCount: BigInt
   # openDrawId: BigInt!
