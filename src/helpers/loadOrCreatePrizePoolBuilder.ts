@@ -25,8 +25,8 @@ export function loadOrCreatePrizePoolBuilder(prizePoolBuilderAddress: Address): 
     prizePoolBuilder.interestTrackerFactory = boundPrizePoolBuilder.interestTrackerFactory()
     prizePoolBuilder.creditFactory = boundPrizePoolBuilder.creditFactory()
 
-    prizePoolBuilder.rngInterface = boundPrizePoolBuilder.rng()
-    prizePoolBuilder.governorInterface = boundPrizePoolBuilder.governor()
+    prizePoolBuilder.rng = boundPrizePoolBuilder.rng()
+    prizePoolBuilder.governor = boundPrizePoolBuilder.governor()
     
     prizePoolBuilder.save()
   }

@@ -123,22 +123,22 @@ export class PrizePoolBuilder extends Entity {
     this.set("creditFactory", Value.fromBytes(value));
   }
 
-  get governorInterface(): Bytes {
-    let value = this.get("governorInterface");
+  get governor(): Bytes {
+    let value = this.get("governor");
     return value.toBytes();
   }
 
-  set governorInterface(value: Bytes) {
-    this.set("governorInterface", Value.fromBytes(value));
+  set governor(value: Bytes) {
+    this.set("governor", Value.fromBytes(value));
   }
 
-  get rngInterface(): Bytes {
-    let value = this.get("rngInterface");
+  get rng(): Bytes {
+    let value = this.get("rng");
     return value.toBytes();
   }
 
-  set rngInterface(value: Bytes) {
-    this.set("rngInterface", Value.fromBytes(value));
+  set rng(value: Bytes) {
+    this.set("rng", Value.fromBytes(value));
   }
 }
 
@@ -348,15 +348,6 @@ export class PeriodicPrizePool extends Entity {
     this.set("prizeStrategy", Value.fromBytes(value));
   }
 
-  get governor(): Bytes {
-    let value = this.get("governor");
-    return value.toBytes();
-  }
-
-  set governor(value: Bytes) {
-    this.set("governor", Value.fromBytes(value));
-  }
-
   get rng(): Bytes {
     let value = this.get("rng");
     return value.toBytes();
@@ -364,6 +355,15 @@ export class PeriodicPrizePool extends Entity {
 
   set rng(value: Bytes) {
     this.set("rng", Value.fromBytes(value));
+  }
+
+  get periodicPrizePool(): Bytes {
+    let value = this.get("periodicPrizePool");
+    return value.toBytes();
+  }
+
+  set periodicPrizePool(value: Bytes) {
+    this.set("periodicPrizePool", Value.fromBytes(value));
   }
 
   get prizePeriodSeconds(): BigInt {
@@ -418,15 +418,6 @@ export class PeriodicPrizePool extends Entity {
 
   set rngRequestId(value: BigInt) {
     this.set("rngRequestId", Value.fromBigInt(value));
-  }
-
-  get prizePeriodStartedAt(): BigInt {
-    let value = this.get("prizePeriodStartedAt");
-    return value.toBigInt();
-  }
-
-  set prizePeriodStartedAt(value: BigInt) {
-    this.set("prizePeriodStartedAt", Value.fromBigInt(value));
   }
 }
 

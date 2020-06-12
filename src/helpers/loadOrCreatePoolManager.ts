@@ -5,6 +5,7 @@ import {
 import {
   PoolManager,
 } from '../../generated/schema'
+import { PeriodicPrizePool } from '../../generated/templates'
 
 export function loadOrCreatePoolManager(
   creator: Address,
@@ -29,6 +30,9 @@ export function loadOrCreatePoolManager(
     poolManager.timelock = boundPoolManager.timelock()
     poolManager.prizePool = boundPoolManager.prizePool()
     poolManager.interestTracker = boundPoolManager.interestTracker()
+
+    // Store Dynamically generated contracts
+    PeriodicPrizePool.create(boundPoolManager.prizePool())
 
     poolManager.save()
   }

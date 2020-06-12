@@ -1,10 +1,9 @@
 // import { log } from '@graphprotocol/graph-ts'
 import {
-  PeriodicPrizePool,
   PrizePoolOpened,
   PrizePoolAwardStarted,
   PrizePoolAwardCompleted,
-} from '../generated/PeriodicPrizePool/PeriodicPrizePool'
+} from '../generated/templates/PeriodicPrizePool/PeriodicPrizePool'
 
 import { loadPeriodicPrizePool } from './helpers/loadPeriodicPrizePool'
 

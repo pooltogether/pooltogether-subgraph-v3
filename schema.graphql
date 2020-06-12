@@ -12,8 +12,8 @@ type PrizePoolBuilder @entity {
   interestTrackerFactory: Bytes!
   creditFactory: Bytes!
 
-  governorInterface: Bytes!
-  rngInterface: Bytes!
+  governor: Bytes!
+  rng: Bytes!
 }
 
 type SingleRandomWinnerPrizePoolBuilder @entity {
@@ -58,17 +58,17 @@ type PeriodicPrizePool @entity {
   id: ID!
 
   prizeStrategy: Bytes!
-  governor: Bytes!
   rng: Bytes!
+  periodicPrizePool: Bytes!
 
   prizePeriodSeconds: BigInt!
   prizePeriodStartedAt: BigInt!
+
   previousPrize: BigInt!
   previousPrizeAverageTickets: BigInt!
+
   feeScaleMantissa: BigInt!
   rngRequestId: BigInt!
-
-  prizePeriodStartedAt: BigInt!
 }
 
 type PrizeStrategy @entity {
