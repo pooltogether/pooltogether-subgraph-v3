@@ -1,4 +1,4 @@
-import { Address } from "@graphprotocol/graph-ts"
+import { Address, BigInt, DataSourceContext } from "@graphprotocol/graph-ts"
 import {
   PrizePoolModuleManager as PrizePoolModuleManagerContract,
 } from '../../generated/PrizePoolBuilder/PrizePoolModuleManager'
@@ -32,7 +32,11 @@ export function loadOrCreatePoolManager(
     poolManager.interestTracker = boundPoolManager.interestTracker()
 
     // Store Dynamically generated contracts
-    PeriodicPrizePool.create(boundPoolManager.prizePool())
+    // PeriodicPrizePool.create(boundPoolManager.prizePool())
+
+    let context = new DataSourceContext()
+    context.setBigInt("prizePeriodSeconds", BigInt.fromI32(1))
+    PeriodicPrizePool.createWithContext(boundPoolManager.prizePool(), context)
 
     poolManager.save()
   }
