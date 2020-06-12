@@ -1,4 +1,4 @@
-import { Address, log } from "@graphprotocol/graph-ts"
+import { Address } from "@graphprotocol/graph-ts"
 import {
   SingleRandomWinnerPrizePoolBuilder as SingleRandomWinnerPrizePoolBuilderContract,
 } from '../../generated/SingleRandomWinnerPrizePoolBuilder/SingleRandomWinnerPrizePoolBuilder'
@@ -15,9 +15,6 @@ export function loadOrCreateSingleRandomWinnerPrizePoolBuilder(singleRandomWinne
     singleRandomWinnerPrizePoolBuilder = new SingleRandomWinnerPrizePoolBuilder(singleRandomWinnerPrizePoolBuilderAddress.toHex())
     const boundSingleRandomWinnerPrizePoolBuilder = SingleRandomWinnerPrizePoolBuilderContract.bind(singleRandomWinnerPrizePoolBuilderAddress)
 
-    log.debug('Hello, {}', [
-      boundSingleRandomWinnerPrizePoolBuilder.prizePoolBuilder().toString()
-    ])
     loadOrCreatePrizePoolBuilder(boundSingleRandomWinnerPrizePoolBuilder.prizePoolBuilder())
 
     singleRandomWinnerPrizePoolBuilder.prizePoolBuilder = boundSingleRandomWinnerPrizePoolBuilder.prizePoolBuilder().toHex()
