@@ -54,6 +54,56 @@ type PoolManager @entity {
   # sponsorshipAndFeeBalance: BigInt!
 }
 
+type PeriodicPrizePool @entity {
+  id: ID!
+
+  prizeStrategy: Bytes!
+  governor: Bytes!
+  rng: Bytes!
+
+  prizePeriodSeconds: BigInt!
+  prizePeriodStartedAt: BigInt!
+  previousPrize: BigInt!
+  previousPrizeAverageTickets: BigInt!
+  feeScaleMantissa: BigInt!
+  rngRequestId: BigInt!
+
+  prizePeriodStartedAt: BigInt!
+}
+
+type PrizeStrategy @entity {
+  id: ID!
+}
+
+type YieldService @entity {
+  id: ID!
+}
+
+type Ticket @entity {
+  id: ID!
+
+}
+
+type Credit @entity {
+  id: ID!
+
+}
+
+type Sponsorship @entity {
+  id: ID!
+
+}
+
+type Timelock @entity {
+  id: ID!
+
+}
+
+type InterestTracker @entity {
+  id: ID!
+
+}
+
 
 # type Player @entity {
 #   id: ID!
