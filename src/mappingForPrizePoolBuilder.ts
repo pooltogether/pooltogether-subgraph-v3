@@ -2,13 +2,15 @@ import {
   PrizePoolCreated,
 } from '../generated/PrizePoolBuilder/PrizePoolBuilder'
 
-import { loadOrCreatePoolManager } from './helpers/loadOrCreatePoolManager'
+import { loadOrCreatePrizePoolModuleManager } from './helpers/loadOrCreatePrizePoolModuleManager'
 import { loadOrCreatePrizePoolBuilder } from './helpers/loadOrCreatePrizePoolBuilder'
 
 export function handlePrizePoolCreated(event: PrizePoolCreated): void {
   loadOrCreatePrizePoolBuilder(event.address)
 
-  const poolManager = loadOrCreatePoolManager(
+  const prizePoolModuleManager = loadOrCreatePrizePoolModuleManager(
+    event.block.number,
+    event.address,
     event.params.creator,
     event.params.moduleManager,
     event.params.prizeStrategy,

@@ -20,14 +20,13 @@ type SingleRandomWinnerPrizePoolBuilder @entity {
   id: ID!
 
   prizePoolBuilder: PrizePoolBuilder!
-  # prizePoolBuilder: Bytes!
   prizeStrategyFactory: Bytes!
 }
 
-type PoolManager @entity {
+type PrizePoolModuleManager @entity {
   id: ID!
-
-  # block: BigInt!
+  block: BigInt!
+  prizePoolBuilder: PrizePoolBuilder!
 
   creator: Bytes!
   prizeStrategy: Bytes!
@@ -57,18 +56,19 @@ type PoolManager @entity {
 type PeriodicPrizePool @entity {
   id: ID!
 
+  prizePoolModuleManager: PrizePoolModuleManager!
+
   prizeStrategy: Bytes!
   rng: Bytes!
-  periodicPrizePool: Bytes!
 
   prizePeriodSeconds: BigInt!
   prizePeriodStartedAt: BigInt!
 
-  previousPrize: BigInt!
-  previousPrizeAverageTickets: BigInt!
+  previousPrize: BigInt
+  previousPrizeAverageTickets: BigInt
 
-  feeScaleMantissa: BigInt!
-  rngRequestId: BigInt!
+  feeScaleMantissa: BigInt
+  rngRequestId: BigInt
 }
 
 type PrizeStrategy @entity {

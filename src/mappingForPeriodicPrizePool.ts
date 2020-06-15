@@ -1,16 +1,18 @@
-// import { log } from '@graphprotocol/graph-ts'
+import { log } from '@graphprotocol/graph-ts'
+import { PeriodicPrizePool } from '../generated/schema'
 import {
+  PeriodicPrizePool as PeriodicPrizePoolContract,
   PrizePoolOpened,
   PrizePoolAwardStarted,
   PrizePoolAwardCompleted,
 } from '../generated/templates/PeriodicPrizePool/PeriodicPrizePool'
 
-import { loadPeriodicPrizePool } from './helpers/loadPeriodicPrizePool'
-
 export function handlePrizePoolOpened(event: PrizePoolOpened): void {
-  const periodicPrizePool = loadPeriodicPrizePool(
-    event.address,
-  )
+  const periodicPrizePool = new PeriodicPrizePool(event.address.toHexString())
+
+  
+
+  periodicPrizePool.save()
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {

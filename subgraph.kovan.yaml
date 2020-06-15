@@ -14,7 +14,7 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - PoolManager
+        - PrizePoolModuleManager
         - PrizePoolBuilder
       abis:
         - name: PrizePoolBuilder
@@ -37,7 +37,7 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - PoolManager
+        - PrizePoolModuleManager
         - SingleRandomWinnerPrizePoolBuilder
       abis:
         - name: SingleRandomWinnerPrizePoolBuilder

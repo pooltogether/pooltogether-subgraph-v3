@@ -197,7 +197,7 @@ export class SingleRandomWinnerPrizePoolBuilder extends Entity {
   }
 }
 
-export class PoolManager extends Entity {
+export class PrizePoolModuleManager extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -205,17 +205,23 @@ export class PoolManager extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save PoolManager entity without an ID");
+    assert(
+      id !== null,
+      "Cannot save PrizePoolModuleManager entity without an ID"
+    );
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save PoolManager entity with non-string ID. " +
+      "Cannot save PrizePoolModuleManager entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("PoolManager", id.toString(), this);
+    store.set("PrizePoolModuleManager", id.toString(), this);
   }
 
-  static load(id: string): PoolManager | null {
-    return store.get("PoolManager", id) as PoolManager | null;
+  static load(id: string): PrizePoolModuleManager | null {
+    return store.get(
+      "PrizePoolModuleManager",
+      id
+    ) as PrizePoolModuleManager | null;
   }
 
   get id(): string {
@@ -225,6 +231,24 @@ export class PoolManager extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get block(): BigInt {
+    let value = this.get("block");
+    return value.toBigInt();
+  }
+
+  set block(value: BigInt) {
+    this.set("block", Value.fromBigInt(value));
+  }
+
+  get prizePoolBuilder(): string {
+    let value = this.get("prizePoolBuilder");
+    return value.toString();
+  }
+
+  set prizePoolBuilder(value: string) {
+    this.set("prizePoolBuilder", Value.fromString(value));
   }
 
   get creator(): Bytes {
@@ -339,6 +363,15 @@ export class PeriodicPrizePool extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get prizePoolModuleManager(): string {
+    let value = this.get("prizePoolModuleManager");
+    return value.toString();
+  }
+
+  set prizePoolModuleManager(value: string) {
+    this.set("prizePoolModuleManager", Value.fromString(value));
+  }
+
   get prizeStrategy(): Bytes {
     let value = this.get("prizeStrategy");
     return value.toBytes();
@@ -355,15 +388,6 @@ export class PeriodicPrizePool extends Entity {
 
   set rng(value: Bytes) {
     this.set("rng", Value.fromBytes(value));
-  }
-
-  get periodicPrizePool(): Bytes {
-    let value = this.get("periodicPrizePool");
-    return value.toBytes();
-  }
-
-  set periodicPrizePool(value: Bytes) {
-    this.set("periodicPrizePool", Value.fromBytes(value));
   }
 
   get prizePeriodSeconds(): BigInt {
@@ -384,40 +408,75 @@ export class PeriodicPrizePool extends Entity {
     this.set("prizePeriodStartedAt", Value.fromBigInt(value));
   }
 
-  get previousPrize(): BigInt {
+  get previousPrize(): BigInt | null {
     let value = this.get("previousPrize");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set previousPrize(value: BigInt) {
-    this.set("previousPrize", Value.fromBigInt(value));
+  set previousPrize(value: BigInt | null) {
+    if (value === null) {
+      this.unset("previousPrize");
+    } else {
+      this.set("previousPrize", Value.fromBigInt(value as BigInt));
+    }
   }
 
-  get previousPrizeAverageTickets(): BigInt {
+  get previousPrizeAverageTickets(): BigInt | null {
     let value = this.get("previousPrizeAverageTickets");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set previousPrizeAverageTickets(value: BigInt) {
-    this.set("previousPrizeAverageTickets", Value.fromBigInt(value));
+  set previousPrizeAverageTickets(value: BigInt | null) {
+    if (value === null) {
+      this.unset("previousPrizeAverageTickets");
+    } else {
+      this.set(
+        "previousPrizeAverageTickets",
+        Value.fromBigInt(value as BigInt)
+      );
+    }
   }
 
-  get feeScaleMantissa(): BigInt {
+  get feeScaleMantissa(): BigInt | null {
     let value = this.get("feeScaleMantissa");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set feeScaleMantissa(value: BigInt) {
-    this.set("feeScaleMantissa", Value.fromBigInt(value));
+  set feeScaleMantissa(value: BigInt | null) {
+    if (value === null) {
+      this.unset("feeScaleMantissa");
+    } else {
+      this.set("feeScaleMantissa", Value.fromBigInt(value as BigInt));
+    }
   }
 
-  get rngRequestId(): BigInt {
+  get rngRequestId(): BigInt | null {
     let value = this.get("rngRequestId");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set rngRequestId(value: BigInt) {
-    this.set("rngRequestId", Value.fromBigInt(value));
+  set rngRequestId(value: BigInt | null) {
+    if (value === null) {
+      this.unset("rngRequestId");
+    } else {
+      this.set("rngRequestId", Value.fromBigInt(value as BigInt));
+    }
   }
 }
 
