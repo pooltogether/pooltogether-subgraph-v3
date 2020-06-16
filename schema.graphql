@@ -1,3 +1,9 @@
+enum PeriodicPrizePoolState {
+  Opened
+  Started
+  Awarded
+}
+
 type PrizePoolBuilder @entity {
   id: ID!
   trustedForwarder: Bytes!
@@ -42,19 +48,13 @@ type PrizePoolModuleManager @entity {
   # draws: [Draw!]! @derivedFrom(field: "poolContract")
   # admins: [Admin!]! @derivedFrom(field: "poolContract")
   # players: [Player!]! @derivedFrom(field: "poolContract")
-
-  # drawsCount: BigInt
-  # openDrawId: BigInt!
-  # committedDrawId: BigInt!
-  # poolToken: PoolTokenContract
-
-  # openBalance: BigInt!
-  # committedBalance: BigInt!
-  # sponsorshipAndFeeBalance: BigInt!
 }
 
 type PeriodicPrizePool @entity {
   id: ID!
+
+  currentState: PeriodicPrizePoolState!
+  currentPrizeId: BigInt!
 
   prizePoolModuleManager: PrizePoolModuleManager!
 
@@ -69,48 +69,70 @@ type PeriodicPrizePool @entity {
 
   feeScaleMantissa: BigInt
   rngRequestId: BigInt
+
+  prizes: [Prize!]! @derivedFrom(field: "prizePool")
 }
 
-type PrizeStrategy @entity {
+# ID: `${prizePool.address}-${prizeId}`
+type Prize @entity {
   id: ID!
-}
+  prizePool: PeriodicPrizePool!
 
-type YieldService @entity {
-  id: ID!
-}
+  prize: BigInt
+  reserveFee: BigInt
+  rngRequestId: BigInt
+  randomNumber: Bytes
+  rewardStartedOperator: Bytes
+  rewardCompletedOperator: Bytes
 
-type Ticket @entity {
-  id: ID!
-
-}
-
-type Credit @entity {
-  id: ID!
-
-}
-
-type Sponsorship @entity {
-  id: ID!
-
-}
-
-type Timelock @entity {
-  id: ID!
-
+  winners: [Player!]
 }
 
 type InterestTracker @entity {
   id: ID!
 
+  prizePool: PeriodicPrizePool!
+  prizePoolModuleManager: PrizePoolModuleManager!
 }
 
+type Ticket @entity {
+  id: ID!
+  
+  prizePool: PeriodicPrizePool!
+  prizePoolModuleManager: PrizePoolModuleManager!
+  
+  name: Bytes!
+  symbol: Bytes!
+  decimals: BigInt!
+}
 
-# type Player @entity {
-#   id: ID!
-#   address: Bytes!
-#   poolContract: PoolContract!
-#   balance: BigInt!
-# }
+type Sponsorship @entity {
+  id: ID!
+
+  prizePool: PeriodicPrizePool!
+  prizePoolModuleManager: PrizePoolModuleManager!
+
+  name: Bytes!
+  symbol: Bytes!
+  decimals: BigInt!
+}
+
+type Timelock @entity {
+  id: ID!
+
+  prizePool: PeriodicPrizePool!
+  prizePoolModuleManager: PrizePoolModuleManager!
+}
+
+# ID: `${prizePool.address}-${playerId}`
+type Player @entity {
+  id: ID!
+
+  address: Bytes!
+  prizePool: PeriodicPrizePool!
+
+  balance: BigInt!
+}
 
 # type Sponsor @entity {
 #   id: ID! 

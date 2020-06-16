@@ -19,3 +19,17 @@ export class PeriodicPrizePool extends DataSourceTemplate {
     );
   }
 }
+
+export class InterestTracker extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("InterestTracker", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "InterestTracker",
+      [address.toHex()],
+      context
+    );
+  }
+}

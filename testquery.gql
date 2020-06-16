@@ -1,0 +1,84 @@
+query ppbs {
+  prizePoolBuilders {
+    id
+
+    trustedForwarder
+
+    prizePoolModuleManagerFactory
+    compoundYieldServiceFactory
+    periodicPrizePoolFactory
+    ticketFactory
+    timelockFactory
+    sponsorshipFactory
+
+    interestTrackerFactory
+    creditFactory
+
+    governor
+    rng
+  }
+  singleRandomWinnerPrizePoolBuilders {
+    id
+
+    prizePoolBuilder {
+      id
+    }
+    prizeStrategyFactory
+  }
+  prizePoolModuleManagers {
+    id
+
+    prizePoolBuilder {
+      id
+    }
+
+    creator
+    prizeStrategy
+
+    yieldService
+    ticket
+    credit
+    sponsorship
+    timelock
+    prizePool
+    interestTracker
+  }
+
+  periodicPrizePools {
+    id
+
+    currentPrizeId
+    currentState
+   
+    prizePoolModuleManager {
+      id
+    }
+    
+    prizeStrategy
+    rng
+
+    prizePeriodSeconds
+    prizePeriodStartedAt
+
+    previousPrize
+    previousPrizeAverageTickets
+
+    feeScaleMantissa
+    rngRequestId
+    
+    prizes {
+      id
+    }
+  }
+  
+  prizes {
+    id
+    
+    prize
+    reserveFee
+    rngRequestId
+    randomNumber
+    rewardStartedOperator
+    rewardCompletedOperator
+  }
+}

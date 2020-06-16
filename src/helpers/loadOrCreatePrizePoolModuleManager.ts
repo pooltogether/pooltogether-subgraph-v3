@@ -1,13 +1,12 @@
-import { Address, BigInt, DataSourceContext, log } from "@graphprotocol/graph-ts"
+import { Address, BigInt } from "@graphprotocol/graph-ts"
 import {
   PrizePoolModuleManager as PrizePoolModuleManagerContract,
 } from '../../generated/PrizePoolBuilder/PrizePoolModuleManager'
 import {
-  PeriodicPrizePool,
   PrizePoolModuleManager,
 } from '../../generated/schema'
-import { PeriodicPrizePool as PeriodicPrizePoolContract } from '../../generated/templates/PeriodicPrizePool/PeriodicPrizePool'
-import { PeriodicPrizePool as PeriodicPrizePoolTemplate } from '../../generated/templates'
+
+import { createPeriodicPrizePool } from '../helpers/createPeriodicPrizePool'
 
 export function loadOrCreatePrizePoolModuleManager(
   blockNumber: BigInt,
@@ -36,26 +35,10 @@ export function loadOrCreatePrizePoolModuleManager(
     prizePoolModuleManager.prizePool = boundPrizePoolModuleManager.prizePool()
     prizePoolModuleManager.interestTracker = boundPrizePoolModuleManager.interestTracker()
 
-
-
-    // Start watching dynamically generated contracts
-    PeriodicPrizePoolTemplate.create(boundPrizePoolModuleManager.prizePool())
-
-    const periodicPrizePoolAddress = boundPrizePoolModuleManager.prizePool()
-    const periodicPrizePool = new PeriodicPrizePool(periodicPrizePoolAddress.toHex())
-    const boundPeriodicPrizePool = PeriodicPrizePoolContract.bind(periodicPrizePoolAddress)
-
-    periodicPrizePool.prizePoolModuleManager = moduleManager.toHex()
-
-    periodicPrizePool.prizeStrategy = boundPeriodicPrizePool.prizeStrategy()
-    periodicPrizePool.rng = boundPeriodicPrizePool.rng()
-
-    periodicPrizePool.prizePeriodSeconds = boundPeriodicPrizePool.prizePeriodSeconds()
-    periodicPrizePool.prizePeriodStartedAt = boundPeriodicPrizePool.prizePeriodStartedAt()
-
-    periodicPrizePool.save()
-
-
+    createPeriodicPrizePool(
+      moduleManager,
+      boundPrizePoolModuleManager.prizePool()
+    )
 
     prizePoolModuleManager.save()
   }

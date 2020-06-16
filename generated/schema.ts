@@ -363,6 +363,24 @@ export class PeriodicPrizePool extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get currentState(): string {
+    let value = this.get("currentState");
+    return value.toString();
+  }
+
+  set currentState(value: string) {
+    this.set("currentState", Value.fromString(value));
+  }
+
+  get currentPrizeId(): BigInt {
+    let value = this.get("currentPrizeId");
+    return value.toBigInt();
+  }
+
+  set currentPrizeId(value: BigInt) {
+    this.set("currentPrizeId", Value.fromBigInt(value));
+  }
+
   get prizePoolModuleManager(): string {
     let value = this.get("prizePoolModuleManager");
     return value.toString();
@@ -478,9 +496,18 @@ export class PeriodicPrizePool extends Entity {
       this.set("rngRequestId", Value.fromBigInt(value as BigInt));
     }
   }
+
+  get prizes(): Array<string> {
+    let value = this.get("prizes");
+    return value.toStringArray();
+  }
+
+  set prizes(value: Array<string>) {
+    this.set("prizes", Value.fromStringArray(value));
+  }
 }
 
-export class PrizeStrategy extends Entity {
+export class Prize extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -488,17 +515,17 @@ export class PrizeStrategy extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save PrizeStrategy entity without an ID");
+    assert(id !== null, "Cannot save Prize entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save PrizeStrategy entity with non-string ID. " +
+      "Cannot save Prize entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("PrizeStrategy", id.toString(), this);
+    store.set("Prize", id.toString(), this);
   }
 
-  static load(id: string): PrizeStrategy | null {
-    return store.get("PrizeStrategy", id) as PrizeStrategy | null;
+  static load(id: string): Prize | null {
+    return store.get("Prize", id) as Prize | null;
   }
 
   get id(): string {
@@ -509,9 +536,137 @@ export class PrizeStrategy extends Entity {
   set id(value: string) {
     this.set("id", Value.fromString(value));
   }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get prize(): BigInt | null {
+    let value = this.get("prize");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set prize(value: BigInt | null) {
+    if (value === null) {
+      this.unset("prize");
+    } else {
+      this.set("prize", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get reserveFee(): BigInt | null {
+    let value = this.get("reserveFee");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set reserveFee(value: BigInt | null) {
+    if (value === null) {
+      this.unset("reserveFee");
+    } else {
+      this.set("reserveFee", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get rngRequestId(): BigInt | null {
+    let value = this.get("rngRequestId");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set rngRequestId(value: BigInt | null) {
+    if (value === null) {
+      this.unset("rngRequestId");
+    } else {
+      this.set("rngRequestId", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get randomNumber(): Bytes | null {
+    let value = this.get("randomNumber");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set randomNumber(value: Bytes | null) {
+    if (value === null) {
+      this.unset("randomNumber");
+    } else {
+      this.set("randomNumber", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get rewardStartedOperator(): Bytes | null {
+    let value = this.get("rewardStartedOperator");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set rewardStartedOperator(value: Bytes | null) {
+    if (value === null) {
+      this.unset("rewardStartedOperator");
+    } else {
+      this.set("rewardStartedOperator", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get rewardCompletedOperator(): Bytes | null {
+    let value = this.get("rewardCompletedOperator");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set rewardCompletedOperator(value: Bytes | null) {
+    if (value === null) {
+      this.unset("rewardCompletedOperator");
+    } else {
+      this.set("rewardCompletedOperator", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get winners(): Array<string> | null {
+    let value = this.get("winners");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set winners(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("winners");
+    } else {
+      this.set("winners", Value.fromStringArray(value as Array<string>));
+    }
+  }
 }
 
-export class YieldService extends Entity {
+export class InterestTracker extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -519,17 +674,17 @@ export class YieldService extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save YieldService entity without an ID");
+    assert(id !== null, "Cannot save InterestTracker entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save YieldService entity with non-string ID. " +
+      "Cannot save InterestTracker entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("YieldService", id.toString(), this);
+    store.set("InterestTracker", id.toString(), this);
   }
 
-  static load(id: string): YieldService | null {
-    return store.get("YieldService", id) as YieldService | null;
+  static load(id: string): InterestTracker | null {
+    return store.get("InterestTracker", id) as InterestTracker | null;
   }
 
   get id(): string {
@@ -539,6 +694,24 @@ export class YieldService extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get prizePoolModuleManager(): string {
+    let value = this.get("prizePoolModuleManager");
+    return value.toString();
+  }
+
+  set prizePoolModuleManager(value: string) {
+    this.set("prizePoolModuleManager", Value.fromString(value));
   }
 }
 
@@ -571,36 +744,50 @@ export class Ticket extends Entity {
   set id(value: string) {
     this.set("id", Value.fromString(value));
   }
-}
 
-export class Credit extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Credit entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Credit entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Credit", id.toString(), this);
-  }
-
-  static load(id: string): Credit | null {
-    return store.get("Credit", id) as Credit | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
+  get prizePool(): string {
+    let value = this.get("prizePool");
     return value.toString();
   }
 
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get prizePoolModuleManager(): string {
+    let value = this.get("prizePoolModuleManager");
+    return value.toString();
+  }
+
+  set prizePoolModuleManager(value: string) {
+    this.set("prizePoolModuleManager", Value.fromString(value));
+  }
+
+  get name(): Bytes {
+    let value = this.get("name");
+    return value.toBytes();
+  }
+
+  set name(value: Bytes) {
+    this.set("name", Value.fromBytes(value));
+  }
+
+  get symbol(): Bytes {
+    let value = this.get("symbol");
+    return value.toBytes();
+  }
+
+  set symbol(value: Bytes) {
+    this.set("symbol", Value.fromBytes(value));
+  }
+
+  get decimals(): BigInt {
+    let value = this.get("decimals");
+    return value.toBigInt();
+  }
+
+  set decimals(value: BigInt) {
+    this.set("decimals", Value.fromBigInt(value));
   }
 }
 
@@ -633,6 +820,51 @@ export class Sponsorship extends Entity {
   set id(value: string) {
     this.set("id", Value.fromString(value));
   }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get prizePoolModuleManager(): string {
+    let value = this.get("prizePoolModuleManager");
+    return value.toString();
+  }
+
+  set prizePoolModuleManager(value: string) {
+    this.set("prizePoolModuleManager", Value.fromString(value));
+  }
+
+  get name(): Bytes {
+    let value = this.get("name");
+    return value.toBytes();
+  }
+
+  set name(value: Bytes) {
+    this.set("name", Value.fromBytes(value));
+  }
+
+  get symbol(): Bytes {
+    let value = this.get("symbol");
+    return value.toBytes();
+  }
+
+  set symbol(value: Bytes) {
+    this.set("symbol", Value.fromBytes(value));
+  }
+
+  get decimals(): BigInt {
+    let value = this.get("decimals");
+    return value.toBigInt();
+  }
+
+  set decimals(value: BigInt) {
+    this.set("decimals", Value.fromBigInt(value));
+  }
 }
 
 export class Timelock extends Entity {
@@ -664,9 +896,27 @@ export class Timelock extends Entity {
   set id(value: string) {
     this.set("id", Value.fromString(value));
   }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get prizePoolModuleManager(): string {
+    let value = this.get("prizePoolModuleManager");
+    return value.toString();
+  }
+
+  set prizePoolModuleManager(value: string) {
+    this.set("prizePoolModuleManager", Value.fromString(value));
+  }
 }
 
-export class InterestTracker extends Entity {
+export class Player extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -674,17 +924,17 @@ export class InterestTracker extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save InterestTracker entity without an ID");
+    assert(id !== null, "Cannot save Player entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save InterestTracker entity with non-string ID. " +
+      "Cannot save Player entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("InterestTracker", id.toString(), this);
+    store.set("Player", id.toString(), this);
   }
 
-  static load(id: string): InterestTracker | null {
-    return store.get("InterestTracker", id) as InterestTracker | null;
+  static load(id: string): Player | null {
+    return store.get("Player", id) as Player | null;
   }
 
   get id(): string {
@@ -694,5 +944,32 @@ export class InterestTracker extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get balance(): BigInt {
+    let value = this.get("balance");
+    return value.toBigInt();
+  }
+
+  set balance(value: BigInt) {
+    this.set("balance", Value.fromBigInt(value));
   }
 }
