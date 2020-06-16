@@ -2,17 +2,22 @@
   "name": "pooltogether",
   "license": "MIT",
   "scripts": {
+    "prepare:mainnet": "mustache networks/mainnet.json subgraph.template.yaml subgraph.yaml",
+    "prepare:kovan": "mustache networks/kovan.json subgraph.template.yaml subgraph.kovan.yaml",
+    "prepare:ropsten": "mustache networks/ropsten.json subgraph.template.yaml subgraph.ropsten.yaml",
+    "prepare:local": "mustache networks/local.json subgraph.template.yaml subgraph.local.yaml",
+    "create:local": "graph create --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
+    "remove:local": "graph remove --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
+    "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/ptv3-subgraph subgraph.yaml",
+    "deploy:kovan": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/v3-kovan subgraph.kovan.yaml",
+    "deploy:local": "graph deploy --node http://127.0.0.1:8020 --ipfs http://localhost:5001 pooltogether/ptv3-subgraph subgraph.local.yaml",
     "codegen": "graph codegen",
     "build": "graph build",
-    "auth": "graph auth https://api.thegraph.com/deploy/",
-    "create-local": "graph create --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
-    "remove-local": "graph remove --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
-    "deploy-local": "graph deploy --node http://127.0.0.1:8020 --ipfs http://localhost:5001 pooltogether/ptv3-subgraph subgraph.local.yaml",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/ptv3-subgraph subgraph.yaml",
-    "deploy-kovan": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/v3-kovan subgraph.kovan.yaml"
+    "auth": "graph auth https://api.thegraph.com/deploy/"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.18.0",
-    "@graphprotocol/graph-ts": "^0.18.1"
+    "@graphprotocol/graph-ts": "^0.18.1",
+    "mustache": "^4.0.1"
   }
 }

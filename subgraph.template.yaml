@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PrizePoolBuilder
-    network: kovan
+    network: {{network}}
     source:
-      address: "0xB0a7b3c750cFbdBc81B9649Ba765B53517b4911c"
+      address: "{{prizePoolBuilderAddress}}"
       abi: PrizePoolBuilder
-      startBlock: 19000000
+      startBlock: 1
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -17,6 +17,8 @@ dataSources:
         - PrizePoolModuleManager
         - PrizePoolBuilder
       abis:
+        - name: PeriodicPrizePool
+          file: ./abis/PeriodicPrizePool.json
         - name: PrizePoolBuilder
           file: ./abis/PrizePoolBuilder.json
         - name: PrizePoolModuleManager
@@ -27,23 +29,25 @@ dataSources:
       file: ./src/mappingForPrizePoolBuilder.ts
   - kind: ethereum/contract
     name: SingleRandomWinnerPrizePoolBuilder
-    network: kovan
+    network: {{network}}
     source:
-      address: "0x2331c528754DC4345eB5e07bdF6b50788dd803Ef"
+      address: "{{singleRandomWinnerPrizePoolBuilderAddress}}"
       abi: SingleRandomWinnerPrizePoolBuilder
-      startBlock: 19000000
+      startBlock: 1
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - PrizePoolModuleManager
+        - PoolManager
         - SingleRandomWinnerPrizePoolBuilder
       abis:
-        - name: SingleRandomWinnerPrizePoolBuilder
-          file: ./abis/SingleRandomWinnerPrizePoolBuilder.json
+        - name: PeriodicPrizePool
+          file: ./abis/PeriodicPrizePool.json
         - name: PrizePoolModuleManager
           file: ./abis/PrizePoolModuleManager.json
+        - name: SingleRandomWinnerPrizePoolBuilder
+          file: ./abis/SingleRandomWinnerPrizePoolBuilder.json
       eventHandlers:
         - event: SingleRandomWinnerPrizePoolCreated(indexed address,indexed address,indexed address)
           handler: handleSingleRandomWinnerPrizePoolCreated
@@ -51,7 +55,7 @@ dataSources:
 templates:
   - name: PeriodicPrizePool
     kind: ethereum/contract
-    network: kovan
+    network: {{network}}
     source:
       abi: PeriodicPrizePool
     mapping:
@@ -64,16 +68,36 @@ templates:
       abis:
         - name: PeriodicPrizePool
           file: ./abis/PeriodicPrizePool.json
-        - name: PrizePoolBuilder
-          file: ./abis/PrizePoolBuilder.json
-        - name: SingleRandomWinnerPrizePoolBuilder
-          file: ./abis/SingleRandomWinnerPrizePoolBuilder.json
-        - name: PrizePoolModuleManager
-          file: ./abis/PrizePoolModuleManager.json
+        # - name: PrizePoolBuilder
+        #   file: ./abis/PrizePoolBuilder.json
+        # - name: SingleRandomWinnerPrizePoolBuilder
+        #   file: ./abis/SingleRandomWinnerPrizePoolBuilder.json
+        # - name: PrizePoolModuleManager
+        #   file: ./abis/PrizePoolModuleManager.json
       eventHandlers:
         - event: PrizePoolOpened(indexed address,indexed uint256)
           handler: handlePrizePoolOpened
         - event: PrizePoolAwardStarted(indexed address,indexed uint256)
           handler: handlePrizePoolAwardStarted
         - event: PrizePoolAwardCompleted(indexed address,uint256,uint256,bytes32)
-          handler: handlePrizeAwardCompleted
+          handler: handlePrizePoolAwardCompleted
+  - name: InterestTracker
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: InterestTracker
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForInterestTracker.ts
+      entities:
+        - InterestTracker
+      abis:
+        - name: InterestTracker
+          file: ./abis/InterestTracker.json
+      eventHandlers:
+        - event: CollateralSupplied(indexed address,indexed address,uint256,uint256)
+          handler: handleCollateralSupplied
+        - event: CollateralRedeemed(indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleCollateralRedeemed

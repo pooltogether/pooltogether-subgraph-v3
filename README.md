@@ -2,6 +2,12 @@
 
 The official PoolTogether v3 subgraph.
 
+## Quick-use:
+
+```sh
+$ yarn prepare:local && graph codegen subgraph.local.yaml && graph build subgraph.local.yaml && yarn create:local && yarn deploy:local
+```
+
 ## Local Setup
 
 First you'll need to setup a graph node, then you can deploy the project to it.
