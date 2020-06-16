@@ -1,3 +1,4 @@
+import { Address } from '@graphprotocol/graph-ts'
 import {
   InterestTracker,
   Player,
@@ -11,10 +12,13 @@ import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 
 export function handleCollateralSupplied(event: CollateralSupplied): void {
   const interestTracker = InterestTracker.load(event.address.toHex())
-  const player = loadOrCreatePlayer(interestTracker.prizePool, event.params.user.toString())
+  const player = loadOrCreatePlayer(
+    Address.fromString(interestTracker.prizePool),
+    event.params.user
+  )
 
   player.address = event.params.user
-  player.prizePool
+  player.prizePool = interestTracker.prizePool
   player.balance = player.balance.plus(event.params.collateral)
   // player.shares = player.shares.plus(event.params.shares)
 
@@ -23,7 +27,10 @@ export function handleCollateralSupplied(event: CollateralSupplied): void {
 
 export function handleCollateralRedeemed(event: CollateralRedeemed): void {
   const interestTracker = InterestTracker.load(event.address.toHex())
-  const player = loadOrCreatePlayer(interestTracker.prizePool, event.params.user.toString())
+  const player = loadOrCreatePlayer(
+    Address.fromString(interestTracker.prizePool),
+    event.params.user
+  )
 
   player.balance = player.balance.minus(event.params.collateral)
   // player.shares = player.shares.minus(event.params.shares)
