@@ -7,6 +7,7 @@ import {
 } from '../../generated/schema'
 
 import { createPeriodicPrizePool } from '../helpers/createPeriodicPrizePool'
+import { createInterestTracker } from '../helpers/createInterestTracker'
 
 export function loadOrCreatePrizePoolModuleManager(
   blockNumber: BigInt,
@@ -38,6 +39,11 @@ export function loadOrCreatePrizePoolModuleManager(
     createPeriodicPrizePool(
       moduleManager,
       boundPrizePoolModuleManager.prizePool()
+    )
+
+    createInterestTracker(
+      moduleManager,
+      boundPrizePoolModuleManager.interestTracker()
     )
 
     prizePoolModuleManager.save()

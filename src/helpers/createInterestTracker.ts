@@ -1,4 +1,4 @@
-import { Address } from "@graphprotocol/graph-ts"
+import { Address, log } from "@graphprotocol/graph-ts"
 import {
   InterestTracker,
 } from '../../generated/schema'
@@ -9,6 +9,8 @@ export function createInterestTracker(
   moduleManager: Address,
   interestTrackerAddress: Address,
 ): InterestTracker {
+  log.warning('{}', [interestTrackerAddress.toString()])
+  
   // Start listening for events from the dynamically generated contract
   InterestTrackerTemplate.create(interestTrackerAddress)
 

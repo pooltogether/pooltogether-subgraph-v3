@@ -81,4 +81,58 @@ query ppbs {
     rewardStartedOperator
     rewardCompletedOperator
   }
+  
+  players {
+    id
+    address
+    balance
+  }
+  
+  timelocks {
+    id
+    prizePool {
+      id
+    }
+    prizePoolModuleManager {
+      id
+    }
+  }
+  
+  tickets {
+    id
+    name
+    symbol
+    decimals
+    
+    prizePool {
+      id
+    }
+    prizePoolModuleManager {
+      id
+    }
+  }
+  
+  sponsorships {
+    id
+    name
+    symbol
+    decimals
+    
+    prizePool {
+      id
+    }
+    prizePoolModuleManager {
+      id
+    }
+  }
+  
+  interestTrackers {
+    id
+    prizePool {
+      id
+    }
+    prizePoolModuleManager {
+      id
+    }
+  }
 }

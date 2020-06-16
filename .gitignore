@@ -2,3 +2,6 @@ node_modules
 .history
 build
 subgraph.local.yaml
+subgraph.kovan.yaml
+subgraph.yaml
+subgraph.ropsten.yaml
