@@ -6,6 +6,58 @@ import {
   DataSourceContext
 } from "@graphprotocol/graph-ts";
 
+export class InterestTracker extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("InterestTracker", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "InterestTracker",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
+export class Sponsorship extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("Sponsorship", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "Sponsorship",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
+export class Ticket extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("Ticket", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext("Ticket", [address.toHex()], context);
+  }
+}
+
+export class Timelock extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("Timelock", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "Timelock",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
 export class PeriodicPrizePool extends DataSourceTemplate {
   static create(address: Address): void {
     DataSourceTemplate.create("PeriodicPrizePool", [address.toHex()]);
@@ -20,14 +72,14 @@ export class PeriodicPrizePool extends DataSourceTemplate {
   }
 }
 
-export class InterestTracker extends DataSourceTemplate {
+export class YieldService extends DataSourceTemplate {
   static create(address: Address): void {
-    DataSourceTemplate.create("InterestTracker", [address.toHex()]);
+    DataSourceTemplate.create("YieldService", [address.toHex()]);
   }
 
   static createWithContext(address: Address, context: DataSourceContext): void {
     DataSourceTemplate.createWithContext(
-      "InterestTracker",
+      "YieldService",
       [address.toHex()],
       context
     );

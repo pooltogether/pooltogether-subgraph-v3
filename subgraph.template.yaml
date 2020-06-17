@@ -17,6 +17,8 @@ dataSources:
         - PrizePoolModuleManager
         - PrizePoolBuilder
       abis:
+        - name: CTokenInterface
+          file: ./abis/CTokenInterface.json
         - name: PeriodicPrizePool
           file: ./abis/PeriodicPrizePool.json
         - name: PrizePoolBuilder
@@ -53,6 +55,80 @@ dataSources:
           handler: handleSingleRandomWinnerPrizePoolCreated
       file: ./src/mappingForSingleRandomWinnerPrizePoolBuilder.ts
 templates:
+  - name: InterestTracker
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: InterestTracker
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForInterestTracker.ts
+      entities:
+        - InterestTracker
+      abis:
+        - name: InterestTracker
+          file: ./abis/InterestTracker.json
+      eventHandlers:
+        - event: CollateralSupplied(indexed address,indexed address,uint256,uint256)
+          handler: handleCollateralSupplied
+        - event: CollateralRedeemed(indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleCollateralRedeemed
+  - name: Sponsorship
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: Sponsorship
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForSponsorship.ts
+      entities:
+        - Sponsorship
+      abis:
+        - name: Sponsorship
+          file: ./abis/Sponsorship.json
+        - name: ERC777UpgradeSafe
+          file: ./abis/ERC777UpgradeSafe.json
+  - name: Ticket
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: Ticket
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForTicket.ts
+      entities:
+        - Ticket
+      abis:
+        - name: Ticket
+          file: ./abis/Ticket.json
+        - name: ERC777UpgradeSafe
+          file: ./abis/ERC777UpgradeSafe.json
+  - name: Timelock
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: Timelock
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForTimelock.ts
+      entities:
+        - Timelock
+      abis:
+        - name: Timelock
+          file: ./abis/Timelock.json
+      eventHandlers:
+        - event: CollateralTimelocked(indexed address,indexed address,uint256,uint256)
+          handler: handleCollateralTimelocked
+        - event: CollateralSwept(indexed address,indexed address,uint256)
+          handler: handleCollateralSwept
   - name: PeriodicPrizePool
     kind: ethereum/contract
     network: {{network}}
@@ -81,23 +157,25 @@ templates:
           handler: handlePrizePoolAwardStarted
         - event: PrizePoolAwardCompleted(indexed address,uint256,uint256,bytes32)
           handler: handlePrizePoolAwardCompleted
-  - name: InterestTracker
+  - name: YieldService
     kind: ethereum/contract
     network: {{network}}
     source:
-      abi: InterestTracker
+      abi: CompoundYieldService
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappingForInterestTracker.ts
+      file: ./src/mappingForYieldService.ts
       entities:
-        - InterestTracker
+        - YieldService
       abis:
-        - name: InterestTracker
-          file: ./abis/InterestTracker.json
+        - name: CompoundYieldService
+          file: ./abis/CompoundYieldService.json
       eventHandlers:
-        - event: CollateralSupplied(indexed address,indexed address,uint256,uint256)
-          handler: handleCollateralSupplied
-        - event: CollateralRedeemed(indexed address,indexed address,uint256,uint256,uint256)
-          handler: handleCollateralRedeemed
+        - event: PrincipalCaptured(address,uint256)
+          handler: handlePrincipalCaptured
+        - event: PrincipalRedeemed(address,uint256)
+          handler: handlePrincipalRedeemed
+        - event: PrincipalSupplied(address,uint256)
+          handler: handlePrincipalSupplied

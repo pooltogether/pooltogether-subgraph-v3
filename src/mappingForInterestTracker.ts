@@ -1,7 +1,6 @@
 import { Address } from '@graphprotocol/graph-ts'
 import {
   InterestTracker,
-  Player,
 } from '../generated/schema'
 import {
   CollateralSupplied,

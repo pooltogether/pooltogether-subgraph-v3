@@ -19,6 +19,9 @@ export function loadOrCreatePlayer(
     _player.address = player
     _player.balance = BigInt.fromI32(0)
 
+    _player.timelockedBalance = BigInt.fromI32(0)
+    _player.unlockTimestamp = BigInt.fromI32(0)
+
     _player.save()
   }
 

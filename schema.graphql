@@ -4,6 +4,10 @@ enum PeriodicPrizePoolState {
   Awarded
 }
 
+enum YieldServiceTokenType {
+  cToken
+}
+
 type PrizePoolBuilder @entity {
   id: ID!
   trustedForwarder: Bytes!
@@ -73,21 +77,6 @@ type PeriodicPrizePool @entity {
   prizes: [Prize!]! @derivedFrom(field: "prizePool")
 }
 
-# ID: `${prizePool.address}-${prizeId}`
-type Prize @entity {
-  id: ID!
-  prizePool: PeriodicPrizePool!
-
-  prize: BigInt
-  reserveFee: BigInt
-  rngRequestId: BigInt
-  randomNumber: Bytes
-  rewardStartedOperator: Bytes
-  rewardCompletedOperator: Bytes
-
-  winners: [Player!]
-}
-
 type InterestTracker @entity {
   id: ID!
 
@@ -124,14 +113,70 @@ type Timelock @entity {
   prizePoolModuleManager: PrizePoolModuleManager!
 }
 
-# ID: `${prizePool.address}-${playerId}`
+type YieldService @entity {
+  id: ID!
+
+  token: Token!
+  yieldServiceToken: YieldServiceToken!
+
+  prizePool: PeriodicPrizePool!
+  prizePoolModuleManager: PrizePoolModuleManager!
+
+  accountedBalance: BigInt!
+  balance: BigInt!
+  unaccountedBalance: BigInt!
+
+  supplyRatePerBlock: BigInt
+}
+
+type Token @entity {
+  id: ID!
+
+  name: Bytes!
+  symbol: Bytes!
+
+  decimals: BigInt!
+}
+
+type YieldServiceToken @entity {
+  id: ID!
+
+  token: Token!
+  type: YieldServiceTokenType!
+
+  prizePool: PeriodicPrizePool!
+  prizePoolModuleManager: PrizePoolModuleManager!
+}
+
+
+# Ephemeral Types (not mapped to a specific contract)
+
+# ID: `${prizePool.address}-${msg.sender.address}`
 type Player @entity {
   id: ID!
 
   address: Bytes!
   prizePool: PeriodicPrizePool!
-
+  
   balance: BigInt!
+
+  timelockedBalance: BigInt!
+  unlockTimestamp: BigInt!
+}
+
+# ID: `${prizePool.address}-${prizeId}`
+type Prize @entity {
+  id: ID!
+  prizePool: PeriodicPrizePool!
+
+  prize: BigInt
+  reserveFee: BigInt
+  rngRequestId: BigInt
+  randomNumber: Bytes
+  rewardStartedOperator: Bytes
+  rewardCompletedOperator: Bytes
+
+  winners: [Player!]
 }
 
 # type Sponsor @entity {
@@ -139,11 +184,4 @@ type Player @entity {
 #   address: Bytes!
 #   poolContract: PoolContract!
 #   sponsorshipAndFeeBalance: BigInt!
-# }
-
-# type Admin @entity {
-#   id: ID!
-#   address: Bytes!
-#   addedAt: BigInt!
-#   poolContract: PoolContract!
 # }

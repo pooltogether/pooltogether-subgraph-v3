@@ -6,8 +6,12 @@ import {
   PrizePoolModuleManager,
 } from '../../generated/schema'
 
-import { createPeriodicPrizePool } from '../helpers/createPeriodicPrizePool'
 import { createInterestTracker } from '../helpers/createInterestTracker'
+import { createPeriodicPrizePool } from '../helpers/createPeriodicPrizePool'
+import { createSponsorship } from '../helpers/createSponsorship'
+import { createTicket } from '../helpers/createTicket'
+import { createTimelock } from '../helpers/createTimelock'
+import { createYieldService } from '../helpers/createYieldService'
 
 export function loadOrCreatePrizePoolModuleManager(
   blockNumber: BigInt,
@@ -36,14 +40,34 @@ export function loadOrCreatePrizePoolModuleManager(
     prizePoolModuleManager.prizePool = boundPrizePoolModuleManager.prizePool()
     prizePoolModuleManager.interestTracker = boundPrizePoolModuleManager.interestTracker()
 
+    createInterestTracker(
+      moduleManager,
+      boundPrizePoolModuleManager.interestTracker()
+    )
+
     createPeriodicPrizePool(
       moduleManager,
       boundPrizePoolModuleManager.prizePool()
     )
 
-    createInterestTracker(
+    createSponsorship(
       moduleManager,
-      boundPrizePoolModuleManager.interestTracker()
+      boundPrizePoolModuleManager.sponsorship()
+    )
+
+    createTicket(
+      moduleManager,
+      boundPrizePoolModuleManager.ticket()
+    )
+
+    createTimelock(
+      moduleManager,
+      boundPrizePoolModuleManager.timelock()
+    )
+
+    createYieldService(
+      moduleManager,
+      boundPrizePoolModuleManager.yieldService()
     )
 
     prizePoolModuleManager.save()
