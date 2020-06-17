@@ -25,6 +25,10 @@ dataSources:
           file: ./abis/PrizePoolBuilder.json
         - name: PrizePoolModuleManager
           file: ./abis/PrizePoolModuleManager.json
+        - name: Sponsorship
+          file: ./abis/Sponsorship.json
+        - name: Ticket
+          file: ./abis/Ticket.json
       eventHandlers:
         - event: PrizePoolCreated(indexed address,indexed address,indexed address)
           handler: handlePrizePoolCreated

@@ -604,22 +604,22 @@ export class Ticket extends Entity {
     this.set("prizePoolModuleManager", Value.fromString(value));
   }
 
-  get name(): Bytes {
+  get name(): string {
     let value = this.get("name");
-    return value.toBytes();
+    return value.toString();
   }
 
-  set name(value: Bytes) {
-    this.set("name", Value.fromBytes(value));
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
   }
 
-  get symbol(): Bytes {
+  get symbol(): string {
     let value = this.get("symbol");
-    return value.toBytes();
+    return value.toString();
   }
 
-  set symbol(value: Bytes) {
-    this.set("symbol", Value.fromBytes(value));
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
   }
 
   get decimals(): BigInt {
@@ -680,22 +680,22 @@ export class Sponsorship extends Entity {
     this.set("prizePoolModuleManager", Value.fromString(value));
   }
 
-  get name(): Bytes {
+  get name(): string {
     let value = this.get("name");
-    return value.toBytes();
+    return value.toString();
   }
 
-  set name(value: Bytes) {
-    this.set("name", Value.fromBytes(value));
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
   }
 
-  get symbol(): Bytes {
+  get symbol(): string {
     let value = this.get("symbol");
-    return value.toBytes();
+    return value.toString();
   }
 
-  set symbol(value: Bytes) {
-    this.set("symbol", Value.fromBytes(value));
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
   }
 
   get decimals(): BigInt {
@@ -898,22 +898,22 @@ export class Token extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get name(): Bytes {
+  get name(): string {
     let value = this.get("name");
-    return value.toBytes();
+    return value.toString();
   }
 
-  set name(value: Bytes) {
-    this.set("name", Value.fromBytes(value));
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
   }
 
-  get symbol(): Bytes {
+  get symbol(): string {
     let value = this.get("symbol");
-    return value.toBytes();
+    return value.toString();
   }
 
-  set symbol(value: Bytes) {
-    this.set("symbol", Value.fromBytes(value));
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
   }
 
   get decimals(): BigInt {

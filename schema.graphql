@@ -90,8 +90,8 @@ type Ticket @entity {
   prizePool: PeriodicPrizePool!
   prizePoolModuleManager: PrizePoolModuleManager!
   
-  name: Bytes!
-  symbol: Bytes!
+  name: String!
+  symbol: String!
   decimals: BigInt!
 }
 
@@ -101,8 +101,8 @@ type Sponsorship @entity {
   prizePool: PeriodicPrizePool!
   prizePoolModuleManager: PrizePoolModuleManager!
 
-  name: Bytes!
-  symbol: Bytes!
+  name: String!
+  symbol: String!
   decimals: BigInt!
 }
 
@@ -132,8 +132,8 @@ type YieldService @entity {
 type Token @entity {
   id: ID!
 
-  name: Bytes!
-  symbol: Bytes!
+  name: String!
+  symbol: String!
 
   decimals: BigInt!
 }
