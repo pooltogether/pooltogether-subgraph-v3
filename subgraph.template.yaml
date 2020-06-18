@@ -86,7 +86,7 @@ templates:
           file: ./abis/Ticket.json
         - name: ERC777UpgradeSafe
           file: ./abis/ERC777UpgradeSafe.json
-  - name: CompoundPeriodicPrizePool
+  - name: PrizePool
     kind: ethereum/contract
     network: {{network}}
     source:
@@ -101,10 +101,6 @@ templates:
       abis:
         - name: CompoundPeriodicPrizePool
           file: ./abis/CompoundPeriodicPrizePool.json
-        # - name: PrizePoolBuilder
-        #   file: ./abis/PrizePoolBuilder.json
-        # - name: SingleRandomWinnerPrizePoolBuilder
-        #   file: ./abis/SingleRandomWinnerPrizePoolBuilder.json
       eventHandlers:
         - event: PrizePoolOpened(indexed address,indexed uint256)
           handler: handlePrizePoolOpened

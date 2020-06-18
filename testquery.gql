@@ -87,10 +87,10 @@ query ppbs {
     }
   }
   
-  yieldServices {
-    id
+  # yieldServices {
+    # id
 
-    prizePool
+    # prizePool
 
     # token
     # yieldServiceToken
@@ -100,5 +100,5 @@ query ppbs {
     # unaccountedBalance
 
     # supplyRatePerBlock
-  }
+  # }
 }

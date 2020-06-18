@@ -12,13 +12,9 @@ type PrizePoolBuilder @entity {
   id: ID!
   trustedForwarder: Bytes!
 
+  controlledTokenFactory: Bytes!
   compoundPeriodicPrizePoolFactory: Bytes!
   ticketFactory: Bytes!
-  timelockFactory: Bytes!
-  sponsorshipFactory: Bytes!
-
-  interestTrackerFactory: Bytes!
-  creditFactory: Bytes!
 
   governor: Bytes!
   rng: Bytes!
@@ -34,11 +30,17 @@ type SingleRandomWinnerPrizePoolBuilder @entity {
 type PrizePool @entity {
   id: ID!
 
-  currentState: PrizePoolState!
-  currentPrizeId: BigInt!
+  creator: Bytes!
 
+  prizePoolBuilder: PrizePoolBuilder!
+  ticket: Bytes!
+  sponsorship: Bytes!
   prizeStrategy: Bytes!
   rng: Bytes!
+
+
+  currentState: PrizePoolState!
+  currentPrizeId: BigInt!
 
   prizePeriodSeconds: BigInt!
   prizePeriodStartedAt: BigInt!

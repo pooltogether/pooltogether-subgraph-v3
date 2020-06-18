@@ -15,8 +15,7 @@ export function loadOrCreatePrizePoolBuilder(prizePoolBuilderAddress: Address): 
 
     prizePoolBuilder.trustedForwarder = boundPrizePoolBuilder.trustedForwarder()
 
-    prizePoolBuilder.compoundYieldServiceFactory = boundPrizePoolBuilder.compoundYieldServiceFactory()
-    prizePoolBuilder.compoundPeriodicPrizePoolFactory = boundPrizePoolBuilder.compoundPeriodicPrizePoolFactory()
+    prizePoolBuilder.compoundPeriodicPrizePoolFactory = boundPrizePoolBuilder.periodicPrizePoolFactory()
     prizePoolBuilder.controlledTokenFactory = boundPrizePoolBuilder.controlledTokenFactory()
     prizePoolBuilder.ticketFactory = boundPrizePoolBuilder.ticketFactory()
 

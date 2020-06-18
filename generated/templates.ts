@@ -30,14 +30,14 @@ export class Ticket extends DataSourceTemplate {
   }
 }
 
-export class CompoundPeriodicPrizePool extends DataSourceTemplate {
+export class PrizePool extends DataSourceTemplate {
   static create(address: Address): void {
-    DataSourceTemplate.create("CompoundPeriodicPrizePool", [address.toHex()]);
+    DataSourceTemplate.create("PrizePool", [address.toHex()]);
   }
 
   static createWithContext(address: Address, context: DataSourceContext): void {
     DataSourceTemplate.createWithContext(
-      "CompoundPeriodicPrizePool",
+      "PrizePool",
       [address.toHex()],
       context
     );

@@ -1,12 +1,16 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts"
-// import {
-//   PrizePool as PrizePoolContract,
-// } from '../../generated/PrizePoolBuilder/PrizePool'
 import {
   PrizePool,
+  Prize,
 } from '../../generated/schema'
+import {
+  CompoundPeriodicPrizePool as CompoundPeriodicPrizePoolContract,
+} from '../../generated/PrizePoolBuilder/CompoundPeriodicPrizePool'
+import {
+  PrizePool as PrizePoolTemplate
+} from '../../generated/templates'
 
-import { createPeriodicPrizePool } from '../helpers/createPeriodicPrizePool'
+import { prizeId } from './idTemplates'
 import { createSponsorship } from '../helpers/createSponsorship'
 import { createTicket } from '../helpers/createTicket'
 
@@ -17,20 +21,39 @@ export function loadOrCreatePrizePool(
   prizePool: Address,
   prizeStrategy: Address,
 ): PrizePool {
-  let prizePool = PrizePool.load(prizePool.toHex())
+  let _prizePool = PrizePool.load(prizePool.toHex())
 
-  if (!prizePool) {
-    prizePool = new PrizePool(prizePool.toHex())
+  if (!_prizePool) {
+    _prizePool = new PrizePool(prizePool.toHex())
     const boundPrizePool = CompoundPeriodicPrizePoolContract.bind(prizePool)
 
-    prizePool.prizePoolBuilder = builder.toHex()
-    prizePool.creator = creator
-    prizePool.prizeStrategy = prizeStrategy
+    const boundPeriodicPrizePool = CompoundPeriodicPrizePoolContract.bind(prizePool)
 
-    createPeriodicPrizePool(
-      prizePool,
-      boundPrizePool.prizePool()
-    )
+    _prizePool.prizePoolBuilder = builder.toHex()
+    _prizePool.creator = creator
+    _prizePool.prizeStrategy = prizeStrategy
+    _prizePool.currentState = 'Opened'
+
+    _prizePool.currentPrizeId = BigInt.fromI32(1)
+
+    // _prizePool.prizePoolModuleManager = moduleManager.toHex()
+
+    _prizePool.prizeStrategy = boundPeriodicPrizePool.prizeStrategy()
+    _prizePool.sponsorship = boundPeriodicPrizePool.sponsorship()
+    _prizePool.ticket = boundPeriodicPrizePool.ticket()
+    _prizePool.rng = boundPeriodicPrizePool.rng()
+
+    _prizePool.prizePeriodSeconds = boundPeriodicPrizePool.prizePeriodSeconds()
+    _prizePool.prizePeriodStartedAt = boundPeriodicPrizePool.prizePeriodStartedAt()
+
+
+    const prize = new Prize(prizeId(
+      prizePool.toHexString(),
+      _prizePool.currentPrizeId.toString()
+    ))
+    prize.prizePool = prizePool.toHex()
+    prize.save()
+
 
     createSponsorship(
       prizePool,
@@ -42,8 +65,25 @@ export function loadOrCreatePrizePool(
       boundPrizePool.ticket()
     )
 
-    prizePool.save()
+    // const boundYieldService = CompoundYieldServiceContract.bind(yieldServiceAddress)
+    // prizePool.cToken = boundYieldService.token().toHex()
+
+    // prizePool.accountedBalance = boundYieldService.accountedBalance()
+    // prizePool.balance = boundYieldService.balance()
+    // prizePool.unaccountedBalance = boundYieldService.unaccountedBalance()
+
+    // const boundCToken = CTokenInterface.bind(boundYieldService.token())
+    // prizePool.token = boundCToken.underlying().toHex()
+
+    // prizePool.supplyRatePerBlock = boundCToken.supplyRatePerBlock()
+    // prizePool.type = 'Compound' // down the road set this via createWithContext (instead of create())
+    // prizePool.unaccountedBalance = boundYieldService.unaccountedBalance()
+
+    _prizePool.save()
+
+    // Start listening for events from the dynamically generated contract
+    PrizePoolTemplate.create(prizePool)
   }
 
-  return prizePool as PrizePool
+  return _prizePool as PrizePool
 }

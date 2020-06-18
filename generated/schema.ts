@@ -51,6 +51,15 @@ export class PrizePoolBuilder extends Entity {
     this.set("trustedForwarder", Value.fromBytes(value));
   }
 
+  get controlledTokenFactory(): Bytes {
+    let value = this.get("controlledTokenFactory");
+    return value.toBytes();
+  }
+
+  set controlledTokenFactory(value: Bytes) {
+    this.set("controlledTokenFactory", Value.fromBytes(value));
+  }
+
   get compoundPeriodicPrizePoolFactory(): Bytes {
     let value = this.get("compoundPeriodicPrizePoolFactory");
     return value.toBytes();
@@ -67,42 +76,6 @@ export class PrizePoolBuilder extends Entity {
 
   set ticketFactory(value: Bytes) {
     this.set("ticketFactory", Value.fromBytes(value));
-  }
-
-  get timelockFactory(): Bytes {
-    let value = this.get("timelockFactory");
-    return value.toBytes();
-  }
-
-  set timelockFactory(value: Bytes) {
-    this.set("timelockFactory", Value.fromBytes(value));
-  }
-
-  get sponsorshipFactory(): Bytes {
-    let value = this.get("sponsorshipFactory");
-    return value.toBytes();
-  }
-
-  set sponsorshipFactory(value: Bytes) {
-    this.set("sponsorshipFactory", Value.fromBytes(value));
-  }
-
-  get interestTrackerFactory(): Bytes {
-    let value = this.get("interestTrackerFactory");
-    return value.toBytes();
-  }
-
-  set interestTrackerFactory(value: Bytes) {
-    this.set("interestTrackerFactory", Value.fromBytes(value));
-  }
-
-  get creditFactory(): Bytes {
-    let value = this.get("creditFactory");
-    return value.toBytes();
-  }
-
-  set creditFactory(value: Bytes) {
-    this.set("creditFactory", Value.fromBytes(value));
   }
 
   get governor(): Bytes {
@@ -209,22 +182,40 @@ export class PrizePool extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get currentState(): string {
-    let value = this.get("currentState");
+  get creator(): Bytes {
+    let value = this.get("creator");
+    return value.toBytes();
+  }
+
+  set creator(value: Bytes) {
+    this.set("creator", Value.fromBytes(value));
+  }
+
+  get prizePoolBuilder(): string {
+    let value = this.get("prizePoolBuilder");
     return value.toString();
   }
 
-  set currentState(value: string) {
-    this.set("currentState", Value.fromString(value));
+  set prizePoolBuilder(value: string) {
+    this.set("prizePoolBuilder", Value.fromString(value));
   }
 
-  get currentPrizeId(): BigInt {
-    let value = this.get("currentPrizeId");
-    return value.toBigInt();
+  get ticket(): Bytes {
+    let value = this.get("ticket");
+    return value.toBytes();
   }
 
-  set currentPrizeId(value: BigInt) {
-    this.set("currentPrizeId", Value.fromBigInt(value));
+  set ticket(value: Bytes) {
+    this.set("ticket", Value.fromBytes(value));
+  }
+
+  get sponsorship(): Bytes {
+    let value = this.get("sponsorship");
+    return value.toBytes();
+  }
+
+  set sponsorship(value: Bytes) {
+    this.set("sponsorship", Value.fromBytes(value));
   }
 
   get prizeStrategy(): Bytes {
@@ -243,6 +234,24 @@ export class PrizePool extends Entity {
 
   set rng(value: Bytes) {
     this.set("rng", Value.fromBytes(value));
+  }
+
+  get currentState(): string {
+    let value = this.get("currentState");
+    return value.toString();
+  }
+
+  set currentState(value: string) {
+    this.set("currentState", Value.fromString(value));
+  }
+
+  get currentPrizeId(): BigInt {
+    let value = this.get("currentPrizeId");
+    return value.toBigInt();
+  }
+
+  set currentPrizeId(value: BigInt) {
+    this.set("currentPrizeId", Value.fromBigInt(value));
   }
 
   get prizePeriodSeconds(): BigInt {

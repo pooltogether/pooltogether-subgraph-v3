@@ -2,24 +2,20 @@ import { Address, BigInt } from "@graphprotocol/graph-ts"
 import {
   Sponsorship,
 } from '../../generated/schema'
-import { PrizePoolModuleManager } from '../../generated/PrizePoolBuilder/PrizePoolModuleManager'
 import { Sponsorship as SponsorshipTemplate } from '../../generated/templates'
-import { Sponsorship as SponsorshipContract } from '../../generated/templates/Sponsorship/Sponsorship'
+import { ControlledToken as ControlledTokenContract } from '../../generated/templates/Sponsorship/ControlledToken'
 
 export function createSponsorship(
-  moduleManager: Address,
+  prizePool: Address,
   sponsorshipAddress: Address,
 ): Sponsorship {
   // Start listening for events from the dynamically generated contract
   SponsorshipTemplate.create(sponsorshipAddress)
 
   const sponsorship = new Sponsorship(sponsorshipAddress.toHex())
-  const boundPrizePoolModuleManager = PrizePoolModuleManager.bind(moduleManager)
+  sponsorship.prizePool = prizePool.toHex()
 
-  sponsorship.prizePool = boundPrizePoolModuleManager.prizePool().toHex()
-  sponsorship.prizePoolModuleManager = moduleManager.toHex()
-
-  const boundSponsorship = SponsorshipContract.bind(sponsorshipAddress)
+  const boundSponsorship = ControlledTokenContract.bind(sponsorshipAddress)
   sponsorship.name = boundSponsorship.name()
   sponsorship.symbol = boundSponsorship.symbol()
   sponsorship.decimals = BigInt.fromI32(boundSponsorship.decimals())

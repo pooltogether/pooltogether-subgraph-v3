@@ -12,7 +12,7 @@ export function handlePrizePoolCreated(event: PrizePoolCreated): void {
     event.block.number,
     event.address,
     event.params.creator,
-    event.params.moduleManager,
+    event.params.prizePool,
     event.params.prizeStrategy,
   )
 }
