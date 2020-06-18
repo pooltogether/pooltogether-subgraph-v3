@@ -186,82 +186,6 @@ export class Sent__Params {
   }
 }
 
-export class TicketsRedeemedInstantly extends ethereum.Event {
-  get params(): TicketsRedeemedInstantly__Params {
-    return new TicketsRedeemedInstantly__Params(this);
-  }
-}
-
-export class TicketsRedeemedInstantly__Params {
-  _event: TicketsRedeemedInstantly;
-
-  constructor(event: TicketsRedeemedInstantly) {
-    this._event = event;
-  }
-
-  get operator(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get from(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tickets(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get exitFee(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get data(): Bytes {
-    return this._event.parameters[4].value.toBytes();
-  }
-
-  get operatorData(): Bytes {
-    return this._event.parameters[5].value.toBytes();
-  }
-}
-
-export class TicketsRedeemedWithTimelock extends ethereum.Event {
-  get params(): TicketsRedeemedWithTimelock__Params {
-    return new TicketsRedeemedWithTimelock__Params(this);
-  }
-}
-
-export class TicketsRedeemedWithTimelock__Params {
-  _event: TicketsRedeemedWithTimelock;
-
-  constructor(event: TicketsRedeemedWithTimelock) {
-    this._event = event;
-  }
-
-  get operator(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get from(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tickets(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get unlockTimestamp(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get data(): Bytes {
-    return this._event.parameters[4].value.toBytes();
-  }
-
-  get operatorData(): Bytes {
-    return this._event.parameters[5].value.toBytes();
-  }
-}
-
 export class Transfer extends ethereum.Event {
   get params(): Transfer__Params {
     return new Transfer__Params(this);
@@ -359,38 +283,6 @@ export class Ticket extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  canImplementInterfaceForAddress(interfaceHash: Bytes, addr: Address): Bytes {
-    let result = super.call(
-      "canImplementInterfaceForAddress",
-      "canImplementInterfaceForAddress(bytes32,address):(bytes32)",
-      [
-        ethereum.Value.fromFixedBytes(interfaceHash),
-        ethereum.Value.fromAddress(addr)
-      ]
-    );
-
-    return result[0].toBytes();
-  }
-
-  try_canImplementInterfaceForAddress(
-    interfaceHash: Bytes,
-    addr: Address
-  ): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "canImplementInterfaceForAddress",
-      "canImplementInterfaceForAddress(bytes32,address):(bytes32)",
-      [
-        ethereum.Value.fromFixedBytes(interfaceHash),
-        ethereum.Value.fromAddress(addr)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
   decimals(): i32 {
     let result = super.call("decimals", "decimals():(uint8)", []);
 
@@ -486,21 +378,6 @@ export class Ticket extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  hashName(): Bytes {
-    let result = super.call("hashName", "hashName():(bytes32)", []);
-
-    return result[0].toBytes();
-  }
-
-  try_hashName(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall("hashName", "hashName():(bytes32)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
   isOperatorFor(operator: Address, tokenHolder: Address): boolean {
     let result = super.call(
       "isOperatorFor",
@@ -533,21 +410,6 @@ export class Ticket extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  manager(): Address {
-    let result = super.call("manager", "manager():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_manager(): ethereum.CallResult<Address> {
-    let result = super.tryCall("manager", "manager():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   name(): string {
     let result = super.call("name", "name():(string)", []);
 
@@ -561,156 +423,6 @@ export class Ticket extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
-  }
-
-  operatorRedeemTicketsInstantly(
-    from: Address,
-    tickets: BigInt,
-    data: Bytes,
-    operatorData: Bytes
-  ): BigInt {
-    let result = super.call(
-      "operatorRedeemTicketsInstantly",
-      "operatorRedeemTicketsInstantly(address,uint256,bytes,bytes):(uint256)",
-      [
-        ethereum.Value.fromAddress(from),
-        ethereum.Value.fromUnsignedBigInt(tickets),
-        ethereum.Value.fromBytes(data),
-        ethereum.Value.fromBytes(operatorData)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_operatorRedeemTicketsInstantly(
-    from: Address,
-    tickets: BigInt,
-    data: Bytes,
-    operatorData: Bytes
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "operatorRedeemTicketsInstantly",
-      "operatorRedeemTicketsInstantly(address,uint256,bytes,bytes):(uint256)",
-      [
-        ethereum.Value.fromAddress(from),
-        ethereum.Value.fromUnsignedBigInt(tickets),
-        ethereum.Value.fromBytes(data),
-        ethereum.Value.fromBytes(operatorData)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  operatorRedeemTicketsWithTimelock(
-    from: Address,
-    tickets: BigInt,
-    data: Bytes,
-    operatorData: Bytes
-  ): BigInt {
-    let result = super.call(
-      "operatorRedeemTicketsWithTimelock",
-      "operatorRedeemTicketsWithTimelock(address,uint256,bytes,bytes):(uint256)",
-      [
-        ethereum.Value.fromAddress(from),
-        ethereum.Value.fromUnsignedBigInt(tickets),
-        ethereum.Value.fromBytes(data),
-        ethereum.Value.fromBytes(operatorData)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_operatorRedeemTicketsWithTimelock(
-    from: Address,
-    tickets: BigInt,
-    data: Bytes,
-    operatorData: Bytes
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "operatorRedeemTicketsWithTimelock",
-      "operatorRedeemTicketsWithTimelock(address,uint256,bytes,bytes):(uint256)",
-      [
-        ethereum.Value.fromAddress(from),
-        ethereum.Value.fromUnsignedBigInt(tickets),
-        ethereum.Value.fromBytes(data),
-        ethereum.Value.fromBytes(operatorData)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  redeemTicketsInstantly(tickets: BigInt, data: Bytes): BigInt {
-    let result = super.call(
-      "redeemTicketsInstantly",
-      "redeemTicketsInstantly(uint256,bytes):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(tickets),
-        ethereum.Value.fromBytes(data)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_redeemTicketsInstantly(
-    tickets: BigInt,
-    data: Bytes
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "redeemTicketsInstantly",
-      "redeemTicketsInstantly(uint256,bytes):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(tickets),
-        ethereum.Value.fromBytes(data)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  redeemTicketsWithTimelock(tickets: BigInt, data: Bytes): BigInt {
-    let result = super.call(
-      "redeemTicketsWithTimelock",
-      "redeemTicketsWithTimelock(uint256,bytes):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(tickets),
-        ethereum.Value.fromBytes(data)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_redeemTicketsWithTimelock(
-    tickets: BigInt,
-    data: Bytes
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "redeemTicketsWithTimelock",
-      "redeemTicketsWithTimelock(uint256,bytes):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(tickets),
-        ethereum.Value.fromBytes(data)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   symbol(): string {
@@ -888,12 +600,20 @@ export class BurnCall__Inputs {
     this._call = call;
   }
 
-  get amount(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
+  get _user(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _amount(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
   }
 
   get data(): Bytes {
-    return this._call.inputValues[1].value.toBytes();
+    return this._call.inputValues[2].value.toBytes();
+  }
+
+  get operatorData(): Bytes {
+    return this._call.inputValues[3].value.toBytes();
   }
 }
 
@@ -905,36 +625,36 @@ export class BurnCall__Outputs {
   }
 }
 
-export class ConstructCall extends ethereum.Call {
-  get inputs(): ConstructCall__Inputs {
-    return new ConstructCall__Inputs(this);
+export class Burn1Call extends ethereum.Call {
+  get inputs(): Burn1Call__Inputs {
+    return new Burn1Call__Inputs(this);
   }
 
-  get outputs(): ConstructCall__Outputs {
-    return new ConstructCall__Outputs(this);
+  get outputs(): Burn1Call__Outputs {
+    return new Burn1Call__Outputs(this);
   }
 }
 
-export class ConstructCall__Inputs {
-  _call: ConstructCall;
+export class Burn1Call__Inputs {
+  _call: Burn1Call;
 
-  constructor(call: ConstructCall) {
+  constructor(call: Burn1Call) {
     this._call = call;
   }
 
-  get _manager(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get amount(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
   }
 
-  get _trustedForwarder(): Address {
-    return this._call.inputValues[1].value.toAddress();
+  get data(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
   }
 }
 
-export class ConstructCall__Outputs {
-  _call: ConstructCall;
+export class Burn1Call__Outputs {
+  _call: Burn1Call;
 
-  constructor(call: ConstructCall) {
+  constructor(call: Burn1Call) {
     this._call = call;
   }
 }
@@ -956,20 +676,24 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get _manager(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get _name(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+
+  get _symbol(): string {
+    return this._call.inputValues[1].value.toString();
+  }
+
+  get defaultOperators(): Array<Address> {
+    return this._call.inputValues[2].value.toAddressArray();
   }
 
   get _trustedForwarder(): Address {
-    return this._call.inputValues[1].value.toAddress();
+    return this._call.inputValues[3].value.toAddress();
   }
 
-  get name(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-
-  get symbol(): string {
-    return this._call.inputValues[3].value.toString();
+  get _controller(): Address {
+    return this._call.inputValues[4].value.toAddress();
   }
 }
 
@@ -981,116 +705,44 @@ export class InitializeCall__Outputs {
   }
 }
 
-export class Initialize1Call extends ethereum.Call {
-  get inputs(): Initialize1Call__Inputs {
-    return new Initialize1Call__Inputs(this);
+export class MintCall extends ethereum.Call {
+  get inputs(): MintCall__Inputs {
+    return new MintCall__Inputs(this);
   }
 
-  get outputs(): Initialize1Call__Outputs {
-    return new Initialize1Call__Outputs(this);
+  get outputs(): MintCall__Outputs {
+    return new MintCall__Outputs(this);
   }
 }
 
-export class Initialize1Call__Inputs {
-  _call: Initialize1Call;
+export class MintCall__Inputs {
+  _call: MintCall;
 
-  constructor(call: Initialize1Call) {
+  constructor(call: MintCall) {
     this._call = call;
   }
 
-  get _manager(): Address {
+  get _user(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _trustedForwarder(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get _name(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-
-  get _symbol(): string {
-    return this._call.inputValues[3].value.toString();
-  }
-
-  get defaultOperators(): Array<Address> {
-    return this._call.inputValues[4].value.toAddressArray();
-  }
-}
-
-export class Initialize1Call__Outputs {
-  _call: Initialize1Call;
-
-  constructor(call: Initialize1Call) {
-    this._call = call;
-  }
-}
-
-export class MintTicketsCall extends ethereum.Call {
-  get inputs(): MintTicketsCall__Inputs {
-    return new MintTicketsCall__Inputs(this);
-  }
-
-  get outputs(): MintTicketsCall__Outputs {
-    return new MintTicketsCall__Outputs(this);
-  }
-}
-
-export class MintTicketsCall__Inputs {
-  _call: MintTicketsCall;
-
-  constructor(call: MintTicketsCall) {
-    this._call = call;
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
+  get _amount(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
   }
 
   get data(): Bytes {
-    return this._call.inputValues[1].value.toBytes();
+    return this._call.inputValues[2].value.toBytes();
+  }
+
+  get operatorData(): Bytes {
+    return this._call.inputValues[3].value.toBytes();
   }
 }
 
-export class MintTicketsCall__Outputs {
-  _call: MintTicketsCall;
+export class MintCall__Outputs {
+  _call: MintCall;
 
-  constructor(call: MintTicketsCall) {
-    this._call = call;
-  }
-}
-
-export class MintTicketsWithSponsorshipToCall extends ethereum.Call {
-  get inputs(): MintTicketsWithSponsorshipToCall__Inputs {
-    return new MintTicketsWithSponsorshipToCall__Inputs(this);
-  }
-
-  get outputs(): MintTicketsWithSponsorshipToCall__Outputs {
-    return new MintTicketsWithSponsorshipToCall__Outputs(this);
-  }
-}
-
-export class MintTicketsWithSponsorshipToCall__Inputs {
-  _call: MintTicketsWithSponsorshipToCall;
-
-  constructor(call: MintTicketsWithSponsorshipToCall) {
-    this._call = call;
-  }
-
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-}
-
-export class MintTicketsWithSponsorshipToCall__Outputs {
-  _call: MintTicketsWithSponsorshipToCall;
-
-  constructor(call: MintTicketsWithSponsorshipToCall) {
+  constructor(call: MintCall) {
     this._call = call;
   }
 }
@@ -1137,140 +789,6 @@ export class OperatorBurnCall__Outputs {
   }
 }
 
-export class OperatorMintTicketsCall extends ethereum.Call {
-  get inputs(): OperatorMintTicketsCall__Inputs {
-    return new OperatorMintTicketsCall__Inputs(this);
-  }
-
-  get outputs(): OperatorMintTicketsCall__Outputs {
-    return new OperatorMintTicketsCall__Outputs(this);
-  }
-}
-
-export class OperatorMintTicketsCall__Inputs {
-  _call: OperatorMintTicketsCall;
-
-  constructor(call: OperatorMintTicketsCall) {
-    this._call = call;
-  }
-
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get data(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
-  }
-
-  get operatorData(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
-  }
-}
-
-export class OperatorMintTicketsCall__Outputs {
-  _call: OperatorMintTicketsCall;
-
-  constructor(call: OperatorMintTicketsCall) {
-    this._call = call;
-  }
-}
-
-export class OperatorRedeemTicketsInstantlyCall extends ethereum.Call {
-  get inputs(): OperatorRedeemTicketsInstantlyCall__Inputs {
-    return new OperatorRedeemTicketsInstantlyCall__Inputs(this);
-  }
-
-  get outputs(): OperatorRedeemTicketsInstantlyCall__Outputs {
-    return new OperatorRedeemTicketsInstantlyCall__Outputs(this);
-  }
-}
-
-export class OperatorRedeemTicketsInstantlyCall__Inputs {
-  _call: OperatorRedeemTicketsInstantlyCall;
-
-  constructor(call: OperatorRedeemTicketsInstantlyCall) {
-    this._call = call;
-  }
-
-  get from(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get tickets(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get data(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
-  }
-
-  get operatorData(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
-  }
-}
-
-export class OperatorRedeemTicketsInstantlyCall__Outputs {
-  _call: OperatorRedeemTicketsInstantlyCall;
-
-  constructor(call: OperatorRedeemTicketsInstantlyCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
-export class OperatorRedeemTicketsWithTimelockCall extends ethereum.Call {
-  get inputs(): OperatorRedeemTicketsWithTimelockCall__Inputs {
-    return new OperatorRedeemTicketsWithTimelockCall__Inputs(this);
-  }
-
-  get outputs(): OperatorRedeemTicketsWithTimelockCall__Outputs {
-    return new OperatorRedeemTicketsWithTimelockCall__Outputs(this);
-  }
-}
-
-export class OperatorRedeemTicketsWithTimelockCall__Inputs {
-  _call: OperatorRedeemTicketsWithTimelockCall;
-
-  constructor(call: OperatorRedeemTicketsWithTimelockCall) {
-    this._call = call;
-  }
-
-  get from(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get tickets(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get data(): Bytes {
-    return this._call.inputValues[2].value.toBytes();
-  }
-
-  get operatorData(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
-  }
-}
-
-export class OperatorRedeemTicketsWithTimelockCall__Outputs {
-  _call: OperatorRedeemTicketsWithTimelockCall;
-
-  constructor(call: OperatorRedeemTicketsWithTimelockCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
 export class OperatorSendCall extends ethereum.Call {
   get inputs(): OperatorSendCall__Inputs {
     return new OperatorSendCall__Inputs(this);
@@ -1314,82 +832,6 @@ export class OperatorSendCall__Outputs {
 
   constructor(call: OperatorSendCall) {
     this._call = call;
-  }
-}
-
-export class RedeemTicketsInstantlyCall extends ethereum.Call {
-  get inputs(): RedeemTicketsInstantlyCall__Inputs {
-    return new RedeemTicketsInstantlyCall__Inputs(this);
-  }
-
-  get outputs(): RedeemTicketsInstantlyCall__Outputs {
-    return new RedeemTicketsInstantlyCall__Outputs(this);
-  }
-}
-
-export class RedeemTicketsInstantlyCall__Inputs {
-  _call: RedeemTicketsInstantlyCall;
-
-  constructor(call: RedeemTicketsInstantlyCall) {
-    this._call = call;
-  }
-
-  get tickets(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get data(): Bytes {
-    return this._call.inputValues[1].value.toBytes();
-  }
-}
-
-export class RedeemTicketsInstantlyCall__Outputs {
-  _call: RedeemTicketsInstantlyCall;
-
-  constructor(call: RedeemTicketsInstantlyCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
-export class RedeemTicketsWithTimelockCall extends ethereum.Call {
-  get inputs(): RedeemTicketsWithTimelockCall__Inputs {
-    return new RedeemTicketsWithTimelockCall__Inputs(this);
-  }
-
-  get outputs(): RedeemTicketsWithTimelockCall__Outputs {
-    return new RedeemTicketsWithTimelockCall__Outputs(this);
-  }
-}
-
-export class RedeemTicketsWithTimelockCall__Inputs {
-  _call: RedeemTicketsWithTimelockCall;
-
-  constructor(call: RedeemTicketsWithTimelockCall) {
-    this._call = call;
-  }
-
-  get tickets(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get data(): Bytes {
-    return this._call.inputValues[1].value.toBytes();
-  }
-}
-
-export class RedeemTicketsWithTimelockCall__Outputs {
-  _call: RedeemTicketsWithTimelockCall;
-
-  constructor(call: RedeemTicketsWithTimelockCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
   }
 }
 

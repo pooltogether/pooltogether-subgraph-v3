@@ -212,9 +212,9 @@ export class Transfer__Params {
   }
 }
 
-export class Ticket extends ethereum.SmartContract {
-  static bind(address: Address): Ticket {
-    return new Ticket("Ticket", address);
+export class ControlledToken extends ethereum.SmartContract {
+  static bind(address: Address): ControlledToken {
+    return new ControlledToken("ControlledToken", address);
   }
 
   allowance(holder: Address, spender: Address): BigInt {
@@ -319,25 +319,6 @@ export class Ticket extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddressArray());
-  }
-
-  draw(randomNumber: BigInt): Address {
-    let result = super.call("draw", "draw(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(randomNumber)
-    ]);
-
-    return result[0].toAddress();
-  }
-
-  try_draw(randomNumber: BigInt): ethereum.CallResult<Address> {
-    let result = super.tryCall("draw", "draw(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(randomNumber)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   getTrustedForwarder(): Address {
@@ -676,11 +657,11 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get _name(): string {
+  get name(): string {
     return this._call.inputValues[0].value.toString();
   }
 
-  get _symbol(): string {
+  get symbol(): string {
     return this._call.inputValues[1].value.toString();
   }
 

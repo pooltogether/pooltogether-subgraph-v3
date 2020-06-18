@@ -4,19 +4,14 @@ query ppbs {
 
     trustedForwarder
 
-    prizePoolModuleManagerFactory
-    compoundYieldServiceFactory
-    periodicPrizePoolFactory
+    compoundPeriodicPrizePoolFactory
+    controlledTokenFactory
     ticketFactory
-    timelockFactory
-    sponsorshipFactory
-
-    interestTrackerFactory
-    creditFactory
 
     governor
     rng
   }
+
   singleRandomWinnerPrizePoolBuilders {
     id
 
@@ -25,36 +20,18 @@ query ppbs {
     }
     prizeStrategyFactory
   }
-  prizePoolModuleManagers {
-    id
 
-    prizePoolBuilder {
-      id
-    }
-
-    creator
-    prizeStrategy
-
-    yieldService
-    ticket
-    credit
-    sponsorship
-    timelock
-    prizePool
-    interestTracker
-  }
-
-  periodicPrizePools {
+  prizePools {
     id
 
     currentPrizeId
     currentState
    
-    prizePoolModuleManager {
-      id
-    }
-    
+    creator
     prizeStrategy
+
+    ticket
+    sponsorship
     rng
 
     prizePeriodSeconds
@@ -88,16 +65,6 @@ query ppbs {
     balance
   }
   
-  timelocks {
-    id
-    prizePool {
-      id
-    }
-    prizePoolModuleManager {
-      id
-    }
-  }
-  
   tickets {
     id
     name
@@ -105,9 +72,6 @@ query ppbs {
     decimals
     
     prizePool {
-      id
-    }
-    prizePoolModuleManager {
       id
     }
   }
@@ -121,18 +85,20 @@ query ppbs {
     prizePool {
       id
     }
-    prizePoolModuleManager {
-      id
-    }
   }
   
-  interestTrackers {
+  yieldServices {
     id
-    prizePool {
-      id
-    }
-    prizePoolModuleManager {
-      id
-    }
+
+    prizePool
+
+    # token
+    # yieldServiceToken
+
+    # accountedBalance
+    # balance
+    # unaccountedBalance
+
+    # supplyRatePerBlock
   }
 }

@@ -1,4 +1,4 @@
-enum PeriodicPrizePoolState {
+enum PrizePoolState {
   Opened
   Started
   Awarded
@@ -12,9 +12,7 @@ type PrizePoolBuilder @entity {
   id: ID!
   trustedForwarder: Bytes!
 
-  prizePoolModuleManagerFactory: Bytes!
-  compoundYieldServiceFactory: Bytes!
-  periodicPrizePoolFactory: Bytes!
+  compoundPeriodicPrizePoolFactory: Bytes!
   ticketFactory: Bytes!
   timelockFactory: Bytes!
   sponsorshipFactory: Bytes!
@@ -33,34 +31,11 @@ type SingleRandomWinnerPrizePoolBuilder @entity {
   prizeStrategyFactory: Bytes!
 }
 
-type PrizePoolModuleManager @entity {
-  id: ID!
-  block: BigInt!
-  prizePoolBuilder: PrizePoolBuilder!
-
-  creator: Bytes!
-  prizeStrategy: Bytes!
-
-  yieldService: Bytes!
-  ticket: Bytes!
-  credit: Bytes!
-  sponsorship: Bytes!
-  timelock: Bytes!
-  prizePool: Bytes!
-  interestTracker: Bytes!
-
-  # draws: [Draw!]! @derivedFrom(field: "poolContract")
-  # admins: [Admin!]! @derivedFrom(field: "poolContract")
-  # players: [Player!]! @derivedFrom(field: "poolContract")
-}
-
-type PeriodicPrizePool @entity {
+type PrizePool @entity {
   id: ID!
 
-  currentState: PeriodicPrizePoolState!
+  currentState: PrizePoolState!
   currentPrizeId: BigInt!
-
-  prizePoolModuleManager: PrizePoolModuleManager!
 
   prizeStrategy: Bytes!
   rng: Bytes!
@@ -75,20 +50,16 @@ type PeriodicPrizePool @entity {
   rngRequestId: BigInt
 
   prizes: [Prize!]! @derivedFrom(field: "prizePool")
-}
 
-type InterestTracker @entity {
-  id: ID!
-
-  prizePool: PeriodicPrizePool!
-  prizePoolModuleManager: PrizePoolModuleManager!
+  # draws: [Draw!]! @derivedFrom(field: "poolContract")
+  # admins: [Admin!]! @derivedFrom(field: "poolContract")
+  # players: [Player!]! @derivedFrom(field: "poolContract")
 }
 
 type Ticket @entity {
   id: ID!
   
-  prizePool: PeriodicPrizePool!
-  prizePoolModuleManager: PrizePoolModuleManager!
+  prizePool: PrizePool!
   
   name: String!
   symbol: String!
@@ -98,55 +69,45 @@ type Ticket @entity {
 type Sponsorship @entity {
   id: ID!
 
-  prizePool: PeriodicPrizePool!
-  prizePoolModuleManager: PrizePoolModuleManager!
+  prizePool: PrizePool!
 
   name: String!
   symbol: String!
   decimals: BigInt!
 }
 
-type Timelock @entity {
-  id: ID!
+# type Token @entity {
+#   id: ID!
 
-  prizePool: PeriodicPrizePool!
-  prizePoolModuleManager: PrizePoolModuleManager!
-}
+#   name: String!
+#   symbol: String!
 
-type YieldService @entity {
-  id: ID!
+#   decimals: BigInt!
+# }
 
-  token: Token!
-  yieldServiceToken: YieldServiceToken!
+# type YieldService @entity {
+#   id: ID!
 
-  prizePool: PeriodicPrizePool!
-  prizePoolModuleManager: PrizePoolModuleManager!
+#   prizePool: PrizePool!
 
-  accountedBalance: BigInt!
-  balance: BigInt!
-  unaccountedBalance: BigInt!
+#   # token: Token!
+#   # yieldServiceToken: YieldServiceToken!
 
-  supplyRatePerBlock: BigInt
-}
+#   # accountedBalance: BigInt!
+#   # balance: BigInt!
+#   # unaccountedBalance: BigInt!
 
-type Token @entity {
-  id: ID!
+#   # supplyRatePerBlock: BigInt
+# }
 
-  name: String!
-  symbol: String!
+# type YieldServiceToken @entity {
+#   id: ID!
 
-  decimals: BigInt!
-}
+#   token: Token!
+#   type: YieldServiceTokenType!
 
-type YieldServiceToken @entity {
-  id: ID!
-
-  token: Token!
-  type: YieldServiceTokenType!
-
-  prizePool: PeriodicPrizePool!
-  prizePoolModuleManager: PrizePoolModuleManager!
-}
+#   prizePool: PrizePool!
+# }
 
 
 # Ephemeral Types (not mapped to a specific contract)
@@ -156,7 +117,7 @@ type Player @entity {
   id: ID!
 
   address: Bytes!
-  prizePool: PeriodicPrizePool!
+  prizePool: PrizePool!
   
   balance: BigInt!
 
@@ -167,7 +128,7 @@ type Player @entity {
 # ID: `${prizePool.address}-${prizeId}`
 type Prize @entity {
   id: ID!
-  prizePool: PeriodicPrizePool!
+  prizePool: PrizePool!
 
   prize: BigInt
   reserveFee: BigInt

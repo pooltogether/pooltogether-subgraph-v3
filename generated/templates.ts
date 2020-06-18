@@ -6,20 +6,6 @@ import {
   DataSourceContext
 } from "@graphprotocol/graph-ts";
 
-export class InterestTracker extends DataSourceTemplate {
-  static create(address: Address): void {
-    DataSourceTemplate.create("InterestTracker", [address.toHex()]);
-  }
-
-  static createWithContext(address: Address, context: DataSourceContext): void {
-    DataSourceTemplate.createWithContext(
-      "InterestTracker",
-      [address.toHex()],
-      context
-    );
-  }
-}
-
 export class Sponsorship extends DataSourceTemplate {
   static create(address: Address): void {
     DataSourceTemplate.create("Sponsorship", [address.toHex()]);
@@ -44,42 +30,14 @@ export class Ticket extends DataSourceTemplate {
   }
 }
 
-export class Timelock extends DataSourceTemplate {
+export class CompoundPeriodicPrizePool extends DataSourceTemplate {
   static create(address: Address): void {
-    DataSourceTemplate.create("Timelock", [address.toHex()]);
+    DataSourceTemplate.create("CompoundPeriodicPrizePool", [address.toHex()]);
   }
 
   static createWithContext(address: Address, context: DataSourceContext): void {
     DataSourceTemplate.createWithContext(
-      "Timelock",
-      [address.toHex()],
-      context
-    );
-  }
-}
-
-export class PeriodicPrizePool extends DataSourceTemplate {
-  static create(address: Address): void {
-    DataSourceTemplate.create("PeriodicPrizePool", [address.toHex()]);
-  }
-
-  static createWithContext(address: Address, context: DataSourceContext): void {
-    DataSourceTemplate.createWithContext(
-      "PeriodicPrizePool",
-      [address.toHex()],
-      context
-    );
-  }
-}
-
-export class YieldService extends DataSourceTemplate {
-  static create(address: Address): void {
-    DataSourceTemplate.create("YieldService", [address.toHex()]);
-  }
-
-  static createWithContext(address: Address, context: DataSourceContext): void {
-    DataSourceTemplate.createWithContext(
-      "YieldService",
+      "CompoundPeriodicPrizePool",
       [address.toHex()],
       context
     );

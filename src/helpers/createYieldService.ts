@@ -26,19 +26,25 @@ export function createYieldService(
   yieldService.prizePool = boundPrizePoolModuleManager.prizePool().toHex()
   yieldService.prizePoolModuleManager = moduleManager.toHex()
 
-  const boundYieldService = CompoundYieldServiceContract.bind(yieldServiceAddress)
-  yieldService.yieldServiceToken = boundYieldService.token().toHex()
 
-  yieldService.accountedBalance = boundYieldService.accountedBalance()
-  yieldService.balance = boundYieldService.balance()
-  yieldService.unaccountedBalance = boundYieldService.unaccountedBalance()
+  // How to get this working?
+  // const boundYieldService = CompoundYieldServiceContract.bind(yieldServiceAddress)
+  // yieldService.yieldServiceToken = boundYieldService.token().toHex()
 
-  const boundCToken = CTokenInterface.bind(boundYieldService.token())
-  yieldService.token = boundCToken.underlying().toHex()
+  // yieldService.accountedBalance = boundYieldService.accountedBalance()
+  // yieldService.balance = boundYieldService.balance()
+  // yieldService.unaccountedBalance = boundYieldService.unaccountedBalance()
+
+  // const boundCToken = CTokenInterface.bind(boundYieldService.token())
+  // yieldService.token = boundCToken.underlying().toHex()
+
+
+
+
   // yieldService.supplyRatePerBlock = boundCToken.supplyRatePerBlock()
   // yieldService.type = 'cToken' // down the road set this via createWithContext (instead of create())
 
-  yieldService.unaccountedBalance = boundYieldService.unaccountedBalance()
+  // yieldService.unaccountedBalance = boundYieldService.unaccountedBalance()
 
   yieldService.save()
 

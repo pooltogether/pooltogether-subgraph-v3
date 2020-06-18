@@ -27,7 +27,7 @@ export class PrizePoolCreated__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get moduleManager(): Address {
+  get prizePool(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -41,20 +41,20 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
     return new PrizePoolBuilder("PrizePoolBuilder", address);
   }
 
-  compoundYieldServiceFactory(): Address {
+  controlledTokenFactory(): Address {
     let result = super.call(
-      "compoundYieldServiceFactory",
-      "compoundYieldServiceFactory():(address)",
+      "controlledTokenFactory",
+      "controlledTokenFactory():(address)",
       []
     );
 
     return result[0].toAddress();
   }
 
-  try_compoundYieldServiceFactory(): ethereum.CallResult<Address> {
+  try_controlledTokenFactory(): ethereum.CallResult<Address> {
     let result = super.tryCall(
-      "compoundYieldServiceFactory",
-      "compoundYieldServiceFactory():(address)",
+      "controlledTokenFactory",
+      "controlledTokenFactory():(address)",
       []
     );
     if (result.reverted) {
@@ -119,25 +119,6 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  creditFactory(): Address {
-    let result = super.call("creditFactory", "creditFactory():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_creditFactory(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "creditFactory",
-      "creditFactory():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   governor(): Address {
     let result = super.call("governor", "governor():(address)", []);
 
@@ -146,29 +127,6 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
 
   try_governor(): ethereum.CallResult<Address> {
     let result = super.tryCall("governor", "governor():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  interestTrackerFactory(): Address {
-    let result = super.call(
-      "interestTrackerFactory",
-      "interestTrackerFactory():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_interestTrackerFactory(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "interestTrackerFactory",
-      "interestTrackerFactory():(address)",
-      []
-    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -199,29 +157,6 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  prizePoolModuleManagerFactory(): Address {
-    let result = super.call(
-      "prizePoolModuleManagerFactory",
-      "prizePoolModuleManagerFactory():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_prizePoolModuleManagerFactory(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "prizePoolModuleManagerFactory",
-      "prizePoolModuleManagerFactory():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   rng(): Address {
     let result = super.call("rng", "rng():(address)", []);
 
@@ -230,29 +165,6 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
 
   try_rng(): ethereum.CallResult<Address> {
     let result = super.tryCall("rng", "rng():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  sponsorshipFactory(): Address {
-    let result = super.call(
-      "sponsorshipFactory",
-      "sponsorshipFactory():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_sponsorshipFactory(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "sponsorshipFactory",
-      "sponsorshipFactory():(address)",
-      []
-    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -270,29 +182,6 @@ export class PrizePoolBuilder extends ethereum.SmartContract {
     let result = super.tryCall(
       "ticketFactory",
       "ticketFactory():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  timelockFactory(): Address {
-    let result = super.call(
-      "timelockFactory",
-      "timelockFactory():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_timelockFactory(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "timelockFactory",
-      "timelockFactory():(address)",
       []
     );
     if (result.reverted) {
@@ -401,48 +290,28 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get _prizePoolModuleManagerFactory(): Address {
+  get _governor(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _governor(): Address {
+  get _periodicPrizePoolFactory(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get _compoundYieldServiceFactory(): Address {
+  get _ticketFactory(): Address {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get _periodicPrizePoolFactory(): Address {
+  get _controlledTokenFactory(): Address {
     return this._call.inputValues[3].value.toAddress();
   }
 
-  get _ticketFactory(): Address {
+  get _rng(): Address {
     return this._call.inputValues[4].value.toAddress();
   }
 
-  get _timelockFactory(): Address {
-    return this._call.inputValues[5].value.toAddress();
-  }
-
-  get _sponsorshipFactory(): Address {
-    return this._call.inputValues[6].value.toAddress();
-  }
-
-  get _creditFactory(): Address {
-    return this._call.inputValues[7].value.toAddress();
-  }
-
-  get _interestTrackerFactory(): Address {
-    return this._call.inputValues[8].value.toAddress();
-  }
-
-  get _rng(): Address {
-    return this._call.inputValues[9].value.toAddress();
-  }
-
   get _trustedForwarder(): Address {
-    return this._call.inputValues[10].value.toAddress();
+    return this._call.inputValues[5].value.toAddress();
   }
 }
 

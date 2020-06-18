@@ -6,27 +6,22 @@ dataSources:
     name: PrizePoolBuilder
     network: {{network}}
     source:
-      address: "{{prizePoolBuilderAddress}}"
+      address: "{{prizePoolBuilder.address}}"
       abi: PrizePoolBuilder
-      startBlock: 1
+      startBlock: {{prizePoolBuilder.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - PrizePoolModuleManager
         - PrizePoolBuilder
       abis:
-        - name: CTokenInterface
-          file: ./abis/CTokenInterface.json
-        - name: PeriodicPrizePool
-          file: ./abis/PeriodicPrizePool.json
+        - name: CompoundPeriodicPrizePool
+          file: ./abis/CompoundPeriodicPrizePool.json
         - name: PrizePoolBuilder
           file: ./abis/PrizePoolBuilder.json
-        - name: PrizePoolModuleManager
-          file: ./abis/PrizePoolModuleManager.json
-        - name: Sponsorship
-          file: ./abis/Sponsorship.json
+        - name: ControlledToken
+          file: ./abis/ControlledToken.json
         - name: Ticket
           file: ./abis/Ticket.json
       eventHandlers:
@@ -37,9 +32,9 @@ dataSources:
     name: SingleRandomWinnerPrizePoolBuilder
     network: {{network}}
     source:
-      address: "{{singleRandomWinnerPrizePoolBuilderAddress}}"
+      address: "{{singleRandomWinnerPrizePoolBuilder.address}}"
       abi: SingleRandomWinnerPrizePoolBuilder
-      startBlock: 1
+      startBlock: {{singleRandomWinnerPrizePoolBuilder.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -50,8 +45,6 @@ dataSources:
       abis:
         - name: PeriodicPrizePool
           file: ./abis/PeriodicPrizePool.json
-        - name: PrizePoolModuleManager
-          file: ./abis/PrizePoolModuleManager.json
         - name: SingleRandomWinnerPrizePoolBuilder
           file: ./abis/SingleRandomWinnerPrizePoolBuilder.json
       eventHandlers:
@@ -59,31 +52,11 @@ dataSources:
           handler: handleSingleRandomWinnerPrizePoolCreated
       file: ./src/mappingForSingleRandomWinnerPrizePoolBuilder.ts
 templates:
-  - name: InterestTracker
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      abi: InterestTracker
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappingForInterestTracker.ts
-      entities:
-        - InterestTracker
-      abis:
-        - name: InterestTracker
-          file: ./abis/InterestTracker.json
-      eventHandlers:
-        - event: CollateralSupplied(indexed address,indexed address,uint256,uint256)
-          handler: handleCollateralSupplied
-        - event: CollateralRedeemed(indexed address,indexed address,uint256,uint256,uint256)
-          handler: handleCollateralRedeemed
   - name: Sponsorship
     kind: ethereum/contract
     network: {{network}}
     source:
-      abi: Sponsorship
+      abi: ControlledToken
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -92,8 +65,8 @@ templates:
       entities:
         - Sponsorship
       abis:
-        - name: Sponsorship
-          file: ./abis/Sponsorship.json
+        - name: ControlledToken
+          file: ./abis/ControlledToken.json
         - name: ERC777UpgradeSafe
           file: ./abis/ERC777UpgradeSafe.json
   - name: Ticket
@@ -113,47 +86,25 @@ templates:
           file: ./abis/Ticket.json
         - name: ERC777UpgradeSafe
           file: ./abis/ERC777UpgradeSafe.json
-  - name: Timelock
+  - name: CompoundPeriodicPrizePool
     kind: ethereum/contract
     network: {{network}}
     source:
-      abi: Timelock
+      abi: CompoundPeriodicPrizePool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappingForTimelock.ts
+      file: ./src/mappingForPrizePool.ts
       entities:
-        - Timelock
+        - PrizePool
       abis:
-        - name: Timelock
-          file: ./abis/Timelock.json
-      eventHandlers:
-        - event: CollateralTimelocked(indexed address,indexed address,uint256,uint256)
-          handler: handleCollateralTimelocked
-        - event: CollateralSwept(indexed address,indexed address,uint256)
-          handler: handleCollateralSwept
-  - name: PeriodicPrizePool
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      abi: PeriodicPrizePool
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappingForPeriodicPrizePool.ts
-      entities:
-        - PeriodicPrizePool
-      abis:
-        - name: PeriodicPrizePool
-          file: ./abis/PeriodicPrizePool.json
+        - name: CompoundPeriodicPrizePool
+          file: ./abis/CompoundPeriodicPrizePool.json
         # - name: PrizePoolBuilder
         #   file: ./abis/PrizePoolBuilder.json
         # - name: SingleRandomWinnerPrizePoolBuilder
         #   file: ./abis/SingleRandomWinnerPrizePoolBuilder.json
-        # - name: PrizePoolModuleManager
-        #   file: ./abis/PrizePoolModuleManager.json
       eventHandlers:
         - event: PrizePoolOpened(indexed address,indexed uint256)
           handler: handlePrizePoolOpened
@@ -161,25 +112,18 @@ templates:
           handler: handlePrizePoolAwardStarted
         - event: PrizePoolAwardCompleted(indexed address,uint256,uint256,bytes32)
           handler: handlePrizePoolAwardCompleted
-  - name: YieldService
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      abi: CompoundYieldService
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappingForYieldService.ts
-      entities:
-        - YieldService
-      abis:
-        - name: CompoundYieldService
-          file: ./abis/CompoundYieldService.json
-      eventHandlers:
+        - event: CollateralSupplied(indexed address,uint256,uint256)
+          handler: handleCollateralSupplied
+        - event: CollateralRedeemed(indexed address,uint256,uint256)
+          handler: handleCollateralRedeemed
+        - event: CollateralTimelocked(indexed address,indexed address,uint256,uint256)
+          handler: handleCollateralTimelocked
+        - event: CollateralSwept(indexed address,indexed address,uint256)
+          handler: handleCollateralSwept
         - event: PrincipalCaptured(address,uint256)
           handler: handlePrincipalCaptured
         - event: PrincipalRedeemed(address,uint256)
           handler: handlePrincipalRedeemed
         - event: PrincipalSupplied(address,uint256)
           handler: handlePrincipalSupplied
+  

@@ -140,6 +140,72 @@ export class InterestCaptured__Params {
   }
 }
 
+export class PrincipalCaptured extends ethereum.Event {
+  get params(): PrincipalCaptured__Params {
+    return new PrincipalCaptured__Params(this);
+  }
+}
+
+export class PrincipalCaptured__Params {
+  _event: PrincipalCaptured;
+
+  constructor(event: PrincipalCaptured) {
+    this._event = event;
+  }
+
+  get from(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class PrincipalRedeemed extends ethereum.Event {
+  get params(): PrincipalRedeemed__Params {
+    return new PrincipalRedeemed__Params(this);
+  }
+}
+
+export class PrincipalRedeemed__Params {
+  _event: PrincipalRedeemed;
+
+  constructor(event: PrincipalRedeemed) {
+    this._event = event;
+  }
+
+  get from(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class PrincipalSupplied extends ethereum.Event {
+  get params(): PrincipalSupplied__Params {
+    return new PrincipalSupplied__Params(this);
+  }
+}
+
+export class PrincipalSupplied__Params {
+  _event: PrincipalSupplied;
+
+  constructor(event: PrincipalSupplied) {
+    this._event = event;
+  }
+
+  get from(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
 export class PrizePoolAwardCompleted extends ethereum.Event {
   get params(): PrizePoolAwardCompleted__Params {
     return new PrizePoolAwardCompleted__Params(this);
@@ -290,9 +356,9 @@ export class TicketsRedeemedWithTimelock__Params {
   }
 }
 
-export class PeriodicPrizePool extends ethereum.SmartContract {
-  static bind(address: Address): PeriodicPrizePool {
-    return new PeriodicPrizePool("PeriodicPrizePool", address);
+export class CompoundPeriodicPrizePool extends ethereum.SmartContract {
+  static bind(address: Address): CompoundPeriodicPrizePool {
+    return new CompoundPeriodicPrizePool("CompoundPeriodicPrizePool", address);
   }
 
   accountedBalance(): BigInt {
@@ -402,6 +468,21 @@ export class PeriodicPrizePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  cToken(): Address {
+    let result = super.call("cToken", "cToken():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_cToken(): ethereum.CallResult<Address> {
+    let result = super.tryCall("cToken", "cToken():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   calculateExitFee(tickets: BigInt, userInterestRatio: BigInt): BigInt {
@@ -1799,12 +1880,62 @@ export class InitializeCall__Inputs {
   get _prizePeriodSeconds(): BigInt {
     return this._call.inputValues[4].value.toBigInt();
   }
+
+  get _cToken(): Address {
+    return this._call.inputValues[5].value.toAddress();
+  }
 }
 
 export class InitializeCall__Outputs {
   _call: InitializeCall;
 
   constructor(call: InitializeCall) {
+    this._call = call;
+  }
+}
+
+export class Initialize1Call extends ethereum.Call {
+  get inputs(): Initialize1Call__Inputs {
+    return new Initialize1Call__Inputs(this);
+  }
+
+  get outputs(): Initialize1Call__Outputs {
+    return new Initialize1Call__Outputs(this);
+  }
+}
+
+export class Initialize1Call__Inputs {
+  _call: Initialize1Call;
+
+  constructor(call: Initialize1Call) {
+    this._call = call;
+  }
+
+  get _trustedForwarder(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _governor(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get _prizeStrategy(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get _rng(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
+
+  get _prizePeriodSeconds(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+}
+
+export class Initialize1Call__Outputs {
+  _call: Initialize1Call;
+
+  constructor(call: Initialize1Call) {
     this._call = call;
   }
 }

@@ -51,31 +51,13 @@ export class PrizePoolBuilder extends Entity {
     this.set("trustedForwarder", Value.fromBytes(value));
   }
 
-  get prizePoolModuleManagerFactory(): Bytes {
-    let value = this.get("prizePoolModuleManagerFactory");
+  get compoundPeriodicPrizePoolFactory(): Bytes {
+    let value = this.get("compoundPeriodicPrizePoolFactory");
     return value.toBytes();
   }
 
-  set prizePoolModuleManagerFactory(value: Bytes) {
-    this.set("prizePoolModuleManagerFactory", Value.fromBytes(value));
-  }
-
-  get compoundYieldServiceFactory(): Bytes {
-    let value = this.get("compoundYieldServiceFactory");
-    return value.toBytes();
-  }
-
-  set compoundYieldServiceFactory(value: Bytes) {
-    this.set("compoundYieldServiceFactory", Value.fromBytes(value));
-  }
-
-  get periodicPrizePoolFactory(): Bytes {
-    let value = this.get("periodicPrizePoolFactory");
-    return value.toBytes();
-  }
-
-  set periodicPrizePoolFactory(value: Bytes) {
-    this.set("periodicPrizePoolFactory", Value.fromBytes(value));
+  set compoundPeriodicPrizePoolFactory(value: Bytes) {
+    this.set("compoundPeriodicPrizePoolFactory", Value.fromBytes(value));
   }
 
   get ticketFactory(): Bytes {
@@ -197,7 +179,7 @@ export class SingleRandomWinnerPrizePoolBuilder extends Entity {
   }
 }
 
-export class PrizePoolModuleManager extends Entity {
+export class PrizePool extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -205,153 +187,17 @@ export class PrizePoolModuleManager extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(
-      id !== null,
-      "Cannot save PrizePoolModuleManager entity without an ID"
-    );
+    assert(id !== null, "Cannot save PrizePool entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save PrizePoolModuleManager entity with non-string ID. " +
+      "Cannot save PrizePool entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("PrizePoolModuleManager", id.toString(), this);
+    store.set("PrizePool", id.toString(), this);
   }
 
-  static load(id: string): PrizePoolModuleManager | null {
-    return store.get(
-      "PrizePoolModuleManager",
-      id
-    ) as PrizePoolModuleManager | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get block(): BigInt {
-    let value = this.get("block");
-    return value.toBigInt();
-  }
-
-  set block(value: BigInt) {
-    this.set("block", Value.fromBigInt(value));
-  }
-
-  get prizePoolBuilder(): string {
-    let value = this.get("prizePoolBuilder");
-    return value.toString();
-  }
-
-  set prizePoolBuilder(value: string) {
-    this.set("prizePoolBuilder", Value.fromString(value));
-  }
-
-  get creator(): Bytes {
-    let value = this.get("creator");
-    return value.toBytes();
-  }
-
-  set creator(value: Bytes) {
-    this.set("creator", Value.fromBytes(value));
-  }
-
-  get prizeStrategy(): Bytes {
-    let value = this.get("prizeStrategy");
-    return value.toBytes();
-  }
-
-  set prizeStrategy(value: Bytes) {
-    this.set("prizeStrategy", Value.fromBytes(value));
-  }
-
-  get yieldService(): Bytes {
-    let value = this.get("yieldService");
-    return value.toBytes();
-  }
-
-  set yieldService(value: Bytes) {
-    this.set("yieldService", Value.fromBytes(value));
-  }
-
-  get ticket(): Bytes {
-    let value = this.get("ticket");
-    return value.toBytes();
-  }
-
-  set ticket(value: Bytes) {
-    this.set("ticket", Value.fromBytes(value));
-  }
-
-  get credit(): Bytes {
-    let value = this.get("credit");
-    return value.toBytes();
-  }
-
-  set credit(value: Bytes) {
-    this.set("credit", Value.fromBytes(value));
-  }
-
-  get sponsorship(): Bytes {
-    let value = this.get("sponsorship");
-    return value.toBytes();
-  }
-
-  set sponsorship(value: Bytes) {
-    this.set("sponsorship", Value.fromBytes(value));
-  }
-
-  get timelock(): Bytes {
-    let value = this.get("timelock");
-    return value.toBytes();
-  }
-
-  set timelock(value: Bytes) {
-    this.set("timelock", Value.fromBytes(value));
-  }
-
-  get prizePool(): Bytes {
-    let value = this.get("prizePool");
-    return value.toBytes();
-  }
-
-  set prizePool(value: Bytes) {
-    this.set("prizePool", Value.fromBytes(value));
-  }
-
-  get interestTracker(): Bytes {
-    let value = this.get("interestTracker");
-    return value.toBytes();
-  }
-
-  set interestTracker(value: Bytes) {
-    this.set("interestTracker", Value.fromBytes(value));
-  }
-}
-
-export class PeriodicPrizePool extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save PeriodicPrizePool entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save PeriodicPrizePool entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("PeriodicPrizePool", id.toString(), this);
-  }
-
-  static load(id: string): PeriodicPrizePool | null {
-    return store.get("PeriodicPrizePool", id) as PeriodicPrizePool | null;
+  static load(id: string): PrizePool | null {
+    return store.get("PrizePool", id) as PrizePool | null;
   }
 
   get id(): string {
@@ -379,15 +225,6 @@ export class PeriodicPrizePool extends Entity {
 
   set currentPrizeId(value: BigInt) {
     this.set("currentPrizeId", Value.fromBigInt(value));
-  }
-
-  get prizePoolModuleManager(): string {
-    let value = this.get("prizePoolModuleManager");
-    return value.toString();
-  }
-
-  set prizePoolModuleManager(value: string) {
-    this.set("prizePoolModuleManager", Value.fromString(value));
   }
 
   get prizeStrategy(): Bytes {
@@ -507,55 +344,6 @@ export class PeriodicPrizePool extends Entity {
   }
 }
 
-export class InterestTracker extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save InterestTracker entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save InterestTracker entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("InterestTracker", id.toString(), this);
-  }
-
-  static load(id: string): InterestTracker | null {
-    return store.get("InterestTracker", id) as InterestTracker | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
-  }
-
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
-  }
-
-  get prizePoolModuleManager(): string {
-    let value = this.get("prizePoolModuleManager");
-    return value.toString();
-  }
-
-  set prizePoolModuleManager(value: string) {
-    this.set("prizePoolModuleManager", Value.fromString(value));
-  }
-}
-
 export class Ticket extends Entity {
   constructor(id: string) {
     super();
@@ -593,15 +381,6 @@ export class Ticket extends Entity {
 
   set prizePool(value: string) {
     this.set("prizePool", Value.fromString(value));
-  }
-
-  get prizePoolModuleManager(): string {
-    let value = this.get("prizePoolModuleManager");
-    return value.toString();
-  }
-
-  set prizePoolModuleManager(value: string) {
-    this.set("prizePoolModuleManager", Value.fromString(value));
   }
 
   get name(): string {
@@ -671,15 +450,6 @@ export class Sponsorship extends Entity {
     this.set("prizePool", Value.fromString(value));
   }
 
-  get prizePoolModuleManager(): string {
-    let value = this.get("prizePoolModuleManager");
-    return value.toString();
-  }
-
-  set prizePoolModuleManager(value: string) {
-    this.set("prizePoolModuleManager", Value.fromString(value));
-  }
-
   get name(): string {
     let value = this.get("name");
     return value.toString();
@@ -705,291 +475,6 @@ export class Sponsorship extends Entity {
 
   set decimals(value: BigInt) {
     this.set("decimals", Value.fromBigInt(value));
-  }
-}
-
-export class Timelock extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Timelock entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Timelock entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Timelock", id.toString(), this);
-  }
-
-  static load(id: string): Timelock | null {
-    return store.get("Timelock", id) as Timelock | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
-  }
-
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
-  }
-
-  get prizePoolModuleManager(): string {
-    let value = this.get("prizePoolModuleManager");
-    return value.toString();
-  }
-
-  set prizePoolModuleManager(value: string) {
-    this.set("prizePoolModuleManager", Value.fromString(value));
-  }
-}
-
-export class YieldService extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save YieldService entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save YieldService entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("YieldService", id.toString(), this);
-  }
-
-  static load(id: string): YieldService | null {
-    return store.get("YieldService", id) as YieldService | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get token(): string {
-    let value = this.get("token");
-    return value.toString();
-  }
-
-  set token(value: string) {
-    this.set("token", Value.fromString(value));
-  }
-
-  get yieldServiceToken(): string {
-    let value = this.get("yieldServiceToken");
-    return value.toString();
-  }
-
-  set yieldServiceToken(value: string) {
-    this.set("yieldServiceToken", Value.fromString(value));
-  }
-
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
-  }
-
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
-  }
-
-  get prizePoolModuleManager(): string {
-    let value = this.get("prizePoolModuleManager");
-    return value.toString();
-  }
-
-  set prizePoolModuleManager(value: string) {
-    this.set("prizePoolModuleManager", Value.fromString(value));
-  }
-
-  get accountedBalance(): BigInt {
-    let value = this.get("accountedBalance");
-    return value.toBigInt();
-  }
-
-  set accountedBalance(value: BigInt) {
-    this.set("accountedBalance", Value.fromBigInt(value));
-  }
-
-  get balance(): BigInt {
-    let value = this.get("balance");
-    return value.toBigInt();
-  }
-
-  set balance(value: BigInt) {
-    this.set("balance", Value.fromBigInt(value));
-  }
-
-  get unaccountedBalance(): BigInt {
-    let value = this.get("unaccountedBalance");
-    return value.toBigInt();
-  }
-
-  set unaccountedBalance(value: BigInt) {
-    this.set("unaccountedBalance", Value.fromBigInt(value));
-  }
-
-  get supplyRatePerBlock(): BigInt | null {
-    let value = this.get("supplyRatePerBlock");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set supplyRatePerBlock(value: BigInt | null) {
-    if (value === null) {
-      this.unset("supplyRatePerBlock");
-    } else {
-      this.set("supplyRatePerBlock", Value.fromBigInt(value as BigInt));
-    }
-  }
-}
-
-export class Token extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Token entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Token entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Token", id.toString(), this);
-  }
-
-  static load(id: string): Token | null {
-    return store.get("Token", id) as Token | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get name(): string {
-    let value = this.get("name");
-    return value.toString();
-  }
-
-  set name(value: string) {
-    this.set("name", Value.fromString(value));
-  }
-
-  get symbol(): string {
-    let value = this.get("symbol");
-    return value.toString();
-  }
-
-  set symbol(value: string) {
-    this.set("symbol", Value.fromString(value));
-  }
-
-  get decimals(): BigInt {
-    let value = this.get("decimals");
-    return value.toBigInt();
-  }
-
-  set decimals(value: BigInt) {
-    this.set("decimals", Value.fromBigInt(value));
-  }
-}
-
-export class YieldServiceToken extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save YieldServiceToken entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save YieldServiceToken entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("YieldServiceToken", id.toString(), this);
-  }
-
-  static load(id: string): YieldServiceToken | null {
-    return store.get("YieldServiceToken", id) as YieldServiceToken | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get token(): string {
-    let value = this.get("token");
-    return value.toString();
-  }
-
-  set token(value: string) {
-    this.set("token", Value.fromString(value));
-  }
-
-  get type(): string {
-    let value = this.get("type");
-    return value.toString();
-  }
-
-  set type(value: string) {
-    this.set("type", Value.fromString(value));
-  }
-
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
-  }
-
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
-  }
-
-  get prizePoolModuleManager(): string {
-    let value = this.get("prizePoolModuleManager");
-    return value.toString();
-  }
-
-  set prizePoolModuleManager(value: string) {
-    this.set("prizePoolModuleManager", Value.fromString(value));
   }
 }
 

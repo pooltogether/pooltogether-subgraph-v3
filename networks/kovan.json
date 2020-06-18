@@ -1,0 +1,11 @@
+{
+  "network": "mainnet",
+  "prizePoolBuilder": {
+    "address": "0xB0a7b3c750cFbdBc81B9649Ba765B53517b4911c",
+    "startBlock": "19103483"
+  },
+  "singleRandomWinnerPrizePoolBuilder": {
+    "address": "0x2331c528754DC4345eB5e07bdF6b50788dd803Ef",
+    "startBlock": "19103483"
+  }
+}

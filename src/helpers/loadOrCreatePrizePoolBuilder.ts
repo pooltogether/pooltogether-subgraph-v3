@@ -15,15 +15,10 @@ export function loadOrCreatePrizePoolBuilder(prizePoolBuilderAddress: Address): 
 
     prizePoolBuilder.trustedForwarder = boundPrizePoolBuilder.trustedForwarder()
 
-    prizePoolBuilder.prizePoolModuleManagerFactory = boundPrizePoolBuilder.prizePoolModuleManagerFactory()
     prizePoolBuilder.compoundYieldServiceFactory = boundPrizePoolBuilder.compoundYieldServiceFactory()
-    prizePoolBuilder.periodicPrizePoolFactory = boundPrizePoolBuilder.periodicPrizePoolFactory()
+    prizePoolBuilder.compoundPeriodicPrizePoolFactory = boundPrizePoolBuilder.compoundPeriodicPrizePoolFactory()
+    prizePoolBuilder.controlledTokenFactory = boundPrizePoolBuilder.controlledTokenFactory()
     prizePoolBuilder.ticketFactory = boundPrizePoolBuilder.ticketFactory()
-    prizePoolBuilder.timelockFactory = boundPrizePoolBuilder.timelockFactory()
-    prizePoolBuilder.sponsorshipFactory = boundPrizePoolBuilder.sponsorshipFactory()
-
-    prizePoolBuilder.interestTrackerFactory = boundPrizePoolBuilder.interestTrackerFactory()
-    prizePoolBuilder.creditFactory = boundPrizePoolBuilder.creditFactory()
 
     prizePoolBuilder.rng = boundPrizePoolBuilder.rng()
     prizePoolBuilder.governor = boundPrizePoolBuilder.governor()
