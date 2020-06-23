@@ -343,6 +343,24 @@ export class PrizePool extends Entity {
     }
   }
 
+  get tickets(): Array<string> {
+    let value = this.get("tickets");
+    return value.toStringArray();
+  }
+
+  set tickets(value: Array<string>) {
+    this.set("tickets", Value.fromStringArray(value));
+  }
+
+  get sponsorships(): Array<string> {
+    let value = this.get("sponsorships");
+    return value.toStringArray();
+  }
+
+  set sponsorships(value: Array<string>) {
+    this.set("sponsorships", Value.fromStringArray(value));
+  }
+
   get prizes(): Array<string> {
     let value = this.get("prizes");
     return value.toStringArray();
@@ -350,6 +368,15 @@ export class PrizePool extends Entity {
 
   set prizes(value: Array<string>) {
     this.set("prizes", Value.fromStringArray(value));
+  }
+
+  get players(): Array<string> {
+    let value = this.get("players");
+    return value.toStringArray();
+  }
+
+  set players(value: Array<string>) {
+    this.set("players", Value.fromStringArray(value));
   }
 }
 
