@@ -45,9 +45,22 @@ query ppbs {
     
     prizes {
       id
+
+      prize
+      reserveFee
+      rngRequestId
+      randomNumber
+      rewardStartedOperator
+      rewardCompletedOperator
+    }
+
+    players {
+      id
+      address
+      balance
     }
   }
-  
+
   prizes {
     id
     
