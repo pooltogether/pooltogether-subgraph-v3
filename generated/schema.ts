@@ -191,6 +191,60 @@ export class PrizePool extends Entity {
     this.set("creator", Value.fromBytes(value));
   }
 
+  get yieldToken(): Bytes {
+    let value = this.get("yieldToken");
+    return value.toBytes();
+  }
+
+  set yieldToken(value: Bytes) {
+    this.set("yieldToken", Value.fromBytes(value));
+  }
+
+  get yieldTokenName(): string {
+    let value = this.get("yieldTokenName");
+    return value.toString();
+  }
+
+  set yieldTokenName(value: string) {
+    this.set("yieldTokenName", Value.fromString(value));
+  }
+
+  get yieldTokenSymbol(): string {
+    let value = this.get("yieldTokenSymbol");
+    return value.toString();
+  }
+
+  set yieldTokenSymbol(value: string) {
+    this.set("yieldTokenSymbol", Value.fromString(value));
+  }
+
+  get underlyingCollateralToken(): Bytes {
+    let value = this.get("underlyingCollateralToken");
+    return value.toBytes();
+  }
+
+  set underlyingCollateralToken(value: Bytes) {
+    this.set("underlyingCollateralToken", Value.fromBytes(value));
+  }
+
+  get underlyingCollateralName(): string {
+    let value = this.get("underlyingCollateralName");
+    return value.toString();
+  }
+
+  set underlyingCollateralName(value: string) {
+    this.set("underlyingCollateralName", Value.fromString(value));
+  }
+
+  get underlyingCollateralSymbol(): string {
+    let value = this.get("underlyingCollateralSymbol");
+    return value.toString();
+  }
+
+  set underlyingCollateralSymbol(value: string) {
+    this.set("underlyingCollateralSymbol", Value.fromString(value));
+  }
+
   get prizePoolBuilder(): string {
     let value = this.get("prizePoolBuilder");
     return value.toString();

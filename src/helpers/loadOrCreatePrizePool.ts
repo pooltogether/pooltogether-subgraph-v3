@@ -1,8 +1,11 @@
-import { Address, BigInt } from "@graphprotocol/graph-ts"
+import { Address, Bytes, BigInt } from "@graphprotocol/graph-ts"
 import {
   PrizePool,
   Prize,
 } from '../../generated/schema'
+import {
+  ERC20 as ERC20Contract,
+} from '../../generated/PrizePoolBuilder/ERC20'
 import {
   CompoundPeriodicPrizePool as CompoundPeriodicPrizePoolContract,
 } from '../../generated/PrizePoolBuilder/CompoundPeriodicPrizePool'
@@ -28,6 +31,16 @@ export function loadOrCreatePrizePool(
     const boundPrizePool = CompoundPeriodicPrizePoolContract.bind(prizePool)
 
     const boundPeriodicPrizePool = CompoundPeriodicPrizePoolContract.bind(prizePool)
+
+    const boundYieldToken = ERC20Contract.bind(boundPeriodicPrizePool.cToken())
+    _prizePool.yieldToken = boundPeriodicPrizePool.cToken()
+    _prizePool.yieldTokenName = boundYieldToken.name()
+    _prizePool.yieldTokenSymbol = boundYieldToken.symbol()
+    
+    const boundToken = ERC20Contract.bind(boundPeriodicPrizePool.token())
+    _prizePool.underlyingCollateralToken = boundPeriodicPrizePool.token()
+    _prizePool.underlyingCollateralName = boundToken.name()
+    _prizePool.underlyingCollateralSymbol = boundToken.symbol()
 
     _prizePool.prizePoolBuilder = builder.toHex()
     _prizePool.creator = creator

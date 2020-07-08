@@ -16,6 +16,8 @@ dataSources:
       entities:
         - PrizePoolBuilder
       abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
         - name: CompoundPeriodicPrizePool
           file: ./abis/CompoundPeriodicPrizePool.json
         - name: PrizePoolBuilder

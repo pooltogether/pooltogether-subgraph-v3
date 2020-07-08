@@ -32,6 +32,14 @@ type PrizePool @entity {
 
   creator: Bytes!
 
+  yieldToken: Bytes!
+  yieldTokenName: String!
+  yieldTokenSymbol: String!
+  
+  underlyingCollateralToken: Bytes!
+  underlyingCollateralName: String!
+  underlyingCollateralSymbol: String!
+
   prizePoolBuilder: PrizePoolBuilder!
   ticket: Bytes!
   sponsorship: Bytes!
