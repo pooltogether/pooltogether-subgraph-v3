@@ -8,6 +8,7 @@ import {
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 
 export function handleTransfer(event: Transfer): void {
+  // increment or decrement prize pool player count
 }
 
 // Burned,

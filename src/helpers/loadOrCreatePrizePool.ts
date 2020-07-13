@@ -17,6 +17,8 @@ import { prizeId } from './idTemplates'
 import { createSponsorship } from '../helpers/createSponsorship'
 import { createTicket } from '../helpers/createTicket'
 
+const ZERO = BigInt.fromI32(0)
+
 export function loadOrCreatePrizePool(
   blockNumber: BigInt,
   builder: Address,
@@ -34,14 +36,16 @@ export function loadOrCreatePrizePool(
 
     const boundYieldToken = ERC20Contract.bind(boundPeriodicPrizePool.cToken())
     _prizePool.yieldToken = boundPeriodicPrizePool.cToken()
-    _prizePool.yieldTokenName = boundYieldToken.name()
-    _prizePool.yieldTokenSymbol = boundYieldToken.symbol()
+    _prizePool.yieldDecimals = BigInt.fromI32(boundYieldToken.decimals())
+    _prizePool.yieldName = boundYieldToken.name()
+    _prizePool.yieldSymbol = boundYieldToken.symbol()
     
     const boundToken = ERC20Contract.bind(boundPeriodicPrizePool.token())
     _prizePool.underlyingCollateralToken = boundPeriodicPrizePool.token()
+    _prizePool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
     _prizePool.underlyingCollateralName = boundToken.name()
     _prizePool.underlyingCollateralSymbol = boundToken.symbol()
-
+    
     _prizePool.prizePoolBuilder = builder.toHex()
     _prizePool.creator = creator
     _prizePool.prizeStrategy = prizeStrategy
@@ -59,7 +63,11 @@ export function loadOrCreatePrizePool(
     _prizePool.prizePeriodSeconds = boundPeriodicPrizePool.prizePeriodSeconds()
     _prizePool.prizePeriodStartedAt = boundPeriodicPrizePool.prizePeriodStartedAt()
 
+    _prizePool.playerCount = ZERO
 
+    const boundTicket = ERC20Contract.bind(Address.fromString(_prizePool.ticket.toHex()))
+    _prizePool.totalSupply = boundTicket.totalSupply()
+    
     const prize = new Prize(prizeId(
       prizePool.toHexString(),
       _prizePool.currentPrizeId.toString()
@@ -77,6 +85,7 @@ export function loadOrCreatePrizePool(
       prizePool,
       boundPrizePool.ticket()
     )
+
 
     // const boundYieldService = CompoundYieldServiceContract.bind(yieldServiceAddress)
     // prizePool.cToken = boundYieldService.token().toHex()

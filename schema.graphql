@@ -8,47 +8,31 @@ enum YieldServiceTokenType {
   cToken
 }
 
-type PrizePoolBuilder @entity {
-  id: ID!
-  trustedForwarder: Bytes!
-
-  controlledTokenFactory: Bytes!
-  compoundPeriodicPrizePoolFactory: Bytes!
-  ticketFactory: Bytes!
-
-  governor: Bytes!
-  rng: Bytes!
-}
-
-type SingleRandomWinnerPrizePoolBuilder @entity {
-  id: ID!
-
-  prizePoolBuilder: PrizePoolBuilder!
-  prizeStrategyFactory: Bytes!
-}
-
 type PrizePool @entity {
   id: ID!
 
-  creator: Bytes!
+  playerCount: BigInt!
+  totalSupply: BigInt! # move to PrizePool.Ticket relationship
+
+  currentPrizeId: BigInt!
+  currentState: PrizePoolState!
 
   yieldToken: Bytes!
-  yieldTokenName: String!
-  yieldTokenSymbol: String!
+  yieldDecimals: BigInt!
+  yieldName: String!
+  yieldSymbol: String!
   
   underlyingCollateralToken: Bytes!
+  underlyingCollateralDecimals: BigInt!
   underlyingCollateralName: String!
   underlyingCollateralSymbol: String!
 
+  creator: Bytes!
   prizePoolBuilder: PrizePoolBuilder!
   ticket: Bytes!
   sponsorship: Bytes!
   prizeStrategy: Bytes!
   rng: Bytes!
-
-
-  currentState: PrizePoolState!
-  currentPrizeId: BigInt!
 
   prizePeriodSeconds: BigInt!
   prizePeriodStartedAt: BigInt!
@@ -67,6 +51,39 @@ type PrizePool @entity {
 
   # draws: [Draw!]! @derivedFrom(field: "poolContract")
   # admins: [Admin!]! @derivedFrom(field: "poolContract")
+}
+
+# ID: `${prizePool.address}-${msg.sender.address}`
+# dynamically generated type, not mapped to a specific contract
+type Player @entity {
+  id: ID!
+  
+  balance: BigInt!
+
+  timelockedBalance: BigInt!
+  unlockTimestamp: BigInt!
+
+  address: Bytes!
+  prizePool: PrizePool!
+}
+
+type PrizePoolBuilder @entity {
+  id: ID!
+  trustedForwarder: Bytes!
+
+  controlledTokenFactory: Bytes!
+  compoundPeriodicPrizePoolFactory: Bytes!
+  ticketFactory: Bytes!
+
+  governor: Bytes!
+  rng: Bytes!
+}
+
+type SingleRandomWinnerPrizePoolBuilder @entity {
+  id: ID!
+
+  prizePoolBuilder: PrizePoolBuilder!
+  prizeStrategyFactory: Bytes!
 }
 
 type Ticket @entity {
@@ -123,22 +140,8 @@ type Sponsorship @entity {
 # }
 
 
-# Ephemeral Types (not mapped to a specific contract)
-
-# ID: `${prizePool.address}-${msg.sender.address}`
-type Player @entity {
-  id: ID!
-
-  address: Bytes!
-  prizePool: PrizePool!
-  
-  balance: BigInt!
-
-  timelockedBalance: BigInt!
-  unlockTimestamp: BigInt!
-}
-
 # ID: `${prizePool.address}-${prizeId}`
+# dynamically generated type, not mapped to a specific contract
 type Prize @entity {
   id: ID!
   prizePool: PrizePool!

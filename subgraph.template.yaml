@@ -54,6 +54,44 @@ dataSources:
           handler: handleSingleRandomWinnerPrizePoolCreated
       file: ./src/mappingForSingleRandomWinnerPrizePoolBuilder.ts
 templates:
+  - name: PrizePool
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: CompoundPeriodicPrizePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForPrizePool.ts
+      entities:
+        - PrizePool
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: CompoundPeriodicPrizePool
+          file: ./abis/CompoundPeriodicPrizePool.json
+      eventHandlers:
+        - event: PrizePoolOpened(indexed address,indexed uint256)
+          handler: handlePrizePoolOpened
+        - event: PrizePoolAwardStarted(indexed address,indexed uint256)
+          handler: handlePrizePoolAwardStarted
+        - event: PrizePoolAwardCompleted(indexed address,uint256,uint256,bytes32)
+          handler: handlePrizePoolAwardCompleted
+        - event: CollateralSupplied(indexed address,uint256,uint256)
+          handler: handleCollateralSupplied
+        - event: CollateralRedeemed(indexed address,uint256,uint256)
+          handler: handleCollateralRedeemed
+        - event: CollateralTimelocked(indexed address,indexed address,uint256,uint256)
+          handler: handleCollateralTimelocked
+        - event: CollateralSwept(indexed address,indexed address,uint256)
+          handler: handleCollateralSwept
+        - event: PrincipalCaptured(address,uint256)
+          handler: handlePrincipalCaptured
+        - event: PrincipalRedeemed(address,uint256)
+          handler: handlePrincipalRedeemed
+        - event: PrincipalSupplied(address,uint256)
+          handler: handlePrincipalSupplied
   - name: Sponsorship
     kind: ethereum/contract
     network: {{network}}
@@ -88,40 +126,3 @@ templates:
           file: ./abis/Ticket.json
         - name: ERC777UpgradeSafe
           file: ./abis/ERC777UpgradeSafe.json
-  - name: PrizePool
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      abi: CompoundPeriodicPrizePool
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappingForPrizePool.ts
-      entities:
-        - PrizePool
-      abis:
-        - name: CompoundPeriodicPrizePool
-          file: ./abis/CompoundPeriodicPrizePool.json
-      eventHandlers:
-        - event: PrizePoolOpened(indexed address,indexed uint256)
-          handler: handlePrizePoolOpened
-        - event: PrizePoolAwardStarted(indexed address,indexed uint256)
-          handler: handlePrizePoolAwardStarted
-        - event: PrizePoolAwardCompleted(indexed address,uint256,uint256,bytes32)
-          handler: handlePrizePoolAwardCompleted
-        - event: CollateralSupplied(indexed address,uint256,uint256)
-          handler: handleCollateralSupplied
-        - event: CollateralRedeemed(indexed address,uint256,uint256)
-          handler: handleCollateralRedeemed
-        - event: CollateralTimelocked(indexed address,indexed address,uint256,uint256)
-          handler: handleCollateralTimelocked
-        - event: CollateralSwept(indexed address,indexed address,uint256)
-          handler: handleCollateralSwept
-        - event: PrincipalCaptured(address,uint256)
-          handler: handlePrincipalCaptured
-        - event: PrincipalRedeemed(address,uint256)
-          handler: handlePrincipalRedeemed
-        - event: PrincipalSupplied(address,uint256)
-          handler: handlePrincipalSupplied
-  
