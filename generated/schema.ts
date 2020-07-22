@@ -114,6 +114,24 @@ export class PrizeStrategy extends Entity {
     this.set("governor", Value.fromBytes(value));
   }
 
+  get currentPrizeId(): BigInt {
+    let value = this.get("currentPrizeId");
+    return value.toBigInt();
+  }
+
+  set currentPrizeId(value: BigInt) {
+    this.set("currentPrizeId", Value.fromBigInt(value));
+  }
+
+  get currentState(): string {
+    let value = this.get("currentState");
+    return value.toString();
+  }
+
+  set currentState(value: string) {
+    this.set("currentState", Value.fromString(value));
+  }
+
   get prizePeriodSeconds(): BigInt {
     let value = this.get("prizePeriodSeconds");
     return value.toBigInt();
@@ -242,24 +260,6 @@ export class PrizePool extends Entity {
 
   set totalSupply(value: BigInt) {
     this.set("totalSupply", Value.fromBigInt(value));
-  }
-
-  get currentPrizeId(): BigInt {
-    let value = this.get("currentPrizeId");
-    return value.toBigInt();
-  }
-
-  set currentPrizeId(value: BigInt) {
-    this.set("currentPrizeId", Value.fromBigInt(value));
-  }
-
-  get currentState(): string {
-    let value = this.get("currentState");
-    return value.toString();
-  }
-
-  set currentState(value: string) {
-    this.set("currentState", Value.fromString(value));
   }
 
   get underlyingCollateralToken(): Bytes {
@@ -644,6 +644,24 @@ export class Prize extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get awardStartOperator(): Bytes {
+    let value = this.get("awardStartOperator");
+    return value.toBytes();
+  }
+
+  set awardStartOperator(value: Bytes) {
+    this.set("awardStartOperator", Value.fromBytes(value));
+  }
+
+  get awardedOperator(): Bytes {
+    let value = this.get("awardedOperator");
+    return value.toBytes();
+  }
+
+  set awardedOperator(value: Bytes) {
+    this.set("awardedOperator", Value.fromBytes(value));
+  }
+
   get prizeStrategy(): string {
     let value = this.get("prizeStrategy");
     return value.toString();
@@ -678,23 +696,6 @@ export class Prize extends Entity {
 
   set lockBlock(value: BigInt) {
     this.set("lockBlock", Value.fromBigInt(value));
-  }
-
-  get randomNumber(): Bytes | null {
-    let value = this.get("randomNumber");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set randomNumber(value: Bytes | null) {
-    if (value === null) {
-      this.unset("randomNumber");
-    } else {
-      this.set("randomNumber", Value.fromBytes(value as Bytes));
-    }
   }
 
   get balance(): BigInt | null {

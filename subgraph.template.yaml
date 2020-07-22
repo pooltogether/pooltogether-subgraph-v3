@@ -18,8 +18,10 @@ dataSources:
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: CompoundPrizePool
-          file: ./abis/CompoundPrizePool.json
+        - name: PrizePool
+          file: ./abis/PrizePool.json
+        # - name: CompoundPrizePool
+        #   file: ./abis/CompoundPrizePool.json
         - name: PrizeStrategyBuilder
           file: ./abis/PrizeStrategyBuilder.json
         - name: ControlledToken
@@ -57,7 +59,7 @@ templates:
     kind: ethereum/contract
     network: {{network}}
     source:
-      abi: CompoundPrizePool
+      abi: PrizePool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -68,8 +70,8 @@ templates:
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: CompoundPrizePool
-          file: ./abis/CompoundPrizePool.json
+        - name: PrizePool
+          file: ./abis/PrizePool.json
       eventHandlers:
         - event: Deposited(indexed address,indexed address,indexed address,uint256)
           handler: handleDeposited

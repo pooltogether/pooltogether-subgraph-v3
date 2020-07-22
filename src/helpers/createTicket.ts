@@ -3,7 +3,7 @@ import {
   Ticket,
 } from '../../generated/schema'
 import { Ticket as TicketTemplate } from '../../generated/templates'
-import { Ticket as TicketContract } from '../../generated/templates/Ticket/Ticket'
+import { ControlledToken as ControlledTokenContract } from '../../generated/templates/Ticket/ControlledToken'
 
 export function createTicket(
   prizePool: Address,
@@ -15,7 +15,7 @@ export function createTicket(
   const ticket = new Ticket(ticketAddress.toHex())
   ticket.prizePool = prizePool.toHex()
 
-  const boundTicket = TicketContract.bind(ticketAddress)
+  const boundTicket = ControlledTokenContract.bind(ticketAddress)
   ticket.name = boundTicket.name()
   ticket.symbol = boundTicket.symbol()
   ticket.decimals = BigInt.fromI32(boundTicket.decimals())

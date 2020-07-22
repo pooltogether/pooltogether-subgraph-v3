@@ -1,6 +1,7 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 import {
   PrizePool,
+  PrizeStrategy,
 } from '../generated/schema'
 import {
   ERC20 as ERC20Contract,
@@ -20,46 +21,62 @@ const ZERO = BigInt.fromI32(0)
 const ONE = BigInt.fromI32(1)
 
 export function handlePrizePoolOpened(event: PrizePoolOpened): void {
+  const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
 
+  // new Prize(prizeId(
+  //   prizeStrategy.toHexString(),
+  //   _prizeStrategy.currentPrizeId.toString()
+  // ))
+
+  const _prize = loadOrCreatePrize(
+    event.address.toHexString(),
+    _prizeStrategy.currentPrizeId.toString()
+  )
+  _prize.prizeStrategy = event.address.toHex()
+  _prize.save()
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
-  const prizePool = PrizePool.load(event.address.toHexString())
+  const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
 
-  prizePool.currentState = "Started"
-  prizePool.rngRequestId = event.params.rngRequestId
-  prizePool.save()
+  _prizeStrategy.currentState = "Started"
+  _prizeStrategy.save()
 
-  const prize = loadOrCreatePrize(event.address.toHexString(), prizePool.currentPrizeId.toString())
+  const prize = loadOrCreatePrize(
+    event.address.toHexString(),
+    _prizeStrategy.currentPrizeId.toString()
+  )
 
-  prize.rewardStartedOperator = event.params.operator
+  prize.awardStartOperator = event.params.operator
   prize.rngRequestId = event.params.rngRequestId
+  prize.lockBlock = event.params.rngLockBlock
   prize.save()
 }
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
-  const prizePool = PrizePool.load(event.address.toHexString())
+  const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
   const boundPrizePool = PrizeStrategyContract.bind(event.address)
   
   // Record prize history
   const prize = loadOrCreatePrize(
     event.address.toHexString(),
-    prizePool.currentPrizeId.toString()
+    _prizeStrategy.currentPrizeId.toString()
   )
 
-  prize.rewardCompletedOperator = event.params.operator
+  prize.awardedOperator = event.params.operator
   prize.prize = event.params.prize
   prize.reserveFee = event.params.reserveFee
-  prize.randomNumber = event.params.randomNumber
 
   prize.save()
 
+  // _prizeStrategy.previousPrize = boundPrizePool.previousPrize()
+  // _prizeStrategy.previousPrizeAverageTickets = boundPrizePool.previousPrizeAverageTickets()
+  // _prizeStrategy.rngRequestId = BigInt.fromI32(0)
+  
+  _prizeStrategy.currentState = "Awarded"
+  _prizeStrategy.currentPrizeId = _prizeStrategy.currentPrizeId.plus(
+    BigInt.fromI32(1)
+  )
 
-  prizePool.currentState = "Awarded"
-  prizePool.currentPrizeId = prizePool.currentPrizeId.plus(BigInt.fromI32(1))
-  prizePool.previousPrize = boundPrizePool.previousPrize()
-  prizePool.previousPrizeAverageTickets = boundPrizePool.previousPrizeAverageTickets()
-  prizePool.rngRequestId = BigInt.fromI32(0)
-
-  prizePool.save()
+  _prizeStrategy.save()
 }

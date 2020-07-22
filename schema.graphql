@@ -22,6 +22,9 @@ type PrizeStrategy @entity {
   trustedForwarder: Bytes!
   governor: Bytes!
 
+  currentPrizeId: BigInt!
+  currentState: PrizePoolState!
+
   prizePeriodSeconds: BigInt!
   prizePeriodStartedAt: BigInt!
   
@@ -42,9 +45,6 @@ type PrizePool @entity {
 
   playerCount: BigInt!
   totalSupply: BigInt! # move to PrizePool.Ticket relationship
-
-  currentPrizeId: BigInt!
-  currentState: PrizePoolState!
 
   # yieldToken: Bytes!
   # yieldDecimals: BigInt!
@@ -149,13 +149,16 @@ type Sponsorship @entity {
 type Prize @entity {
   id: ID!
 
+  awardStartOperator: Bytes!
+  awardedOperator: Bytes!
+
   prizeStrategy: PrizeStrategy!
   prizePool: PrizePool!
 
   prizePeriodStartedAt: BigInt!
   lockBlock: BigInt!
 
-  randomNumber: Bytes
+  # randomNumber: Bytes
   balance: BigInt
   prize: BigInt
   reserveFee: BigInt
