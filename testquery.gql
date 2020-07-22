@@ -1,24 +1,14 @@
 query ppbs {
-  prizePoolBuilders {
+  PrizeStrategyBuilders {
     id
 
     trustedForwarder
-
-    compoundPeriodicPrizePoolFactory
-    controlledTokenFactory
-    ticketFactory
-
     governor
     rng
-  }
 
-  singleRandomWinnerPrizePoolBuilders {
-    id
-
-    prizePoolBuilder {
-      id
-    }
-    prizeStrategyFactory
+    # compoundPeriodicPrizePoolFactory
+    # controlledTokenFactory
+    # ticketFactory
   }
 
   prizePools {

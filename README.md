@@ -66,11 +66,11 @@ $ cp subgraph.yaml subgraph.local.yaml
 // subgraph.local.yaml
 dataSources:
   - kind: ethereum/contract
-    name: PrizePoolBuilder
+    name: PrizeStrategyBuilder
     network: mainnet
     source:
       address: "<Your locally deployed address here>"
-      abi: PrizePoolBuilder
+      abi: PrizeStrategyBuilder
 ...
 ```
   

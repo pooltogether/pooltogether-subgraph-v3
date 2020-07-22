@@ -8,6 +8,55 @@ enum YieldServiceTokenType {
   cToken
 }
 
+
+type PrizeStrategy @entity {
+  id: ID!
+
+  # yieldToken: Bytes!
+  # yieldDecimals: BigInt!
+  # yieldName: String!
+  # yieldSymbol: String!
+  
+  underlyingCollateralToken: Bytes!
+  underlyingCollateralDecimals: BigInt!
+  underlyingCollateralName: String!
+  underlyingCollateralSymbol: String!
+
+  creator: Bytes!
+  prizeStrategyBuilder: PrizeStrategyBuilder!
+  
+  prizePool: Bytes!
+  ticket: Bytes!
+  rng: Bytes!
+  sponsorship: Bytes!
+  trustedForwarder: Bytes!
+  governor: Bytes!
+
+  prizePeriodSeconds: BigInt!
+  prizePeriodStartedAt: BigInt!
+  
+  exitFeeMantissa: BigInt!
+  creditRateMantissa: BigInt!
+
+
+
+
+  previousPrize: BigInt
+  previousPrizeAverageTickets: BigInt
+
+  feeScaleMantissa: BigInt
+  rngRequestId: BigInt
+
+  tickets: [Prize!]! @derivedFrom(field: "prizePool")
+  sponsorships: [Player!]! @derivedFrom(field: "prizePool")
+
+  prizes: [Prize!]! @derivedFrom(field: "prizePool")
+  players: [Player!]! @derivedFrom(field: "prizePool")
+
+  # draws: [Draw!]! @derivedFrom(field: "poolContract")
+  # admins: [Admin!]! @derivedFrom(field: "poolContract")
+}
+
 type PrizePool @entity {
   id: ID!
 
@@ -17,10 +66,10 @@ type PrizePool @entity {
   currentPrizeId: BigInt!
   currentState: PrizePoolState!
 
-  yieldToken: Bytes!
-  yieldDecimals: BigInt!
-  yieldName: String!
-  yieldSymbol: String!
+  # yieldToken: Bytes!
+  # yieldDecimals: BigInt!
+  # yieldName: String!
+  # yieldSymbol: String!
   
   underlyingCollateralToken: Bytes!
   underlyingCollateralDecimals: BigInt!
@@ -28,7 +77,7 @@ type PrizePool @entity {
   underlyingCollateralSymbol: String!
 
   creator: Bytes!
-  prizePoolBuilder: PrizePoolBuilder!
+  prizeStrategyBuilder: PrizeStrategyBuilder!
   ticket: Bytes!
   sponsorship: Bytes!
   prizeStrategy: Bytes!
@@ -67,23 +116,16 @@ type Player @entity {
   prizePool: PrizePool!
 }
 
-type PrizePoolBuilder @entity {
+type PrizeStrategyBuilder @entity {
   id: ID!
+
   trustedForwarder: Bytes!
-
-  controlledTokenFactory: Bytes!
-  compoundPeriodicPrizePoolFactory: Bytes!
-  ticketFactory: Bytes!
-
   governor: Bytes!
   rng: Bytes!
-}
 
-type SingleRandomWinnerPrizePoolBuilder @entity {
-  id: ID!
-
-  prizePoolBuilder: PrizePoolBuilder!
-  prizeStrategyFactory: Bytes!
+  # controlledTokenFactory: Bytes!
+  # compoundPeriodicPrizePoolFactory: Bytes!
+  # ticketFactory: Bytes!
 }
 
 type Ticket @entity {
@@ -144,14 +186,19 @@ type Sponsorship @entity {
 # dynamically generated type, not mapped to a specific contract
 type Prize @entity {
   id: ID!
+
+  prizeStrategy: PrizeStrategy!
   prizePool: PrizePool!
 
+  prizePeriodStartedAt: BigInt!
+  lockBlock: BigInt!
+
+  randomNumber: Bytes
+  balance: BigInt
   prize: BigInt
   reserveFee: BigInt
-  rngRequestId: BigInt
-  randomNumber: Bytes
-  rewardStartedOperator: Bytes
-  rewardCompletedOperator: Bytes
+  
+  rngRequestId: BigInt!
 
   winners: [Player!]
 }

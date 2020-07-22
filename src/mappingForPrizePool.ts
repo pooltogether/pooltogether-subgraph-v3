@@ -7,18 +7,15 @@ import {
 } from '../generated/templates/PrizePool/ERC20'
 
 import {
-  CompoundPeriodicPrizePool as CompoundPeriodicPrizePoolContract,
-  CollateralRedeemed,
-  CollateralSupplied,
-  CollateralSwept,
-  CollateralTimelocked,
-  PrizePoolOpened,
-  PrizePoolAwardStarted,
-  PrizePoolAwardCompleted,
-  PrincipalSupplied,
-  PrincipalRedeemed,
-  PrincipalCaptured,
-} from '../generated/templates/CompoundPeriodicPrizePool/CompoundPeriodicPrizePool'
+  PrizePool as PrizePoolContract,
+  Deposited,
+  Awarded,
+  AwardedExternal,
+  InstantWithdrawal,
+  TimelockedWithdrawal,
+  TimelockedWithdrawalSwept,
+  PrizeStrategyDetached,
+} from '../generated/templates/PrizePool/PrizePool'
 
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
@@ -26,117 +23,7 @@ import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
 const ZERO = BigInt.fromI32(0)
 const ONE = BigInt.fromI32(1)
 
-export function handlePrizePoolOpened(event: PrizePoolOpened): void {
-  // no-op, handled when created by builder
-}
-
-export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
-  const prizePool = PrizePool.load(event.address.toHexString())
-
-  prizePool.currentState = "Started"
-  prizePool.rngRequestId = event.params.rngRequestId
-  prizePool.save()
-
-  const prize = loadOrCreatePrize(event.address.toHexString(), prizePool.currentPrizeId.toString())
-
-  prize.rewardStartedOperator = event.params.operator
-  prize.rngRequestId = event.params.rngRequestId
-  prize.save()
-}
-
-export function handlePrizePoolAwardCompleted(event: PrizePoolAwardCompleted): void {
-  const prizePool = PrizePool.load(event.address.toHexString())
-  const boundPrizePool = CompoundPeriodicPrizePoolContract.bind(event.address)
-  
-  // Record prize history
-  const prize = loadOrCreatePrize(
-    event.address.toHexString(),
-    prizePool.currentPrizeId.toString()
-  )
-
-  prize.rewardCompletedOperator = event.params.operator
-  prize.prize = event.params.prize
-  prize.reserveFee = event.params.reserveFee
-  prize.randomNumber = event.params.randomNumber
-
-  prize.save()
-
-
-  prizePool.currentState = "Awarded"
-  prizePool.currentPrizeId = prizePool.currentPrizeId.plus(BigInt.fromI32(1))
-  prizePool.previousPrize = boundPrizePool.previousPrize()
-  prizePool.previousPrizeAverageTickets = boundPrizePool.previousPrizeAverageTickets()
-  prizePool.rngRequestId = BigInt.fromI32(0)
-
-  prizePool.save()
-}
-
-
-
-
-
-
-
-
-
-export function handlePrincipalSupplied(event: PrincipalSupplied): void {
-  // const yieldService = YieldService.load(event.address.toHex())
-
-  // const player = loadOrCreatePlayer(
-  //   Address.fromString(yieldService.prizePool),
-  //   event.params.from
-  // )
-
-  // player.address = event.params.from
-  // player.prizePool = yieldService.prizePool
-  // player.balance = player.balance.plus(event.params.amount)
-  // // player.shares = player.shares.plus(event.params.shares)
-
-  // player.save()
-}
-
-export function handlePrincipalRedeemed(event: PrincipalRedeemed): void {
-  // const yieldService = YieldService.load(event.address.toHex())
-}
-
-export function handlePrincipalCaptured(event: PrincipalCaptured): void {
-  // const yieldService = YieldService.load(event.address.toHex())
-}
-
-
-export function handleCollateralTimelocked(event: CollateralTimelocked): void {
-  // const timelock = Timelock.load(event.address.toHex())
-  const player = loadOrCreatePlayer(
-    Address.fromString(event.address.toHex()),
-    event.params.to
-  )
-
-  // increment or decrement prize pool player count if balance is now 0
-
-  // This may need to be an association of many timelocked balances per player
-  player.timelockedBalance = player.timelockedBalance.plus(event.params.amount)
-  player.unlockTimestamp = event.params.unlockTimestamp
-
-  player.save()
-}
-
-export function handleCollateralSwept(event: CollateralSwept): void {
-  // const _prizePool = PrizePool.load(event.address.toHex())
-  const _player = loadOrCreatePlayer(
-    Address.fromString(event.address.toHex()),
-    event.params.to
-  )
-
-  _player.timelockedBalance = _player.timelockedBalance.minus(event.params.amount)
-  // _player.unlockTimestamp = event.params.unlockTimestamp ?
-
-  // increment or decrement prize pool player count if balance is now 0
-
-  _player.save()
-}
-
-
-export function handleCollateralSupplied(event: CollateralSupplied): void {
+export function handleDeposited(event: Deposited): void {
   const _prizePool = PrizePool.load(event.address.toHex())
   const _player = loadOrCreatePlayer(
     Address.fromString(event.address.toHex()),
@@ -154,7 +41,7 @@ export function handleCollateralSupplied(event: CollateralSupplied): void {
   const boundTicket = ERC20Contract.bind(Address.fromString(_prizePool.ticket.toHex()))
   _prizePool.totalSupply = boundTicket.totalSupply()
   _prizePool.save()
-  
+
   _player.address = event.params.user
   _player.prizePool = event.address.toHex()
   _player.balance = _player.balance.plus(event.params.collateral)
@@ -163,7 +50,7 @@ export function handleCollateralSupplied(event: CollateralSupplied): void {
   _player.save()
 }
 
-export function handleCollateralRedeemed(event: CollateralRedeemed): void {
+export function handleInstantWithdrawal(event: InstantWithdrawal): void {
   const _prizePool = PrizePool.load(event.address.toHex())
   const _player = loadOrCreatePlayer(
     Address.fromString(event.address.toHex()),
@@ -185,3 +72,36 @@ export function handleCollateralRedeemed(event: CollateralRedeemed): void {
   _prizePool.save()
   _player.save()
 }
+
+export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
+  // const timelock = Timelock.load(event.address.toHex())
+  const player = loadOrCreatePlayer(
+    Address.fromString(event.address.toHex()),
+    event.params.to
+  )
+
+  // increment or decrement prize pool player count if balance is now 0
+
+  // This may need to be an association of many timelocked balances per player
+  player.timelockedBalance = player.timelockedBalance.plus(event.params.amount)
+  player.unlockTimestamp = event.params.unlockTimestamp
+
+  player.save()
+}
+
+export function handleTimelockedWithdrawalSwept(event: TimelockedWithdrawalSwept): void {
+  // const _prizePool = PrizePool.load(event.address.toHex())
+  const _player = loadOrCreatePlayer(
+    Address.fromString(event.address.toHex()),
+    event.params.to
+  )
+
+  _player.timelockedBalance = _player.timelockedBalance.minus(event.params.amount)
+  // _player.unlockTimestamp = event.params.unlockTimestamp ?
+
+  // increment or decrement prize pool player count if balance is now 0
+
+  _player.save()
+}
+
+

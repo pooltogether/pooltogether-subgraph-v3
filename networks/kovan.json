@@ -1,11 +1,7 @@
 {
   "network": "kovan",
-  "prizePoolBuilder": {
-    "address": "0x8AeB3b4C55569C5893b2BEBe25AFF87bAC3705ad",
-    "startBlock": "19123000"
-  },
-  "singleRandomWinnerPrizePoolBuilder": {
-    "address": "0x7E2f3700677A558e41A8CAEaE6d75D5A8E5eB72E",
-    "startBlock": "19123000"
+  "prizeStrategyBuilder": {
+    "address": "0x5b346F2bCD7Da95160A8C9D14a5F0ace70D78DBf",
+    "startBlock": "19750000"
   }
 }

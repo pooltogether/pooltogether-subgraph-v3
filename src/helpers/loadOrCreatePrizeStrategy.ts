@@ -5,10 +5,10 @@ import {
 } from '../../generated/schema'
 import {
   ERC20 as ERC20Contract,
-} from '../../generated/PrizePoolBuilder/ERC20'
+} from '../../generated/PrizeStrategyBuilder/ERC20'
 import {
-  CompoundPeriodicPrizePool as CompoundPeriodicPrizePoolContract,
-} from '../../generated/PrizePoolBuilder/CompoundPeriodicPrizePool'
+  PrizeStrategy as PrizeStrategyContract,
+} from '../../generated/PrizeStrategyBuilder/PrizeStrategy'
 import {
   PrizePool as PrizePoolTemplate
 } from '../../generated/templates'
@@ -19,7 +19,7 @@ import { createTicket } from '../helpers/createTicket'
 
 const ZERO = BigInt.fromI32(0)
 
-export function loadOrCreatePrizePool(
+export function loadOrCreatePrizeStrategy(
   blockNumber: BigInt,
   builder: Address,
   creator: Address,
@@ -30,15 +30,15 @@ export function loadOrCreatePrizePool(
 
   if (!_prizePool) {
     _prizePool = new PrizePool(prizePool.toHex())
-    const boundPrizePool = CompoundPeriodicPrizePoolContract.bind(prizePool)
+    const boundPrizeStrategy = PrizeStrategyContract.bind(prizePool)
 
-    const boundPeriodicPrizePool = CompoundPeriodicPrizePoolContract.bind(prizePool)
+    const boundPeriodicPrizePool = PrizeStrategyContract.bind(prizePool)
 
-    const boundYieldToken = ERC20Contract.bind(boundPeriodicPrizePool.cToken())
-    _prizePool.yieldToken = boundPeriodicPrizePool.cToken()
-    _prizePool.yieldDecimals = BigInt.fromI32(boundYieldToken.decimals())
-    _prizePool.yieldName = boundYieldToken.name()
-    _prizePool.yieldSymbol = boundYieldToken.symbol()
+    // const boundYieldToken = ERC20Contract.bind(boundPeriodicPrizePool.cToken())
+    // _prizePool.yieldToken = boundPeriodicPrizePool.cToken()
+    // _prizePool.yieldDecimals = BigInt.fromI32(boundYieldToken.decimals())
+    // _prizePool.yieldName = boundYieldToken.name()
+    // _prizePool.yieldSymbol = boundYieldToken.symbol()
     
     const boundToken = ERC20Contract.bind(boundPeriodicPrizePool.token())
     _prizePool.underlyingCollateralToken = boundPeriodicPrizePool.token()
@@ -46,7 +46,7 @@ export function loadOrCreatePrizePool(
     _prizePool.underlyingCollateralName = boundToken.name()
     _prizePool.underlyingCollateralSymbol = boundToken.symbol()
     
-    _prizePool.prizePoolBuilder = builder.toHex()
+    _prizePool.PrizeStrategyBuilder = builder.toHex()
     _prizePool.creator = creator
     _prizePool.prizeStrategy = prizeStrategy
     _prizePool.currentState = 'Opened'
@@ -78,12 +78,12 @@ export function loadOrCreatePrizePool(
 
     createSponsorship(
       prizePool,
-      boundPrizePool.sponsorship()
+      boundPrizeStrategy.sponsorship()
     )
 
     createTicket(
       prizePool,
-      boundPrizePool.ticket()
+      boundPrizeStrategy.ticket()
     )
 
 

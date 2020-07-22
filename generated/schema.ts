@@ -78,42 +78,6 @@ export class PrizePool extends Entity {
     this.set("currentState", Value.fromString(value));
   }
 
-  get yieldToken(): Bytes {
-    let value = this.get("yieldToken");
-    return value.toBytes();
-  }
-
-  set yieldToken(value: Bytes) {
-    this.set("yieldToken", Value.fromBytes(value));
-  }
-
-  get yieldDecimals(): BigInt {
-    let value = this.get("yieldDecimals");
-    return value.toBigInt();
-  }
-
-  set yieldDecimals(value: BigInt) {
-    this.set("yieldDecimals", Value.fromBigInt(value));
-  }
-
-  get yieldName(): string {
-    let value = this.get("yieldName");
-    return value.toString();
-  }
-
-  set yieldName(value: string) {
-    this.set("yieldName", Value.fromString(value));
-  }
-
-  get yieldSymbol(): string {
-    let value = this.get("yieldSymbol");
-    return value.toString();
-  }
-
-  set yieldSymbol(value: string) {
-    this.set("yieldSymbol", Value.fromString(value));
-  }
-
   get underlyingCollateralToken(): Bytes {
     let value = this.get("underlyingCollateralToken");
     return value.toBytes();
@@ -159,13 +123,13 @@ export class PrizePool extends Entity {
     this.set("creator", Value.fromBytes(value));
   }
 
-  get prizePoolBuilder(): string {
-    let value = this.get("prizePoolBuilder");
+  get prizeStrategyBuilder(): string {
+    let value = this.get("prizeStrategyBuilder");
     return value.toString();
   }
 
-  set prizePoolBuilder(value: string) {
-    this.set("prizePoolBuilder", Value.fromString(value));
+  set prizeStrategyBuilder(value: string) {
+    this.set("prizeStrategyBuilder", Value.fromString(value));
   }
 
   get ticket(): Bytes {
@@ -406,7 +370,7 @@ export class Player extends Entity {
   }
 }
 
-export class PrizePoolBuilder extends Entity {
+export class PrizeStrategyBuilder extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -414,17 +378,20 @@ export class PrizePoolBuilder extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save PrizePoolBuilder entity without an ID");
+    assert(
+      id !== null,
+      "Cannot save PrizeStrategyBuilder entity without an ID"
+    );
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save PrizePoolBuilder entity with non-string ID. " +
+      "Cannot save PrizeStrategyBuilder entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("PrizePoolBuilder", id.toString(), this);
+    store.set("PrizeStrategyBuilder", id.toString(), this);
   }
 
-  static load(id: string): PrizePoolBuilder | null {
-    return store.get("PrizePoolBuilder", id) as PrizePoolBuilder | null;
+  static load(id: string): PrizeStrategyBuilder | null {
+    return store.get("PrizeStrategyBuilder", id) as PrizeStrategyBuilder | null;
   }
 
   get id(): string {
@@ -445,33 +412,6 @@ export class PrizePoolBuilder extends Entity {
     this.set("trustedForwarder", Value.fromBytes(value));
   }
 
-  get controlledTokenFactory(): Bytes {
-    let value = this.get("controlledTokenFactory");
-    return value.toBytes();
-  }
-
-  set controlledTokenFactory(value: Bytes) {
-    this.set("controlledTokenFactory", Value.fromBytes(value));
-  }
-
-  get compoundPeriodicPrizePoolFactory(): Bytes {
-    let value = this.get("compoundPeriodicPrizePoolFactory");
-    return value.toBytes();
-  }
-
-  set compoundPeriodicPrizePoolFactory(value: Bytes) {
-    this.set("compoundPeriodicPrizePoolFactory", Value.fromBytes(value));
-  }
-
-  get ticketFactory(): Bytes {
-    let value = this.get("ticketFactory");
-    return value.toBytes();
-  }
-
-  set ticketFactory(value: Bytes) {
-    this.set("ticketFactory", Value.fromBytes(value));
-  }
-
   get governor(): Bytes {
     let value = this.get("governor");
     return value.toBytes();
@@ -488,61 +428,6 @@ export class PrizePoolBuilder extends Entity {
 
   set rng(value: Bytes) {
     this.set("rng", Value.fromBytes(value));
-  }
-}
-
-export class SingleRandomWinnerPrizePoolBuilder extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(
-      id !== null,
-      "Cannot save SingleRandomWinnerPrizePoolBuilder entity without an ID"
-    );
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save SingleRandomWinnerPrizePoolBuilder entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("SingleRandomWinnerPrizePoolBuilder", id.toString(), this);
-  }
-
-  static load(id: string): SingleRandomWinnerPrizePoolBuilder | null {
-    return store.get(
-      "SingleRandomWinnerPrizePoolBuilder",
-      id
-    ) as SingleRandomWinnerPrizePoolBuilder | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get prizePoolBuilder(): string {
-    let value = this.get("prizePoolBuilder");
-    return value.toString();
-  }
-
-  set prizePoolBuilder(value: string) {
-    this.set("prizePoolBuilder", Value.fromString(value));
-  }
-
-  get prizeStrategyFactory(): Bytes {
-    let value = this.get("prizeStrategyFactory");
-    return value.toBytes();
-  }
-
-  set prizeStrategyFactory(value: Bytes) {
-    this.set("prizeStrategyFactory", Value.fromBytes(value));
   }
 }
 
