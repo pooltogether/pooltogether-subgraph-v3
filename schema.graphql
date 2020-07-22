@@ -58,9 +58,7 @@ type PrizePool @entity {
 
   previousPrize: BigInt
 
-  tickets: [Prize!]! @derivedFrom(field: "prizePool")
-  sponsorships: [Player!]! @derivedFrom(field: "prizePool")
-
+  # sponsorships: [Sponsor!]! @derivedFrom(field: "prizePool")
   players: [Player!]! @derivedFrom(field: "prizePool")
 }
 
@@ -93,7 +91,7 @@ type PrizeStrategyBuilder @entity {
 type Ticket @entity {
   id: ID!
   
-  prizePool: PrizePool!
+  prizeStrategy: PrizeStrategy!
   
   name: String!
   symbol: String!
@@ -103,7 +101,7 @@ type Ticket @entity {
 type Sponsorship @entity {
   id: ID!
 
-  prizePool: PrizePool!
+  prizeStrategy: PrizeStrategy!
 
   name: String!
   symbol: String!

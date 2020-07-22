@@ -315,24 +315,6 @@ export class PrizePool extends Entity {
     }
   }
 
-  get tickets(): Array<string> {
-    let value = this.get("tickets");
-    return value.toStringArray();
-  }
-
-  set tickets(value: Array<string>) {
-    this.set("tickets", Value.fromStringArray(value));
-  }
-
-  get sponsorships(): Array<string> {
-    let value = this.get("sponsorships");
-    return value.toStringArray();
-  }
-
-  set sponsorships(value: Array<string>) {
-    this.set("sponsorships", Value.fromStringArray(value));
-  }
-
   get players(): Array<string> {
     let value = this.get("players");
     return value.toStringArray();
@@ -510,13 +492,13 @@ export class Ticket extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get prizePool(): string {
-    let value = this.get("prizePool");
+  get prizeStrategy(): string {
+    let value = this.get("prizeStrategy");
     return value.toString();
   }
 
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
+  set prizeStrategy(value: string) {
+    this.set("prizeStrategy", Value.fromString(value));
   }
 
   get name(): string {
@@ -577,13 +559,13 @@ export class Sponsorship extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get prizePool(): string {
-    let value = this.get("prizePool");
+  get prizeStrategy(): string {
+    let value = this.get("prizeStrategy");
     return value.toString();
   }
 
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
+  set prizeStrategy(value: string) {
+    this.set("prizeStrategy", Value.fromString(value));
   }
 
   get name(): string {

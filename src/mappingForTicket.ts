@@ -1,9 +1,9 @@
 import {
-  Burned,
-  Sent,
-  Minted,
+  // Burned,
+  // Sent,
+  // Minted,
   Transfer
-} from '../generated/templates/Ticket/ERC777UpgradeSafe'
+} from '../generated/templates/Ticket/ControlledToken'
 
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 

@@ -6,21 +6,21 @@ import { Ticket as TicketTemplate } from '../../generated/templates'
 import { ControlledToken as ControlledTokenContract } from '../../generated/templates/Ticket/ControlledToken'
 
 export function createTicket(
-  prizePool: Address,
+  prizeStrategy: Address,
   ticketAddress: Address,
 ): Ticket {
   // Start listening for events from the dynamically generated contract
   TicketTemplate.create(ticketAddress)
 
-  const ticket = new Ticket(ticketAddress.toHex())
-  ticket.prizePool = prizePool.toHex()
+  const _ticket = new Ticket(ticketAddress.toHex())
+  _ticket.prizeStrategy = prizeStrategy.toHex()
 
   const boundTicket = ControlledTokenContract.bind(ticketAddress)
-  ticket.name = boundTicket.name()
-  ticket.symbol = boundTicket.symbol()
-  ticket.decimals = BigInt.fromI32(boundTicket.decimals())
+  _ticket.name = boundTicket.name()
+  _ticket.symbol = boundTicket.symbol()
+  _ticket.decimals = BigInt.fromI32(boundTicket.decimals())
 
-  ticket.save()
+  _ticket.save()
 
-  return ticket as Ticket
+  return _ticket as Ticket
 }

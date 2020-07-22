@@ -6,21 +6,21 @@ import { Sponsorship as SponsorshipTemplate } from '../../generated/templates'
 import { ControlledToken as ControlledTokenContract } from '../../generated/templates/Sponsorship/ControlledToken'
 
 export function createSponsorship(
-  prizePool: Address,
+  prizeStrategy: Address,
   sponsorshipAddress: Address,
 ): Sponsorship {
   // Start listening for events from the dynamically generated contract
   SponsorshipTemplate.create(sponsorshipAddress)
 
-  const sponsorship = new Sponsorship(sponsorshipAddress.toHex())
-  sponsorship.prizePool = prizePool.toHex()
+  const _sponsorship = new Sponsorship(sponsorshipAddress.toHex())
+  _sponsorship.prizeStrategy = prizeStrategy.toHex()
 
   const boundSponsorship = ControlledTokenContract.bind(sponsorshipAddress)
-  sponsorship.name = boundSponsorship.name()
-  sponsorship.symbol = boundSponsorship.symbol()
-  sponsorship.decimals = BigInt.fromI32(boundSponsorship.decimals())
+  _sponsorship.name = boundSponsorship.name()
+  _sponsorship.symbol = boundSponsorship.symbol()
+  _sponsorship.decimals = BigInt.fromI32(boundSponsorship.decimals())
 
-  sponsorship.save()
+  _sponsorship.save()
 
-  return sponsorship as Sponsorship
+  return _sponsorship as Sponsorship
 }
