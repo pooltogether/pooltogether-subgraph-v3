@@ -1,6 +1,6 @@
 import { Address, Bytes, BigInt } from "@graphprotocol/graph-ts"
 import {
-  PrizePool,
+  PrizeStrategy,
   Prize,
 } from '../../generated/schema'
 import {
@@ -8,9 +8,9 @@ import {
 } from '../../generated/PrizeStrategyBuilder/ERC20'
 import {
   PrizeStrategy as PrizeStrategyContract,
-} from '../../generated/PrizeStrategyBuilder/PrizeStrategy'
+} from '../../generated/templates/PrizeStrategy/PrizeStrategy'
 import {
-  PrizePool as PrizePoolTemplate
+  PrizeStrategy as PrizeStrategyTemplate
 } from '../../generated/templates'
 
 import { prizeId } from './idTemplates'
@@ -25,23 +25,23 @@ export function loadOrCreatePrizeStrategy(
   creator: Address,
   prizePool: Address,
   prizeStrategy: Address,
-): PrizePool {
-  let _prizePool = PrizePool.load(prizePool.toHex())
+): PrizeStrategy {
+  let _prizePool = PrizeStrategy.load(prizePool.toHex())
 
   if (!_prizePool) {
-    _prizePool = new PrizePool(prizePool.toHex())
+    _prizePool = new PrizeStrategy(prizePool.toHex())
     const boundPrizeStrategy = PrizeStrategyContract.bind(prizePool)
 
-    const boundPeriodicPrizePool = PrizeStrategyContract.bind(prizePool)
+    const boundPeriodicPrizeStrategy = PrizeStrategyContract.bind(prizePool)
 
-    // const boundYieldToken = ERC20Contract.bind(boundPeriodicPrizePool.cToken())
-    // _prizePool.yieldToken = boundPeriodicPrizePool.cToken()
+    // const boundYieldToken = ERC20Contract.bind(boundPeriodicPrizeStrategy.cToken())
+    // _prizePool.yieldToken = boundPeriodicPrizeStrategy.cToken()
     // _prizePool.yieldDecimals = BigInt.fromI32(boundYieldToken.decimals())
     // _prizePool.yieldName = boundYieldToken.name()
     // _prizePool.yieldSymbol = boundYieldToken.symbol()
     
-    const boundToken = ERC20Contract.bind(boundPeriodicPrizePool.token())
-    _prizePool.underlyingCollateralToken = boundPeriodicPrizePool.token()
+    const boundToken = ERC20Contract.bind(boundPeriodicPrizeStrategy.token())
+    _prizePool.underlyingCollateralToken = boundPeriodicPrizeStrategy.token()
     _prizePool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
     _prizePool.underlyingCollateralName = boundToken.name()
     _prizePool.underlyingCollateralSymbol = boundToken.symbol()
@@ -55,13 +55,13 @@ export function loadOrCreatePrizeStrategy(
 
     // _prizePool.prizePoolModuleManager = moduleManager.toHex()
 
-    _prizePool.prizeStrategy = boundPeriodicPrizePool.prizeStrategy()
-    _prizePool.sponsorship = boundPeriodicPrizePool.sponsorship()
-    _prizePool.ticket = boundPeriodicPrizePool.ticket()
-    _prizePool.rng = boundPeriodicPrizePool.rng()
+    _prizePool.prizeStrategy = boundPeriodicPrizeStrategy.prizeStrategy()
+    _prizePool.sponsorship = boundPeriodicPrizeStrategy.sponsorship()
+    _prizePool.ticket = boundPeriodicPrizeStrategy.ticket()
+    _prizePool.rng = boundPeriodicPrizeStrategy.rng()
 
-    _prizePool.prizePeriodSeconds = boundPeriodicPrizePool.prizePeriodSeconds()
-    _prizePool.prizePeriodStartedAt = boundPeriodicPrizePool.prizePeriodStartedAt()
+    _prizePool.prizePeriodSeconds = boundPeriodicPrizeStrategy.prizePeriodSeconds()
+    _prizePool.prizePeriodStartedAt = boundPeriodicPrizeStrategy.prizePeriodStartedAt()
 
     _prizePool.playerCount = ZERO
 
@@ -104,8 +104,8 @@ export function loadOrCreatePrizeStrategy(
     _prizePool.save()
 
     // Start listening for events from the dynamically generated contract
-    PrizePoolTemplate.create(prizePool)
+    PrizeStrategyTemplate.create(prizePool)
   }
 
-  return _prizePool as PrizePool
+  return _prizePool as PrizeStrategy
 }
