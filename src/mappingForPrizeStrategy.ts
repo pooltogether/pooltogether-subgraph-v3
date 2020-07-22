@@ -8,6 +8,9 @@ import {
 } from '../generated/templates/PrizePool/ERC20'
 
 import {
+  RNGInterface as RngContract,
+} from '../generated/templates/PrizeStrategy/RNGInterface'
+import {
   PrizeStrategy as PrizeStrategyContract,
   PrizePoolOpened,
   PrizePoolAwardStarted,
@@ -22,11 +25,6 @@ const ONE = BigInt.fromI32(1)
 
 export function handlePrizePoolOpened(event: PrizePoolOpened): void {
   const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
-
-  // new Prize(prizeId(
-  //   prizeStrategy.toHexString(),
-  //   _prizeStrategy.currentPrizeId.toString()
-  // ))
 
   const _prize = loadOrCreatePrize(
     event.address.toHexString(),
@@ -55,7 +53,8 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
-  const boundPrizePool = PrizeStrategyContract.bind(event.address)
+  const boundPrizeStrategy = PrizeStrategyContract.bind(event.address)
+  const boundRng = RngContract.bind(boundPrizeStrategy.rng())
   
   // Record prize history
   const prize = loadOrCreatePrize(
@@ -66,6 +65,10 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   prize.awardedOperator = event.params.operator
   prize.prize = event.params.prize
   prize.reserveFee = event.params.reserveFee
+
+  const randomNumber = boundRng.randomNumber(prize.rngRequestId)
+  const winner = boundPrizeStrategy.draw(randomNumber)
+  prize.winners = [winner.toHex()]
 
   prize.save()
 

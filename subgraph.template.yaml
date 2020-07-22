@@ -48,6 +48,8 @@ templates:
           file: ./abis/ERC20.json
         - name: PrizeStrategy
           file: ./abis/PrizeStrategy.json
+        - name: RNGInterface
+          file: ./abis/RNGInterface.json
       eventHandlers:
         - event: PrizePoolOpened(indexed address,indexed uint256)
           handler: handlePrizePoolOpened
