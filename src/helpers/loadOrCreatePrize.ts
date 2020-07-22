@@ -8,7 +8,7 @@ export function loadOrCreatePrize(prizePoolAddress: string, currentPrizeId: stri
 
   if (!prize) {
     prize = new Prize(id)
-    prize.save()
+    // prize.save()
   }
 
   return prize as Prize

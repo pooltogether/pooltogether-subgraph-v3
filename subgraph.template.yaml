@@ -22,6 +22,8 @@ dataSources:
           file: ./abis/PrizePool.json
         # - name: CompoundPrizePool
         #   file: ./abis/CompoundPrizePool.json
+        - name: PrizeStrategy
+          file: ./abis/PrizeStrategy.json
         - name: PrizeStrategyBuilder
           file: ./abis/PrizeStrategyBuilder.json
         - name: ControlledToken

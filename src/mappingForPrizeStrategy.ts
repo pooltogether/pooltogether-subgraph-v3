@@ -24,14 +24,16 @@ const ZERO = BigInt.fromI32(0)
 const ONE = BigInt.fromI32(1)
 
 export function handlePrizePoolOpened(event: PrizePoolOpened): void {
-  const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
+  // no-op
+  //
+  // const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
 
-  const _prize = loadOrCreatePrize(
-    event.address.toHexString(),
-    _prizeStrategy.currentPrizeId.toString()
-  )
-  _prize.prizeStrategy = event.address.toHex()
-  _prize.save()
+  // const _prize = loadOrCreatePrize(
+  //   event.address.toHexString(),
+  //   _prizeStrategy.currentPrizeId.toString()
+  // )
+  // _prize.prizeStrategy = event.address.toHex()
+  // _prize.save()
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
@@ -48,6 +50,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
   prize.awardStartOperator = event.params.operator
   prize.rngRequestId = event.params.rngRequestId
   prize.lockBlock = event.params.rngLockBlock
+
   prize.save()
 }
 
@@ -67,6 +70,8 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   prize.reserveFee = event.params.reserveFee
 
   const randomNumber = boundRng.randomNumber(prize.rngRequestId)
+  prize.randomNumber = randomNumber
+
   const winner = boundPrizeStrategy.draw(randomNumber)
   prize.winners = [winner.toHex()]
 

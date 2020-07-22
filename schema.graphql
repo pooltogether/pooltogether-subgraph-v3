@@ -19,7 +19,7 @@ type PrizeStrategy @entity {
   ticket: Bytes!
   rng: Bytes!
   sponsorship: Bytes!
-  trustedForwarder: Bytes!
+  # trustedForwarder: Bytes!
   governor: Bytes!
 
   currentPrizeId: BigInt!
@@ -37,14 +37,8 @@ type PrizeStrategy @entity {
 type PrizePool @entity {
   id: ID!
 
-  trustedForwarder: Bytes!
+  # trustedForwarder: Bytes!
   prizeStrategy: PrizeStrategy!
-
-  maxExitFeeMantissa: BigInt!
-  maxTimelockDuration: BigInt!
-
-  playerCount: BigInt!
-  totalSupply: BigInt! # move to PrizePool.Ticket relationship
 
   # yieldToken: Bytes!
   # yieldDecimals: BigInt!
@@ -55,6 +49,13 @@ type PrizePool @entity {
   underlyingCollateralDecimals: BigInt!
   underlyingCollateralName: String!
   underlyingCollateralSymbol: String!
+
+  maxExitFeeMantissa: BigInt
+  maxTimelockDuration: BigInt!
+  timelockTotalSupply: BigInt!
+
+  playerCount: BigInt!
+  totalSupply: BigInt! # move to PrizePool.Ticket relationship
 
   previousPrize: BigInt
 
@@ -147,21 +148,21 @@ type Sponsorship @entity {
 type Prize @entity {
   id: ID!
 
-  awardStartOperator: Bytes!
-  awardedOperator: Bytes!
+  awardStartOperator: Bytes
+  awardedOperator: Bytes
 
   prizeStrategy: PrizeStrategy!
   prizePool: PrizePool!
 
   prizePeriodStartedAt: BigInt!
-  lockBlock: BigInt!
+  lockBlock: BigInt
 
-  # randomNumber: Bytes
+  rngRequestId: BigInt!
+  randomNumber: BigInt!
+
   balance: BigInt
   prize: BigInt
   reserveFee: BigInt
-  
-  rngRequestId: BigInt!
 
   winners: [Player!]
 }

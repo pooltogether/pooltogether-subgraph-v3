@@ -96,15 +96,6 @@ export class PrizeStrategy extends Entity {
     this.set("sponsorship", Value.fromBytes(value));
   }
 
-  get trustedForwarder(): Bytes {
-    let value = this.get("trustedForwarder");
-    return value.toBytes();
-  }
-
-  set trustedForwarder(value: Bytes) {
-    this.set("trustedForwarder", Value.fromBytes(value));
-  }
-
   get governor(): Bytes {
     let value = this.get("governor");
     return value.toBytes();
@@ -208,15 +199,6 @@ export class PrizePool extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get trustedForwarder(): Bytes {
-    let value = this.get("trustedForwarder");
-    return value.toBytes();
-  }
-
-  set trustedForwarder(value: Bytes) {
-    this.set("trustedForwarder", Value.fromBytes(value));
-  }
-
   get prizeStrategy(): string {
     let value = this.get("prizeStrategy");
     return value.toString();
@@ -224,42 +206,6 @@ export class PrizePool extends Entity {
 
   set prizeStrategy(value: string) {
     this.set("prizeStrategy", Value.fromString(value));
-  }
-
-  get maxExitFeeMantissa(): BigInt {
-    let value = this.get("maxExitFeeMantissa");
-    return value.toBigInt();
-  }
-
-  set maxExitFeeMantissa(value: BigInt) {
-    this.set("maxExitFeeMantissa", Value.fromBigInt(value));
-  }
-
-  get maxTimelockDuration(): BigInt {
-    let value = this.get("maxTimelockDuration");
-    return value.toBigInt();
-  }
-
-  set maxTimelockDuration(value: BigInt) {
-    this.set("maxTimelockDuration", Value.fromBigInt(value));
-  }
-
-  get playerCount(): BigInt {
-    let value = this.get("playerCount");
-    return value.toBigInt();
-  }
-
-  set playerCount(value: BigInt) {
-    this.set("playerCount", Value.fromBigInt(value));
-  }
-
-  get totalSupply(): BigInt {
-    let value = this.get("totalSupply");
-    return value.toBigInt();
-  }
-
-  set totalSupply(value: BigInt) {
-    this.set("totalSupply", Value.fromBigInt(value));
   }
 
   get underlyingCollateralToken(): Bytes {
@@ -296,6 +242,59 @@ export class PrizePool extends Entity {
 
   set underlyingCollateralSymbol(value: string) {
     this.set("underlyingCollateralSymbol", Value.fromString(value));
+  }
+
+  get maxExitFeeMantissa(): BigInt | null {
+    let value = this.get("maxExitFeeMantissa");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set maxExitFeeMantissa(value: BigInt | null) {
+    if (value === null) {
+      this.unset("maxExitFeeMantissa");
+    } else {
+      this.set("maxExitFeeMantissa", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get maxTimelockDuration(): BigInt {
+    let value = this.get("maxTimelockDuration");
+    return value.toBigInt();
+  }
+
+  set maxTimelockDuration(value: BigInt) {
+    this.set("maxTimelockDuration", Value.fromBigInt(value));
+  }
+
+  get timelockTotalSupply(): BigInt {
+    let value = this.get("timelockTotalSupply");
+    return value.toBigInt();
+  }
+
+  set timelockTotalSupply(value: BigInt) {
+    this.set("timelockTotalSupply", Value.fromBigInt(value));
+  }
+
+  get playerCount(): BigInt {
+    let value = this.get("playerCount");
+    return value.toBigInt();
+  }
+
+  set playerCount(value: BigInt) {
+    this.set("playerCount", Value.fromBigInt(value));
+  }
+
+  get totalSupply(): BigInt {
+    let value = this.get("totalSupply");
+    return value.toBigInt();
+  }
+
+  set totalSupply(value: BigInt) {
+    this.set("totalSupply", Value.fromBigInt(value));
   }
 
   get previousPrize(): BigInt | null {
@@ -626,22 +625,38 @@ export class Prize extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get awardStartOperator(): Bytes {
+  get awardStartOperator(): Bytes | null {
     let value = this.get("awardStartOperator");
-    return value.toBytes();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set awardStartOperator(value: Bytes) {
-    this.set("awardStartOperator", Value.fromBytes(value));
+  set awardStartOperator(value: Bytes | null) {
+    if (value === null) {
+      this.unset("awardStartOperator");
+    } else {
+      this.set("awardStartOperator", Value.fromBytes(value as Bytes));
+    }
   }
 
-  get awardedOperator(): Bytes {
+  get awardedOperator(): Bytes | null {
     let value = this.get("awardedOperator");
-    return value.toBytes();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set awardedOperator(value: Bytes) {
-    this.set("awardedOperator", Value.fromBytes(value));
+  set awardedOperator(value: Bytes | null) {
+    if (value === null) {
+      this.unset("awardedOperator");
+    } else {
+      this.set("awardedOperator", Value.fromBytes(value as Bytes));
+    }
   }
 
   get prizeStrategy(): string {
@@ -671,13 +686,39 @@ export class Prize extends Entity {
     this.set("prizePeriodStartedAt", Value.fromBigInt(value));
   }
 
-  get lockBlock(): BigInt {
+  get lockBlock(): BigInt | null {
     let value = this.get("lockBlock");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set lockBlock(value: BigInt | null) {
+    if (value === null) {
+      this.unset("lockBlock");
+    } else {
+      this.set("lockBlock", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get rngRequestId(): BigInt {
+    let value = this.get("rngRequestId");
     return value.toBigInt();
   }
 
-  set lockBlock(value: BigInt) {
-    this.set("lockBlock", Value.fromBigInt(value));
+  set rngRequestId(value: BigInt) {
+    this.set("rngRequestId", Value.fromBigInt(value));
+  }
+
+  get randomNumber(): BigInt {
+    let value = this.get("randomNumber");
+    return value.toBigInt();
+  }
+
+  set randomNumber(value: BigInt) {
+    this.set("randomNumber", Value.fromBigInt(value));
   }
 
   get balance(): BigInt | null {
@@ -729,15 +770,6 @@ export class Prize extends Entity {
     } else {
       this.set("reserveFee", Value.fromBigInt(value as BigInt));
     }
-  }
-
-  get rngRequestId(): BigInt {
-    let value = this.get("rngRequestId");
-    return value.toBigInt();
-  }
-
-  set rngRequestId(value: BigInt) {
-    this.set("rngRequestId", Value.fromBigInt(value));
   }
 
   get winners(): Array<string> | null {

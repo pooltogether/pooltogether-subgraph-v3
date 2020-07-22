@@ -1,5 +1,5 @@
-query ppbs {
-  PrizeStrategyBuilders {
+{
+  prizeStrategyBuilders {
     id
 
     trustedForwarder
@@ -11,28 +11,32 @@ query ppbs {
     # ticketFactory
   }
 
-  prizePools {
+  prizeStrategies {
     id
+    
+    creator
+    prizeStrategyBuilder {
+      id
+    }
+    
+    prizePool {
+      id
+    }
+    ticket
+    rng
+    sponsorship
+    # trustedForwarder
+    governor
 
     currentPrizeId
     currentState
-   
-    creator
-    prizeStrategy
-
-    ticket
-    sponsorship
-    rng
 
     prizePeriodSeconds
     prizePeriodStartedAt
-
-    previousPrize
-    previousPrizeAverageTickets
-
-    feeScaleMantissa
-    rngRequestId
     
+    exitFeeMantissa
+    creditRateMantissa
+
     prizes {
       id
 
@@ -40,32 +44,73 @@ query ppbs {
       reserveFee
       rngRequestId
       randomNumber
-      rewardStartedOperator
-      rewardCompletedOperator
+      awardStartOperator
+      awardedOperator
     }
+  }
 
+  prizePools {
+    id
+
+    # trustedForwarder
+    prizeStrategy
+
+    underlyingCollateralToken
+    underlyingCollateralDecimals
+    underlyingCollateralName
+    underlyingCollateralSymbol
+
+    maxExitFeeMantissa
+    maxTimelockDuration
+
+    playerCount
+    totalSupply
+
+    previousPrize
+    
     players {
       id
       address
       balance
+      timelockedBalance
+      unlockTimestamp
     }
   }
 
   prizes {
     id
+
+    prizeStrategy
+    prizePool
     
+    balance
     prize
     reserveFee
-    rngRequestId
+
     randomNumber
-    rewardStartedOperator
-    rewardCompletedOperator
+    rngRequestId
+    
+    awardStartOperator
+    awardedOperator
+
+    prizePeriodStartedAt
+    lockBlock
+
+    winners {
+      id
+      address
+      balance
+      timelockedBalance
+      unlockTimestamp
+    }
   }
   
   players {
     id
     address
     balance
+    timelockedBalance
+    unlockTimestamp
   }
   
   tickets {
@@ -74,7 +119,7 @@ query ppbs {
     symbol
     decimals
     
-    prizePool {
+    prizeStrategy {
       id
     }
   }
@@ -85,7 +130,7 @@ query ppbs {
     symbol
     decimals
     
-    prizePool {
+    prizeStrategy {
       id
     }
   }
