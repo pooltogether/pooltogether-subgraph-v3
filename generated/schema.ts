@@ -132,15 +132,6 @@ export class PrizeStrategy extends Entity {
     this.set("prizePeriodSeconds", Value.fromBigInt(value));
   }
 
-  get prizePeriodStartedAt(): BigInt {
-    let value = this.get("prizePeriodStartedAt");
-    return value.toBigInt();
-  }
-
-  set prizePeriodStartedAt(value: BigInt) {
-    this.set("prizePeriodStartedAt", Value.fromBigInt(value));
-  }
-
   get exitFeeMantissa(): BigInt {
     let value = this.get("exitFeeMantissa");
     return value.toBigInt();
@@ -651,15 +642,6 @@ export class Prize extends Entity {
     this.set("prizeStrategy", Value.fromString(value));
   }
 
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
-  }
-
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
-  }
-
   get prizePeriodStartedAt(): BigInt {
     let value = this.get("prizePeriodStartedAt");
     return value.toBigInt();
@@ -729,13 +711,21 @@ export class Prize extends Entity {
     this.set("rngRequestId", Value.fromBigInt(value));
   }
 
-  get randomNumber(): BigInt {
+  get randomNumber(): BigInt | null {
     let value = this.get("randomNumber");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set randomNumber(value: BigInt) {
-    this.set("randomNumber", Value.fromBigInt(value));
+  set randomNumber(value: BigInt | null) {
+    if (value === null) {
+      this.unset("randomNumber");
+    } else {
+      this.set("randomNumber", Value.fromBigInt(value as BigInt));
+    }
   }
 
   get balance(): BigInt | null {

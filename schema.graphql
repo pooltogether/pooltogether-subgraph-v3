@@ -26,7 +26,7 @@ type PrizeStrategy @entity {
   currentState: PrizePoolState!
 
   prizePeriodSeconds: BigInt!
-  prizePeriodStartedAt: BigInt!
+  # prizePeriodStartedAt: BigInt!
   
   exitFeeMantissa: BigInt!
   creditRateMantissa: BigInt!
@@ -152,7 +152,6 @@ type Prize @entity {
   awardedOperator: Bytes
 
   prizeStrategy: PrizeStrategy!
-  prizePool: PrizePool!
 
   prizePeriodStartedAt: BigInt!
   lockBlock: BigInt
@@ -161,7 +160,7 @@ type Prize @entity {
   awardedTimestamp: BigInt
 
   rngRequestId: BigInt!
-  randomNumber: BigInt!
+  randomNumber: BigInt
 
   balance: BigInt
   prize: BigInt

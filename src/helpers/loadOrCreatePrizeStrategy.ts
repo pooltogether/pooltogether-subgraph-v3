@@ -63,7 +63,7 @@ export function loadOrCreatePrizeStrategy(
     _prizeStrategy.currentState = 'Opened'
 
     _prizeStrategy.prizePeriodSeconds = boundPrizeStrategy.prizePeriodSeconds()
-    _prizeStrategy.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
+    // _prizeStrategy.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
 
     _prizeStrategy.exitFeeMantissa = boundPrizeStrategy.exitFeeMantissa()
     _prizeStrategy.creditRateMantissa = boundPrizeStrategy.creditRateMantissa()

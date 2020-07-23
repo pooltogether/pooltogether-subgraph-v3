@@ -31,13 +31,9 @@ export function handleDeposited(event: Deposited): void {
   const ticket = _prizeStrategy.ticket
   const token = event.params.token
 
-  log.warning('in handleDeposited', [])
-  log.warning('token: {}', [token.toHexString()])
-  log.warning('ticket: {}', [ticket.toHexString()])
   const ticketAddress = Address.fromString(ticket.toHexString())
 
   const ticketIsToken = (token.equals(ticketAddress))
-  log.warning('Is {}', [ticketIsToken.toString()])
   
   if (token.equals(ticketAddress)) {
     const _player = loadOrCreatePlayer(

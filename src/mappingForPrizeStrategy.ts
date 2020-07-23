@@ -37,19 +37,25 @@ export function handlePrizePoolOpened(event: PrizePoolOpened): void {
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
-  const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
+  const _prizeStrategy = PrizeStrategy.load(event.address.toHex())
+  const boundPrizeStrategy = PrizeStrategyContract.bind(event.address)
 
   _prizeStrategy.currentState = "Started"
   _prizeStrategy.save()
 
   const prize = loadOrCreatePrize(
-    event.address.toHexString(),
+    event.address,
     _prizeStrategy.currentPrizeId.toString()
   )
 
+  prize.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
+  prize.lockBlock = event.params.rngLockBlock
+
+  // // prize.balance = event.params.balance
+  // // prize.prize = event.params.prize
+
   prize.awardStartOperator = event.params.operator
   prize.rngRequestId = event.params.rngRequestId
-  prize.lockBlock = event.params.rngLockBlock
 
   prize.save()
 }
@@ -61,7 +67,7 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   
   // Record prize history
   const prize = loadOrCreatePrize(
-    event.address.toHexString(),
+    event.address,
     _prizeStrategy.currentPrizeId.toString()
   )
 
