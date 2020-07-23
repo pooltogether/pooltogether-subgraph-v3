@@ -297,23 +297,6 @@ export class PrizePool extends Entity {
     this.set("totalSupply", Value.fromBigInt(value));
   }
 
-  get previousPrize(): BigInt | null {
-    let value = this.get("previousPrize");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set previousPrize(value: BigInt | null) {
-    if (value === null) {
-      this.unset("previousPrize");
-    } else {
-      this.set("previousPrize", Value.fromBigInt(value as BigInt));
-    }
-  }
-
   get players(): Array<string> {
     let value = this.get("players");
     return value.toStringArray();
@@ -700,6 +683,40 @@ export class Prize extends Entity {
       this.unset("lockBlock");
     } else {
       this.set("lockBlock", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get awardedBlock(): BigInt | null {
+    let value = this.get("awardedBlock");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set awardedBlock(value: BigInt | null) {
+    if (value === null) {
+      this.unset("awardedBlock");
+    } else {
+      this.set("awardedBlock", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get awardedTimestamp(): BigInt | null {
+    let value = this.get("awardedTimestamp");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set awardedTimestamp(value: BigInt | null) {
+    if (value === null) {
+      this.unset("awardedTimestamp");
+    } else {
+      this.set("awardedTimestamp", Value.fromBigInt(value as BigInt));
     }
   }
 

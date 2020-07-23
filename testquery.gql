@@ -95,6 +95,7 @@
 
     prizePeriodStartedAt
     lockBlock
+    awardedBlock
 
     winners {
       id

@@ -75,6 +75,9 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   const winner = boundPrizeStrategy.draw(randomNumber)
   prize.winners = [winner.toHex()]
 
+  prize.awardedBlock = event.block.number
+  prize.awardedTimestamp = event.block.timestamp
+
   prize.save()
 
   // _prizeStrategy.previousPrize = boundPrizePool.previousPrize()
