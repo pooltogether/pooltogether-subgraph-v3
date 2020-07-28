@@ -3,18 +3,18 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: PrizeStrategyBuilder
+    name: CompoundPrizePoolBuilder
     network: {{network}}
     source:
-      address: "{{prizeStrategyBuilder.address}}"
-      abi: PrizeStrategyBuilder
-      startBlock: {{prizeStrategyBuilder.startBlock}}
+      address: "{{compoundPrizePoolBuilder.address}}"
+      abi: CompoundPrizePoolBuilder
+      startBlock: {{compoundPrizePoolBuilder.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - PrizeStrategyBuilder
+        - CompoundPrizePoolBuilder
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
@@ -24,14 +24,14 @@ dataSources:
         #   file: ./abis/CompoundPrizePool.json
         - name: PrizeStrategy
           file: ./abis/PrizeStrategy.json
-        - name: PrizeStrategyBuilder
-          file: ./abis/PrizeStrategyBuilder.json
+        - name: CompoundPrizePoolBuilder
+          file: ./abis/CompoundPrizePoolBuilder.json
         - name: ControlledToken
           file: ./abis/ControlledToken.json
       eventHandlers:
-        - event: PrizeStrategyBuilt(indexed address,indexed address,indexed address)
-          handler: handlePrizeStrategyBuilt
-      file: ./src/mappingForPrizeStrategyBuilder.ts
+        - event: CompoundPrizePoolCreated(indexed address,indexed address,indexed address)
+          handler: handleCompoundPrizePoolCreated
+      file: ./src/mappingForCompoundPrizePoolBuilder.ts
 templates:
   - name: PrizeStrategy
     kind: ethereum/contract
@@ -57,7 +57,7 @@ templates:
           handler: handlePrizePoolOpened
         - event: PrizePoolAwardStarted(indexed address,indexed address,indexed uint32,uint32)
           handler: handlePrizePoolAwardStarted
-        - event: PrizePoolAwarded(indexed address,uint256,uint256)
+        - event: PrizePoolAwarded(indexed address,uint256,uint256,uint256)
           handler: handlePrizePoolAwarded
   - name: PrizePool
     kind: ethereum/contract

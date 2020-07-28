@@ -148,6 +148,28 @@ export class InstantWithdrawal__Params {
   }
 }
 
+export class OwnershipTransferred extends ethereum.Event {
+  get params(): OwnershipTransferred__Params {
+    return new OwnershipTransferred__Params(this);
+  }
+}
+
+export class OwnershipTransferred__Params {
+  _event: OwnershipTransferred;
+
+  constructor(event: OwnershipTransferred) {
+    this._event = event;
+  }
+
+  get previousOwner(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newOwner(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
 export class PrizeStrategyDetached extends ethereum.Event {
   get params(): PrizeStrategyDetached__Params {
     return new PrizeStrategyDetached__Params(this);
@@ -159,6 +181,36 @@ export class PrizeStrategyDetached__Params {
 
   constructor(event: PrizeStrategyDetached) {
     this._event = event;
+  }
+}
+
+export class TimelockDeposited extends ethereum.Event {
+  get params(): TimelockDeposited__Params {
+    return new TimelockDeposited__Params(this);
+  }
+}
+
+export class TimelockDeposited__Params {
+  _event: TimelockDeposited;
+
+  constructor(event: TimelockDeposited) {
+    this._event = event;
+  }
+
+  get operator(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get to(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get token(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -404,6 +456,21 @@ export class PrizePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  owner(): Address {
+    let result = super.call("owner", "owner():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_owner(): ethereum.CallResult<Address> {
+    let result = super.tryCall("owner", "owner():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   prizeStrategy(): Address {
     let result = super.call("prizeStrategy", "prizeStrategy():(address)", []);
 
@@ -551,16 +618,18 @@ export class PrizePool extends ethereum.SmartContract {
     from: Address,
     amount: BigInt,
     controlledToken: Address,
-    sponsorAmount: BigInt
+    sponsorAmount: BigInt,
+    maximumExitFee: BigInt
   ): BigInt {
     let result = super.call(
       "withdrawInstantlyFrom",
-      "withdrawInstantlyFrom(address,uint256,address,uint256):(uint256)",
+      "withdrawInstantlyFrom(address,uint256,address,uint256,uint256):(uint256)",
       [
         ethereum.Value.fromAddress(from),
         ethereum.Value.fromUnsignedBigInt(amount),
         ethereum.Value.fromAddress(controlledToken),
-        ethereum.Value.fromUnsignedBigInt(sponsorAmount)
+        ethereum.Value.fromUnsignedBigInt(sponsorAmount),
+        ethereum.Value.fromUnsignedBigInt(maximumExitFee)
       ]
     );
 
@@ -571,16 +640,18 @@ export class PrizePool extends ethereum.SmartContract {
     from: Address,
     amount: BigInt,
     controlledToken: Address,
-    sponsorAmount: BigInt
+    sponsorAmount: BigInt,
+    maximumExitFee: BigInt
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "withdrawInstantlyFrom",
-      "withdrawInstantlyFrom(address,uint256,address,uint256):(uint256)",
+      "withdrawInstantlyFrom(address,uint256,address,uint256,uint256):(uint256)",
       [
         ethereum.Value.fromAddress(from),
         ethereum.Value.fromUnsignedBigInt(amount),
         ethereum.Value.fromAddress(controlledToken),
-        ethereum.Value.fromUnsignedBigInt(sponsorAmount)
+        ethereum.Value.fromUnsignedBigInt(sponsorAmount),
+        ethereum.Value.fromUnsignedBigInt(maximumExitFee)
       ]
     );
     if (result.reverted) {
@@ -723,7 +794,7 @@ export class AwardExternalCall__Inputs {
     return this._call.inputValues[1].value.toBigInt();
   }
 
-  get controlledToken(): Address {
+  get externalToken(): Address {
     return this._call.inputValues[2].value.toAddress();
   }
 }
@@ -914,6 +985,32 @@ export class InitializeCall__Outputs {
   }
 }
 
+export class RenounceOwnershipCall extends ethereum.Call {
+  get inputs(): RenounceOwnershipCall__Inputs {
+    return new RenounceOwnershipCall__Inputs(this);
+  }
+
+  get outputs(): RenounceOwnershipCall__Outputs {
+    return new RenounceOwnershipCall__Outputs(this);
+  }
+}
+
+export class RenounceOwnershipCall__Inputs {
+  _call: RenounceOwnershipCall;
+
+  constructor(call: RenounceOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class RenounceOwnershipCall__Outputs {
+  _call: RenounceOwnershipCall;
+
+  constructor(call: RenounceOwnershipCall) {
+    this._call = call;
+  }
+}
+
 export class SweepTimelockBalancesCall extends ethereum.Call {
   get inputs(): SweepTimelockBalancesCall__Inputs {
     return new SweepTimelockBalancesCall__Inputs(this);
@@ -948,6 +1045,74 @@ export class SweepTimelockBalancesCall__Outputs {
   }
 }
 
+export class TimelockDepositToCall extends ethereum.Call {
+  get inputs(): TimelockDepositToCall__Inputs {
+    return new TimelockDepositToCall__Inputs(this);
+  }
+
+  get outputs(): TimelockDepositToCall__Outputs {
+    return new TimelockDepositToCall__Outputs(this);
+  }
+}
+
+export class TimelockDepositToCall__Inputs {
+  _call: TimelockDepositToCall;
+
+  constructor(call: TimelockDepositToCall) {
+    this._call = call;
+  }
+
+  get to(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get controlledToken(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+}
+
+export class TimelockDepositToCall__Outputs {
+  _call: TimelockDepositToCall;
+
+  constructor(call: TimelockDepositToCall) {
+    this._call = call;
+  }
+}
+
+export class TransferOwnershipCall extends ethereum.Call {
+  get inputs(): TransferOwnershipCall__Inputs {
+    return new TransferOwnershipCall__Inputs(this);
+  }
+
+  get outputs(): TransferOwnershipCall__Outputs {
+    return new TransferOwnershipCall__Outputs(this);
+  }
+}
+
+export class TransferOwnershipCall__Inputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+
+  get newOwner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class TransferOwnershipCall__Outputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
 export class WithdrawInstantlyFromCall extends ethereum.Call {
   get inputs(): WithdrawInstantlyFromCall__Inputs {
     return new WithdrawInstantlyFromCall__Inputs(this);
@@ -979,6 +1144,10 @@ export class WithdrawInstantlyFromCall__Inputs {
 
   get sponsorAmount(): BigInt {
     return this._call.inputValues[3].value.toBigInt();
+  }
+
+  get maximumExitFee(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
   }
 }
 

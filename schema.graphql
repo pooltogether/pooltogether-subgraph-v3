@@ -13,7 +13,7 @@ type PrizeStrategy @entity {
   id: ID!
 
   creator: Bytes!
-  prizeStrategyBuilder: PrizeStrategyBuilder!
+  compoundPrizePoolBuilder: CompoundPrizePoolBuilder!
   
   prizePool: PrizePool!
   ticket: Bytes!
@@ -77,7 +77,7 @@ type Player @entity {
   prizePool: PrizePool!
 }
 
-type PrizeStrategyBuilder @entity {
+type CompoundPrizePoolBuilder @entity {
   id: ID!
 
   trustedForwarder: Bytes!

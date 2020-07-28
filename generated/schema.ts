@@ -51,13 +51,13 @@ export class PrizeStrategy extends Entity {
     this.set("creator", Value.fromBytes(value));
   }
 
-  get prizeStrategyBuilder(): string {
-    let value = this.get("prizeStrategyBuilder");
+  get compoundPrizePoolBuilder(): string {
+    let value = this.get("compoundPrizePoolBuilder");
     return value.toString();
   }
 
-  set prizeStrategyBuilder(value: string) {
-    this.set("prizeStrategyBuilder", Value.fromString(value));
+  set compoundPrizePoolBuilder(value: string) {
+    this.set("compoundPrizePoolBuilder", Value.fromString(value));
   }
 
   get prizePool(): string {
@@ -374,7 +374,7 @@ export class Player extends Entity {
   }
 }
 
-export class PrizeStrategyBuilder extends Entity {
+export class CompoundPrizePoolBuilder extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -384,18 +384,21 @@ export class PrizeStrategyBuilder extends Entity {
     let id = this.get("id");
     assert(
       id !== null,
-      "Cannot save PrizeStrategyBuilder entity without an ID"
+      "Cannot save CompoundPrizePoolBuilder entity without an ID"
     );
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save PrizeStrategyBuilder entity with non-string ID. " +
+      "Cannot save CompoundPrizePoolBuilder entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("PrizeStrategyBuilder", id.toString(), this);
+    store.set("CompoundPrizePoolBuilder", id.toString(), this);
   }
 
-  static load(id: string): PrizeStrategyBuilder | null {
-    return store.get("PrizeStrategyBuilder", id) as PrizeStrategyBuilder | null;
+  static load(id: string): CompoundPrizePoolBuilder | null {
+    return store.get(
+      "CompoundPrizePoolBuilder",
+      id
+    ) as CompoundPrizePoolBuilder | null;
   }
 
   get id(): string {

@@ -1,6 +1,6 @@
 {
   "network": "mainnet",
-  "prizeStrategyBuilder": {
+  "compoundPrizePoolBuilder": {
     "address": "0xd15468525c35BDBC1eD8F2e09A00F8a173437f2f",
     "startBlock": "1"
   }

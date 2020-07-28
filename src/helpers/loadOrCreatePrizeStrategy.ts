@@ -6,7 +6,7 @@ import {
 } from '../../generated/schema'
 import {
   ERC20 as ERC20Contract,
-} from '../../generated/PrizeStrategyBuilder/ERC20'
+} from '../../generated/CompoundPrizePoolBuilder/ERC20'
 import {
   PrizePool as PrizePoolContract,
 } from '../../generated/templates/PrizePool/PrizePool'
@@ -47,7 +47,7 @@ export function loadOrCreatePrizeStrategy(
     
 
     
-    _prizeStrategy.prizeStrategyBuilder = builder.toHex()
+    _prizeStrategy.compoundPrizePoolBuilder = builder.toHex()
     _prizeStrategy.creator = creator
 
     // _prizeStrategy.prizePoolModuleManager = moduleManager.toHex()

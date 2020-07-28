@@ -10,16 +10,16 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class PrizeStrategyBuilt extends ethereum.Event {
-  get params(): PrizeStrategyBuilt__Params {
-    return new PrizeStrategyBuilt__Params(this);
+export class CompoundPrizePoolCreated extends ethereum.Event {
+  get params(): CompoundPrizePoolCreated__Params {
+    return new CompoundPrizePoolCreated__Params(this);
   }
 }
 
-export class PrizeStrategyBuilt__Params {
-  _event: PrizeStrategyBuilt;
+export class CompoundPrizePoolCreated__Params {
+  _event: CompoundPrizePoolCreated;
 
-  constructor(event: PrizeStrategyBuilt) {
+  constructor(event: CompoundPrizePoolCreated) {
     this._event = event;
   }
 
@@ -36,7 +36,7 @@ export class PrizeStrategyBuilt__Params {
   }
 }
 
-export class PrizeStrategyBuilder__createInputConfigStruct extends ethereum.Tuple {
+export class CompoundPrizePoolBuilder__createInputConfigStruct extends ethereum.Tuple {
   get cToken(): Address {
     return this[0].toAddress();
   }
@@ -82,9 +82,9 @@ export class PrizeStrategyBuilder__createInputConfigStruct extends ethereum.Tupl
   }
 }
 
-export class PrizeStrategyBuilder extends ethereum.SmartContract {
-  static bind(address: Address): PrizeStrategyBuilder {
-    return new PrizeStrategyBuilder("PrizeStrategyBuilder", address);
+export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
+  static bind(address: Address): CompoundPrizePoolBuilder {
+    return new CompoundPrizePoolBuilder("CompoundPrizePoolBuilder", address);
   }
 
   compoundPrizePoolProxyFactory(): Address {
@@ -133,7 +133,7 @@ export class PrizeStrategyBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  create(config: PrizeStrategyBuilder__createInputConfigStruct): Address {
+  create(config: CompoundPrizePoolBuilder__createInputConfigStruct): Address {
     let result = super.call(
       "create",
       "create((address,uint256,string,string,string,string,uint256,uint256,uint256,uint256,address[])):(address)",
@@ -144,7 +144,7 @@ export class PrizeStrategyBuilder extends ethereum.SmartContract {
   }
 
   try_create(
-    config: PrizeStrategyBuilder__createInputConfigStruct
+    config: CompoundPrizePoolBuilder__createInputConfigStruct
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "create",

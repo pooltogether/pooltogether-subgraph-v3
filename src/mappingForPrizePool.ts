@@ -10,7 +10,7 @@ import {
 import {
   PrizePool as PrizePoolContract,
   Deposited,
-  Awarded,
+  // Awarded,
   AwardedExternal,
   InstantWithdrawal,
   TimelockedWithdrawal,
@@ -19,10 +19,16 @@ import {
 } from '../generated/templates/PrizePool/PrizePool'
 
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
-import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
+// import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
 
 const ZERO = BigInt.fromI32(0)
 const ONE = BigInt.fromI32(1)
+
+export function handleAwardedExternal(event: AwardedExternal): void {
+  // This is emitted when external rewards (other tokens, nfts, etc)
+  // are awarded
+  log.warning('implement handleAwardedExternal!', [])
+}
 
 export function handleDeposited(event: Deposited): void {
   const _prizePool = PrizePool.load(event.address.toHex())
