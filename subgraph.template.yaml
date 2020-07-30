@@ -77,6 +77,10 @@ templates:
         - name: PrizePool
           file: ./abis/PrizePool.json
       eventHandlers:
+        - event: CapturedAward(uint256)
+          handler: handleCapturedAward
+        - event: TimelockDeposited(indexed address,indexed address,indexed address,uint256)
+          handler: handleTimelockDeposited
         - event: Deposited(indexed address,indexed address,indexed address,uint256)
           handler: handleDeposited
         - event: Awarded(indexed address,indexed address,uint256)
