@@ -41,18 +41,17 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
   const boundPrizeStrategy = PrizeStrategyContract.bind(event.address)
 
   _prizeStrategy.currentState = "Started"
+  _prizeStrategy.prizesCount = _prizeStrategy.prizesCount.plus(ONE)
   _prizeStrategy.save()
+
 
   const prize = loadOrCreatePrize(
     event.address,
     _prizeStrategy.currentPrizeId.toString()
   )
 
-  prize.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
+  prize.prizePeriodStartedTimestamp = boundPrizeStrategy.prizePeriodStartedAt()
   prize.lockBlock = event.params.rngLockBlock
-
-  // // prize.balance = event.params.balance
-  // // prize.prize = event.params.prize
 
   prize.awardStartOperator = event.params.operator
   prize.rngRequestId = event.params.rngRequestId
@@ -72,8 +71,10 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   )
 
   prize.awardedOperator = event.params.operator
-  prize.prize = event.params.prize
+
+  prize.net = event.params.prize
   prize.reserveFee = event.params.reserveFee
+  prize.gross = prize.net.plus(prize.reserveFee)
 
   const randomNumber = boundRng.randomNumber(prize.rngRequestId)
   prize.randomNumber = randomNumber

@@ -26,11 +26,11 @@ type PrizeStrategy @entity {
   currentState: PrizePoolState!
 
   prizePeriodSeconds: BigInt!
-  # prizePeriodStartedAt: BigInt!
   
   exitFeeMantissa: BigInt!
   creditRateMantissa: BigInt!
 
+  prizesCount: BitInt!
   prizes: [Prize!]! @derivedFrom(field: "prizeStrategy")
 }
 
@@ -153,7 +153,7 @@ type Prize @entity {
 
   prizeStrategy: PrizeStrategy!
 
-  prizePeriodStartedAt: BigInt!
+  prizePeriodStartedTimestamp: BigInt!
   lockBlock: BigInt
   
   awardedBlock: BigInt
@@ -162,8 +162,8 @@ type Prize @entity {
   rngRequestId: BigInt!
   randomNumber: BigInt
 
-  balance: BigInt
-  prize: BigInt
+  gross: BigInt
+  net: BigInt
   reserveFee: BigInt
 
   winners: [Player!]

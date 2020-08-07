@@ -63,10 +63,11 @@ export function loadOrCreatePrizeStrategy(
     _prizeStrategy.currentState = 'Opened'
 
     _prizeStrategy.prizePeriodSeconds = boundPrizeStrategy.prizePeriodSeconds()
-    // _prizeStrategy.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
 
     _prizeStrategy.exitFeeMantissa = boundPrizeStrategy.exitFeeMantissa()
     _prizeStrategy.creditRateMantissa = boundPrizeStrategy.creditRateMantissa()
+
+    _prizeStrategy.prizesCount = ZERO
 
     // const boundYieldService = CompoundYieldServiceContract.bind(yieldServiceAddress)
     // prizeStrategy.cToken = boundYieldService.token().toHex()

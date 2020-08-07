@@ -93,7 +93,7 @@
     awardStartOperator
     awardedOperator
 
-    prizePeriodStartedAt
+    prizePeriodStartedTimestamp
     lockBlock
     awardedBlock
 
