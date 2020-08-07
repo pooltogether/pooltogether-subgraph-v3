@@ -150,6 +150,15 @@ export class PrizeStrategy extends Entity {
     this.set("creditRateMantissa", Value.fromBigInt(value));
   }
 
+  get prizesCount(): BigInt {
+    let value = this.get("prizesCount");
+    return value.toBigInt();
+  }
+
+  set prizesCount(value: BigInt) {
+    this.set("prizesCount", Value.fromBigInt(value));
+  }
+
   get prizes(): Array<string> {
     let value = this.get("prizes");
     return value.toStringArray();
@@ -645,13 +654,13 @@ export class Prize extends Entity {
     this.set("prizeStrategy", Value.fromString(value));
   }
 
-  get prizePeriodStartedAt(): BigInt {
-    let value = this.get("prizePeriodStartedAt");
+  get prizePeriodStartedTimestamp(): BigInt {
+    let value = this.get("prizePeriodStartedTimestamp");
     return value.toBigInt();
   }
 
-  set prizePeriodStartedAt(value: BigInt) {
-    this.set("prizePeriodStartedAt", Value.fromBigInt(value));
+  set prizePeriodStartedTimestamp(value: BigInt) {
+    this.set("prizePeriodStartedTimestamp", Value.fromBigInt(value));
   }
 
   get lockBlock(): BigInt | null {
@@ -731,8 +740,8 @@ export class Prize extends Entity {
     }
   }
 
-  get balance(): BigInt | null {
-    let value = this.get("balance");
+  get gross(): BigInt | null {
+    let value = this.get("gross");
     if (value === null) {
       return null;
     } else {
@@ -740,16 +749,16 @@ export class Prize extends Entity {
     }
   }
 
-  set balance(value: BigInt | null) {
+  set gross(value: BigInt | null) {
     if (value === null) {
-      this.unset("balance");
+      this.unset("gross");
     } else {
-      this.set("balance", Value.fromBigInt(value as BigInt));
+      this.set("gross", Value.fromBigInt(value as BigInt));
     }
   }
 
-  get prize(): BigInt | null {
-    let value = this.get("prize");
+  get net(): BigInt | null {
+    let value = this.get("net");
     if (value === null) {
       return null;
     } else {
@@ -757,11 +766,11 @@ export class Prize extends Entity {
     }
   }
 
-  set prize(value: BigInt | null) {
+  set net(value: BigInt | null) {
     if (value === null) {
-      this.unset("prize");
+      this.unset("net");
     } else {
-      this.set("prize", Value.fromBigInt(value as BigInt));
+      this.set("net", Value.fromBigInt(value as BigInt));
     }
   }
 

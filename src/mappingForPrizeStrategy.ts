@@ -74,7 +74,10 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
 
   prize.net = event.params.prize
   prize.reserveFee = event.params.reserveFee
-  prize.gross = prize.net.plus(prize.reserveFee)
+  prize.gross = ZERO
+  if (event.params.reserveFee.gt(ZERO)) {
+    prize.gross = prize.net.plus(prize.reserveFee as BigInt)
+  }
 
   const randomNumber = boundRng.randomNumber(prize.rngRequestId)
   prize.randomNumber = randomNumber

@@ -30,7 +30,7 @@ type PrizeStrategy @entity {
   exitFeeMantissa: BigInt!
   creditRateMantissa: BigInt!
 
-  prizesCount: BitInt!
+  prizesCount: BigInt!
   prizes: [Prize!]! @derivedFrom(field: "prizeStrategy")
 }
 
