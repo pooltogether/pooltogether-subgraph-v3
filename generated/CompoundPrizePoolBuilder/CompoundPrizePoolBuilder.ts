@@ -77,7 +77,7 @@ export class CompoundPrizePoolBuilder__createInputConfigStruct extends ethereum.
     return this[9].toBigInt();
   }
 
-  get externalAwards(): Array<Address> {
+  get externalERC20Awards(): Array<Address> {
     return this[10].toAddressArray();
   }
 }
@@ -103,6 +103,21 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
       "compoundPrizePoolProxyFactory():(address)",
       []
     );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  comptroller(): Address {
+    let result = super.call("comptroller", "comptroller():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_comptroller(): ethereum.CallResult<Address> {
+    let result = super.tryCall("comptroller", "comptroller():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -151,21 +166,6 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
       "create((address,uint256,string,string,string,string,uint256,uint256,uint256,uint256,address[])):(address)",
       [ethereum.Value.fromTuple(config)]
     );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  governor(): Address {
-    let result = super.call("governor", "governor():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_governor(): ethereum.CallResult<Address> {
-    let result = super.tryCall("governor", "governor():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -310,7 +310,7 @@ export class CreateCallConfigStruct extends ethereum.Tuple {
     return this[9].toBigInt();
   }
 
-  get externalAwards(): Array<Address> {
+  get externalERC20Awards(): Array<Address> {
     return this[10].toAddressArray();
   }
 }
@@ -332,7 +332,7 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get _governor(): Address {
+  get _comptroller(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 

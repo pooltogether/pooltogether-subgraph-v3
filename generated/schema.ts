@@ -96,13 +96,13 @@ export class PrizeStrategy extends Entity {
     this.set("sponsorship", Value.fromBytes(value));
   }
 
-  get governor(): Bytes {
-    let value = this.get("governor");
+  get comptroller(): Bytes {
+    let value = this.get("comptroller");
     return value.toBytes();
   }
 
-  set governor(value: Bytes) {
-    this.set("governor", Value.fromBytes(value));
+  set comptroller(value: Bytes) {
+    this.set("comptroller", Value.fromBytes(value));
   }
 
   get currentPrizeId(): BigInt {
@@ -159,6 +159,33 @@ export class PrizeStrategy extends Entity {
     this.set("prizesCount", Value.fromBigInt(value));
   }
 
+  get balanceDrips(): Array<string> {
+    let value = this.get("balanceDrips");
+    return value.toStringArray();
+  }
+
+  set balanceDrips(value: Array<string>) {
+    this.set("balanceDrips", Value.fromStringArray(value));
+  }
+
+  get volumeDrips(): Array<string> {
+    let value = this.get("volumeDrips");
+    return value.toStringArray();
+  }
+
+  set volumeDrips(value: Array<string>) {
+    this.set("volumeDrips", Value.fromStringArray(value));
+  }
+
+  get referralVolumeDrips(): Array<string> {
+    let value = this.get("referralVolumeDrips");
+    return value.toStringArray();
+  }
+
+  set referralVolumeDrips(value: Array<string>) {
+    this.set("referralVolumeDrips", Value.fromStringArray(value));
+  }
+
   get prizes(): Array<string> {
     let value = this.get("prizes");
     return value.toStringArray();
@@ -166,6 +193,442 @@ export class PrizeStrategy extends Entity {
 
   set prizes(value: Array<string>) {
     this.set("prizes", Value.fromStringArray(value));
+  }
+}
+
+export class BalanceDrip extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save BalanceDrip entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save BalanceDrip entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("BalanceDrip", id.toString(), this);
+  }
+
+  static load(id: string): BalanceDrip | null {
+    return store.get("BalanceDrip", id) as BalanceDrip | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get prizeStrategy(): string {
+    let value = this.get("prizeStrategy");
+    return value.toString();
+  }
+
+  set prizeStrategy(value: string) {
+    this.set("prizeStrategy", Value.fromString(value));
+  }
+
+  get measureToken(): Bytes {
+    let value = this.get("measureToken");
+    return value.toBytes();
+  }
+
+  set measureToken(value: Bytes) {
+    this.set("measureToken", Value.fromBytes(value));
+  }
+
+  get dripToken(): Bytes {
+    let value = this.get("dripToken");
+    return value.toBytes();
+  }
+
+  set dripToken(value: Bytes) {
+    this.set("dripToken", Value.fromBytes(value));
+  }
+
+  get dripRatePerSecond(): BigInt | null {
+    let value = this.get("dripRatePerSecond");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set dripRatePerSecond(value: BigInt | null) {
+    if (value === null) {
+      this.unset("dripRatePerSecond");
+    } else {
+      this.set("dripRatePerSecond", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get removed(): boolean {
+    let value = this.get("removed");
+    return value.toBoolean();
+  }
+
+  set removed(value: boolean) {
+    this.set("removed", Value.fromBoolean(value));
+  }
+}
+
+export class VolumeDrip extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save VolumeDrip entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save VolumeDrip entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("VolumeDrip", id.toString(), this);
+  }
+
+  static load(id: string): VolumeDrip | null {
+    return store.get("VolumeDrip", id) as VolumeDrip | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get prizeStrategy(): string {
+    let value = this.get("prizeStrategy");
+    return value.toString();
+  }
+
+  set prizeStrategy(value: string) {
+    this.set("prizeStrategy", Value.fromString(value));
+  }
+
+  get index(): BigInt {
+    let value = this.get("index");
+    return value.toBigInt();
+  }
+
+  set index(value: BigInt) {
+    this.set("index", Value.fromBigInt(value));
+  }
+
+  get measureToken(): Bytes | null {
+    let value = this.get("measureToken");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set measureToken(value: Bytes | null) {
+    if (value === null) {
+      this.unset("measureToken");
+    } else {
+      this.set("measureToken", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get dripToken(): Bytes | null {
+    let value = this.get("dripToken");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set dripToken(value: Bytes | null) {
+    if (value === null) {
+      this.unset("dripToken");
+    } else {
+      this.set("dripToken", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get periodSeconds(): BigInt | null {
+    let value = this.get("periodSeconds");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set periodSeconds(value: BigInt | null) {
+    if (value === null) {
+      this.unset("periodSeconds");
+    } else {
+      this.set("periodSeconds", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get dripAmount(): BigInt | null {
+    let value = this.get("dripAmount");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set dripAmount(value: BigInt | null) {
+    if (value === null) {
+      this.unset("dripAmount");
+    } else {
+      this.set("dripAmount", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get referral(): boolean {
+    let value = this.get("referral");
+    return value.toBoolean();
+  }
+
+  set referral(value: boolean) {
+    this.set("referral", Value.fromBoolean(value));
+  }
+
+  get periods(): Array<string> {
+    let value = this.get("periods");
+    return value.toStringArray();
+  }
+
+  set periods(value: Array<string>) {
+    this.set("periods", Value.fromStringArray(value));
+  }
+}
+
+export class VolumeDripPeriod extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save VolumeDripPeriod entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save VolumeDripPeriod entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("VolumeDripPeriod", id.toString(), this);
+  }
+
+  static load(id: string): VolumeDripPeriod | null {
+    return store.get("VolumeDripPeriod", id) as VolumeDripPeriod | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get startTime(): BigInt {
+    let value = this.get("startTime");
+    return value.toBigInt();
+  }
+
+  set startTime(value: BigInt) {
+    this.set("startTime", Value.fromBigInt(value));
+  }
+
+  get totalSupply(): BigInt {
+    let value = this.get("totalSupply");
+    return value.toBigInt();
+  }
+
+  set totalSupply(value: BigInt) {
+    this.set("totalSupply", Value.fromBigInt(value));
+  }
+
+  get volumeDrip(): string {
+    let value = this.get("volumeDrip");
+    return value.toString();
+  }
+
+  set volumeDrip(value: string) {
+    this.set("volumeDrip", Value.fromString(value));
+  }
+}
+
+export class PlayerBalanceDrip extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PlayerBalanceDrip entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PlayerBalanceDrip entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PlayerBalanceDrip", id.toString(), this);
+  }
+
+  static load(id: string): PlayerBalanceDrip | null {
+    return store.get("PlayerBalanceDrip", id) as PlayerBalanceDrip | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get player(): string {
+    let value = this.get("player");
+    return value.toString();
+  }
+
+  set player(value: string) {
+    this.set("player", Value.fromString(value));
+  }
+
+  get balanceDrip(): string {
+    let value = this.get("balanceDrip");
+    return value.toString();
+  }
+
+  set balanceDrip(value: string) {
+    this.set("balanceDrip", Value.fromString(value));
+  }
+
+  get lastExchangeRateMantissa(): BigInt | null {
+    let value = this.get("lastExchangeRateMantissa");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set lastExchangeRateMantissa(value: BigInt | null) {
+    if (value === null) {
+      this.unset("lastExchangeRateMantissa");
+    } else {
+      this.set("lastExchangeRateMantissa", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get dripBalance(): BigInt | null {
+    let value = this.get("dripBalance");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set dripBalance(value: BigInt | null) {
+    if (value === null) {
+      this.unset("dripBalance");
+    } else {
+      this.set("dripBalance", Value.fromBigInt(value as BigInt));
+    }
+  }
+}
+
+export class PlayerVolumeDrip extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PlayerVolumeDrip entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PlayerVolumeDrip entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PlayerVolumeDrip", id.toString(), this);
+  }
+
+  static load(id: string): PlayerVolumeDrip | null {
+    return store.get("PlayerVolumeDrip", id) as PlayerVolumeDrip | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get player(): string {
+    let value = this.get("player");
+    return value.toString();
+  }
+
+  set player(value: string) {
+    this.set("player", Value.fromString(value));
+  }
+
+  get volumeDrip(): string {
+    let value = this.get("volumeDrip");
+    return value.toString();
+  }
+
+  set volumeDrip(value: string) {
+    this.set("volumeDrip", Value.fromString(value));
+  }
+
+  get balance(): BigInt {
+    let value = this.get("balance");
+    return value.toBigInt();
+  }
+
+  set balance(value: BigInt) {
+    this.set("balance", Value.fromBigInt(value));
+  }
+
+  get period(): BigInt {
+    let value = this.get("period");
+    return value.toBigInt();
+  }
+
+  set period(value: BigInt) {
+    this.set("period", Value.fromBigInt(value));
+  }
+
+  get accrued(): BigInt {
+    let value = this.get("accrued");
+    return value.toBigInt();
+  }
+
+  set accrued(value: BigInt) {
+    this.set("accrued", Value.fromBigInt(value));
   }
 }
 
@@ -428,13 +891,13 @@ export class CompoundPrizePoolBuilder extends Entity {
     this.set("trustedForwarder", Value.fromBytes(value));
   }
 
-  get governor(): Bytes {
-    let value = this.get("governor");
+  get comptroller(): Bytes {
+    let value = this.get("comptroller");
     return value.toBytes();
   }
 
-  set governor(value: Bytes) {
-    this.set("governor", Value.fromBytes(value));
+  set comptroller(value: Bytes) {
+    this.set("comptroller", Value.fromBytes(value));
   }
 
   get rng(): Bytes {
@@ -806,5 +1269,45 @@ export class Prize extends Entity {
     } else {
       this.set("winners", Value.fromStringArray(value as Array<string>));
     }
+  }
+}
+
+export class Comptroller extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Comptroller entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Comptroller entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Comptroller", id.toString(), this);
+  }
+
+  static load(id: string): Comptroller | null {
+    return store.get("Comptroller", id) as Comptroller | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get reserveRateMantissa(): BigInt {
+    let value = this.get("reserveRateMantissa");
+    return value.toBigInt();
+  }
+
+  set reserveRateMantissa(value: BigInt) {
+    this.set("reserveRateMantissa", Value.fromBigInt(value));
   }
 }

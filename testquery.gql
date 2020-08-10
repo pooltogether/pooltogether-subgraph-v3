@@ -3,7 +3,7 @@
     id
 
     trustedForwarder
-    governor
+    comptroller
     rng
 
     # compoundPeriodicPrizePoolFactory
@@ -13,12 +13,12 @@
 
   prizeStrategies {
     id
-    
+
     creator
     compoundPrizePoolBuilder {
       id
     }
-    
+
     prizePool {
       id
     }
@@ -26,14 +26,14 @@
     rng
     sponsorship
     # trustedForwarder
-    governor
+    comptroller
 
     currentPrizeId
     currentState
 
     prizePeriodSeconds
     prizePeriodStartedAt
-    
+
     exitFeeMantissa
     creditRateMantissa
 
@@ -67,7 +67,7 @@
     totalSupply
 
     previousPrize
-    
+
     players {
       id
       address
@@ -82,14 +82,14 @@
 
     prizeStrategy
     prizePool
-    
+
     balance
     prize
     reserveFee
 
     randomNumber
     rngRequestId
-    
+
     awardStartOperator
     awardedOperator
 
@@ -105,7 +105,7 @@
       unlockTimestamp
     }
   }
-  
+
   players {
     id
     address
@@ -113,29 +113,29 @@
     timelockedBalance
     unlockTimestamp
   }
-  
+
   tickets {
     id
     name
     symbol
     decimals
-    
+
     prizeStrategy {
       id
     }
   }
-  
+
   sponsorships {
     id
     name
     symbol
     decimals
-    
+
     prizeStrategy {
       id
     }
   }
-  
+
   # yieldServices {
     # id
 

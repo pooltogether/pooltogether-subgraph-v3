@@ -10,11 +10,11 @@ import {
 
 import {
   PrizePool as PrizePoolContract,
-  CapturedAward,
   TimelockDeposited,
   Deposited,
   Awarded,
-  AwardedExternal,
+  AwardedExternalERC20,
+  AwardedExternalERC721,
   InstantWithdrawal,
   TimelockedWithdrawal,
   TimelockedWithdrawalSwept,
@@ -80,20 +80,21 @@ function incrementPlayerTimelockedBalance(_player: Player, amount: BigInt): void
   _player.save()
 }
 
-export function handleCapturedAward(event: CapturedAward): void {
-  // TODO!
-  log.warning('no-op!', [])
-}
-
 export function handleAwarded(event: Awarded): void {
   // TODO!
   log.warning('no-op!', [])
 }
 
-export function handleAwardedExternal(event: AwardedExternal): void {
+export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
   // This is emitted when external rewards (other tokens, nfts, etc)
   // are awarded
-  log.warning('implement handleAwardedExternal!', [])
+  log.warning('implement handleAwardedExternalERC20!', [])
+}
+
+export function handleAwardedExternalERC721(event: AwardedExternalERC721): void {
+  // This is emitted when external rewards (other tokens, nfts, etc)
+  // are awarded
+  log.warning('implement handleAwardedExternalERC721!', [])
 }
 
 export function handleDeposited(event: Deposited): void {
@@ -105,13 +106,13 @@ export function handleDeposited(event: Deposited): void {
 
   const ticketAddress = Address.fromString(ticket.toHexString())
   const ticketIsToken = (token.equals(ticketAddress))
-  
+
   if (ticketIsToken) {
     const _player = loadOrCreatePlayer(
       Address.fromString(event.address.toHex()),
       event.params.to
     )
-    
+
     const playersCachedBalance = _player.balance
     incrementPlayerCount(_prizePool as PrizePool, playersCachedBalance)
 
@@ -162,7 +163,7 @@ export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
   )
 
   decrementPlayerCount(_prizePool as PrizePool, _player)
-  
+
   decrementPlayerBalance(_player, event.params.amount)
   incrementPlayerTimelockedBalance(_player, event.params.amount)
 
