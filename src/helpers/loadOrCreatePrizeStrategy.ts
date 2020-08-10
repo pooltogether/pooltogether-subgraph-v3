@@ -44,9 +44,9 @@ export function loadOrCreatePrizeStrategy(
     // _prizeStrategy.yieldDecimals = BigInt.fromI32(boundYieldToken.decimals())
     // _prizeStrategy.yieldName = boundYieldToken.name()
     // _prizeStrategy.yieldSymbol = boundYieldToken.symbol()
-    
 
-    
+
+
     _prizeStrategy.compoundPrizePoolBuilder = builder.toHex()
     _prizeStrategy.creator = creator
 
@@ -107,13 +107,13 @@ export function loadOrCreatePrizeStrategy(
     } else {
       _pool.maxExitFeeMantissa = callResult.value
     }
-    
+
     _pool.maxTimelockDuration = boundPrizePool.maxTimelockDuration()
     _pool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
 
     const boundTicket = ERC20Contract.bind(Address.fromString(_prizeStrategy.ticket.toHex()))
     _pool.totalSupply = boundTicket.totalSupply()
-    
+
     _pool.cumulativePrizeGross = ZERO
     _pool.cumulativePrizeReserveFee = ZERO
     _pool.cumulativePrizeNet = ZERO

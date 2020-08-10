@@ -32,6 +32,50 @@ dataSources:
         - event: CompoundPrizePoolCreated(indexed address,indexed address,indexed address)
           handler: handleCompoundPrizePoolCreated
       file: ./src/mappingForCompoundPrizePoolBuilder.ts
+  - name: Comptroller
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{comptroller.address}}"
+      abi: Comptroller
+      startBlock: {{comptroller.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForComptroller.ts
+      entities:
+        - Comptroller
+      abis:
+        - name: Comptroller
+          file: ./abis/Comptroller.json
+      eventHandlers:
+        - event: ReserveRateMantissaSet(uint256)
+          handler: handleReserveRateMantissaSet
+        - event: BalanceDripAdded(indexed address,indexed address,indexed address,uint256)
+          handler: handleBalanceDripAdded
+        - event: BalanceDripRemoved(indexed address,indexed address,indexed address)
+          handler: handleBalanceDripRemoved
+        - event: BalanceDripRateSet(indexed address,indexed address,indexed address,uint256)
+          handler: handleBalanceDripRateSet
+        - event: BalanceDripClaimed(indexed address,indexed address,indexed address,address,uint256)
+          handler: handleBalanceDripClaimed
+        - event: VolumeDripAdded(indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleVolumeDripAdded
+        - event: VolumeDripRemoved(indexed address,indexed address,indexed uint256)
+          handler: handleVolumeDripRemoved
+        - event: VolumeDripAmountSet(address,uint256,uint256)
+          handler: handleVolumeDripAmountSet
+        - event: VolumeDripClaimed(address,uint256,address,address,uint256)
+          handler: handleVolumeDripClaimed
+        - event: ReferralVolumeDripAdded(indexed address,indexed address,indexed address,uint256,uint256,uint256)
+          handler: handleReferralVolumeDripAdded
+        - event: ReferralVolumeDripRemoved(indexed address,indexed address,indexed uint256)
+          handler: handleReferralVolumeDripRemoved
+        - event: ReferralVolumeDripAmountSet(address,uint256,uint256)
+          handler: handleReferralVolumeDripAmountSet
+        - event: ReferralVolumeDripClaimed(address,uint256,address,address,uint256)
+          handler: handleReferralVolumeDripClaimed
 templates:
   - name: PrizeStrategy
     kind: ethereum/contract
@@ -87,6 +131,8 @@ templates:
           handler: handleTimelockDeposited
         - event: Deposited(indexed address,indexed address,indexed address,uint256)
           handler: handleDeposited
+        - event: TimelockDeposited(indexed address,indexed address,indexed address,uint256)
+          handler: handleTimelockDeposited
         - event: Awarded(indexed address,indexed address,uint256)
           handler: handleAwarded
         - event: AwardedExternalERC20(indexed address,indexed address,uint256)

@@ -8,13 +8,13 @@
 
   prizeStrategies {
     id
-    
+
     creator
 
     compoundPrizePoolBuilder {
       id
     }
-    
+
     prizePool {
       id
     }
@@ -28,7 +28,8 @@
     currentState
 
     prizePeriodSeconds
-    
+    prizePeriodStartedAt
+
     exitFeeMantissa
     creditRateMantissa
 
@@ -62,7 +63,7 @@
     cumulativePrizeGross
     cumulativePrizeReserveFee
     cumulativePrizeNet
-    
+
     players {
       id
       address
@@ -78,26 +79,26 @@
     prizeStrategy {
       id
     }
-    
+
     gross
     net
     reserveFee
 
     randomNumber
     rngRequestId
-    
+
     awardStartOperator
     awardedOperator
 
     prizePeriodStartedTimestamp
     lockBlock
-  
+
     awardedBlock
     awardedTimestamp
 
     winners
   }
-  
+
   players {
     id
 
@@ -106,26 +107,26 @@
     timelockedBalance
     unlockTimestamp
   }
-  
+
   tickets {
     id
 
     name
     symbol
     decimals
-    
+
     prizeStrategy {
       id
     }
   }
-  
+
   sponsorships {
     id
-    
+
     name
     symbol
     decimals
-    
+
     prizeStrategy {
       id
     }

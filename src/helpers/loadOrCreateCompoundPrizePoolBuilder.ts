@@ -15,7 +15,7 @@ export function loadOrCreateCompoundPrizePoolBuilder(CompoundPrizePoolBuilderAdd
 
     _builder.comptroller = boundCompoundPrizePoolBuilder.comptroller()
     _builder.trustedForwarder = boundCompoundPrizePoolBuilder.trustedForwarder()
-    
+
     _builder.save()
   }
 

@@ -8,6 +8,11 @@ The official PoolTogether v3 subgraph.
 $ yarn prepare:local && graph codegen subgraph.local.yaml && graph build subgraph.local.yaml && yarn create:local && yarn deploy:local
 ```
 
+### For Kovan:
+```sh
+$ yarn prepare:kovan && graph codegen subgraph.kovan.yaml && yarn deploy:kovan
+```
+
 ## Local Setup
 
 First you'll need to setup a graph node, then you can deploy the project to it.
@@ -73,7 +78,7 @@ dataSources:
       abi: CompoundPrizePoolBuilder
 ...
 ```
-  
+
 5. Allocate the subgraph in the local Graph node
 
 ```bash
