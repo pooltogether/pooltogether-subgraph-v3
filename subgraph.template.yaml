@@ -18,6 +18,8 @@ dataSources:
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: Comptroller
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         # - name: CompoundPrizePool
@@ -32,6 +34,55 @@ dataSources:
         - event: CompoundPrizePoolCreated(indexed address,indexed address,indexed address)
           handler: handleCompoundPrizePoolCreated
       file: ./src/mappingForCompoundPrizePoolBuilder.ts
+  - name: Comptroller
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{comptroller.address}}"
+      abi: Comptroller
+      startBlock: {{comptroller.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForComptroller.ts
+      entities:
+        - Comptroller
+      abis:
+        - name: Comptroller
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
+      eventHandlers:
+        - event: ReserveRateMantissaSet(uint256)
+          handler: handleReserveRateMantissaSet
+
+        - event: DripTokenDripped(indexed address,indexed address,uint256)
+          handler: handleDripTokenDripped
+        - event: DripTokenClaimed(indexed address,indexed address,indexed address,uint256)
+          handler: handleDripTokenClaimed
+
+        - event: BalanceDripActivated(indexed address,indexed address,indexed address,uint256)
+          handler: handleBalanceDripActivated
+        - event: BalanceDripDeactivated(indexed address,indexed address,indexed address)
+          handler: handleBalanceDripDeactivated
+        - event: BalanceDripRateSet(indexed address,indexed address,indexed address,uint256)
+          handler: handleBalanceDripRateSet
+        - event: BalanceDripDripped(indexed address,indexed address,indexed address,address,uint256)
+          handler: handleBalanceDripDripped
+
+        - event: VolumeDripActivated(indexed address,indexed address,indexed address,bool,uint256,uint256)
+          handler: handleVolumeDripActivated
+        - event: VolumeDripDeactivated(indexed address,indexed address,indexed address,bool)
+          handler: handleVolumeDripDeactivated
+        - event: VolumeDripSet(indexed address,indexed address,indexed address,bool,uint256,uint256)
+          handler: handleVolumeDripSet
+        - event: VolumeDripPeriodStarted(indexed address,indexed address,indexed address,bool,uint32,uint256,uint256)
+          handler: handleVolumeDripPeriodStarted
+        - event: VolumeDripPeriodEnded(indexed address,indexed address,indexed address,bool,uint32,uint256)
+          handler: handleVolumeDripPeriodEnded
+        - event: VolumeDripDeposited(indexed address,indexed address,indexed address,bool,address,uint256,uint256,uint256)
+          handler: handleVolumeDripDeposited
+        - event: VolumeDripDripped(indexed address,indexed address,indexed address,bool,address,uint256)
+          handler: handleVolumeDripDripped
 templates:
   - name: PrizeStrategy
     kind: ethereum/contract
@@ -83,10 +134,10 @@ templates:
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
       eventHandlers:
-        - event: TimelockDeposited(indexed address,indexed address,indexed address,uint256)
-          handler: handleTimelockDeposited
         - event: Deposited(indexed address,indexed address,indexed address,uint256)
           handler: handleDeposited
+        - event: TimelockDeposited(indexed address,indexed address,indexed address,uint256)
+          handler: handleTimelockDeposited
         - event: Awarded(indexed address,indexed address,uint256)
           handler: handleAwarded
         - event: AwardedExternalERC20(indexed address,indexed address,uint256)
