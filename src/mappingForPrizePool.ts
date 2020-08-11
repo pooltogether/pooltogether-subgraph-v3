@@ -2,6 +2,7 @@ import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 import {
   Player,
   PrizeStrategy,
+  Prize,
   PrizePool,
 } from '../generated/schema'
 import {
@@ -23,6 +24,7 @@ import {
 
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 // import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
+import { prizeId } from './helpers/idTemplates'
 
 const ZERO = BigInt.fromI32(0)
 const ONE = BigInt.fromI32(1)
@@ -86,8 +88,25 @@ export function handleCapturedAward(event: CapturedAward): void {
 }
 
 export function handleAwarded(event: Awarded): void {
-  // TODO!
-  log.warning('no-op!', [])
+  const _prizePool = PrizePool.load(event.address.toHex())
+  const _prizeStrategy = PrizeStrategy.load(_prizePool.prizeStrategy)
+
+  const _prizeId = prizeId(
+    _prizePool.prizeStrategy,
+    _prizeStrategy.currentPrizeId.toString()
+  )
+
+  const _prize = Prize.load(_prizeId)
+  const winner = event.params.winner
+
+  log.info('_prizeStrategy.currentPrizeId', [_prizeStrategy.currentPrizeId.toString()])
+  log.info('winner', [winner.toString()])
+  log.info('Address.fromI32(0)', [Address.fromI32(0).toString()])
+
+  if (!winner.equals(Address.fromI32(0))) {
+    _prize.winners = [winner.toHex()]
+    _prize.save()
+  }
 }
 
 export function handleAwardedExternal(event: AwardedExternal): void {

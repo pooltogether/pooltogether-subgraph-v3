@@ -82,9 +82,6 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   const randomNumber = boundRng.randomNumber(prize.rngRequestId)
   prize.randomNumber = randomNumber
 
-  const winner = boundPrizeStrategy.draw(randomNumber)
-  prize.winners = [winner.toHex()]
-
   prize.awardedBlock = event.block.number
   prize.awardedTimestamp = event.block.timestamp
 
@@ -95,9 +92,13 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   // _prizeStrategy.rngRequestId = BigInt.fromI32(0)
   
   _prizeStrategy.currentState = "Awarded"
+  log.info('old _prizeStrategy.currentPrizeId', [_prizeStrategy.currentPrizeId.toString()])
+
   _prizeStrategy.currentPrizeId = _prizeStrategy.currentPrizeId.plus(
     BigInt.fromI32(1)
   )
+
+  log.info('new _prizeStrategy.currentPrizeId', [_prizeStrategy.currentPrizeId.toString()])
 
   _prizeStrategy.save()
 }
