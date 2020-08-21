@@ -1,4 +1,4 @@
-import { Address, BigInt, log } from '@graphprotocol/graph-ts'
+import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts'
 import {
   Player,
   PrizeStrategy,
@@ -11,15 +11,16 @@ import {
 
 import {
   PrizePool as PrizePoolContract,
-  CapturedAward,
   TimelockDeposited,
   Deposited,
   Awarded,
-  AwardedExternal,
+  AwardedExternalERC20,
+  AwardedExternalERC721,
   InstantWithdrawal,
   TimelockedWithdrawal,
   TimelockedWithdrawalSwept,
   PrizeStrategyDetached,
+  OwnershipTransferred,
 } from '../generated/templates/PrizePool/PrizePool'
 
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
@@ -28,7 +29,7 @@ import { prizeId } from './helpers/idTemplates'
 
 const ZERO = BigInt.fromI32(0)
 const ONE = BigInt.fromI32(1)
-
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
 function updateTotalTicketSupply(_prizePool: PrizePool): void {
   const _prizeStrategy = PrizeStrategy.load(_prizePool.prizeStrategy)
@@ -82,11 +83,6 @@ function incrementPlayerTimelockedBalance(_player: Player, amount: BigInt): void
   _player.save()
 }
 
-export function handleCapturedAward(event: CapturedAward): void {
-  // TODO!
-  log.warning('no-op!', [])
-}
-
 export function handleAwarded(event: Awarded): void {
   const _prizePool = PrizePool.load(event.address.toHex())
   const _prizeStrategy = PrizeStrategy.load(_prizePool.prizeStrategy)
@@ -97,22 +93,38 @@ export function handleAwarded(event: Awarded): void {
   )
 
   const _prize = Prize.load(_prizeId)
-  const winner = event.params.winner
+  const winner = event.params.winner.toHex()
+  // const winner = Bytes.fromHexString(ZERO_ADDRESS) as Bytes
 
-  log.info('_prizeStrategy.currentPrizeId', [_prizeStrategy.currentPrizeId.toString()])
-  log.info('winner', [winner.toString()])
-  log.info('Address.fromI32(0)', [Address.fromI32(0).toString()])
+  log.warning('_prizeStrategy.currentPrizeId: {}', [_prizeStrategy.currentPrizeId.toHexString()])
+  log.warning('winner.toHex(): {}', [winner])
+  log.warning('ZERO_ADDRESS: {}', [ZERO_ADDRESS])
 
-  if (!winner.equals(Address.fromI32(0))) {
-    _prize.winners = [winner.toHex()]
+  // if (event.params.winner.toHex() != ZERO_ADDRESS) {
+  if (winner != ZERO_ADDRESS) {
+    log.warning('GOT WINNER! {}', [winner])
+    const winnerBytes = Bytes.fromHexString(winner) as Bytes
+    _prize.winners = [winnerBytes]
+
+    // log.warning('_prize.winner: {}', [_prize.winner])
     _prize.save()
   }
 }
 
-export function handleAwardedExternal(event: AwardedExternal): void {
-  // This is emitted when external rewards (other tokens, nfts, etc)
+export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
+  // This is emitted when external rewards (other tokens, etc)
   // are awarded
-  log.warning('implement handleAwardedExternal!', [])
+  log.warning('implement handleAwardedExternalERC20!', [])
+}
+
+export function handleAwardedExternalERC721(event: AwardedExternalERC721): void {
+  // This is emitted when external rewards (nfts, etc)
+  // are awarded
+  log.warning('implement handleAwardedExternalERC721!', [])
+}
+
+export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+  log.warning('implement handleOwnershipTransferred!', [])
 }
 
 export function handleDeposited(event: Deposited): void {

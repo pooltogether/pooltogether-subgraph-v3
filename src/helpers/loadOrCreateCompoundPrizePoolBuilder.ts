@@ -13,9 +13,8 @@ export function loadOrCreateCompoundPrizePoolBuilder(CompoundPrizePoolBuilderAdd
     _builder = new CompoundPrizePoolBuilder(CompoundPrizePoolBuilderAddress.toHex())
     const boundCompoundPrizePoolBuilder = CompoundPrizePoolBuilderContract.bind(CompoundPrizePoolBuilderAddress)
 
+    _builder.comptroller = boundCompoundPrizePoolBuilder.comptroller()
     _builder.trustedForwarder = boundCompoundPrizePoolBuilder.trustedForwarder()
-    _builder.rng = boundCompoundPrizePoolBuilder.rng()
-    _builder.governor = boundCompoundPrizePoolBuilder.governor()
     
     _builder.save()
   }

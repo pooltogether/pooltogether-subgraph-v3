@@ -19,15 +19,15 @@ dataSources:
         - name: ERC20
           file: ./abis/ERC20.json
         - name: PrizePool
-          file: ./abis/PrizePool.json
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         # - name: CompoundPrizePool
-        #   file: ./abis/CompoundPrizePool.json
+        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
         - name: PrizeStrategy
-          file: ./abis/PrizeStrategy.json
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizeStrategy.json
         - name: CompoundPrizePoolBuilder
-          file: ./abis/CompoundPrizePoolBuilder.json
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolBuilder.json
         - name: ControlledToken
-          file: ./abis/ControlledToken.json
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
         - event: CompoundPrizePoolCreated(indexed address,indexed address,indexed address)
           handler: handleCompoundPrizePoolCreated
@@ -49,9 +49,9 @@ templates:
         - name: ERC20
           file: ./abis/ERC20.json
         - name: PrizeStrategy
-          file: ./abis/PrizeStrategy.json
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizeStrategy.json
         - name: RNGInterface
-          file: ./abis/RNGInterface.json
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/RNGInterface.json
       eventHandlers:
         - event: PrizePoolOpened(indexed address,indexed uint256)
           handler: handlePrizePoolOpened
@@ -59,6 +59,12 @@ templates:
           handler: handlePrizePoolAwardStarted
         - event: PrizePoolAwarded(indexed address,uint256,uint256,uint256)
           handler: handlePrizePoolAwarded
+        - event: ExitFeeUpdated(uint256)
+          handler: handleExitFeeUpdated
+        - event: CreditRateUpdated(uint256)
+          handler: handleCreditRateUpdated
+        - event: RngServiceUpdated(address)
+          handler: handleRngServiceUpdated
   - name: PrizePool
     kind: ethereum/contract
     network: {{network}}
@@ -75,18 +81,18 @@ templates:
         - name: ERC20
           file: ./abis/ERC20.json
         - name: PrizePool
-          file: ./abis/PrizePool.json
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
       eventHandlers:
-        - event: CapturedAward(uint256)
-          handler: handleCapturedAward
         - event: TimelockDeposited(indexed address,indexed address,indexed address,uint256)
           handler: handleTimelockDeposited
         - event: Deposited(indexed address,indexed address,indexed address,uint256)
           handler: handleDeposited
         - event: Awarded(indexed address,indexed address,uint256)
           handler: handleAwarded
-        - event: AwardedExternal(indexed address,indexed address,uint256)
-          handler: handleAwardedExternal
+        - event: AwardedExternalERC20(indexed address,indexed address,uint256)
+          handler: handleAwardedExternalERC20
+        - event: AwardedExternalERC721(indexed address,indexed address,uint256[])
+          handler: handleAwardedExternalERC721
         - event: InstantWithdrawal(indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleInstantWithdrawal
         - event: TimelockedWithdrawal(indexed address,indexed address,indexed address,uint256,uint256)
@@ -95,6 +101,8 @@ templates:
           handler: handleTimelockedWithdrawalSwept
         - event: PrizeStrategyDetached()
           handler: handlePrizeStrategyDetached
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
   - name: Sponsorship
     kind: ethereum/contract
     network: {{network}}
@@ -109,7 +117,7 @@ templates:
         - Sponsorship
       abis:
         - name: ControlledToken
-          file: ./abis/ControlledToken.json
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
   - name: Ticket
     kind: ethereum/contract
     network: {{network}}
@@ -124,4 +132,4 @@ templates:
         - Ticket
       abis:
         - name: ControlledToken
-          file: ./abis/ControlledToken.json
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json

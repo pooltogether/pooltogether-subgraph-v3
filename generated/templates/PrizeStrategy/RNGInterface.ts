@@ -23,7 +23,7 @@ export class RandomNumberCompleted__Params {
     this._event = event;
   }
 
-  get id(): BigInt {
+  get requestId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 
@@ -45,20 +45,29 @@ export class RandomNumberRequested__Params {
     this._event = event;
   }
 
-  get id(): BigInt {
+  get requestId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 
   get sender(): Address {
     return this._event.parameters[1].value.toAddress();
   }
+}
 
-  get token(): Address {
-    return this._event.parameters[2].value.toAddress();
+export class RNGInterface__getRequestFeeResult {
+  value0: Address;
+  value1: BigInt;
+
+  constructor(value0: Address, value1: BigInt) {
+    this.value0 = value0;
+    this.value1 = value1;
   }
 
-  get budget(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromAddress(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    return map;
   }
 }
 
@@ -84,42 +93,21 @@ export class RNGInterface extends ethereum.SmartContract {
     return new RNGInterface("RNGInterface", address);
   }
 
-  isRequestComplete(id: BigInt): boolean {
+  getLastRequestId(): BigInt {
     let result = super.call(
-      "isRequestComplete",
-      "isRequestComplete(uint32):(bool)",
-      [ethereum.Value.fromUnsignedBigInt(id)]
+      "getLastRequestId",
+      "getLastRequestId():(uint32)",
+      []
     );
-
-    return result[0].toBoolean();
-  }
-
-  try_isRequestComplete(id: BigInt): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "isRequestComplete",
-      "isRequestComplete(uint32):(bool)",
-      [ethereum.Value.fromUnsignedBigInt(id)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  randomNumber(id: BigInt): BigInt {
-    let result = super.call("randomNumber", "randomNumber(uint32):(uint256)", [
-      ethereum.Value.fromUnsignedBigInt(id)
-    ]);
 
     return result[0].toBigInt();
   }
 
-  try_randomNumber(id: BigInt): ethereum.CallResult<BigInt> {
+  try_getLastRequestId(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "randomNumber",
-      "randomNumber(uint32):(uint256)",
-      [ethereum.Value.fromUnsignedBigInt(id)]
+      "getLastRequestId",
+      "getLastRequestId():(uint32)",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -128,17 +116,86 @@ export class RNGInterface extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  requestRandomNumber(
-    token: Address,
-    budget: BigInt
-  ): RNGInterface__requestRandomNumberResult {
+  getRequestFee(): RNGInterface__getRequestFeeResult {
+    let result = super.call(
+      "getRequestFee",
+      "getRequestFee():(address,uint256)",
+      []
+    );
+
+    return new RNGInterface__getRequestFeeResult(
+      result[0].toAddress(),
+      result[1].toBigInt()
+    );
+  }
+
+  try_getRequestFee(): ethereum.CallResult<RNGInterface__getRequestFeeResult> {
+    let result = super.tryCall(
+      "getRequestFee",
+      "getRequestFee():(address,uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new RNGInterface__getRequestFeeResult(
+        value[0].toAddress(),
+        value[1].toBigInt()
+      )
+    );
+  }
+
+  isRequestComplete(requestId: BigInt): boolean {
+    let result = super.call(
+      "isRequestComplete",
+      "isRequestComplete(uint32):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(requestId)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isRequestComplete(requestId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isRequestComplete",
+      "isRequestComplete(uint32):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(requestId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  randomNumber(requestId: BigInt): BigInt {
+    let result = super.call("randomNumber", "randomNumber(uint32):(uint256)", [
+      ethereum.Value.fromUnsignedBigInt(requestId)
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_randomNumber(requestId: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "randomNumber",
+      "randomNumber(uint32):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(requestId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  requestRandomNumber(): RNGInterface__requestRandomNumberResult {
     let result = super.call(
       "requestRandomNumber",
-      "requestRandomNumber(address,uint256):(uint32,uint32)",
-      [
-        ethereum.Value.fromAddress(token),
-        ethereum.Value.fromUnsignedBigInt(budget)
-      ]
+      "requestRandomNumber():(uint32,uint32)",
+      []
     );
 
     return new RNGInterface__requestRandomNumberResult(
@@ -147,17 +204,13 @@ export class RNGInterface extends ethereum.SmartContract {
     );
   }
 
-  try_requestRandomNumber(
-    token: Address,
-    budget: BigInt
-  ): ethereum.CallResult<RNGInterface__requestRandomNumberResult> {
+  try_requestRandomNumber(): ethereum.CallResult<
+    RNGInterface__requestRandomNumberResult
+  > {
     let result = super.tryCall(
       "requestRandomNumber",
-      "requestRandomNumber(address,uint256):(uint32,uint32)",
-      [
-        ethereum.Value.fromAddress(token),
-        ethereum.Value.fromUnsignedBigInt(budget)
-      ]
+      "requestRandomNumber():(uint32,uint32)",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -169,6 +222,40 @@ export class RNGInterface extends ethereum.SmartContract {
         value[1].toBigInt()
       )
     );
+  }
+}
+
+export class RandomNumberCall extends ethereum.Call {
+  get inputs(): RandomNumberCall__Inputs {
+    return new RandomNumberCall__Inputs(this);
+  }
+
+  get outputs(): RandomNumberCall__Outputs {
+    return new RandomNumberCall__Outputs(this);
+  }
+}
+
+export class RandomNumberCall__Inputs {
+  _call: RandomNumberCall;
+
+  constructor(call: RandomNumberCall) {
+    this._call = call;
+  }
+
+  get requestId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class RandomNumberCall__Outputs {
+  _call: RandomNumberCall;
+
+  constructor(call: RandomNumberCall) {
+    this._call = call;
+  }
+
+  get randomNum(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
   }
 }
 
@@ -187,14 +274,6 @@ export class RequestRandomNumberCall__Inputs {
 
   constructor(call: RequestRandomNumberCall) {
     this._call = call;
-  }
-
-  get token(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get budget(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
   }
 }
 

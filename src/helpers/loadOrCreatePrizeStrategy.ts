@@ -53,11 +53,11 @@ export function loadOrCreatePrizeStrategy(
     // _prizeStrategy.prizePoolModuleManager = moduleManager.toHex()
 
     _prizeStrategy.prizePool = prizePool.toHex()
+    _prizeStrategy.comptroller = boundPrizeStrategy.comptroller()
     _prizeStrategy.ticket = boundPrizeStrategy.ticket()
     _prizeStrategy.rng = boundPrizeStrategy.rng()
     _prizeStrategy.sponsorship = boundPrizeStrategy.sponsorship()
     // _prizeStrategy.trustedForwarder = boundPrizeStrategy.trustedForwarder()
-    _prizeStrategy.governor = boundPrizeStrategy.governor()
 
     _prizeStrategy.currentPrizeId = ONE
     _prizeStrategy.currentState = 'Opened'
@@ -103,7 +103,7 @@ export function loadOrCreatePrizeStrategy(
 
     const callResult = boundPrizePool.try_maxExitFeeMantissa()
     if (callResult.reverted) {
-      log.info("maxExitFeeMantissa reverted", [])
+      log.warning("maxExitFeeMantissa reverted", [])
     } else {
       _pool.maxExitFeeMantissa = callResult.value
     }

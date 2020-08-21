@@ -16,11 +16,11 @@ type PrizeStrategy @entity {
   compoundPrizePoolBuilder: CompoundPrizePoolBuilder!
   
   prizePool: PrizePool!
+  comptroller: Bytes!
   ticket: Bytes!
   rng: Bytes!
   sponsorship: Bytes!
   # trustedForwarder: Bytes!
-  governor: Bytes!
 
   currentPrizeId: BigInt!
   currentState: PrizePoolState!
@@ -57,8 +57,6 @@ type PrizePool @entity {
   playerCount: BigInt!
   totalSupply: BigInt! # move to PrizePool.Ticket relationship
 
-  # previousPrize: BigInt
-
   # sponsorships: [Sponsor!]! @derivedFrom(field: "prizePool")
   players: [Player!]! @derivedFrom(field: "prizePool")
 }
@@ -75,18 +73,15 @@ type Player @entity {
 
   address: Bytes!
   prizePool: PrizePool!
+
+  # prizes: [Prize!] # @derivedFrom(field: "winners")
 }
 
 type CompoundPrizePoolBuilder @entity {
   id: ID!
 
+  comptroller: Bytes!
   trustedForwarder: Bytes!
-  governor: Bytes!
-  rng: Bytes!
-
-  # controlledTokenFactory: Bytes!
-  # compoundPeriodicPrizePoolFactory: Bytes!
-  # ticketFactory: Bytes!
 }
 
 type Ticket @entity {
@@ -166,7 +161,8 @@ type Prize @entity {
   net: BigInt
   reserveFee: BigInt
 
-  winners: [Player!]
+  # winner: Player
+  winners: [Bytes!]
 }
 
 # type Sponsor @entity {

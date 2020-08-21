@@ -2,19 +2,15 @@
   compoundPrizePoolBuilders {
     id
 
+    comptroller
     trustedForwarder
-    governor
-    rng
-
-    # compoundPeriodicPrizePoolFactory
-    # controlledTokenFactory
-    # ticketFactory
   }
 
   prizeStrategies {
     id
     
     creator
+
     compoundPrizePoolBuilder {
       id
     }
@@ -22,17 +18,16 @@
     prizePool {
       id
     }
+
+    comptroller
     ticket
     rng
     sponsorship
-    # trustedForwarder
-    governor
 
     currentPrizeId
     currentState
 
     prizePeriodSeconds
-    prizePeriodStartedAt
     
     exitFeeMantissa
     creditRateMantissa
@@ -40,12 +35,9 @@
     prizes {
       id
 
-      prize
+      net
+      gross
       reserveFee
-      rngRequestId
-      randomNumber
-      awardStartOperator
-      awardedOperator
     }
   }
 
@@ -62,11 +54,10 @@
 
     maxExitFeeMantissa
     maxTimelockDuration
+    timelockTotalSupply
 
     playerCount
     totalSupply
-
-    previousPrize
     
     players {
       id
@@ -80,11 +71,12 @@
   prizes {
     id
 
-    prizeStrategy
-    prizePool
+    prizeStrategy {
+      id
+    }
     
-    balance
-    prize
+    gross
+    net
     reserveFee
 
     randomNumber
@@ -95,19 +87,16 @@
 
     prizePeriodStartedTimestamp
     lockBlock
+  
     awardedBlock
+    awardedTimestamp
 
-    winners {
-      id
-      address
-      balance
-      timelockedBalance
-      unlockTimestamp
-    }
+    winners
   }
   
   players {
     id
+
     address
     balance
     timelockedBalance
@@ -116,6 +105,7 @@
   
   tickets {
     id
+
     name
     symbol
     decimals
@@ -127,6 +117,7 @@
   
   sponsorships {
     id
+    
     name
     symbol
     decimals
@@ -135,19 +126,4 @@
       id
     }
   }
-  
-  # yieldServices {
-    # id
-
-    # prizePool
-
-    # token
-    # yieldServiceToken
-
-    # accountedBalance
-    # balance
-    # unaccountedBalance
-
-    # supplyRatePerBlock
-  # }
 }

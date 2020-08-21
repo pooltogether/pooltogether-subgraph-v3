@@ -69,6 +69,15 @@ export class PrizeStrategy extends Entity {
     this.set("prizePool", Value.fromString(value));
   }
 
+  get comptroller(): Bytes {
+    let value = this.get("comptroller");
+    return value.toBytes();
+  }
+
+  set comptroller(value: Bytes) {
+    this.set("comptroller", Value.fromBytes(value));
+  }
+
   get ticket(): Bytes {
     let value = this.get("ticket");
     return value.toBytes();
@@ -94,15 +103,6 @@ export class PrizeStrategy extends Entity {
 
   set sponsorship(value: Bytes) {
     this.set("sponsorship", Value.fromBytes(value));
-  }
-
-  get governor(): Bytes {
-    let value = this.get("governor");
-    return value.toBytes();
-  }
-
-  set governor(value: Bytes) {
-    this.set("governor", Value.fromBytes(value));
   }
 
   get currentPrizeId(): BigInt {
@@ -419,6 +419,15 @@ export class CompoundPrizePoolBuilder extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get comptroller(): Bytes {
+    let value = this.get("comptroller");
+    return value.toBytes();
+  }
+
+  set comptroller(value: Bytes) {
+    this.set("comptroller", Value.fromBytes(value));
+  }
+
   get trustedForwarder(): Bytes {
     let value = this.get("trustedForwarder");
     return value.toBytes();
@@ -426,24 +435,6 @@ export class CompoundPrizePoolBuilder extends Entity {
 
   set trustedForwarder(value: Bytes) {
     this.set("trustedForwarder", Value.fromBytes(value));
-  }
-
-  get governor(): Bytes {
-    let value = this.get("governor");
-    return value.toBytes();
-  }
-
-  set governor(value: Bytes) {
-    this.set("governor", Value.fromBytes(value));
-  }
-
-  get rng(): Bytes {
-    let value = this.get("rng");
-    return value.toBytes();
-  }
-
-  set rng(value: Bytes) {
-    this.set("rng", Value.fromBytes(value));
   }
 }
 
@@ -791,20 +782,20 @@ export class Prize extends Entity {
     }
   }
 
-  get winners(): Array<string> | null {
+  get winners(): Array<Bytes> | null {
     let value = this.get("winners");
     if (value === null) {
       return null;
     } else {
-      return value.toStringArray();
+      return value.toBytesArray();
     }
   }
 
-  set winners(value: Array<string> | null) {
+  set winners(value: Array<Bytes> | null) {
     if (value === null) {
       this.unset("winners");
     } else {
-      this.set("winners", Value.fromStringArray(value as Array<string>));
+      this.set("winners", Value.fromBytesArray(value as Array<Bytes>));
     }
   }
 }

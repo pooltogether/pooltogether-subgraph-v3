@@ -37,48 +37,60 @@ export class CompoundPrizePoolCreated__Params {
 }
 
 export class CompoundPrizePoolBuilder__createInputConfigStruct extends ethereum.Tuple {
-  get cToken(): Address {
+  get proxyAdmin(): Address {
     return this[0].toAddress();
   }
 
+  get cToken(): Address {
+    return this[1].toAddress();
+  }
+
+  get rngService(): Address {
+    return this[2].toAddress();
+  }
+
+  get prizePeriodStart(): BigInt {
+    return this[3].toBigInt();
+  }
+
   get prizePeriodSeconds(): BigInt {
-    return this[1].toBigInt();
+    return this[4].toBigInt();
   }
 
   get ticketName(): string {
-    return this[2].toString();
-  }
-
-  get ticketSymbol(): string {
-    return this[3].toString();
-  }
-
-  get sponsorshipName(): string {
-    return this[4].toString();
-  }
-
-  get sponsorshipSymbol(): string {
     return this[5].toString();
   }
 
+  get ticketSymbol(): string {
+    return this[6].toString();
+  }
+
+  get sponsorshipName(): string {
+    return this[7].toString();
+  }
+
+  get sponsorshipSymbol(): string {
+    return this[8].toString();
+  }
+
   get maxExitFeeMantissa(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get maxTimelockDuration(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get exitFeeMantissa(): BigInt {
-    return this[8].toBigInt();
-  }
-
-  get creditRateMantissa(): BigInt {
     return this[9].toBigInt();
   }
 
-  get externalAwards(): Array<Address> {
-    return this[10].toAddressArray();
+  get maxTimelockDuration(): BigInt {
+    return this[10].toBigInt();
+  }
+
+  get exitFeeMantissa(): BigInt {
+    return this[11].toBigInt();
+  }
+
+  get creditRateMantissa(): BigInt {
+    return this[12].toBigInt();
+  }
+
+  get externalERC20Awards(): Array<Address> {
+    return this[13].toAddressArray();
   }
 }
 
@@ -103,6 +115,21 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
       "compoundPrizePoolProxyFactory():(address)",
       []
     );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  comptroller(): Address {
+    let result = super.call("comptroller", "comptroller():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_comptroller(): ethereum.CallResult<Address> {
+    let result = super.tryCall("comptroller", "comptroller():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -136,7 +163,7 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
   create(config: CompoundPrizePoolBuilder__createInputConfigStruct): Address {
     let result = super.call(
       "create",
-      "create((address,uint256,string,string,string,string,uint256,uint256,uint256,uint256,address[])):(address)",
+      "create((address,address,address,uint256,uint256,string,string,string,string,uint256,uint256,uint256,uint256,address[])):(address)",
       [ethereum.Value.fromTuple(config)]
     );
 
@@ -148,24 +175,9 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "create",
-      "create((address,uint256,string,string,string,string,uint256,uint256,uint256,uint256,address[])):(address)",
+      "create((address,address,address,uint256,uint256,string,string,string,string,uint256,uint256,uint256,uint256,address[])):(address)",
       [ethereum.Value.fromTuple(config)]
     );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  governor(): Address {
-    let result = super.call("governor", "governor():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_governor(): ethereum.CallResult<Address> {
-    let result = super.tryCall("governor", "governor():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -196,14 +208,14 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  rng(): Address {
-    let result = super.call("rng", "rng():(address)", []);
+  proxyFactory(): Address {
+    let result = super.call("proxyFactory", "proxyFactory():(address)", []);
 
     return result[0].toAddress();
   }
 
-  try_rng(): ethereum.CallResult<Address> {
-    let result = super.tryCall("rng", "rng():(address)", []);
+  try_proxyFactory(): ethereum.CallResult<Address> {
+    let result = super.tryCall("proxyFactory", "proxyFactory():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -232,6 +244,56 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+}
+
+export class ConstructorCall extends ethereum.Call {
+  get inputs(): ConstructorCall__Inputs {
+    return new ConstructorCall__Inputs(this);
+  }
+
+  get outputs(): ConstructorCall__Outputs {
+    return new ConstructorCall__Outputs(this);
+  }
+}
+
+export class ConstructorCall__Inputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+
+  get _comptroller(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _prizeStrategyProxyFactory(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get _trustedForwarder(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get _compoundPrizePoolProxyFactory(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
+
+  get _controlledTokenProxyFactory(): Address {
+    return this._call.inputValues[4].value.toAddress();
+  }
+
+  get _proxyFactory(): Address {
+    return this._call.inputValues[5].value.toAddress();
+  }
+}
+
+export class ConstructorCall__Outputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
   }
 }
 
@@ -270,97 +332,59 @@ export class CreateCall__Outputs {
 }
 
 export class CreateCallConfigStruct extends ethereum.Tuple {
-  get cToken(): Address {
+  get proxyAdmin(): Address {
     return this[0].toAddress();
   }
 
+  get cToken(): Address {
+    return this[1].toAddress();
+  }
+
+  get rngService(): Address {
+    return this[2].toAddress();
+  }
+
+  get prizePeriodStart(): BigInt {
+    return this[3].toBigInt();
+  }
+
   get prizePeriodSeconds(): BigInt {
-    return this[1].toBigInt();
+    return this[4].toBigInt();
   }
 
   get ticketName(): string {
-    return this[2].toString();
-  }
-
-  get ticketSymbol(): string {
-    return this[3].toString();
-  }
-
-  get sponsorshipName(): string {
-    return this[4].toString();
-  }
-
-  get sponsorshipSymbol(): string {
     return this[5].toString();
   }
 
+  get ticketSymbol(): string {
+    return this[6].toString();
+  }
+
+  get sponsorshipName(): string {
+    return this[7].toString();
+  }
+
+  get sponsorshipSymbol(): string {
+    return this[8].toString();
+  }
+
   get maxExitFeeMantissa(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get maxTimelockDuration(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get exitFeeMantissa(): BigInt {
-    return this[8].toBigInt();
-  }
-
-  get creditRateMantissa(): BigInt {
     return this[9].toBigInt();
   }
 
-  get externalAwards(): Array<Address> {
-    return this[10].toAddressArray();
-  }
-}
-
-export class InitializeCall extends ethereum.Call {
-  get inputs(): InitializeCall__Inputs {
-    return new InitializeCall__Inputs(this);
+  get maxTimelockDuration(): BigInt {
+    return this[10].toBigInt();
   }
 
-  get outputs(): InitializeCall__Outputs {
-    return new InitializeCall__Outputs(this);
-  }
-}
-
-export class InitializeCall__Inputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
+  get exitFeeMantissa(): BigInt {
+    return this[11].toBigInt();
   }
 
-  get _governor(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get creditRateMantissa(): BigInt {
+    return this[12].toBigInt();
   }
 
-  get _prizeStrategyProxyFactory(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get _trustedForwarder(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get _compoundPrizePoolProxyFactory(): Address {
-    return this._call.inputValues[3].value.toAddress();
-  }
-
-  get _controlledTokenProxyFactory(): Address {
-    return this._call.inputValues[4].value.toAddress();
-  }
-
-  get _rng(): Address {
-    return this._call.inputValues[5].value.toAddress();
-  }
-}
-
-export class InitializeCall__Outputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
+  get externalERC20Awards(): Array<Address> {
+    return this[13].toAddressArray();
   }
 }

@@ -65,6 +65,11 @@
   dependencies:
     assemblyscript "https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3"
 
+"@pooltogether/pooltogether-contracts@^3.0.0-alpha.30":
+  version "3.0.0-alpha.30"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0-alpha.30.tgz#e617aea48124928e63bc319609cb2e95579bc714"
+  integrity sha512-vbCxRri8AHUxeAeknuS2+egMhYLFbWU1V1yYb3IFww3/cw5q7Yy3psuL1cKjQbJI8aW7O9vLwrSN/HwH0o0f6A==
+
 "@protobufjs/utf8@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"

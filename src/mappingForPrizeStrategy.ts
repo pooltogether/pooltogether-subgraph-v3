@@ -15,6 +15,9 @@ import {
   PrizePoolOpened,
   PrizePoolAwardStarted,
   PrizePoolAwarded,
+  ExitFeeUpdated,
+  CreditRateUpdated,
+  RngServiceUpdated,
 } from '../generated/templates/PrizeStrategy/PrizeStrategy'
 
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
@@ -87,18 +90,39 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
 
   prize.save()
 
-  // _prizeStrategy.previousPrize = boundPrizePool.previousPrize()
-  // _prizeStrategy.previousPrizeAverageTickets = boundPrizePool.previousPrizeAverageTickets()
-  // _prizeStrategy.rngRequestId = BigInt.fromI32(0)
-  
   _prizeStrategy.currentState = "Awarded"
-  log.info('old _prizeStrategy.currentPrizeId', [_prizeStrategy.currentPrizeId.toString()])
+  log.warning('old _prizeStrategy.currentPrizeId: {}', [_prizeStrategy.currentPrizeId.toString()])
 
   _prizeStrategy.currentPrizeId = _prizeStrategy.currentPrizeId.plus(
     BigInt.fromI32(1)
   )
 
-  log.info('new _prizeStrategy.currentPrizeId', [_prizeStrategy.currentPrizeId.toString()])
+  log.warning('new _prizeStrategy.currentPrizeId: {}', [_prizeStrategy.currentPrizeId.toString()])
+
+  _prizeStrategy.save()
+}
+
+
+export function handleExitFeeUpdated(event: ExitFeeUpdated): void {
+  const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
+
+  _prizeStrategy.exitFeeMantissa = event.params.exitFeeMantissa
+
+  _prizeStrategy.save()
+}
+
+export function handleCreditRateUpdated(event: CreditRateUpdated): void {
+  const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
+
+  _prizeStrategy.creditRateMantissa = event.params.creditRateMantissa
+
+  _prizeStrategy.save()
+}
+
+export function handleRngServiceUpdated(event: RngServiceUpdated): void {
+  const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
+
+  _prizeStrategy.rng = event.params.rngService
 
   _prizeStrategy.save()
 }

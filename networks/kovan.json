@@ -1,7 +1,7 @@
 {
   "network": "kovan",
   "compoundPrizePoolBuilder": {
-    "address": "0x6e12233ac8ccD7cC0d0481787D7e7dd943315984",
-    "startBlock": "19800600"
+    "address": "0x4E7649204C49cB214E5A884B60Ac017D6660D828",
+    "startBlock": "20338000"
   }
 }
