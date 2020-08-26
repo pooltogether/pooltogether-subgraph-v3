@@ -12,6 +12,9 @@ enum PrizePoolType {
 type Comptroller @entity {
   id: ID!
   reserveRateMantissa: BigInt!
+
+  # players: [DripTokenPlayer!]! @derivedFrom(field: "comptroller")
+  # prizePools: [PrizePool!]! @derivedFrom(field: "comptroller")
 }
 
 type PrizeStrategy @entity {
@@ -21,7 +24,7 @@ type PrizeStrategy @entity {
   compoundPrizePoolBuilder: CompoundPrizePoolBuilder!
 
   prizePool: PrizePool!
-  comptroller: Bytes!
+  comptroller: Comptroller!
   ticket: Bytes!
   rng: Bytes!
   sponsorship: Bytes!
@@ -31,76 +34,19 @@ type PrizeStrategy @entity {
   currentState: PrizePoolState!
 
   prizePeriodSeconds: BigInt!
+  prizePeriodStartedAt: BigInt!
 
   exitFeeMantissa: BigInt!
   creditRateMantissa: BigInt!
-
-  balanceDrips: [BalanceDrip!]! @derivedFrom(field: "prizeStrategy")
-  volumeDrips: [VolumeDrip!]! @derivedFrom(field: "prizeStrategy")
-  referralVolumeDrips: [VolumeDrip!]! @derivedFrom(field: "prizeStrategy")
 
   prizesCount: BigInt!
   prizes: [Prize!]! @derivedFrom(field: "prizeStrategy")
 }
 
-type BalanceDrip @entity {
-  id: ID!
-  prizeStrategy: PrizeStrategy!
-  measureToken: Bytes!
-  dripToken: Bytes!
-
-  dripRatePerSecond: BigInt
-  removed: Boolean!
-}
-
-type VolumeDrip @entity {
-  id: ID!
-  prizeStrategy: PrizeStrategy!
-  index: BigInt!
-
-  measureToken: Bytes
-  dripToken: Bytes
-  periodSeconds: BigInt
-  dripAmount: BigInt
-  referral: Boolean
-
-  periods: [VolumeDripPeriod!]! @derivedFrom(field: "volumeDrip")
-}
-
-type VolumeDripPeriod @entity {
-  id: ID!
-
-  startTime: BigInt!
-  totalSupply: BigInt!
-
-  volumeDrip: VolumeDrip!
-}
-
-type PlayerBalanceDrip @entity {
-  id: ID!
-
-  player: Player!
-  balanceDrip: BalanceDrip!
-
-  lastExchangeRateMantissa: BigInt
-  dripBalance: BigInt
-}
-
-type PlayerVolumeDrip @entity {
-  id: ID!
-
-  player: Player!
-  volumeDrip: VolumeDrip!
-
-  balance: BigInt!
-  period: BigInt!
-  accrued: BigInt!
-}
-
 type PrizePool @entity {
   id: ID!
 
-  # trustedForwarder: Bytes!
+  comptroller: Comptroller!
   prizeStrategy: PrizeStrategy!
 
   # yieldToken: Bytes!
@@ -126,60 +72,11 @@ type PrizePool @entity {
 
   # sponsorships: [Sponsor!]! @derivedFrom(field: "prizePool")
   players: [Player!]! @derivedFrom(field: "prizePool")
+
+  balanceDrips: [BalanceDrip!]! @derivedFrom(field: "prizePool")
+  # volumeDrips: [VolumeDrip!]! @derivedFrom(field: "prizePool")
+  # referralVolumeDrips: [VolumeDrip!]! @derivedFrom(field: "prizePool")
 }
-
-# ID: `${prizePool.address}-${msg.sender.address}`
-# dynamically generated type, not mapped to a specific contract
-type Player @entity {
-  id: ID!
-
-  balance: BigInt!
-
-  timelockedBalance: BigInt!
-  unlockTimestamp: BigInt!
-
-  address: Bytes!
-  prizePool: PrizePool!
-
-  # prizes: [Prize!] # @derivedFrom(field: "winners")
-}
-
-type CompoundPrizePoolBuilder @entity {
-  id: ID!
-
-  comptroller: Bytes!
-  trustedForwarder: Bytes!
-}
-
-type Ticket @entity {
-  id: ID!
-
-  prizeStrategy: PrizeStrategy!
-
-  name: String!
-  symbol: String!
-  decimals: BigInt!
-}
-
-type Sponsorship @entity {
-  id: ID!
-
-  prizeStrategy: PrizeStrategy!
-
-  name: String!
-  symbol: String!
-  decimals: BigInt!
-}
-
-# type Token @entity {
-#   id: ID!
-
-#   name: String!
-#   symbol: String!
-
-#   decimals: BigInt!
-# }
-
 
 # ID: `${prizePool.address}-${prizeId}`
 # dynamically generated type, not mapped to a specific contract
@@ -204,13 +101,113 @@ type Prize @entity {
   net: BigInt
   reserveFee: BigInt
 
-  # winner: Player
   winners: [Bytes!]
 }
 
-# type Sponsor @entity {
+type CompoundPrizePoolBuilder @entity {
+  id: ID!
+
+  comptroller: Comptroller!
+  trustedForwarder: Bytes!
+}
+
+type Ticket @entity {
+  id: ID!
+
+  prizeStrategy: PrizeStrategy!
+
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+}
+
+type Sponsorship @entity {
+  id: ID!
+
+  prizeStrategy: PrizeStrategy!
+
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+}
+
+type Player @entity {
+  id: ID!
+  prizePool: PrizePool!
+  address: Bytes!
+
+  balance: BigInt!
+  timelockedBalance: BigInt!
+  unlockTimestamp: BigInt!
+}
+
+type DripTokenPlayer @entity {
+  id: ID!
+  comptroller: Comptroller!
+  dripToken: Bytes!
+  address: Bytes!
+
+  # claimable balance
+  balance: BigInt!
+}
+
+type BalanceDripPlayer @entity {
+  id: ID!
+  balanceDrip: BalanceDrip!
+  address: Bytes!
+
+  lastExchangeRateMantissa: BigInt!
+}
+
+type BalanceDrip @entity {
+  id: ID!
+  prizePool: PrizePool!
+  measureToken: Bytes!
+  dripToken: Bytes!
+
+  dripRatePerSecond: BigInt
+  exchangeRateMantissa: BigInt
+  timestamp: BigInt
+
+  players: [BalanceDripPlayer!]! @derivedFrom(field: "balanceDrip")
+
+  deactivated: Boolean!
+}
+
+
+# type VolumeDrip @entity {
 #   id: ID!
-#   address: Bytes!
-#   poolContract: PoolContract!
-#   sponsorshipAndFeeBalance: BigInt!
+#   prizePool: PrizePool!
+#   index: BigInt!
+
+#   measureToken: Bytes
+#   dripToken: Bytes
+
+#   periodSeconds: BigInt
+#   dripAmount: BigInt
+#   referral: Boolean
+
+#   periods: [VolumeDripPeriod!]! @derivedFrom(field: "volumeDrip")
+
+#   deactivated: Boolean!
+# }
+
+# type VolumeDripPeriod @entity {
+#   id: ID!
+
+#   startTime: BigInt!
+#   totalSupply: BigInt!
+
+#   volumeDrip: VolumeDrip!
+# }
+
+# type PlayerVolumeDrip @entity {
+#   id: ID!
+
+#   player: Player!
+#   volumeDrip: VolumeDrip!
+
+#   balance: BigInt!
+#   period: BigInt!
+#   accrued: BigInt!
 # }

@@ -8,6 +8,9 @@ import {
   ERC20 as ERC20Contract,
 } from '../../generated/CompoundPrizePoolBuilder/ERC20'
 import {
+  ControlledToken as ControlledTokenContract,
+} from '../../generated/CompoundPrizePoolBuilder/ControlledToken'
+import {
   PrizePool as PrizePoolContract,
 } from '../../generated/templates/PrizePool/PrizePool'
 import {
@@ -32,7 +35,7 @@ export function loadOrCreatePrizeStrategy(
   prizePool: Address,
   prizeStrategy: Address,
 ): PrizeStrategy {
-  let _prizeStrategy = PrizeStrategy.load(prizePool.toHex())
+  let _prizeStrategy = PrizeStrategy.load(prizeStrategy.toHex())
 
   if (!_prizeStrategy) {
     _prizeStrategy = new PrizeStrategy(prizeStrategy.toHex())
@@ -53,7 +56,7 @@ export function loadOrCreatePrizeStrategy(
     // _prizeStrategy.prizePoolModuleManager = moduleManager.toHex()
 
     _prizeStrategy.prizePool = prizePool.toHex()
-    _prizeStrategy.comptroller = boundPrizeStrategy.comptroller()
+    _prizeStrategy.comptroller = boundPrizeStrategy.comptroller().toHex()
     _prizeStrategy.ticket = boundPrizeStrategy.ticket()
     _prizeStrategy.rng = boundPrizeStrategy.rng()
     _prizeStrategy.sponsorship = boundPrizeStrategy.sponsorship()
@@ -63,6 +66,7 @@ export function loadOrCreatePrizeStrategy(
     _prizeStrategy.currentState = 'Opened'
 
     _prizeStrategy.prizePeriodSeconds = boundPrizeStrategy.prizePeriodSeconds()
+    _prizeStrategy.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
 
     _prizeStrategy.exitFeeMantissa = boundPrizeStrategy.exitFeeMantissa()
     _prizeStrategy.creditRateMantissa = boundPrizeStrategy.creditRateMantissa()
@@ -91,13 +95,14 @@ export function loadOrCreatePrizeStrategy(
     const _pool = new PrizePool(prizePool.toHex())
     const boundPrizePool = PrizePoolContract.bind(prizePool)
 
-    const boundToken = ERC20Contract.bind(boundPrizePool.token())
+    const boundToken = ControlledTokenContract.bind(boundPrizePool.token())
     _pool.underlyingCollateralToken = boundPrizePool.token()
     _pool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
     _pool.underlyingCollateralName = boundToken.name()
     _pool.underlyingCollateralSymbol = boundToken.symbol()
 
     _pool.prizeStrategy = prizeStrategy.toHex()
+    _pool.comptroller = boundPrizeStrategy.comptroller().toHex()
 
     _pool.playerCount = ZERO
 

@@ -6,27 +6,37 @@ import {
 
 import {
   Comptroller as ComptrollerContract,
-  ReserveRateMantissaSet,
-  BalanceDripAdded,
-  BalanceDripRemoved,
-  BalanceDripRateSet,
-  BalanceDripClaimed,
-  VolumeDripAdded,
-  VolumeDripRemoved,
-  VolumeDripAmountSet,
-  VolumeDripClaimed,
-  ReferralVolumeDripAdded,
-  ReferralVolumeDripRemoved,
-  ReferralVolumeDripAmountSet,
-  ReferralVolumeDripClaimed,
-} from '../generated/templates/Comptroller/Comptroller'
 
-import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
+  ReserveRateMantissaSet,
+  DripTokenDripped,
+  DripTokenClaimed,
+
+  BalanceDripActivated,
+  BalanceDripDeactivated,
+  BalanceDripRateSet,
+  BalanceDripDripped,
+
+  VolumeDripActivated,
+  VolumeDripDeactivated,
+  VolumeDripSet,
+  VolumeDripPeriodStarted,
+  VolumeDripPeriodEnded,
+  VolumeDripDeposited,
+  VolumeDripDripped,
+} from '../generated/Comptroller/Comptroller'
+
+import {
+  loadOrCreatePlayer,
+  loadOrCreateDripTokenPlayer,
+  loadOrCreateBalanceDripPlayer,
+} from './helpers/loadOrCreatePlayer'
+
 import {
   loadOrCreateComptroller,
   loadOrCreateBalanceDrip,
-  loadOrCreatePlayerBalanceDrip,
 } from './helpers/loadOrCreateComptroller'
+
+
 
 
 export function handleReserveRateMantissaSet(event: ReserveRateMantissaSet): void {
@@ -35,127 +45,167 @@ export function handleReserveRateMantissaSet(event: ReserveRateMantissaSet): voi
   _comptroller.save()
 }
 
-export function handleBalanceDripAdded(event: BalanceDripAdded): void {
+
+
+
+///////////////////////////////////////
+// Drip Token Balances
+///////////////////////////////////////
+
+
+export function handleDripTokenDripped(event: DripTokenDripped): void {
   const _comptrollerAddress = event.address
-  const _prizeStrategyAddress = event.params.prizeStrategy
+  const _dripTokenAddress = event.params.dripToken
+  const _playerAddress = event.params.user
+  const _amount = event.params.amount
+
+  const _player = loadOrCreateDripTokenPlayer(
+    _comptrollerAddress,
+    _dripTokenAddress,
+    _playerAddress,
+  )
+
+  _player.balance = _player.balance.plus(_amount)
+  _player.save()
+}
+
+export function handleDripTokenClaimed(event: DripTokenClaimed): void {
+  const _comptrollerAddress = event.address
+  const _dripTokenAddress = event.params.dripToken
+  const _playerAddress = event.params.user
+  const _amount = event.params.amount
+
+  const _player = loadOrCreateDripTokenPlayer(
+    _comptrollerAddress,
+    _dripTokenAddress,
+    _playerAddress,
+  )
+
+  _player.balance = _player.balance.minus(_amount)
+  _player.save()
+}
+
+
+///////////////////////////////////////
+// Balance Drips
+///////////////////////////////////////
+
+
+export function handleBalanceDripActivated(event: BalanceDripActivated): void {
+  const _comptrollerAddress = event.address
+  const _sourceAddress = event.params.source
   const _measureTokenAddress = event.params.measure
   const _dripTokenAddress = event.params.dripToken
 
   const _balanceDrip = loadOrCreateBalanceDrip(
     _comptrollerAddress,
-    _prizeStrategyAddress,
+    _sourceAddress,
     _measureTokenAddress,
     _dripTokenAddress
   )
 
+  const boundComptroller = ComptrollerContract.bind(_comptrollerAddress)
+  const callResult = boundComptroller.getBalanceDrip(_sourceAddress, _measureTokenAddress, _dripTokenAddress);
+
+  _balanceDrip.exchangeRateMantissa = callResult.value1
+  _balanceDrip.timestamp = callResult.value2
   _balanceDrip.dripRatePerSecond = event.params.dripRatePerSecond
   _balanceDrip.save()
 }
 
-export function handleBalanceDripRemoved(event: BalanceDripRemoved): void {
+export function handleBalanceDripDeactivated(event: BalanceDripDeactivated): void {
   const _comptrollerAddress = event.address
-  const _prizeStrategyAddress = event.params.prizeStrategy
+  const _sourceAddress = event.params.source
   const _measureTokenAddress = event.params.measure
   const _dripTokenAddress = event.params.dripToken
 
   const _balanceDrip = loadOrCreateBalanceDrip(
     _comptrollerAddress,
-    _prizeStrategyAddress,
+    _sourceAddress,
     _measureTokenAddress,
     _dripTokenAddress
   )
 
-  _balanceDrip.removed = true
+  _balanceDrip.deactivated = true
   _balanceDrip.save()
 }
 
 export function handleBalanceDripRateSet(event: BalanceDripRateSet): void {
   const _comptrollerAddress = event.address
-  const _prizeStrategyAddress = event.params.prizeStrategy
+  const _sourceAddress = event.params.source
   const _measureTokenAddress = event.params.measure
   const _dripTokenAddress = event.params.dripToken
 
   const _balanceDrip = loadOrCreateBalanceDrip(
     _comptrollerAddress,
-    _prizeStrategyAddress,
+    _sourceAddress,
     _measureTokenAddress,
     _dripTokenAddress
   )
 
+  const boundComptroller = ComptrollerContract.bind(_comptrollerAddress)
+  const callResult = boundComptroller.getBalanceDrip(_sourceAddress, _measureTokenAddress, _dripTokenAddress);
+
+  _balanceDrip.exchangeRateMantissa = callResult.value1
+  _balanceDrip.timestamp = callResult.value2
   _balanceDrip.dripRatePerSecond = event.params.dripRatePerSecond
   _balanceDrip.save()
 }
 
-export function handleBalanceDripClaimed(event: BalanceDripClaimed): void {
+export function handleBalanceDripDripped(event: BalanceDripDripped): void {
   const _comptrollerAddress = event.address
-  const _prizeStrategyAddress = event.params.prizeStrategy
+  const _sourceAddress = event.params.source
   const _measureTokenAddress = event.params.measure
   const _dripTokenAddress = event.params.dripToken
   const _playerAddress = event.params.user
-
-  const _boundComptroller = ComptrollerContract.bind(_comptrollerAddress)
-  const response = _boundComptroller.getBalanceDrip(
-    _prizeStrategyAddress,
-    _measureTokenAddress,
-    _dripTokenAddress
-  )
-  const exchangeRateMantissa = response.value1 // response[1]
-
-  const _boundPrizeStrategy = PrizeStrategyContract.bind(event.address)
-  const _prizePoolAddress = _boundPrizeStrategy.prizePool()
-
-  const _player = loadOrCreatePlayer(
-    _prizePoolAddress,
-    _playerAddress
-  )
+  const _userLastExchangeRate = event.params.userExchangeRate
 
   const _balanceDrip = loadOrCreateBalanceDrip(
     _comptrollerAddress,
-    _prizeStrategyAddress,
+    _sourceAddress,
     _measureTokenAddress,
     _dripTokenAddress
   )
 
-  const _playerBalanceDrip = loadOrCreatePlayerBalanceDrip(
+  const _playerBalanceDrip = loadOrCreateBalanceDripPlayer(
     _comptrollerAddress,
-    _prizeStrategyAddress,
     _playerAddress,
     _balanceDrip.id
   )
 
-  _playerBalanceDrip.dripBalance = _playerBalanceDrip.dripBalance.plus(event.params.amount)
-  _playerBalanceDrip.lastExchangeRateMantissa = exchangeRateMantissa
+  _playerBalanceDrip.lastExchangeRateMantissa = _userLastExchangeRate
   _playerBalanceDrip.save()
 }
 
-export function handleVolumeDripAdded(event: VolumeDripAdded): void {
-  log.warning('TODO: implement handleVolumeDripAdded!', [])
+///////////////////////////////////////
+// Volume Drips
+///////////////////////////////////////
+
+
+export function handleVolumeDripActivated(event: VolumeDripActivated): void {
+  log.warning('TODO: implement handleVolumeDripActivated!', [])
 }
 
-export function handleVolumeDripRemoved(event: VolumeDripRemoved): void {
-  log.warning('TODO: implement handleVolumeDripRemoved!', [])
+export function handleVolumeDripDeactivated(event: VolumeDripDeactivated): void {
+  log.warning('TODO: implement handleVolumeDripDeactivated!', [])
 }
 
-export function handleVolumeDripAmountSet(event: VolumeDripAmountSet): void {
-  log.warning('TODO: implement handleVolumeDripAmountSet!', [])
+export function handleVolumeDripSet(event: VolumeDripSet): void {
+  log.warning('TODO: implement handleVolumeDripSet!', [])
 }
 
-export function handleVolumeDripClaimed(event: VolumeDripClaimed): void {
-  log.warning('TODO: implement handleVolumeDripClaimed!', [])
+export function handleVolumeDripPeriodStarted(event: VolumeDripPeriodStarted): void {
+  log.warning('TODO: implement handleVolumeDripSet!', [])
 }
 
-export function handleReferralVolumeDripAdded(event: ReferralVolumeDripAdded): void {
-  log.warning('TODO: implement handleReferralVolumeDripAdded!', [])
+export function handleVolumeDripPeriodEnded(event: VolumeDripPeriodEnded): void {
+  log.warning('TODO: implement handleVolumeDripSet!', [])
 }
 
-export function handleReferralVolumeDripRemoved(event: ReferralVolumeDripRemoved): void {
-  log.warning('TODO: implement handleReferralVolumeDripRemoved!', [])
+export function handleVolumeDripDeposited(event: VolumeDripDeposited): void {
+  log.warning('TODO: implement handleVolumeDripSet!', [])
 }
 
-export function handleReferralVolumeDripAmountSet(event: ReferralVolumeDripAmountSet): void {
-  log.warning('TODO: implement handleReferralVolumeDripAmountSet!', [])
-}
-
-export function handleReferralVolumeDripClaimed(event: ReferralVolumeDripClaimed): void {
-  log.warning('TODO: implement handleReferralVolumeDripClaimed!', [])
+export function handleVolumeDripDripped(event: VolumeDripDripped): void {
+  log.warning('TODO: implement handleVolumeDripDripped!', [])
 }

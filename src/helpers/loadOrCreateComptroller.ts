@@ -2,8 +2,6 @@ import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 import {
   Comptroller,
   BalanceDrip,
-  PlayerBalanceDrip,
-  VolumeDrip,
 } from '../../generated/schema'
 
 import {
@@ -12,9 +10,9 @@ import {
 
 import {
   balanceDripId,
-  playerBalanceDripId,
   volumeDripId,
 } from './idTemplates'
+
 
 export function loadOrCreateComptroller(
   comptrollerAddress: Address
@@ -26,12 +24,13 @@ export function loadOrCreateComptroller(
     _comptroller = new Comptroller(id)
     const boundComptroller = ComptrollerContract.bind(comptrollerAddress)
 
-    const callResult = boundComptroller.try_reserveRateMantissa()
-    if (callResult.reverted) {
-      log.info("Comptroller->reserveRateMantissa reverted", [])
-    } else {
-      _comptroller.reserveRateMantissa = callResult.value
-    }
+    _comptroller.reserveRateMantissa = boundComptroller.reserveRateMantissa()
+    // const callResult = boundComptroller.try_reserveRateMantissa()
+    // if (callResult.reverted) {
+    //   log.info("Comptroller->reserveRateMantissa reverted", [])
+    // } else {
+    //   _comptroller.reserveRateMantissa = callResult.value
+    // }
 
     _comptroller.save()
   }
@@ -42,13 +41,13 @@ export function loadOrCreateComptroller(
 
 export function loadOrCreateBalanceDrip(
   comptrollerAddress: Address,
-  prizeStrategyAddress: Address,
+  sourceAddress: Address,
   measureTokenAddress: Address,
   dripTokenAddress: Address
 ): BalanceDrip {
   const id = balanceDripId(
     comptrollerAddress.toHex(),
-    prizeStrategyAddress.toHex(),
+    sourceAddress.toHex(),
     measureTokenAddress.toHex(),
     dripTokenAddress.toHex()
   )
@@ -56,10 +55,10 @@ export function loadOrCreateBalanceDrip(
 
   if (!_balanceDrip) {
     _balanceDrip = new BalanceDrip(id)
-    _balanceDrip.prizeStrategy = prizeStrategyAddress.toHex()
+    _balanceDrip.prizePool = sourceAddress.toHex()
     _balanceDrip.measureToken = measureTokenAddress
     _balanceDrip.dripToken = dripTokenAddress
-    _balanceDrip.removed = false
+    _balanceDrip.deactivated = false
     _balanceDrip.save()
   }
 
@@ -67,44 +66,20 @@ export function loadOrCreateBalanceDrip(
 }
 
 
-export function loadOrCreatePlayerBalanceDrip(
-  comptrollerAddress: Address,
-  prizeStrategyAddress: Address,
-  playerAddress: Address,
-  balanceDripAddress: string
-): PlayerBalanceDrip {
-  const id = playerBalanceDripId(
-    comptrollerAddress.toHex(),
-    prizeStrategyAddress.toHex(),
-    playerAddress.toHex()
-  )
-  let _playerBalanceDrip = PlayerBalanceDrip.load(id)
+// export function loadOrCreateVolumeDrip(
+//   comptrollerAddress: Address,
+//   sourceAddress: Address,
+//   volumeDripIndex: BigInt
+// ): VolumeDrip {
+//   const id = volumeDripId(comptrollerAddress.toHex(), sourceAddress.toHex(), volumeDripIndex.toHex())
+//   let _volumeDrip = VolumeDrip.load(id)
 
-  if (!_playerBalanceDrip) {
-    _playerBalanceDrip = new PlayerBalanceDrip(id)
-    _playerBalanceDrip.player = playerAddress.toHex()
-    _playerBalanceDrip.balanceDrip = balanceDripAddress
-    _playerBalanceDrip.save()
-  }
+//   if (!_volumeDrip) {
+//     _volumeDrip = new VolumeDrip(id)
+//     _volumeDrip.prizePool = sourceAddress.toHex()
+//     _volumeDrip.index = volumeDripIndex
+//     _volumeDrip.save()
+//   }
 
-  return _playerBalanceDrip as PlayerBalanceDrip
-}
-
-
-export function loadOrCreateVolumeDrip(
-  comptrollerAddress: Address,
-  prizeStrategyAddress: Address,
-  volumeDripIndex: BigInt
-): VolumeDrip {
-  const id = volumeDripId(comptrollerAddress.toHex(), prizeStrategyAddress.toHex(), volumeDripIndex.toHex())
-  let _volumeDrip = VolumeDrip.load(id)
-
-  if (!_volumeDrip) {
-    _volumeDrip = new VolumeDrip(id)
-    _volumeDrip.prizeStrategy = prizeStrategyAddress.toHex()
-    _volumeDrip.index = volumeDripIndex
-    _volumeDrip.save()
-  }
-
-  return _volumeDrip as VolumeDrip
-}
+//   return _volumeDrip as VolumeDrip
+// }

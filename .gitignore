@@ -5,3 +5,4 @@ subgraph.local.yaml
 subgraph.kovan.yaml
 subgraph.yaml
 subgraph.ropsten.yaml
+subgraph.rinkeby.yaml

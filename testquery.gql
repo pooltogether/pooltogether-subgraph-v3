@@ -1,8 +1,15 @@
 {
+  comptrollers {
+    id
+    reserveRateMantissa
+  }
+
   compoundPrizePoolBuilders {
     id
 
-    comptroller
+    comptroller {
+      id
+    }
     trustedForwarder
   }
 
@@ -19,7 +26,9 @@
       id
     }
 
-    comptroller
+    comptroller {
+      id
+    }
     ticket
     rng
     sponsorship
@@ -46,7 +55,9 @@
     id
 
     # trustedForwarder
-    prizeStrategy
+    prizeStrategy {
+      id
+    }
 
     underlyingCollateralToken
     underlyingCollateralDecimals
@@ -130,5 +141,43 @@
     prizeStrategy {
       id
     }
+  }
+
+  balanceDrips {
+    id
+    prizePool {
+      id
+    }
+    measureToken
+    dripToken
+
+    dripRatePerSecond
+    exchangeRateMantissa
+    timestamp
+
+    players {
+      id
+    }
+
+    deactivated
+  }
+
+  balanceDripPlayers {
+    id
+    balanceDrip {
+      id
+    }
+    address
+    lastExchangeRateMantissa
+  }
+
+  dripTokenPlayers {
+   	id
+    comptroller {
+      id
+    }
+    dripToken
+    address
+    balance
   }
 }

@@ -1793,28 +1793,32 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get _prizePeriodSeconds(): BigInt {
+  get _prizePeriodStart(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
 
-  get _prizePool(): Address {
-    return this._call.inputValues[3].value.toAddress();
+  get _prizePeriodSeconds(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
   }
 
-  get _ticket(): Address {
+  get _prizePool(): Address {
     return this._call.inputValues[4].value.toAddress();
   }
 
-  get _sponsorship(): Address {
+  get _ticket(): Address {
     return this._call.inputValues[5].value.toAddress();
   }
 
-  get _rng(): Address {
+  get _sponsorship(): Address {
     return this._call.inputValues[6].value.toAddress();
   }
 
+  get _rng(): Address {
+    return this._call.inputValues[7].value.toAddress();
+  }
+
   get _externalErc20s(): Array<Address> {
-    return this._call.inputValues[7].value.toAddressArray();
+    return this._call.inputValues[8].value.toAddressArray();
   }
 }
 
