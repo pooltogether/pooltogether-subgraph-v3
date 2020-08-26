@@ -1793,37 +1793,28 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get _prizePeriodStart(): BigInt {
+  get _prizePeriodSeconds(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
 
-  get _prizePeriodSeconds(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
   get _prizePool(): Address {
-    return this._call.inputValues[4].value.toAddress();
+    return this._call.inputValues[3].value.toAddress();
   }
 
   get _ticket(): Address {
-    return this._call.inputValues[5].value.toAddress();
+    return this._call.inputValues[4].value.toAddress();
   }
 
   get _sponsorship(): Address {
+    return this._call.inputValues[5].value.toAddress();
+  }
+
+  get _rng(): Address {
     return this._call.inputValues[6].value.toAddress();
   }
 
-<<<<<<< HEAD
-  get _rng(): Address {
-    return this._call.inputValues[7].value.toAddress();
-  }
-
-  get _externalErc20s(): Array<Address> {
-    return this._call.inputValues[8].value.toAddressArray();
-=======
   get _externalErc20s(): Array<Address> {
     return this._call.inputValues[7].value.toAddressArray();
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
   }
 }
 

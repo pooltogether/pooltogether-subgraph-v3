@@ -12,6 +12,46 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
+export class Comptroller extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Comptroller entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Comptroller entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Comptroller", id.toString(), this);
+  }
+
+  static load(id: string): Comptroller | null {
+    return store.get("Comptroller", id) as Comptroller | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get reserveRateMantissa(): BigInt {
+    let value = this.get("reserveRateMantissa");
+    return value.toBigInt();
+  }
+
+  set reserveRateMantissa(value: BigInt) {
+    this.set("reserveRateMantissa", Value.fromBigInt(value));
+  }
+}
+
 export class PrizeStrategy extends Entity {
   constructor(id: string) {
     super();
@@ -105,18 +145,6 @@ export class PrizeStrategy extends Entity {
     this.set("sponsorship", Value.fromBytes(value));
   }
 
-<<<<<<< HEAD
-=======
-  get comptroller(): Bytes {
-    let value = this.get("comptroller");
-    return value.toBytes();
-  }
-
-  set comptroller(value: Bytes) {
-    this.set("comptroller", Value.fromBytes(value));
-  }
-
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
   get currentPrizeId(): BigInt {
     let value = this.get("currentPrizeId");
     return value.toBigInt();
@@ -162,15 +190,6 @@ export class PrizeStrategy extends Entity {
     this.set("creditRateMantissa", Value.fromBigInt(value));
   }
 
-  get prizesCount(): BigInt {
-    let value = this.get("prizesCount");
-    return value.toBigInt();
-  }
-
-  set prizesCount(value: BigInt) {
-    this.set("prizesCount", Value.fromBigInt(value));
-  }
-
   get balanceDrips(): Array<string> {
     let value = this.get("balanceDrips");
     return value.toStringArray();
@@ -196,6 +215,15 @@ export class PrizeStrategy extends Entity {
 
   set referralVolumeDrips(value: Array<string>) {
     this.set("referralVolumeDrips", Value.fromStringArray(value));
+  }
+
+  get prizesCount(): BigInt {
+    let value = this.get("prizesCount");
+    return value.toBigInt();
+  }
+
+  set prizesCount(value: BigInt) {
+    this.set("prizesCount", Value.fromBigInt(value));
   }
 
   get prizes(): Array<string> {
@@ -926,30 +954,12 @@ export class CompoundPrizePoolBuilder extends Entity {
     return value.toBytes();
   }
 
-<<<<<<< HEAD
   set comptroller(value: Bytes) {
     this.set("comptroller", Value.fromBytes(value));
   }
 
   get trustedForwarder(): Bytes {
     let value = this.get("trustedForwarder");
-=======
-  set trustedForwarder(value: Bytes) {
-    this.set("trustedForwarder", Value.fromBytes(value));
-  }
-
-  get comptroller(): Bytes {
-    let value = this.get("comptroller");
-    return value.toBytes();
-  }
-
-  set comptroller(value: Bytes) {
-    this.set("comptroller", Value.fromBytes(value));
-  }
-
-  get rng(): Bytes {
-    let value = this.get("rng");
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
     return value.toBytes();
   }
 
@@ -1317,45 +1327,5 @@ export class Prize extends Entity {
     } else {
       this.set("winners", Value.fromBytesArray(value as Array<Bytes>));
     }
-  }
-}
-
-export class Comptroller extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Comptroller entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Comptroller entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Comptroller", id.toString(), this);
-  }
-
-  static load(id: string): Comptroller | null {
-    return store.get("Comptroller", id) as Comptroller | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get reserveRateMantissa(): BigInt {
-    let value = this.get("reserveRateMantissa");
-    return value.toBigInt();
-  }
-
-  set reserveRateMantissa(value: BigInt) {
-    this.set("reserveRateMantissa", Value.fromBigInt(value));
   }
 }
