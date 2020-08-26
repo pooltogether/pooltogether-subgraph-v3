@@ -1,0 +1,7 @@
+{
+  "network": "rinkeby",
+  "compoundPrizePoolBuilder": {
+    "address": "0xcCcB39A82BC0481aE58e8d14bd79D3c9b9a64ceA",
+    "startBlock": "7042000"
+  }
+}
