@@ -297,6 +297,33 @@ export class PrizePool extends Entity {
     this.set("totalSupply", Value.fromBigInt(value));
   }
 
+  get cumulativePrizeGross(): BigInt {
+    let value = this.get("cumulativePrizeGross");
+    return value.toBigInt();
+  }
+
+  set cumulativePrizeGross(value: BigInt) {
+    this.set("cumulativePrizeGross", Value.fromBigInt(value));
+  }
+
+  get cumulativePrizeReserveFee(): BigInt {
+    let value = this.get("cumulativePrizeReserveFee");
+    return value.toBigInt();
+  }
+
+  set cumulativePrizeReserveFee(value: BigInt) {
+    this.set("cumulativePrizeReserveFee", Value.fromBigInt(value));
+  }
+
+  get cumulativePrizeNet(): BigInt {
+    let value = this.get("cumulativePrizeNet");
+    return value.toBigInt();
+  }
+
+  set cumulativePrizeNet(value: BigInt) {
+    this.set("cumulativePrizeNet", Value.fromBigInt(value));
+  }
+
   get players(): Array<string> {
     let value = this.get("players");
     return value.toStringArray();

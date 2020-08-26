@@ -24,7 +24,6 @@ import {
 } from '../generated/templates/PrizePool/PrizePool'
 
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
-// import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
 import { prizeId } from './helpers/idTemplates'
 
 const ZERO = BigInt.fromI32(0)

@@ -55,7 +55,11 @@ type PrizePool @entity {
   timelockTotalSupply: BigInt!
 
   playerCount: BigInt!
-  totalSupply: BigInt! # move to PrizePool.Ticket relationship
+  totalSupply: BigInt! # move to PrizePool.Ticket relationship?
+  
+  cumulativePrizeGross: BigInt!
+  cumulativePrizeReserveFee: BigInt!
+  cumulativePrizeNet: BigInt!
 
   # sponsorships: [Sponsor!]! @derivedFrom(field: "prizePool")
   players: [Player!]! @derivedFrom(field: "prizePool")

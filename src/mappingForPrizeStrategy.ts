@@ -1,11 +1,11 @@
-import { Address, BigInt, log } from '@graphprotocol/graph-ts'
+import { BigInt, log } from '@graphprotocol/graph-ts'
 import {
   PrizePool,
   PrizeStrategy,
 } from '../generated/schema'
-import {
-  ERC20 as ERC20Contract,
-} from '../generated/templates/PrizePool/ERC20'
+// import {
+//   ERC20 as ERC20Contract,
+// } from '../generated/templates/PrizePool/ERC20'
 
 import {
   RNGInterface as RngContract,
@@ -64,6 +64,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   const _prizeStrategy = PrizeStrategy.load(event.address.toHexString())
+  const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
   const boundPrizeStrategy = PrizeStrategyContract.bind(event.address)
   const boundRng = RngContract.bind(boundPrizeStrategy.rng())
   
@@ -75,9 +76,10 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
 
   prize.awardedOperator = event.params.operator
 
-  prize.net = event.params.prize
   prize.reserveFee = event.params.reserveFee
-  prize.gross = ZERO
+  prize.net = event.params.prize
+  prize.gross = prize.net
+
   if (event.params.reserveFee.gt(ZERO)) {
     prize.gross = prize.net.plus(prize.reserveFee as BigInt)
   }
@@ -91,15 +93,23 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   prize.save()
 
   _prizeStrategy.currentState = "Awarded"
-  log.warning('old _prizeStrategy.currentPrizeId: {}', [_prizeStrategy.currentPrizeId.toString()])
+  // log.warning('old _prizeStrategy.currentPrizeId: {}', [_prizeStrategy.currentPrizeId.toString()])
 
   _prizeStrategy.currentPrizeId = _prizeStrategy.currentPrizeId.plus(
     BigInt.fromI32(1)
   )
 
-  log.warning('new _prizeStrategy.currentPrizeId: {}', [_prizeStrategy.currentPrizeId.toString()])
+  // log.warning('new _prizeStrategy.currentPrizeId: {}', [_prizeStrategy.currentPrizeId.toString()])
 
   _prizeStrategy.save()
+
+
+  // Update Pool
+  _prizePool.cumulativePrizeGross = _prizePool.cumulativePrizeGross.plus(prize.gross as BigInt)
+  _prizePool.cumulativePrizeReserveFee = _prizePool.cumulativePrizeReserveFee.plus(event.params.reserveFee)
+  _prizePool.cumulativePrizeNet = _prizePool.cumulativePrizeNet.plus(event.params.prize)
+
+  _prizePool.save()
 }
 
 

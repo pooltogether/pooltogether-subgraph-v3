@@ -58,6 +58,10 @@
 
     playerCount
     totalSupply
+
+    cumulativePrizeGross
+    cumulativePrizeReserveFee
+    cumulativePrizeNet
     
     players {
       id
