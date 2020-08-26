@@ -32,7 +32,7 @@ export function loadOrCreatePrizeStrategy(
   prizePool: Address,
   prizeStrategy: Address,
 ): PrizeStrategy {
-  let _prizeStrategy = PrizeStrategy.load(prizePool.toHex())
+  let _prizeStrategy = PrizeStrategy.load(prizeStrategy.toHex())
 
   if (!_prizeStrategy) {
     _prizeStrategy = new PrizeStrategy(prizeStrategy.toHex())
