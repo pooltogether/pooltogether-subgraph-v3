@@ -165,6 +165,8 @@ type Prize @entity {
   net: BigInt
   reserveFee: BigInt
 
+  totalTicketSupply: BigInt # cache of num tickets sold when this prize was awarded
+
   # winner: Player
   winners: [Bytes!]
 }

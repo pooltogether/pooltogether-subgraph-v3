@@ -809,6 +809,23 @@ export class Prize extends Entity {
     }
   }
 
+  get totalTicketSupply(): BigInt | null {
+    let value = this.get("totalTicketSupply");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalTicketSupply(value: BigInt | null) {
+    if (value === null) {
+      this.unset("totalTicketSupply");
+    } else {
+      this.set("totalTicketSupply", Value.fromBigInt(value as BigInt));
+    }
+  }
+
   get winners(): Array<Bytes> | null {
     let value = this.get("winners");
     if (value === null) {
