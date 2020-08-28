@@ -408,6 +408,15 @@ export class Player extends Entity {
   set prizePool(value: string) {
     this.set("prizePool", Value.fromString(value));
   }
+
+  get cumulativeWinnings(): BigInt {
+    let value = this.get("cumulativeWinnings");
+    return value.toBigInt();
+  }
+
+  set cumulativeWinnings(value: BigInt) {
+    this.set("cumulativeWinnings", Value.fromBigInt(value));
+  }
 }
 
 export class CompoundPrizePoolBuilder extends Entity {

@@ -93,20 +93,28 @@ export function handleAwarded(event: Awarded): void {
 
   const _prize = Prize.load(_prizeId)
   const winner = event.params.winner.toHex()
-  // const winner = Bytes.fromHexString(ZERO_ADDRESS) as Bytes
 
-  log.warning('_prizeStrategy.currentPrizeId: {}', [_prizeStrategy.currentPrizeId.toHexString()])
-  log.warning('winner.toHex(): {}', [winner])
-  log.warning('ZERO_ADDRESS: {}', [ZERO_ADDRESS])
+  // log.warning('_prizeStrategy.currentPrizeId: {}', [_prizeStrategy.currentPrizeId.toHexString()])
+  // log.warning('winner.toHex(): {}', [winner])
+  // log.warning('ZERO_ADDRESS: {}', [ZERO_ADDRESS])
 
-  // if (event.params.winner.toHex() != ZERO_ADDRESS) {
   if (winner != ZERO_ADDRESS) {
-    log.warning('GOT WINNER! {}', [winner])
+    // log.warning('GOT WINNER! {}', [winner])
     const winnerBytes = Bytes.fromHexString(winner) as Bytes
     _prize.winners = [winnerBytes]
 
     // log.warning('_prize.winner: {}', [_prize.winner])
     _prize.save()
+
+
+
+    const _player = loadOrCreatePlayer(event.address, Address.fromString(winner))
+    _player.cumulativeWinnings = _player.cumulativeWinnings.plus(event.params.amount)
+    // log.warning('Upping players cumulativeWinnings from {} to {}', [
+    //   _player.cumulativeWinnings.toString(),
+    //   event.params.amount.toString(),
+    // ])
+    _player.save()
   }
 }
 
@@ -151,11 +159,12 @@ export function handleDeposited(event: Deposited): void {
     _player.prizePool = event.address.toHex()
 
     incrementPlayerBalance(_player, event.params.amount)
+    // check what shares are, if still a thing?
     // _player.shares = _player.shares.plus(event.params.shares)
 
     _player.save()
   } else if (token === _prizeStrategy.sponsorship) {
-    // FILL IN SPONSORSHIP WHAT HAPPENS HERE
+    // TODO: SPONSORSHIP
 
     // _sponsor.save()
   }

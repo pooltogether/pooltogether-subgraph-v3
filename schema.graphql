@@ -77,6 +77,8 @@ type Player @entity {
 
   address: Bytes!
   prizePool: PrizePool!
+  
+  cumulativeWinnings: BigInt!
 
   # prizes: [Prize!] # @derivedFrom(field: "winners")
 }
