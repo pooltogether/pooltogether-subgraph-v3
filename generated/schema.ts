@@ -12,6 +12,46 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
+export class Comptroller extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Comptroller entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Comptroller entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Comptroller", id.toString(), this);
+  }
+
+  static load(id: string): Comptroller | null {
+    return store.get("Comptroller", id) as Comptroller | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get reserveRateMantissa(): BigInt {
+    let value = this.get("reserveRateMantissa");
+    return value.toBigInt();
+  }
+
+  set reserveRateMantissa(value: BigInt) {
+    this.set("reserveRateMantissa", Value.fromBigInt(value));
+  }
+}
+
 export class PrizeStrategy extends Entity {
   constructor(id: string) {
     super();
@@ -105,21 +145,6 @@ export class PrizeStrategy extends Entity {
     this.set("sponsorship", Value.fromBytes(value));
   }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
-  get comptroller(): Bytes {
-    let value = this.get("comptroller");
-    return value.toBytes();
-  }
-
-  set comptroller(value: Bytes) {
-    this.set("comptroller", Value.fromBytes(value));
-  }
-
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
   get currentPrizeId(): BigInt {
     let value = this.get("currentPrizeId");
     return value.toBigInt();
@@ -183,36 +208,6 @@ export class PrizeStrategy extends Entity {
     this.set("prizesCount", Value.fromBigInt(value));
   }
 
-<<<<<<< HEAD
-  get balanceDrips(): Array<string> {
-    let value = this.get("balanceDrips");
-    return value.toStringArray();
-  }
-
-  set balanceDrips(value: Array<string>) {
-    this.set("balanceDrips", Value.fromStringArray(value));
-  }
-
-  get volumeDrips(): Array<string> {
-    let value = this.get("volumeDrips");
-    return value.toStringArray();
-  }
-
-  set volumeDrips(value: Array<string>) {
-    this.set("volumeDrips", Value.fromStringArray(value));
-  }
-
-  get referralVolumeDrips(): Array<string> {
-    let value = this.get("referralVolumeDrips");
-    return value.toStringArray();
-  }
-
-  set referralVolumeDrips(value: Array<string>) {
-    this.set("referralVolumeDrips", Value.fromStringArray(value));
-  }
-
-=======
->>>>>>> 2007b46... Updates for Comptroller Balance Drips
   get prizes(): Array<string> {
     let value = this.get("prizes");
     return value.toStringArray();
@@ -956,153 +951,8 @@ export class DripTokenPlayer extends Entity {
     this.set("address", Value.fromBytes(value));
   }
 
-<<<<<<< HEAD
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
-  }
-
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
-  }
-}
-
-export class CompoundPrizePoolBuilder extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(
-      id !== null,
-      "Cannot save CompoundPrizePoolBuilder entity without an ID"
-    );
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save CompoundPrizePoolBuilder entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("CompoundPrizePoolBuilder", id.toString(), this);
-  }
-
-  static load(id: string): CompoundPrizePoolBuilder | null {
-    return store.get(
-      "CompoundPrizePoolBuilder",
-      id
-    ) as CompoundPrizePoolBuilder | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get comptroller(): Bytes {
-    let value = this.get("comptroller");
-    return value.toBytes();
-  }
-
-<<<<<<< HEAD
-  set comptroller(value: Bytes) {
-    this.set("comptroller", Value.fromBytes(value));
-  }
-
-  get trustedForwarder(): Bytes {
-    let value = this.get("trustedForwarder");
-=======
-  set trustedForwarder(value: Bytes) {
-    this.set("trustedForwarder", Value.fromBytes(value));
-  }
-
-  get comptroller(): Bytes {
-    let value = this.get("comptroller");
-    return value.toBytes();
-  }
-
-  set comptroller(value: Bytes) {
-    this.set("comptroller", Value.fromBytes(value));
-  }
-
-  get rng(): Bytes {
-    let value = this.get("rng");
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
-    return value.toBytes();
-  }
-
-  set trustedForwarder(value: Bytes) {
-    this.set("trustedForwarder", Value.fromBytes(value));
-  }
-}
-
-export class Ticket extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Ticket entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Ticket entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Ticket", id.toString(), this);
-  }
-
-  static load(id: string): Ticket | null {
-    return store.get("Ticket", id) as Ticket | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get prizeStrategy(): string {
-    let value = this.get("prizeStrategy");
-    return value.toString();
-  }
-
-  set prizeStrategy(value: string) {
-    this.set("prizeStrategy", Value.fromString(value));
-  }
-
-  get name(): string {
-    let value = this.get("name");
-    return value.toString();
-  }
-
-  set name(value: string) {
-    this.set("name", Value.fromString(value));
-  }
-
-  get symbol(): string {
-    let value = this.get("symbol");
-    return value.toString();
-  }
-
-  set symbol(value: string) {
-    this.set("symbol", Value.fromString(value));
-  }
-
-  get decimals(): BigInt {
-    let value = this.get("decimals");
-=======
   get balance(): BigInt {
     let value = this.get("balance");
->>>>>>> 2007b46... Updates for Comptroller Balance Drips
     return value.toBigInt();
   }
 
@@ -1293,45 +1143,5 @@ export class BalanceDrip extends Entity {
 
   set deactivated(value: boolean) {
     this.set("deactivated", Value.fromBoolean(value));
-  }
-}
-
-export class Comptroller extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Comptroller entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Comptroller entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Comptroller", id.toString(), this);
-  }
-
-  static load(id: string): Comptroller | null {
-    return store.get("Comptroller", id) as Comptroller | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get reserveRateMantissa(): BigInt {
-    let value = this.get("reserveRateMantissa");
-    return value.toBigInt();
-  }
-
-  set reserveRateMantissa(value: BigInt) {
-    this.set("reserveRateMantissa", Value.fromBigInt(value));
   }
 }

@@ -90,18 +90,7 @@ export class CompoundPrizePoolBuilder__createInputConfigStruct extends ethereum.
   }
 
   get externalERC20Awards(): Array<Address> {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     return this[13].toAddressArray();
-=======
-=======
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
-    return this[10].toAddressArray();
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
-=======
-    return this[13].toAddressArray();
->>>>>>> 2007b46... Updates for Comptroller Balance Drips
   }
 }
 
@@ -392,59 +381,10 @@ export class CreateCallConfigStruct extends ethereum.Tuple {
   }
 
   get creditRateMantissa(): BigInt {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    return this[12].toBigInt();
-=======
-    return this[9].toBigInt();
-  }
-
-  get externalERC20Awards(): Array<Address> {
-    return this[10].toAddressArray();
-  }
-}
-
-export class InitializeCall extends ethereum.Call {
-  get inputs(): InitializeCall__Inputs {
-    return new InitializeCall__Inputs(this);
-  }
-
-  get outputs(): InitializeCall__Outputs {
-    return new InitializeCall__Outputs(this);
-  }
-}
-
-export class InitializeCall__Inputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
-  }
-
-  get _comptroller(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get _prizeStrategyProxyFactory(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get _trustedForwarder(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get _compoundPrizePoolProxyFactory(): Address {
-    return this._call.inputValues[3].value.toAddress();
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
-  }
-
-  get externalERC20Awards(): Array<Address> {
-=======
     return this[12].toBigInt();
   }
 
   get externalERC20Awards(): Array<Address> {
->>>>>>> 2007b46... Updates for Comptroller Balance Drips
     return this[13].toAddressArray();
   }
 }

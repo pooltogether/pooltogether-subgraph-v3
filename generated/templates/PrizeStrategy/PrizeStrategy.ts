@@ -1813,25 +1813,12 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[6].value.toAddress();
   }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   get _rng(): Address {
     return this._call.inputValues[7].value.toAddress();
   }
 
   get _externalErc20s(): Array<Address> {
     return this._call.inputValues[8].value.toAddressArray();
-<<<<<<< HEAD
-=======
-  get _externalErc20s(): Array<Address> {
-    return this._call.inputValues[7].value.toAddressArray();
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
-=======
-  get _externalErc20s(): Array<Address> {
-    return this._call.inputValues[7].value.toAddressArray();
->>>>>>> 3567037... WIP - Add subgraph for Comptroller BalanceDrips
-=======
->>>>>>> 2007b46... Updates for Comptroller Balance Drips
   }
 }
 
