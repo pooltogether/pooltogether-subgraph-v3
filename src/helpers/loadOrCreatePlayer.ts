@@ -12,17 +12,17 @@ import {
 } from './idTemplates'
 
 export function loadOrCreatePlayer(
-  source: Address,
+  prizePool: Address,
   player: Address
 ): Player {
-  const id = playerId(source.toHex(), player.toHex())
+  const id = playerId(prizePool.toHex(), player.toHex())
   let _player = Player.load(id)
 
   if (!_player) {
     _player = new Player(id)
 
     log.warning('_player {}', [player.toHex()])
-    _player.prizePool = source.toHex()
+    _player.prizePool = prizePool.toHex()
     _player.address = player
     _player.balance = BigInt.fromI32(0)
 
