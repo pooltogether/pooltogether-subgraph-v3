@@ -11,6 +11,8 @@ import {
   balanceDripPlayerId,
 } from './idTemplates'
 
+const ZERO = BigInt.fromI32(0)
+
 export function loadOrCreatePlayer(
   prizePool: Address,
   player: Address
@@ -21,15 +23,19 @@ export function loadOrCreatePlayer(
   if (!_player) {
     _player = new Player(id)
 
-    log.warning('_player {}', [player.toHex()])
+    // log.warning('Creating new _player {}', [player.toHex()])
     _player.prizePool = prizePool.toHex()
     _player.address = player
-    _player.balance = BigInt.fromI32(0)
+    _player.balance = ZERO
 
-    _player.timelockedBalance = BigInt.fromI32(0)
-    _player.unlockTimestamp = BigInt.fromI32(0)
+    _player.timelockedBalance = ZERO
+    _player.unlockTimestamp = ZERO
+    
+    _player.cumulativeWinnings = ZERO
 
     _player.save()
+  } else {
+    // log.warning('Found existing _player {}', [player.toHex()])
   }
 
   return _player as Player

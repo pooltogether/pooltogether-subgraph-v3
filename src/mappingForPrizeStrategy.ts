@@ -3,10 +3,10 @@ import {
   PrizePool,
   PrizeStrategy,
 } from '../generated/schema'
-// import {
-//   ERC20 as ERC20Contract,
-// } from '../generated/templates/PrizePool/ERC20'
 
+import {
+  PrizePool as PrizePoolContract,
+} from '../generated/templates/PrizePool/PrizePool'
 import {
   RNGInterface as RngContract,
 } from '../generated/templates/PrizeStrategy/RNGInterface'
@@ -89,6 +89,8 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
 
   prize.awardedBlock = event.block.number
   prize.awardedTimestamp = event.block.timestamp
+
+  prize.totalTicketSupply = _prizePool.totalSupply
 
   prize.save()
 
