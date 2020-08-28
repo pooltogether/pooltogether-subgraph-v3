@@ -1,8 +1,4 @@
 
-export function generateId(...args: string[]): string {
-  return args.join('-')
-}
-
 export function prizeId(prizePool: string, currentPrizeId: string): string {
   return prizePool + '-' + currentPrizeId
 }
@@ -16,7 +12,7 @@ export function dripTokenPlayerId(
   dripTokenAddress: string,
   playerAddress: string
 ): string {
-  return `${comptrollerAddress}-${dripTokenAddress}-${playerAddress}`;
+  return comptrollerAddress + '-' + dripTokenAddress + '-' + playerAddress
 }
 
 export function balanceDripId(
@@ -25,7 +21,7 @@ export function balanceDripId(
   measureTokenAddress: string,
   dripTokenAddress: string
 ): string {
-  return `${comptrollerAddress}-${sourceAddress}-${measureTokenAddress}-${dripTokenAddress}`;
+  return comptrollerAddress + '-' + sourceAddress + '-' + measureTokenAddress + '-' + dripTokenAddress
 }
 
 export function balanceDripPlayerId(
@@ -33,7 +29,7 @@ export function balanceDripPlayerId(
   playerAddress: string,
   balanceDripId: string
 ): string {
-  return `${comptrollerAddress}-${playerAddress}-${balanceDripId}`;
+  return comptrollerAddress + '-' + playerAddress + '-' + balanceDripId
 }
 
 export function volumeDripId(
@@ -41,5 +37,5 @@ export function volumeDripId(
   sourceAddress: string,
   volumeDripIndex: string
 ): string {
-  return `${comptrollerAddress}-${sourceAddress}-${volumeDripIndex}`;
+  return comptrollerAddress + '-' +  sourceAddress + '-' +  volumeDripIndex
 }
