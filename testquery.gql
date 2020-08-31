@@ -2,6 +2,13 @@
   comptrollers {
     id
     reserveRateMantissa
+
+    players {
+      id
+    }
+    prizePools {
+      id
+    }
   }
 
   compoundPrizePoolBuilders {
@@ -82,6 +89,15 @@
       timelockedBalance
       unlockTimestamp
     }
+
+    balanceDrips {
+      id
+      deactivated
+    }
+    volumeDrips {
+      id
+      deactivated
+    }
   }
 
   prizes {
@@ -107,16 +123,23 @@
     awardedBlock
     awardedTimestamp
 
+    totalTicketSupply
+
     winners
   }
 
   players {
     id
 
+    prizePool {
+      id
+    }
+
     address
     balance
     timelockedBalance
     unlockTimestamp
+    cumulativeWinnings
   }
 
   tickets {
@@ -169,6 +192,53 @@
     }
     address
     lastExchangeRateMantissa
+  }
+
+  volumeDrips {
+    id
+    prizePool {
+      id
+    }
+    measureToken
+    dripToken
+		referral
+
+    periodSeconds
+    dripAmount
+    periodCount
+
+    deposits {
+      id
+    }
+    periods {
+      id
+    }
+
+    deactivated
+  }
+
+  volumeDripPlayers {
+    id
+    volumeDrip {
+      id
+    }
+    address
+    periodIndex
+    balance
+  }
+
+  volumeDripPeriods {
+    id
+    volumeDrip {
+      id
+    }
+
+    periodIndex
+    totalSupply
+    dripAmount
+    endTime
+
+    isDripping
   }
 
   dripTokenPlayers {

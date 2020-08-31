@@ -4,8 +4,8 @@ enum PrizePoolState {
   Awarded
 }
 
-enum PrizePoolType {
-  Compound
+enum YieldServiceTokenType {
+  cToken
 }
 
 
@@ -13,8 +13,8 @@ type Comptroller @entity {
   id: ID!
   reserveRateMantissa: BigInt!
 
-  # players: [DripTokenPlayer!]! @derivedFrom(field: "comptroller")
-  # prizePools: [PrizePool!]! @derivedFrom(field: "comptroller")
+  players: [DripTokenPlayer!]! @derivedFrom(field: "comptroller")
+  prizePools: [PrizePool!]! @derivedFrom(field: "comptroller")
 }
 
 type PrizeStrategy @entity {
@@ -74,8 +74,7 @@ type PrizePool @entity {
   players: [Player!]! @derivedFrom(field: "prizePool")
 
   balanceDrips: [BalanceDrip!]! @derivedFrom(field: "prizePool")
-  # volumeDrips: [VolumeDrip!]! @derivedFrom(field: "prizePool")
-  # referralVolumeDrips: [VolumeDrip!]! @derivedFrom(field: "prizePool")
+  volumeDrips: [VolumeDrip!]! @derivedFrom(field: "prizePool")
 }
 
 # ID: `${prizePool.address}-${prizeId}`
@@ -100,6 +99,8 @@ type Prize @entity {
   gross: BigInt
   net: BigInt
   reserveFee: BigInt
+
+  totalTicketSupply: BigInt # cache of num tickets sold when this prize was awarded
 
   winners: [Bytes!]
 }
@@ -139,6 +140,7 @@ type Player @entity {
   balance: BigInt!
   timelockedBalance: BigInt!
   unlockTimestamp: BigInt!
+  cumulativeWinnings: BigInt!
 }
 
 type DripTokenPlayer @entity {
@@ -175,39 +177,40 @@ type BalanceDrip @entity {
 }
 
 
-# type VolumeDrip @entity {
-#   id: ID!
-#   prizePool: PrizePool!
-#   index: BigInt!
+type VolumeDripPlayer @entity {
+  id: ID!
+  volumeDrip: VolumeDrip!
+  address: Bytes!
 
-#   measureToken: Bytes
-#   dripToken: Bytes
+  periodIndex: BigInt!
+  balance: BigInt!
+}
 
-#   periodSeconds: BigInt
-#   dripAmount: BigInt
-#   referral: Boolean
+type VolumeDripPeriod @entity {
+  id: ID!
+  volumeDrip: VolumeDrip!
+  periodIndex: BigInt!
 
-#   periods: [VolumeDripPeriod!]! @derivedFrom(field: "volumeDrip")
+  totalSupply: BigInt
+  dripAmount: BigInt
+  endTime: BigInt
 
-#   deactivated: Boolean!
-# }
+  isDripping: Boolean!
+}
 
-# type VolumeDripPeriod @entity {
-#   id: ID!
+type VolumeDrip @entity {
+  id: ID!
+  prizePool: PrizePool!
+  measureToken: Bytes!
+  dripToken: Bytes!
+  referral: Boolean!
 
-#   startTime: BigInt!
-#   totalSupply: BigInt!
+  periodSeconds: BigInt
+  dripAmount: BigInt
+  periodCount: BigInt
 
-#   volumeDrip: VolumeDrip!
-# }
+  deposits: [VolumeDripPlayer!]! @derivedFrom(field: "volumeDrip")
+  periods: [VolumeDripPeriod!]! @derivedFrom(field: "volumeDrip")
 
-# type PlayerVolumeDrip @entity {
-#   id: ID!
-
-#   player: Player!
-#   volumeDrip: VolumeDrip!
-
-#   balance: BigInt!
-#   period: BigInt!
-#   accrued: BigInt!
-# }
+  deactivated: Boolean!
+}

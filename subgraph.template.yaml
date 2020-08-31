@@ -54,12 +54,10 @@ dataSources:
       eventHandlers:
         - event: ReserveRateMantissaSet(uint256)
           handler: handleReserveRateMantissaSet
-
         - event: DripTokenDripped(indexed address,indexed address,uint256)
           handler: handleDripTokenDripped
         - event: DripTokenClaimed(indexed address,indexed address,indexed address,uint256)
           handler: handleDripTokenClaimed
-
         - event: BalanceDripActivated(indexed address,indexed address,indexed address,uint256)
           handler: handleBalanceDripActivated
         - event: BalanceDripDeactivated(indexed address,indexed address,indexed address)
@@ -68,7 +66,6 @@ dataSources:
           handler: handleBalanceDripRateSet
         - event: BalanceDripDripped(indexed address,indexed address,indexed address,address,uint256)
           handler: handleBalanceDripDripped
-
         - event: VolumeDripActivated(indexed address,indexed address,indexed address,bool,uint256,uint256)
           handler: handleVolumeDripActivated
         - event: VolumeDripDeactivated(indexed address,indexed address,indexed address,bool)

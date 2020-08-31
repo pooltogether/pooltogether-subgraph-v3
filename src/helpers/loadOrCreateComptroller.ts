@@ -2,6 +2,8 @@ import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 import {
   Comptroller,
   BalanceDrip,
+  VolumeDrip,
+  VolumeDripPeriod,
 } from '../../generated/schema'
 
 import {
@@ -9,8 +11,8 @@ import {
 } from '../../generated/Comptroller/Comptroller'
 
 import {
-  balanceDripId,
-  volumeDripId,
+  dripTokenId,
+  volumeDripPeriodId,
 } from './idTemplates'
 
 
@@ -25,13 +27,6 @@ export function loadOrCreateComptroller(
     const boundComptroller = ComptrollerContract.bind(comptrollerAddress)
 
     _comptroller.reserveRateMantissa = boundComptroller.reserveRateMantissa()
-    // const callResult = boundComptroller.try_reserveRateMantissa()
-    // if (callResult.reverted) {
-    //   log.info("Comptroller->reserveRateMantissa reverted", [])
-    // } else {
-    //   _comptroller.reserveRateMantissa = callResult.value
-    // }
-
     _comptroller.save()
   }
 
@@ -45,7 +40,7 @@ export function loadOrCreateBalanceDrip(
   measureTokenAddress: Address,
   dripTokenAddress: Address
 ): BalanceDrip {
-  const id = balanceDripId(
+  const id = dripTokenId(
     comptrollerAddress.toHex(),
     sourceAddress.toHex(),
     measureTokenAddress.toHex(),
@@ -66,20 +61,52 @@ export function loadOrCreateBalanceDrip(
 }
 
 
-// export function loadOrCreateVolumeDrip(
-//   comptrollerAddress: Address,
-//   sourceAddress: Address,
-//   volumeDripIndex: BigInt
-// ): VolumeDrip {
-//   const id = volumeDripId(comptrollerAddress.toHex(), sourceAddress.toHex(), volumeDripIndex.toHex())
-//   let _volumeDrip = VolumeDrip.load(id)
+export function loadOrCreateVolumeDrip(
+  comptrollerAddress: Address,
+  sourceAddress: Address,
+  measureTokenAddress: Address,
+  dripTokenAddress: Address,
+  isReferral: boolean
+): VolumeDrip {
+  const id = dripTokenId(
+    comptrollerAddress.toHex(),
+    sourceAddress.toHex(),
+    measureTokenAddress.toHex(),
+    dripTokenAddress.toHex(),
+    isReferral.toString()
+  )
+  let _volumeDrip = VolumeDrip.load(id)
 
-//   if (!_volumeDrip) {
-//     _volumeDrip = new VolumeDrip(id)
-//     _volumeDrip.prizePool = sourceAddress.toHex()
-//     _volumeDrip.index = volumeDripIndex
-//     _volumeDrip.save()
-//   }
+  if (!_volumeDrip) {
+    _volumeDrip = new VolumeDrip(id)
+    _volumeDrip.prizePool = sourceAddress.toHex()
+    _volumeDrip.measureToken = measureTokenAddress
+    _volumeDrip.dripToken = dripTokenAddress
+    _volumeDrip.referral = isReferral
+    _volumeDrip.deactivated = false
+    _volumeDrip.save()
+  }
 
-//   return _volumeDrip as VolumeDrip
-// }
+  return _volumeDrip as VolumeDrip
+}
+
+export function loadOrCreateVolumeDripPeriod(
+  volumeDripId: string,
+  periodIndex: BigInt
+): VolumeDripPeriod {
+  const id = volumeDripPeriodId(
+    volumeDripId,
+    periodIndex.toString()
+  )
+  let _period = VolumeDripPeriod.load(id)
+
+  if (!_period) {
+    _period = new VolumeDripPeriod(id)
+    _period.volumeDrip = volumeDripId
+    _period.periodIndex = periodIndex
+    _period.isDripping = false
+    _period.save()
+  }
+
+  return _period as VolumeDripPeriod
+}
