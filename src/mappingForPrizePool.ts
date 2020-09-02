@@ -110,6 +110,7 @@ export function handleAwarded(event: Awarded): void {
 
     const _player = loadOrCreatePlayer(event.address, Address.fromString(winner))
     _player.cumulativeWinnings = _player.cumulativeWinnings.plus(event.params.amount)
+    incrementPlayerBalance(_player, event.params.amount)
     // log.warning('Upping players cumulativeWinnings from {} to {}', [
     //   _player.cumulativeWinnings.toString(),
     //   event.params.amount.toString(),
