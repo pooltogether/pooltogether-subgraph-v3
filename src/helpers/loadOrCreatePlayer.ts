@@ -1,7 +1,17 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts'
-import { Player } from '../../generated/schema'
+import {
+  Player,
+  DripTokenPlayer,
+  BalanceDripPlayer,
+  VolumeDripPlayer,
+} from '../../generated/schema'
 
-import { playerId } from './idTemplates'
+import {
+  playerId,
+  dripTokenPlayerId,
+  balanceDripPlayerId,
+  volumeDripPlayerId,
+} from './idTemplates'
 
 const ZERO = BigInt.fromI32(0)
 
@@ -17,13 +27,12 @@ export function loadOrCreatePlayer(
 
     // log.warning('Creating new _player {}', [player.toHex()])
     _player.prizePool = prizePool.toHex()
-    // log.warning('Address from String {}', [Address.fromString(player).toString()])
     _player.address = player
     _player.balance = ZERO
 
     _player.timelockedBalance = ZERO
     _player.unlockTimestamp = ZERO
-    
+
     _player.cumulativeWinnings = ZERO
 
     _player.save()
@@ -32,4 +41,73 @@ export function loadOrCreatePlayer(
   }
 
   return _player as Player
+}
+
+
+export function loadOrCreateDripTokenPlayer(
+  comptroller: Address,
+  dripToken: Address,
+  player: Address
+): DripTokenPlayer {
+  const _playerId = dripTokenPlayerId(comptroller.toHex(), dripToken.toHex(), player.toHex())
+  let _player = DripTokenPlayer.load(_playerId)
+
+  if (!_player) {
+    _player = new DripTokenPlayer(_playerId)
+
+    log.warning('DripTokenPlayer {}', [player.toHex()])
+    _player.dripToken = dripToken
+    _player.comptroller = comptroller.toHex()
+    _player.address = player
+    _player.balance = BigInt.fromI32(0)
+    _player.save()
+  }
+
+  return _player as DripTokenPlayer
+}
+
+
+export function loadOrCreateBalanceDripPlayer(
+  comptroller: Address,
+  player: Address,
+  balanceDripId: string
+): BalanceDripPlayer {
+  const _playerId = balanceDripPlayerId(comptroller.toHex(), player.toHex(), balanceDripId)
+  let _player = BalanceDripPlayer.load(_playerId)
+
+  if (!_player) {
+    _player = new BalanceDripPlayer(_playerId)
+
+    log.warning('BalanceDripPlayer {}', [player.toHex()])
+    _player.balanceDrip = balanceDripId
+    _player.address = player
+    _player.lastExchangeRateMantissa = BigInt.fromI32(0)
+    _player.save()
+  }
+
+  return _player as BalanceDripPlayer
+}
+
+export function loadOrCreateVolumeDripPlayer(
+  volumeDripId: string,
+  player: Address,
+): VolumeDripPlayer {
+  const _playerId = volumeDripPlayerId(
+    volumeDripId,
+    player.toHex(),
+  )
+  let _player = VolumeDripPlayer.load(_playerId)
+
+  if (!_player) {
+    _player = new VolumeDripPlayer(_playerId)
+
+    log.warning('VolumeDripPlayer {}', [player.toHex()])
+    _player.volumeDrip = volumeDripId
+    _player.address = player
+    _player.periodIndex = BigInt.fromI32(0)
+    _player.balance = BigInt.fromI32(0)
+    _player.save()
+  }
+
+  return _player as VolumeDripPlayer
 }

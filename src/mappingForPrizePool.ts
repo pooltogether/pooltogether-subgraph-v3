@@ -144,13 +144,13 @@ export function handleDeposited(event: Deposited): void {
 
   const ticketAddress = Address.fromString(ticket.toHexString())
   const ticketIsToken = (token.equals(ticketAddress))
-  
+
   if (ticketIsToken) {
     const _player = loadOrCreatePlayer(
       Address.fromString(event.address.toHex()),
       event.params.to
     )
-    
+
     const playersCachedBalance = _player.balance
     incrementPlayerCount(_prizePool as PrizePool, playersCachedBalance)
 
@@ -202,7 +202,7 @@ export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
   )
 
   decrementPlayerCount(_prizePool as PrizePool, _player)
-  
+
   decrementPlayerBalance(_player, event.params.amount)
   incrementPlayerTimelockedBalance(_player, event.params.amount)
 

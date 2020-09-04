@@ -8,6 +8,9 @@ import {
   ERC20 as ERC20Contract,
 } from '../../generated/CompoundPrizePoolBuilder/ERC20'
 import {
+  ControlledToken as ControlledTokenContract,
+} from '../../generated/CompoundPrizePoolBuilder/ControlledToken'
+import {
   PrizePool as PrizePoolContract,
 } from '../../generated/templates/PrizePool/PrizePool'
 import {
@@ -44,16 +47,16 @@ export function loadOrCreatePrizeStrategy(
     // _prizeStrategy.yieldDecimals = BigInt.fromI32(boundYieldToken.decimals())
     // _prizeStrategy.yieldName = boundYieldToken.name()
     // _prizeStrategy.yieldSymbol = boundYieldToken.symbol()
-    
 
-    
+
+
     _prizeStrategy.compoundPrizePoolBuilder = builder.toHex()
     _prizeStrategy.creator = creator
 
     // _prizeStrategy.prizePoolModuleManager = moduleManager.toHex()
 
     _prizeStrategy.prizePool = prizePool.toHex()
-    _prizeStrategy.comptroller = boundPrizeStrategy.comptroller()
+    _prizeStrategy.comptroller = boundPrizeStrategy.comptroller().toHex()
     _prizeStrategy.ticket = boundPrizeStrategy.ticket()
     _prizeStrategy.rng = boundPrizeStrategy.rng()
     _prizeStrategy.sponsorship = boundPrizeStrategy.sponsorship()
@@ -63,6 +66,7 @@ export function loadOrCreatePrizeStrategy(
     _prizeStrategy.currentState = 'Opened'
 
     _prizeStrategy.prizePeriodSeconds = boundPrizeStrategy.prizePeriodSeconds()
+    _prizeStrategy.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
 
     _prizeStrategy.exitFeeMantissa = boundPrizeStrategy.exitFeeMantissa()
     _prizeStrategy.creditRateMantissa = boundPrizeStrategy.creditRateMantissa()
@@ -91,13 +95,14 @@ export function loadOrCreatePrizeStrategy(
     const _pool = new PrizePool(prizePool.toHex())
     const boundPrizePool = PrizePoolContract.bind(prizePool)
 
-    const boundToken = ERC20Contract.bind(boundPrizePool.token())
+    const boundToken = ControlledTokenContract.bind(boundPrizePool.token())
     _pool.underlyingCollateralToken = boundPrizePool.token()
     _pool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
     _pool.underlyingCollateralName = boundToken.name()
     _pool.underlyingCollateralSymbol = boundToken.symbol()
 
     _pool.prizeStrategy = prizeStrategy.toHex()
+    _pool.comptroller = boundPrizeStrategy.comptroller().toHex()
 
     _pool.playerCount = ZERO
 
@@ -107,13 +112,13 @@ export function loadOrCreatePrizeStrategy(
     } else {
       _pool.maxExitFeeMantissa = callResult.value
     }
-    
+
     _pool.maxTimelockDuration = boundPrizePool.maxTimelockDuration()
     _pool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
 
     const boundTicket = ERC20Contract.bind(Address.fromString(_prizeStrategy.ticket.toHex()))
     _pool.totalSupply = boundTicket.totalSupply()
-    
+
     _pool.cumulativePrizeGross = ZERO
     _pool.cumulativePrizeReserveFee = ZERO
     _pool.cumulativePrizeNet = ZERO

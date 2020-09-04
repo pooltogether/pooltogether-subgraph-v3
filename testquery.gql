@@ -1,25 +1,41 @@
 {
+  comptrollers {
+    id
+    reserveRateMantissa
+
+    players {
+      id
+    }
+    prizePools {
+      id
+    }
+  }
+
   compoundPrizePoolBuilders {
     id
 
-    comptroller
+    comptroller {
+      id
+    }
     trustedForwarder
   }
 
   prizeStrategies {
     id
-    
+
     creator
 
     compoundPrizePoolBuilder {
       id
     }
-    
+
     prizePool {
       id
     }
 
-    comptroller
+    comptroller {
+      id
+    }
     ticket
     rng
     sponsorship
@@ -28,7 +44,8 @@
     currentState
 
     prizePeriodSeconds
-    
+    prizePeriodStartedAt
+
     exitFeeMantissa
     creditRateMantissa
 
@@ -45,7 +62,9 @@
     id
 
     # trustedForwarder
-    prizeStrategy
+    prizeStrategy {
+      id
+    }
 
     underlyingCollateralToken
     underlyingCollateralDecimals
@@ -62,13 +81,22 @@
     cumulativePrizeGross
     cumulativePrizeReserveFee
     cumulativePrizeNet
-    
+
     players {
       id
       address
       balance
       timelockedBalance
       unlockTimestamp
+    }
+
+    balanceDrips {
+      id
+      deactivated
+    }
+    volumeDrips {
+      id
+      deactivated
     }
   }
 
@@ -78,56 +106,148 @@
     prizeStrategy {
       id
     }
-    
+
     gross
     net
     reserveFee
 
     randomNumber
     rngRequestId
-    
+
     awardStartOperator
     awardedOperator
 
     prizePeriodStartedTimestamp
     lockBlock
-  
+
     awardedBlock
     awardedTimestamp
 
+    totalTicketSupply
+
     winners
   }
-  
+
   players {
     id
+
+    prizePool {
+      id
+    }
 
     address
     balance
     timelockedBalance
     unlockTimestamp
+    cumulativeWinnings
   }
-  
+
   tickets {
     id
 
     name
     symbol
     decimals
-    
+
     prizeStrategy {
       id
     }
   }
-  
+
   sponsorships {
     id
-    
+
     name
     symbol
     decimals
-    
+
     prizeStrategy {
       id
     }
+  }
+
+  balanceDrips {
+    id
+    prizePool {
+      id
+    }
+    measureToken
+    dripToken
+
+    dripRatePerSecond
+    exchangeRateMantissa
+    timestamp
+
+    players {
+      id
+    }
+
+    deactivated
+  }
+
+  balanceDripPlayers {
+    id
+    balanceDrip {
+      id
+    }
+    address
+    lastExchangeRateMantissa
+  }
+
+  volumeDrips {
+    id
+    prizePool {
+      id
+    }
+    measureToken
+    dripToken
+		referral
+
+    periodSeconds
+    dripAmount
+    periodCount
+
+    deposits {
+      id
+    }
+    periods {
+      id
+    }
+
+    deactivated
+  }
+
+  volumeDripPlayers {
+    id
+    volumeDrip {
+      id
+    }
+    address
+    periodIndex
+    balance
+  }
+
+  volumeDripPeriods {
+    id
+    volumeDrip {
+      id
+    }
+
+    periodIndex
+    totalSupply
+    dripAmount
+    endTime
+
+    isDripping
+  }
+
+  dripTokenPlayers {
+   	id
+    comptroller {
+      id
+    }
+    dripToken
+    address
+    balance
   }
 }
