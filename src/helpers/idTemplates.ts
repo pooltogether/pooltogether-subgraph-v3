@@ -7,6 +7,10 @@ export function playerId(prizePoolAddress: string, playerAddress: string): strin
   return prizePoolAddress + '-' + playerAddress
 }
 
+export function creditRateId(prizePoolAddress: string, tokenAddress: string): string {
+  return prizePoolAddress + '-' + tokenAddress
+}
+
 export function dripTokenId(
   comptrollerAddress: string,
   sourceAddress: string,
@@ -26,11 +30,10 @@ export function dripTokenPlayerId(
 }
 
 export function balanceDripPlayerId(
-  comptrollerAddress: string,
+  balanceDripId: string,
   playerAddress: string,
-  balanceDripId: string
 ): string {
-  return comptrollerAddress + '-' + playerAddress + '-' + balanceDripId
+  return balanceDripId + '-' + playerAddress
 }
 
 export function volumeDripPlayerId(

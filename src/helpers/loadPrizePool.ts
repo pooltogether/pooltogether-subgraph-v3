@@ -1,4 +1,4 @@
-import { Address, BigInt, log } from "@graphprotocol/graph-ts"
+import { Address } from "@graphprotocol/graph-ts"
 import {
   PrizePool,
 } from '../../generated/schema'

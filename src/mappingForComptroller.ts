@@ -1,13 +1,19 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts'
-
 import {
-  PrizeStrategy as PrizeStrategyContract,
-} from '../generated/templates/PrizeStrategy/PrizeStrategy'
-
+  Comptroller,
+  BalanceDrip,
+  VolumeDrip,
+  DripTokenPlayer,
+  BalanceDripPlayer,
+  VolumeDripPlayer,
+  VolumeDripPeriod,
+} from '../generated/schema'
 import {
   Comptroller as ComptrollerContract,
 
   ReserveRateMantissaSet,
+  OwnershipTransferred,
+
   DripTokenDripped,
   DripTokenClaimed,
 
@@ -21,12 +27,10 @@ import {
   VolumeDripSet,
   VolumeDripPeriodStarted,
   VolumeDripPeriodEnded,
-  VolumeDripDeposited,
   VolumeDripDripped,
 } from '../generated/Comptroller/Comptroller'
 
 import {
-  loadOrCreatePlayer,
   loadOrCreateDripTokenPlayer,
   loadOrCreateBalanceDripPlayer,
   loadOrCreateVolumeDripPlayer,
@@ -43,11 +47,16 @@ import {
 
 
 export function handleReserveRateMantissaSet(event: ReserveRateMantissaSet): void {
-  const _comptroller = loadOrCreateComptroller(event.address)
+  const _comptroller:Comptroller = loadOrCreateComptroller(event.address)
   _comptroller.reserveRateMantissa = event.params.reserveRateMantissa
   _comptroller.save()
 }
 
+export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+  const _comptroller:Comptroller = loadOrCreateComptroller(event.address)
+  _comptroller.owner = event.params.newOwner
+  _comptroller.save()
+}
 
 
 
@@ -57,12 +66,12 @@ export function handleReserveRateMantissaSet(event: ReserveRateMantissaSet): voi
 
 
 export function handleDripTokenDripped(event: DripTokenDripped): void {
-  const _comptrollerAddress = event.address
-  const _dripTokenAddress = event.params.dripToken
-  const _playerAddress = event.params.user
-  const _amount = event.params.amount
+  const _comptrollerAddress:Address = event.address
+  const _dripTokenAddress:Address = event.params.dripToken
+  const _playerAddress:Address = event.params.user
+  const _amount:BigInt = event.params.amount
 
-  const _player = loadOrCreateDripTokenPlayer(
+  const _player:DripTokenPlayer = loadOrCreateDripTokenPlayer(
     _comptrollerAddress,
     _dripTokenAddress,
     _playerAddress,
@@ -73,12 +82,12 @@ export function handleDripTokenDripped(event: DripTokenDripped): void {
 }
 
 export function handleDripTokenClaimed(event: DripTokenClaimed): void {
-  const _comptrollerAddress = event.address
-  const _dripTokenAddress = event.params.dripToken
-  const _playerAddress = event.params.user
-  const _amount = event.params.amount
+  const _comptrollerAddress:Address = event.address
+  const _dripTokenAddress:Address = event.params.dripToken
+  const _playerAddress:Address = event.params.user
+  const _amount:BigInt = event.params.amount
 
-  const _player = loadOrCreateDripTokenPlayer(
+  const _player:DripTokenPlayer = loadOrCreateDripTokenPlayer(
     _comptrollerAddress,
     _dripTokenAddress,
     _playerAddress,
@@ -95,12 +104,12 @@ export function handleDripTokenClaimed(event: DripTokenClaimed): void {
 
 
 export function handleBalanceDripActivated(event: BalanceDripActivated): void {
-  const _comptrollerAddress = event.address
-  const _sourceAddress = event.params.source
-  const _measureTokenAddress = event.params.measure
-  const _dripTokenAddress = event.params.dripToken
+  const _comptrollerAddress:Address = event.address
+  const _sourceAddress:Address = event.params.source
+  const _measureTokenAddress:Address = event.params.measure
+  const _dripTokenAddress:Address = event.params.dripToken
 
-  const _balanceDrip = loadOrCreateBalanceDrip(
+  const _balanceDrip:BalanceDrip = loadOrCreateBalanceDrip(
     _comptrollerAddress,
     _sourceAddress,
     _measureTokenAddress,
@@ -117,12 +126,12 @@ export function handleBalanceDripActivated(event: BalanceDripActivated): void {
 }
 
 export function handleBalanceDripDeactivated(event: BalanceDripDeactivated): void {
-  const _comptrollerAddress = event.address
+  const _comptrollerAddress:Address = event.address
   const _sourceAddress = event.params.source
-  const _measureTokenAddress = event.params.measure
-  const _dripTokenAddress = event.params.dripToken
+  const _measureTokenAddress:Address = event.params.measure
+  const _dripTokenAddress:Address = event.params.dripToken
 
-  const _balanceDrip = loadOrCreateBalanceDrip(
+  const _balanceDrip:BalanceDrip = loadOrCreateBalanceDrip(
     _comptrollerAddress,
     _sourceAddress,
     _measureTokenAddress,
@@ -134,12 +143,12 @@ export function handleBalanceDripDeactivated(event: BalanceDripDeactivated): voi
 }
 
 export function handleBalanceDripRateSet(event: BalanceDripRateSet): void {
-  const _comptrollerAddress = event.address
-  const _sourceAddress = event.params.source
-  const _measureTokenAddress = event.params.measure
-  const _dripTokenAddress = event.params.dripToken
+  const _comptrollerAddress:Address = event.address
+  const _sourceAddress:Address = event.params.source
+  const _measureTokenAddress:Address = event.params.measure
+  const _dripTokenAddress:Address = event.params.dripToken
 
-  const _balanceDrip = loadOrCreateBalanceDrip(
+  const _balanceDrip:BalanceDrip = loadOrCreateBalanceDrip(
     _comptrollerAddress,
     _sourceAddress,
     _measureTokenAddress,
@@ -156,27 +165,26 @@ export function handleBalanceDripRateSet(event: BalanceDripRateSet): void {
 }
 
 export function handleBalanceDripDripped(event: BalanceDripDripped): void {
-  const _comptrollerAddress = event.address
-  const _sourceAddress = event.params.source
-  const _measureTokenAddress = event.params.measure
-  const _dripTokenAddress = event.params.dripToken
-  const _playerAddress = event.params.user
-  const _userLastExchangeRate = event.params.userExchangeRate
+  const _comptrollerAddress:Address = event.address
+  const _sourceAddress:Address = event.params.source
+  const _measureTokenAddress:Address = event.params.measure
+  const _dripTokenAddress:Address = event.params.dripToken
+  const _playerAddress:Address = event.params.user
+  const _amount:BigInt = event.params.amount
 
-  const _balanceDrip = loadOrCreateBalanceDrip(
+  const _balanceDrip:BalanceDrip = loadOrCreateBalanceDrip(
     _comptrollerAddress,
     _sourceAddress,
     _measureTokenAddress,
     _dripTokenAddress
   )
 
-  const _playerBalanceDrip = loadOrCreateBalanceDripPlayer(
-    _comptrollerAddress,
+  const _playerBalanceDrip:BalanceDripPlayer = loadOrCreateBalanceDripPlayer(
+    _balanceDrip.id,
     _playerAddress,
-    _balanceDrip.id
   )
 
-  _playerBalanceDrip.lastExchangeRateMantissa = _userLastExchangeRate
+  // _playerBalanceDrip.lastExchangeRateMantissa = _userLastExchangeRate
   _playerBalanceDrip.save()
 }
 
@@ -186,13 +194,13 @@ export function handleBalanceDripDripped(event: BalanceDripDripped): void {
 
 
 export function handleVolumeDripActivated(event: VolumeDripActivated): void {
-  const _comptrollerAddress = event.address
-  const _sourceAddress = event.params.source
-  const _measureTokenAddress = event.params.measure
-  const _dripTokenAddress = event.params.dripToken
-  const _isReferral = event.params.isReferral
+  const _comptrollerAddress:Address = event.address
+  const _sourceAddress:Address = event.params.source
+  const _measureTokenAddress:Address = event.params.measure
+  const _dripTokenAddress:Address = event.params.dripToken
+  const _isReferral:boolean = event.params.isReferral
 
-  const _volumeDrip = loadOrCreateVolumeDrip(
+  const _volumeDrip:VolumeDrip = loadOrCreateVolumeDrip(
     _comptrollerAddress,
     _sourceAddress,
     _measureTokenAddress,
@@ -211,13 +219,13 @@ export function handleVolumeDripActivated(event: VolumeDripActivated): void {
 }
 
 export function handleVolumeDripDeactivated(event: VolumeDripDeactivated): void {
-  const _comptrollerAddress = event.address
-  const _sourceAddress = event.params.source
-  const _measureTokenAddress = event.params.measure
-  const _dripTokenAddress = event.params.dripToken
-  const _isReferral = event.params.isReferral
+  const _comptrollerAddress:Address = event.address
+  const _sourceAddress:Address = event.params.source
+  const _measureTokenAddress:Address = event.params.measure
+  const _dripTokenAddress:Address = event.params.dripToken
+  const _isReferral:boolean = event.params.isReferral
 
-  const _volumeDrip = loadOrCreateVolumeDrip(
+  const _volumeDrip:VolumeDrip = loadOrCreateVolumeDrip(
     _comptrollerAddress,
     _sourceAddress,
     _measureTokenAddress,
@@ -230,15 +238,15 @@ export function handleVolumeDripDeactivated(event: VolumeDripDeactivated): void 
 }
 
 export function handleVolumeDripSet(event: VolumeDripSet): void {
-  const _comptrollerAddress = event.address
-  const _sourceAddress = event.params.source
-  const _measureTokenAddress = event.params.measure
-  const _dripTokenAddress = event.params.dripToken
-  const _isReferral = event.params.isReferral
-  const _periodSeconds = event.params.periodSeconds
-  const _dripAmount = event.params.dripAmount
+  const _comptrollerAddress:Address = event.address
+  const _sourceAddress:Address = event.params.source
+  const _measureTokenAddress:Address = event.params.measure
+  const _dripTokenAddress:Address = event.params.dripToken
+  const _isReferral:boolean = event.params.isReferral
+  const _periodSeconds:BigInt = event.params.periodSeconds
+  const _dripAmount:BigInt = event.params.dripAmount
 
-  const _volumeDrip = loadOrCreateVolumeDrip(
+  const _volumeDrip:VolumeDrip = loadOrCreateVolumeDrip(
     _comptrollerAddress,
     _sourceAddress,
     _measureTokenAddress,
@@ -253,23 +261,23 @@ export function handleVolumeDripSet(event: VolumeDripSet): void {
 }
 
 export function handleVolumeDripPeriodStarted(event: VolumeDripPeriodStarted): void {
-  const _comptrollerAddress = event.address
-  const _sourceAddress = event.params.source
-  const _measureTokenAddress = event.params.measure
-  const _dripTokenAddress = event.params.dripToken
-  const _isReferral = event.params.isReferral
-  const _periodIndex = event.params.period
-  const _dripAmount = event.params.dripAmount
-  const _endTime = event.params.endTime
+  const _comptrollerAddress:Address = event.address
+  const _sourceAddress:Address = event.params.source
+  const _measureTokenAddress:Address = event.params.measure
+  const _dripTokenAddress:Address = event.params.dripToken
+  const _isReferral:boolean = event.params.isReferral
+  const _periodIndex:BigInt = event.params.period
+  const _dripAmount:BigInt = event.params.dripAmount
+  const _endTime:BigInt = event.params.endTime
 
-  const _volumeDrip = loadOrCreateVolumeDrip(
+  const _volumeDrip:VolumeDrip = loadOrCreateVolumeDrip(
     _comptrollerAddress,
     _sourceAddress,
     _measureTokenAddress,
     _dripTokenAddress,
     _isReferral
   )
-  const _volumeDripPeriod = loadOrCreateVolumeDripPeriod(
+  const _volumeDripPeriod:VolumeDripPeriod = loadOrCreateVolumeDripPeriod(
     _volumeDrip.id,
     _periodIndex,
   )
@@ -285,22 +293,22 @@ export function handleVolumeDripPeriodStarted(event: VolumeDripPeriodStarted): v
 }
 
 export function handleVolumeDripPeriodEnded(event: VolumeDripPeriodEnded): void {
-  const _comptrollerAddress = event.address
-  const _sourceAddress = event.params.source
-  const _measureTokenAddress = event.params.measure
-  const _dripTokenAddress = event.params.dripToken
-  const _isReferral = event.params.isReferral
-  const _periodIndex = event.params.period
-  const _totalSupply = event.params.totalSupply
+  const _comptrollerAddress:Address = event.address
+  const _sourceAddress:Address = event.params.source
+  const _measureTokenAddress:Address = event.params.measure
+  const _dripTokenAddress:Address = event.params.dripToken
+  const _isReferral:boolean = event.params.isReferral
+  const _periodIndex:BigInt = event.params.period
+  const _totalSupply:BigInt = event.params.totalSupply
 
-  const _volumeDrip = loadOrCreateVolumeDrip(
+  const _volumeDrip:VolumeDrip = loadOrCreateVolumeDrip(
     _comptrollerAddress,
     _sourceAddress,
     _measureTokenAddress,
     _dripTokenAddress,
     _isReferral
   )
-  const _volumeDripPeriod = loadOrCreateVolumeDripPeriod(
+  const _volumeDripPeriod:VolumeDripPeriod = loadOrCreateVolumeDripPeriod(
     _volumeDrip.id,
     _periodIndex,
   )
@@ -310,32 +318,23 @@ export function handleVolumeDripPeriodEnded(event: VolumeDripPeriodEnded): void 
   _volumeDripPeriod.save()
 }
 
-export function handleVolumeDripDeposited(event: VolumeDripDeposited): void {
-
-
-  // NOTE: Event never fired
-  log.warning('TODO: implement handleVolumeDripDeposited!', [])
-
-
-}
-
 export function handleVolumeDripDripped(event: VolumeDripDripped): void {
-  const _comptrollerAddress = event.address
-  const _sourceAddress = event.params.source
-  const _measureTokenAddress = event.params.measure
-  const _dripTokenAddress = event.params.dripToken
-  const _isReferral = event.params.isReferral
-  const _user = event.params.user
-  const _amount = event.params.amount
+  const _comptrollerAddress:Address = event.address
+  const _sourceAddress:Address = event.params.source
+  const _measureTokenAddress:Address = event.params.measure
+  const _dripTokenAddress:Address = event.params.dripToken
+  const _isReferral:boolean = event.params.isReferral
+  const _user:Address = event.params.user
+  const _amount:BigInt = event.params.amount
 
-  const _volumeDrip = loadOrCreateVolumeDrip(
+  const _volumeDrip:VolumeDrip = loadOrCreateVolumeDrip(
     _comptrollerAddress,
     _sourceAddress,
     _measureTokenAddress,
     _dripTokenAddress,
     _isReferral
   )
-  const _volumeDripPlayer = loadOrCreateVolumeDripPlayer(
+  const _volumeDripPlayer:VolumeDripPlayer = loadOrCreateVolumeDripPlayer(
     _volumeDrip.id,
     _user,
   )

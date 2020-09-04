@@ -223,6 +223,29 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  ticketProxyFactory(): Address {
+    let result = super.call(
+      "ticketProxyFactory",
+      "ticketProxyFactory():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_ticketProxyFactory(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "ticketProxyFactory",
+      "ticketProxyFactory():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   trustedForwarder(): Address {
     let result = super.call(
       "trustedForwarder",
@@ -286,6 +309,10 @@ export class ConstructorCall__Inputs {
 
   get _proxyFactory(): Address {
     return this._call.inputValues[5].value.toAddress();
+  }
+
+  get _ticketProxyFactory(): Address {
+    return this._call.inputValues[6].value.toAddress();
   }
 }
 

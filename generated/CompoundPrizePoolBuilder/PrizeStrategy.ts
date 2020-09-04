@@ -10,42 +10,6 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class CreditRateUpdated extends ethereum.Event {
-  get params(): CreditRateUpdated__Params {
-    return new CreditRateUpdated__Params(this);
-  }
-}
-
-export class CreditRateUpdated__Params {
-  _event: CreditRateUpdated;
-
-  constructor(event: CreditRateUpdated) {
-    this._event = event;
-  }
-
-  get creditRateMantissa(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class ExitFeeUpdated extends ethereum.Event {
-  get params(): ExitFeeUpdated__Params {
-    return new ExitFeeUpdated__Params(this);
-  }
-}
-
-export class ExitFeeUpdated__Params {
-  _event: ExitFeeUpdated;
-
-  constructor(event: ExitFeeUpdated) {
-    this._event = event;
-  }
-
-  get exitFeeMantissa(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
 export class OwnershipTransferred extends ethereum.Event {
   get params(): OwnershipTransferred__Params {
     return new OwnershipTransferred__Params(this);
@@ -122,10 +86,6 @@ export class PrizePoolAwarded__Params {
   get prize(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
-
-  get reserveFee(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
 }
 
 export class PrizePoolOpened extends ethereum.Event {
@@ -168,199 +128,9 @@ export class RngServiceUpdated__Params {
   }
 }
 
-export class PrizeStrategy__calculateInstantWithdrawalFeeResult {
-  value0: BigInt;
-  value1: BigInt;
-
-  constructor(value0: BigInt, value1: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
-    return map;
-  }
-}
-
-export class PrizeStrategy__calculateTimelockDurationAndFeeResult {
-  value0: BigInt;
-  value1: BigInt;
-
-  constructor(value0: BigInt, value1: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
-    return map;
-  }
-}
-
 export class PrizeStrategy extends ethereum.SmartContract {
   static bind(address: Address): PrizeStrategy {
     return new PrizeStrategy("PrizeStrategy", address);
-  }
-
-  balanceOfCredit(user: Address): BigInt {
-    let result = super.call(
-      "balanceOfCredit",
-      "balanceOfCredit(address):(uint256)",
-      [ethereum.Value.fromAddress(user)]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_balanceOfCredit(user: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "balanceOfCredit",
-      "balanceOfCredit(address):(uint256)",
-      [ethereum.Value.fromAddress(user)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  beforeWithdrawInstantlyFrom(
-    from: Address,
-    amount: BigInt,
-    controlledToken: Address,
-    param3: Bytes
-  ): BigInt {
-    let result = super.call(
-      "beforeWithdrawInstantlyFrom",
-      "beforeWithdrawInstantlyFrom(address,uint256,address,bytes):(uint256)",
-      [
-        ethereum.Value.fromAddress(from),
-        ethereum.Value.fromUnsignedBigInt(amount),
-        ethereum.Value.fromAddress(controlledToken),
-        ethereum.Value.fromBytes(param3)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_beforeWithdrawInstantlyFrom(
-    from: Address,
-    amount: BigInt,
-    controlledToken: Address,
-    param3: Bytes
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "beforeWithdrawInstantlyFrom",
-      "beforeWithdrawInstantlyFrom(address,uint256,address,bytes):(uint256)",
-      [
-        ethereum.Value.fromAddress(from),
-        ethereum.Value.fromUnsignedBigInt(amount),
-        ethereum.Value.fromAddress(controlledToken),
-        ethereum.Value.fromBytes(param3)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  beforeWithdrawWithTimelockFrom(
-    user: Address,
-    amount: BigInt,
-    controlledToken: Address,
-    param3: Bytes
-  ): BigInt {
-    let result = super.call(
-      "beforeWithdrawWithTimelockFrom",
-      "beforeWithdrawWithTimelockFrom(address,uint256,address,bytes):(uint256)",
-      [
-        ethereum.Value.fromAddress(user),
-        ethereum.Value.fromUnsignedBigInt(amount),
-        ethereum.Value.fromAddress(controlledToken),
-        ethereum.Value.fromBytes(param3)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_beforeWithdrawWithTimelockFrom(
-    user: Address,
-    amount: BigInt,
-    controlledToken: Address,
-    param3: Bytes
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "beforeWithdrawWithTimelockFrom",
-      "beforeWithdrawWithTimelockFrom(address,uint256,address,bytes):(uint256)",
-      [
-        ethereum.Value.fromAddress(user),
-        ethereum.Value.fromUnsignedBigInt(amount),
-        ethereum.Value.fromAddress(controlledToken),
-        ethereum.Value.fromBytes(param3)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  calculateInstantWithdrawalFee(
-    from: Address,
-    amount: BigInt,
-    controlledToken: Address
-  ): PrizeStrategy__calculateInstantWithdrawalFeeResult {
-    let result = super.call(
-      "calculateInstantWithdrawalFee",
-      "calculateInstantWithdrawalFee(address,uint256,address):(uint256,uint256)",
-      [
-        ethereum.Value.fromAddress(from),
-        ethereum.Value.fromUnsignedBigInt(amount),
-        ethereum.Value.fromAddress(controlledToken)
-      ]
-    );
-
-    return new PrizeStrategy__calculateInstantWithdrawalFeeResult(
-      result[0].toBigInt(),
-      result[1].toBigInt()
-    );
-  }
-
-  try_calculateInstantWithdrawalFee(
-    from: Address,
-    amount: BigInt,
-    controlledToken: Address
-  ): ethereum.CallResult<PrizeStrategy__calculateInstantWithdrawalFeeResult> {
-    let result = super.tryCall(
-      "calculateInstantWithdrawalFee",
-      "calculateInstantWithdrawalFee(address,uint256,address):(uint256,uint256)",
-      [
-        ethereum.Value.fromAddress(from),
-        ethereum.Value.fromUnsignedBigInt(amount),
-        ethereum.Value.fromAddress(controlledToken)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new PrizeStrategy__calculateInstantWithdrawalFeeResult(
-        value[0].toBigInt(),
-        value[1].toBigInt()
-      )
-    );
   }
 
   calculateNextPrizePeriodStartTime(currentTime: BigInt): BigInt {
@@ -386,53 +156,6 @@ export class PrizeStrategy extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  calculateTimelockDurationAndFee(
-    from: Address,
-    amount: BigInt,
-    controlledToken: Address
-  ): PrizeStrategy__calculateTimelockDurationAndFeeResult {
-    let result = super.call(
-      "calculateTimelockDurationAndFee",
-      "calculateTimelockDurationAndFee(address,uint256,address):(uint256,uint256)",
-      [
-        ethereum.Value.fromAddress(from),
-        ethereum.Value.fromUnsignedBigInt(amount),
-        ethereum.Value.fromAddress(controlledToken)
-      ]
-    );
-
-    return new PrizeStrategy__calculateTimelockDurationAndFeeResult(
-      result[0].toBigInt(),
-      result[1].toBigInt()
-    );
-  }
-
-  try_calculateTimelockDurationAndFee(
-    from: Address,
-    amount: BigInt,
-    controlledToken: Address
-  ): ethereum.CallResult<PrizeStrategy__calculateTimelockDurationAndFeeResult> {
-    let result = super.tryCall(
-      "calculateTimelockDurationAndFee",
-      "calculateTimelockDurationAndFee(address,uint256,address):(uint256,uint256)",
-      [
-        ethereum.Value.fromAddress(from),
-        ethereum.Value.fromUnsignedBigInt(amount),
-        ethereum.Value.fromAddress(controlledToken)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new PrizeStrategy__calculateTimelockDurationAndFeeResult(
-        value[0].toBigInt(),
-        value[1].toBigInt()
-      )
-    );
   }
 
   canCompleteAward(): boolean {
@@ -473,63 +196,6 @@ export class PrizeStrategy extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  chanceOf(user: Address): BigInt {
-    let result = super.call("chanceOf", "chanceOf(address):(uint256)", [
-      ethereum.Value.fromAddress(user)
-    ]);
-
-    return result[0].toBigInt();
-  }
-
-  try_chanceOf(user: Address): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("chanceOf", "chanceOf(address):(uint256)", [
-      ethereum.Value.fromAddress(user)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  comptroller(): Address {
-    let result = super.call("comptroller", "comptroller():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_comptroller(): ethereum.CallResult<Address> {
-    let result = super.tryCall("comptroller", "comptroller():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  creditRateMantissa(): BigInt {
-    let result = super.call(
-      "creditRateMantissa",
-      "creditRateMantissa():(uint256)",
-      []
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_creditRateMantissa(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "creditRateMantissa",
-      "creditRateMantissa():(uint256)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   currentPrize(): BigInt {
     let result = super.call("currentPrize", "currentPrize():(uint256)", []);
 
@@ -538,57 +204,6 @@ export class PrizeStrategy extends ethereum.SmartContract {
 
   try_currentPrize(): ethereum.CallResult<BigInt> {
     let result = super.tryCall("currentPrize", "currentPrize():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  draw(randomNumber: BigInt): Address {
-    let result = super.call("draw", "draw(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(randomNumber)
-    ]);
-
-    return result[0].toAddress();
-  }
-
-  try_draw(randomNumber: BigInt): ethereum.CallResult<Address> {
-    let result = super.tryCall("draw", "draw(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(randomNumber)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  estimateCreditAccrualTime(_principal: BigInt, _interest: BigInt): BigInt {
-    let result = super.call(
-      "estimateCreditAccrualTime",
-      "estimateCreditAccrualTime(uint256,uint256):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(_principal),
-        ethereum.Value.fromUnsignedBigInt(_interest)
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_estimateCreditAccrualTime(
-    _principal: BigInt,
-    _interest: BigInt
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "estimateCreditAccrualTime",
-      "estimateCreditAccrualTime(uint256,uint256):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(_principal),
-        ethereum.Value.fromUnsignedBigInt(_interest)
-      ]
-    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -705,29 +320,6 @@ export class PrizeStrategy extends ethereum.SmartContract {
       "estimateRemainingPrizeWithBlockTime",
       "estimateRemainingPrizeWithBlockTime(uint256):(uint256)",
       [ethereum.Value.fromUnsignedBigInt(secondsPerBlockMantissa)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  exitFeeMantissa(): BigInt {
-    let result = super.call(
-      "exitFeeMantissa",
-      "exitFeeMantissa():(uint256)",
-      []
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_exitFeeMantissa(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "exitFeeMantissa",
-      "exitFeeMantissa():(uint256)",
-      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1072,36 +664,6 @@ export class PrizeStrategy extends ethereum.SmartContract {
   }
 }
 
-export class AccrueTicketCreditCall extends ethereum.Call {
-  get inputs(): AccrueTicketCreditCall__Inputs {
-    return new AccrueTicketCreditCall__Inputs(this);
-  }
-
-  get outputs(): AccrueTicketCreditCall__Outputs {
-    return new AccrueTicketCreditCall__Outputs(this);
-  }
-}
-
-export class AccrueTicketCreditCall__Inputs {
-  _call: AccrueTicketCreditCall;
-
-  constructor(call: AccrueTicketCreditCall) {
-    this._call = call;
-  }
-
-  get user(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class AccrueTicketCreditCall__Outputs {
-  _call: AccrueTicketCreditCall;
-
-  constructor(call: AccrueTicketCreditCall) {
-    this._call = call;
-  }
-}
-
 export class AddExternalErc20AwardCall extends ethereum.Call {
   get inputs(): AddExternalErc20AwardCall__Inputs {
     return new AddExternalErc20AwardCall__Inputs(this);
@@ -1166,20 +728,20 @@ export class AddExternalErc721AwardCall__Outputs {
   }
 }
 
-export class AfterDepositToCall extends ethereum.Call {
-  get inputs(): AfterDepositToCall__Inputs {
-    return new AfterDepositToCall__Inputs(this);
+export class BeforeTokenMintCall extends ethereum.Call {
+  get inputs(): BeforeTokenMintCall__Inputs {
+    return new BeforeTokenMintCall__Inputs(this);
   }
 
-  get outputs(): AfterDepositToCall__Outputs {
-    return new AfterDepositToCall__Outputs(this);
+  get outputs(): BeforeTokenMintCall__Outputs {
+    return new BeforeTokenMintCall__Outputs(this);
   }
 }
 
-export class AfterDepositToCall__Inputs {
-  _call: AfterDepositToCall;
+export class BeforeTokenMintCall__Inputs {
+  _call: BeforeTokenMintCall;
 
-  constructor(call: AfterDepositToCall) {
+  constructor(call: BeforeTokenMintCall) {
     this._call = call;
   }
 
@@ -1195,230 +757,16 @@ export class AfterDepositToCall__Inputs {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get data(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
-  }
-}
-
-export class AfterDepositToCall__Outputs {
-  _call: AfterDepositToCall;
-
-  constructor(call: AfterDepositToCall) {
-    this._call = call;
-  }
-}
-
-export class AfterSweepTimelockedWithdrawalCall extends ethereum.Call {
-  get inputs(): AfterSweepTimelockedWithdrawalCall__Inputs {
-    return new AfterSweepTimelockedWithdrawalCall__Inputs(this);
-  }
-
-  get outputs(): AfterSweepTimelockedWithdrawalCall__Outputs {
-    return new AfterSweepTimelockedWithdrawalCall__Outputs(this);
-  }
-}
-
-export class AfterSweepTimelockedWithdrawalCall__Inputs {
-  _call: AfterSweepTimelockedWithdrawalCall;
-
-  constructor(call: AfterSweepTimelockedWithdrawalCall) {
-    this._call = call;
-  }
-
-  get operator(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get from(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-}
-
-export class AfterSweepTimelockedWithdrawalCall__Outputs {
-  _call: AfterSweepTimelockedWithdrawalCall;
-
-  constructor(call: AfterSweepTimelockedWithdrawalCall) {
-    this._call = call;
-  }
-}
-
-export class AfterTimelockDepositToCall extends ethereum.Call {
-  get inputs(): AfterTimelockDepositToCall__Inputs {
-    return new AfterTimelockDepositToCall__Inputs(this);
-  }
-
-  get outputs(): AfterTimelockDepositToCall__Outputs {
-    return new AfterTimelockDepositToCall__Outputs(this);
-  }
-}
-
-export class AfterTimelockDepositToCall__Inputs {
-  _call: AfterTimelockDepositToCall;
-
-  constructor(call: AfterTimelockDepositToCall) {
-    this._call = call;
-  }
-
-  get value0(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get to(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get controlledToken(): Address {
+  get referrer(): Address {
     return this._call.inputValues[3].value.toAddress();
   }
-
-  get value4(): Bytes {
-    return this._call.inputValues[4].value.toBytes();
-  }
 }
 
-export class AfterTimelockDepositToCall__Outputs {
-  _call: AfterTimelockDepositToCall;
+export class BeforeTokenMintCall__Outputs {
+  _call: BeforeTokenMintCall;
 
-  constructor(call: AfterTimelockDepositToCall) {
+  constructor(call: BeforeTokenMintCall) {
     this._call = call;
-  }
-}
-
-export class AfterWithdrawInstantlyFromCall extends ethereum.Call {
-  get inputs(): AfterWithdrawInstantlyFromCall__Inputs {
-    return new AfterWithdrawInstantlyFromCall__Inputs(this);
-  }
-
-  get outputs(): AfterWithdrawInstantlyFromCall__Outputs {
-    return new AfterWithdrawInstantlyFromCall__Outputs(this);
-  }
-}
-
-export class AfterWithdrawInstantlyFromCall__Inputs {
-  _call: AfterWithdrawInstantlyFromCall;
-
-  constructor(call: AfterWithdrawInstantlyFromCall) {
-    this._call = call;
-  }
-
-  get value0(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get from(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get controlledToken(): Address {
-    return this._call.inputValues[3].value.toAddress();
-  }
-
-  get value4(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
-  }
-
-  get value5(): BigInt {
-    return this._call.inputValues[5].value.toBigInt();
-  }
-
-  get value6(): Bytes {
-    return this._call.inputValues[6].value.toBytes();
-  }
-}
-
-export class AfterWithdrawInstantlyFromCall__Outputs {
-  _call: AfterWithdrawInstantlyFromCall;
-
-  constructor(call: AfterWithdrawInstantlyFromCall) {
-    this._call = call;
-  }
-}
-
-export class AfterWithdrawWithTimelockFromCall extends ethereum.Call {
-  get inputs(): AfterWithdrawWithTimelockFromCall__Inputs {
-    return new AfterWithdrawWithTimelockFromCall__Inputs(this);
-  }
-
-  get outputs(): AfterWithdrawWithTimelockFromCall__Outputs {
-    return new AfterWithdrawWithTimelockFromCall__Outputs(this);
-  }
-}
-
-export class AfterWithdrawWithTimelockFromCall__Inputs {
-  _call: AfterWithdrawWithTimelockFromCall;
-
-  constructor(call: AfterWithdrawWithTimelockFromCall) {
-    this._call = call;
-  }
-
-  get from(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get controlledToken(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get value3(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
-  }
-}
-
-export class AfterWithdrawWithTimelockFromCall__Outputs {
-  _call: AfterWithdrawWithTimelockFromCall;
-
-  constructor(call: AfterWithdrawWithTimelockFromCall) {
-    this._call = call;
-  }
-}
-
-export class BalanceOfCreditCall extends ethereum.Call {
-  get inputs(): BalanceOfCreditCall__Inputs {
-    return new BalanceOfCreditCall__Inputs(this);
-  }
-
-  get outputs(): BalanceOfCreditCall__Outputs {
-    return new BalanceOfCreditCall__Outputs(this);
-  }
-}
-
-export class BalanceOfCreditCall__Inputs {
-  _call: BalanceOfCreditCall;
-
-  constructor(call: BalanceOfCreditCall) {
-    this._call = call;
-  }
-
-  get user(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class BalanceOfCreditCall__Outputs {
-  _call: BalanceOfCreditCall;
-
-  constructor(call: BalanceOfCreditCall) {
-    this._call = call;
-  }
-
-  get creditBalance(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
   }
 }
 
@@ -1461,190 +809,6 @@ export class BeforeTokenTransferCall__Outputs {
 
   constructor(call: BeforeTokenTransferCall) {
     this._call = call;
-  }
-}
-
-export class BeforeWithdrawInstantlyFromCall extends ethereum.Call {
-  get inputs(): BeforeWithdrawInstantlyFromCall__Inputs {
-    return new BeforeWithdrawInstantlyFromCall__Inputs(this);
-  }
-
-  get outputs(): BeforeWithdrawInstantlyFromCall__Outputs {
-    return new BeforeWithdrawInstantlyFromCall__Outputs(this);
-  }
-}
-
-export class BeforeWithdrawInstantlyFromCall__Inputs {
-  _call: BeforeWithdrawInstantlyFromCall;
-
-  constructor(call: BeforeWithdrawInstantlyFromCall) {
-    this._call = call;
-  }
-
-  get from(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get controlledToken(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get value3(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
-  }
-}
-
-export class BeforeWithdrawInstantlyFromCall__Outputs {
-  _call: BeforeWithdrawInstantlyFromCall;
-
-  constructor(call: BeforeWithdrawInstantlyFromCall) {
-    this._call = call;
-  }
-
-  get withdrawalFee(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
-export class BeforeWithdrawWithTimelockFromCall extends ethereum.Call {
-  get inputs(): BeforeWithdrawWithTimelockFromCall__Inputs {
-    return new BeforeWithdrawWithTimelockFromCall__Inputs(this);
-  }
-
-  get outputs(): BeforeWithdrawWithTimelockFromCall__Outputs {
-    return new BeforeWithdrawWithTimelockFromCall__Outputs(this);
-  }
-}
-
-export class BeforeWithdrawWithTimelockFromCall__Inputs {
-  _call: BeforeWithdrawWithTimelockFromCall;
-
-  constructor(call: BeforeWithdrawWithTimelockFromCall) {
-    this._call = call;
-  }
-
-  get user(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get controlledToken(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get value3(): Bytes {
-    return this._call.inputValues[3].value.toBytes();
-  }
-}
-
-export class BeforeWithdrawWithTimelockFromCall__Outputs {
-  _call: BeforeWithdrawWithTimelockFromCall;
-
-  constructor(call: BeforeWithdrawWithTimelockFromCall) {
-    this._call = call;
-  }
-
-  get timestamp(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
-export class CalculateInstantWithdrawalFeeCall extends ethereum.Call {
-  get inputs(): CalculateInstantWithdrawalFeeCall__Inputs {
-    return new CalculateInstantWithdrawalFeeCall__Inputs(this);
-  }
-
-  get outputs(): CalculateInstantWithdrawalFeeCall__Outputs {
-    return new CalculateInstantWithdrawalFeeCall__Outputs(this);
-  }
-}
-
-export class CalculateInstantWithdrawalFeeCall__Inputs {
-  _call: CalculateInstantWithdrawalFeeCall;
-
-  constructor(call: CalculateInstantWithdrawalFeeCall) {
-    this._call = call;
-  }
-
-  get from(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get controlledToken(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-}
-
-export class CalculateInstantWithdrawalFeeCall__Outputs {
-  _call: CalculateInstantWithdrawalFeeCall;
-
-  constructor(call: CalculateInstantWithdrawalFeeCall) {
-    this._call = call;
-  }
-
-  get remainingFee(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-
-  get burnedCredit(): BigInt {
-    return this._call.outputValues[1].value.toBigInt();
-  }
-}
-
-export class CalculateTimelockDurationAndFeeCall extends ethereum.Call {
-  get inputs(): CalculateTimelockDurationAndFeeCall__Inputs {
-    return new CalculateTimelockDurationAndFeeCall__Inputs(this);
-  }
-
-  get outputs(): CalculateTimelockDurationAndFeeCall__Outputs {
-    return new CalculateTimelockDurationAndFeeCall__Outputs(this);
-  }
-}
-
-export class CalculateTimelockDurationAndFeeCall__Inputs {
-  _call: CalculateTimelockDurationAndFeeCall;
-
-  constructor(call: CalculateTimelockDurationAndFeeCall) {
-    this._call = call;
-  }
-
-  get from(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get controlledToken(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-}
-
-export class CalculateTimelockDurationAndFeeCall__Outputs {
-  _call: CalculateTimelockDurationAndFeeCall;
-
-  constructor(call: CalculateTimelockDurationAndFeeCall) {
-    this._call = call;
-  }
-
-  get durationSeconds(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-
-  get burnedCredit(): BigInt {
-    return this._call.outputValues[1].value.toBigInt();
   }
 }
 
@@ -1789,36 +953,32 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _comptroller(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
   get _prizePeriodStart(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
+    return this._call.inputValues[1].value.toBigInt();
   }
 
   get _prizePeriodSeconds(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
+    return this._call.inputValues[2].value.toBigInt();
   }
 
   get _prizePool(): Address {
-    return this._call.inputValues[4].value.toAddress();
+    return this._call.inputValues[3].value.toAddress();
   }
 
   get _ticket(): Address {
-    return this._call.inputValues[5].value.toAddress();
+    return this._call.inputValues[4].value.toAddress();
   }
 
   get _sponsorship(): Address {
-    return this._call.inputValues[6].value.toAddress();
+    return this._call.inputValues[5].value.toAddress();
   }
 
   get _rng(): Address {
-    return this._call.inputValues[7].value.toAddress();
+    return this._call.inputValues[6].value.toAddress();
   }
 
   get _externalErc20s(): Array<Address> {
-    return this._call.inputValues[8].value.toAddressArray();
+    return this._call.inputValues[7].value.toAddressArray();
   }
 }
 
@@ -1852,66 +1012,6 @@ export class RenounceOwnershipCall__Outputs {
   _call: RenounceOwnershipCall;
 
   constructor(call: RenounceOwnershipCall) {
-    this._call = call;
-  }
-}
-
-export class SetCreditRateMantissaCall extends ethereum.Call {
-  get inputs(): SetCreditRateMantissaCall__Inputs {
-    return new SetCreditRateMantissaCall__Inputs(this);
-  }
-
-  get outputs(): SetCreditRateMantissaCall__Outputs {
-    return new SetCreditRateMantissaCall__Outputs(this);
-  }
-}
-
-export class SetCreditRateMantissaCall__Inputs {
-  _call: SetCreditRateMantissaCall;
-
-  constructor(call: SetCreditRateMantissaCall) {
-    this._call = call;
-  }
-
-  get _creditRateMantissa(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class SetCreditRateMantissaCall__Outputs {
-  _call: SetCreditRateMantissaCall;
-
-  constructor(call: SetCreditRateMantissaCall) {
-    this._call = call;
-  }
-}
-
-export class SetExitFeeMantissaCall extends ethereum.Call {
-  get inputs(): SetExitFeeMantissaCall__Inputs {
-    return new SetExitFeeMantissaCall__Inputs(this);
-  }
-
-  get outputs(): SetExitFeeMantissaCall__Outputs {
-    return new SetExitFeeMantissaCall__Outputs(this);
-  }
-}
-
-export class SetExitFeeMantissaCall__Inputs {
-  _call: SetExitFeeMantissaCall;
-
-  constructor(call: SetExitFeeMantissaCall) {
-    this._call = call;
-  }
-
-  get _exitFeeMantissa(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class SetExitFeeMantissaCall__Outputs {
-  _call: SetExitFeeMantissaCall;
-
-  constructor(call: SetExitFeeMantissaCall) {
     this._call = call;
   }
 }

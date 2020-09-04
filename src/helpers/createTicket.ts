@@ -13,7 +13,7 @@ export function createTicket(
   TicketTemplate.create(ticketAddress)
 
   const _ticket = new Ticket(ticketAddress.toHex())
-  _ticket.prizeStrategy = prizeStrategy.toHex()
+  _ticket.prizeStrategy = prizeStrategy
 
   const boundTicket = ControlledTokenContract.bind(ticketAddress)
   _ticket.name = boundTicket.name()
