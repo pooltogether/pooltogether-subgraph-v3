@@ -95,7 +95,7 @@ export class BalanceDripDripped__Params {
     return this._event.parameters[3].value.toAddress();
   }
 
-  get userExchangeRate(): BigInt {
+  get amount(): BigInt {
     return this._event.parameters[4].value.toBigInt();
   }
 }
@@ -291,52 +291,6 @@ export class VolumeDripDeactivated__Params {
 
   get isReferral(): boolean {
     return this._event.parameters[3].value.toBoolean();
-  }
-}
-
-export class VolumeDripDeposited extends ethereum.Event {
-  get params(): VolumeDripDeposited__Params {
-    return new VolumeDripDeposited__Params(this);
-  }
-}
-
-export class VolumeDripDeposited__Params {
-  _event: VolumeDripDeposited;
-
-  constructor(event: VolumeDripDeposited) {
-    this._event = event;
-  }
-
-  get source(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get measure(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get dripToken(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get isReferral(): boolean {
-    return this._event.parameters[3].value.toBoolean();
-  }
-
-  get user(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-
-  get balance(): BigInt {
-    return this._event.parameters[6].value.toBigInt();
-  }
-
-  get accrued(): BigInt {
-    return this._event.parameters[7].value.toBigInt();
   }
 }
 
@@ -985,20 +939,20 @@ export class ActivateVolumeDripCall__Outputs {
   }
 }
 
-export class AfterDepositToCall extends ethereum.Call {
-  get inputs(): AfterDepositToCall__Inputs {
-    return new AfterDepositToCall__Inputs(this);
+export class BeforeTokenMintCall extends ethereum.Call {
+  get inputs(): BeforeTokenMintCall__Inputs {
+    return new BeforeTokenMintCall__Inputs(this);
   }
 
-  get outputs(): AfterDepositToCall__Outputs {
-    return new AfterDepositToCall__Outputs(this);
+  get outputs(): BeforeTokenMintCall__Outputs {
+    return new BeforeTokenMintCall__Outputs(this);
   }
 }
 
-export class AfterDepositToCall__Inputs {
-  _call: AfterDepositToCall;
+export class BeforeTokenMintCall__Inputs {
+  _call: BeforeTokenMintCall;
 
-  constructor(call: AfterDepositToCall) {
+  constructor(call: BeforeTokenMintCall) {
     this._call = call;
   }
 
@@ -1010,45 +964,37 @@ export class AfterDepositToCall__Inputs {
     return this._call.inputValues[1].value.toBigInt();
   }
 
-  get balance(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get totalSupply(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
   get measure(): Address {
-    return this._call.inputValues[4].value.toAddress();
+    return this._call.inputValues[2].value.toAddress();
   }
 
   get referrer(): Address {
-    return this._call.inputValues[5].value.toAddress();
+    return this._call.inputValues[3].value.toAddress();
   }
 }
 
-export class AfterDepositToCall__Outputs {
-  _call: AfterDepositToCall;
+export class BeforeTokenMintCall__Outputs {
+  _call: BeforeTokenMintCall;
 
-  constructor(call: AfterDepositToCall) {
+  constructor(call: BeforeTokenMintCall) {
     this._call = call;
   }
 }
 
-export class AfterWithdrawFromCall extends ethereum.Call {
-  get inputs(): AfterWithdrawFromCall__Inputs {
-    return new AfterWithdrawFromCall__Inputs(this);
+export class BeforeTokenTransferCall extends ethereum.Call {
+  get inputs(): BeforeTokenTransferCall__Inputs {
+    return new BeforeTokenTransferCall__Inputs(this);
   }
 
-  get outputs(): AfterWithdrawFromCall__Outputs {
-    return new AfterWithdrawFromCall__Outputs(this);
+  get outputs(): BeforeTokenTransferCall__Outputs {
+    return new BeforeTokenTransferCall__Outputs(this);
   }
 }
 
-export class AfterWithdrawFromCall__Inputs {
-  _call: AfterWithdrawFromCall;
+export class BeforeTokenTransferCall__Inputs {
+  _call: BeforeTokenTransferCall;
 
-  constructor(call: AfterWithdrawFromCall) {
+  constructor(call: BeforeTokenTransferCall) {
     this._call = call;
   }
 
@@ -1056,27 +1002,23 @@ export class AfterWithdrawFromCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get amount(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+  get to(): Address {
+    return this._call.inputValues[1].value.toAddress();
   }
 
-  get balance(): BigInt {
+  get amount(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
 
-  get totalSupply(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
   get measure(): Address {
-    return this._call.inputValues[4].value.toAddress();
+    return this._call.inputValues[3].value.toAddress();
   }
 }
 
-export class AfterWithdrawFromCall__Outputs {
-  _call: AfterWithdrawFromCall;
+export class BeforeTokenTransferCall__Outputs {
+  _call: BeforeTokenTransferCall;
 
-  constructor(call: AfterWithdrawFromCall) {
+  constructor(call: BeforeTokenTransferCall) {
     this._call = call;
   }
 }

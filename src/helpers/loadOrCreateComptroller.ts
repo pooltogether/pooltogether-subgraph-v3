@@ -26,6 +26,7 @@ export function loadOrCreateComptroller(
     _comptroller = new Comptroller(id)
     const boundComptroller = ComptrollerContract.bind(comptrollerAddress)
 
+    _comptroller.owner = boundComptroller.owner()
     _comptroller.reserveRateMantissa = boundComptroller.reserveRateMantissa()
     _comptroller.save()
   }

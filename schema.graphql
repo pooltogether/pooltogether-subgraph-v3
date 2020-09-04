@@ -8,51 +8,49 @@ enum YieldServiceTokenType {
   cToken
 }
 
+type CreditRate @entity {
+  id: ID!
+  prizePool: PrizePool!
+
+  creditLimitMantissa: BigInt!
+  creditRateMantissa: BigInt!
+}
+
+# type CreditBalance @entity {
+#   id: ID!
+#   prizePool: PrizePool!
+
+#   balance: BigInt
+#   timestamp: BigInt
+#   initialized: Boolean
+# }
+
+type CompoundPrizePoolBuilder @entity {
+  id: ID!
+
+  comptroller: Comptroller!
+  trustedForwarder: Bytes!
+}
 
 type Comptroller @entity {
   id: ID!
+  owner: Bytes!
   reserveRateMantissa: BigInt!
 
   players: [DripTokenPlayer!]! @derivedFrom(field: "comptroller")
   prizePools: [PrizePool!]! @derivedFrom(field: "comptroller")
 }
 
-type PrizeStrategy @entity {
-  id: ID!
-
-  creator: Bytes!
-  compoundPrizePoolBuilder: CompoundPrizePoolBuilder!
-
-  prizePool: PrizePool!
-  comptroller: Comptroller!
-  ticket: Bytes!
-  rng: Bytes!
-  sponsorship: Bytes!
-  # trustedForwarder: Bytes!
-
-  currentPrizeId: BigInt!
-  currentState: PrizePoolState!
-
-  prizePeriodSeconds: BigInt!
-  prizePeriodStartedAt: BigInt!
-
-  exitFeeMantissa: BigInt!
-  creditRateMantissa: BigInt!
-
-  prizesCount: BigInt!
-  prizes: [Prize!]! @derivedFrom(field: "prizeStrategy")
-}
-
 type PrizePool @entity {
   id: ID!
 
+  owner: Bytes!
   comptroller: Comptroller!
-  prizeStrategy: PrizeStrategy!
+  prizeStrategy: Bytes!
+  trustedForwarder: Bytes
+  deactivated: Boolean!
 
-  # yieldToken: Bytes!
-  # yieldDecimals: BigInt!
-  # yieldName: String!
-  # yieldSymbol: String!
+  reserveFeeControlledToken: Bytes!
 
   underlyingCollateralToken: Bytes!
   underlyingCollateralDecimals: BigInt!
@@ -70,6 +68,14 @@ type PrizePool @entity {
   cumulativePrizeReserveFee: BigInt!
   cumulativePrizeNet: BigInt!
 
+  currentPrizeId: BigInt!
+  currentState: PrizePoolState!
+
+  prizesCount: BigInt!
+  prizes: [Prize!]! @derivedFrom(field: "prizePool")
+
+  tokenCreditRates: [CreditRate!]! @derivedFrom(field: "prizePool")
+
   # sponsorships: [Sponsor!]! @derivedFrom(field: "prizePool")
   players: [Player!]! @derivedFrom(field: "prizePool")
 
@@ -85,15 +91,15 @@ type Prize @entity {
   awardStartOperator: Bytes
   awardedOperator: Bytes
 
-  prizeStrategy: PrizeStrategy!
+  prizePool: PrizePool!
 
-  prizePeriodStartedTimestamp: BigInt!
+  prizePeriodStartedTimestamp: BigInt
   lockBlock: BigInt
 
   awardedBlock: BigInt
   awardedTimestamp: BigInt
 
-  rngRequestId: BigInt!
+  rngRequestId: BigInt
   randomNumber: BigInt
 
   gross: BigInt
@@ -105,17 +111,25 @@ type Prize @entity {
   winners: [Bytes!]
 }
 
-type CompoundPrizePoolBuilder @entity {
+type SingleRandomWinnerPrizeStrategy @entity {
   id: ID!
 
-  comptroller: Comptroller!
-  trustedForwarder: Bytes!
+  owner: Bytes!
+  compoundPrizePoolBuilder: CompoundPrizePoolBuilder!
+
+  prizePool: PrizePool!
+  ticket: Bytes!
+  rng: Bytes!
+  sponsorship: Bytes!
+
+  prizePeriodSeconds: BigInt!
+  prizePeriodStartedAt: BigInt!
 }
 
 type Ticket @entity {
   id: ID!
 
-  prizeStrategy: PrizeStrategy!
+  prizeStrategy: Bytes!
 
   name: String!
   symbol: String!
@@ -125,7 +139,7 @@ type Ticket @entity {
 type Sponsorship @entity {
   id: ID!
 
-  prizeStrategy: PrizeStrategy!
+  prizeStrategy: Bytes!
 
   name: String!
   symbol: String!
@@ -157,8 +171,6 @@ type BalanceDripPlayer @entity {
   id: ID!
   balanceDrip: BalanceDrip!
   address: Bytes!
-
-  lastExchangeRateMantissa: BigInt!
 }
 
 type BalanceDrip @entity {

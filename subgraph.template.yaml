@@ -54,6 +54,8 @@ dataSources:
       eventHandlers:
         - event: ReserveRateMantissaSet(uint256)
           handler: handleReserveRateMantissaSet
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
         - event: DripTokenDripped(indexed address,indexed address,uint256)
           handler: handleDripTokenDripped
         - event: DripTokenClaimed(indexed address,indexed address,indexed address,uint256)
@@ -76,8 +78,6 @@ dataSources:
           handler: handleVolumeDripPeriodStarted
         - event: VolumeDripPeriodEnded(indexed address,indexed address,indexed address,bool,uint32,uint256)
           handler: handleVolumeDripPeriodEnded
-        - event: VolumeDripDeposited(indexed address,indexed address,indexed address,bool,address,uint256,uint256,uint256)
-          handler: handleVolumeDripDeposited
         - event: VolumeDripDripped(indexed address,indexed address,indexed address,bool,address,uint256)
           handler: handleVolumeDripDripped
 templates:
@@ -92,7 +92,7 @@ templates:
       language: wasm/assemblyscript
       file: ./src/mappingForPrizeStrategy.ts
       entities:
-        - PrizeStrategy
+        - SingleRandomWinnerPrizeStrategy
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
@@ -105,14 +105,12 @@ templates:
           handler: handlePrizePoolOpened
         - event: PrizePoolAwardStarted(indexed address,indexed address,indexed uint32,uint32)
           handler: handlePrizePoolAwardStarted
-        - event: PrizePoolAwarded(indexed address,uint256,uint256,uint256)
+        - event: PrizePoolAwarded(indexed address,uint256,uint256)
           handler: handlePrizePoolAwarded
-        - event: ExitFeeUpdated(uint256)
-          handler: handleExitFeeUpdated
-        - event: CreditRateUpdated(uint256)
-          handler: handleCreditRateUpdated
         - event: RngServiceUpdated(address)
           handler: handleRngServiceUpdated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
   - name: PrizePool
     kind: ethereum/contract
     network: {{network}}
@@ -131,24 +129,34 @@ templates:
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
       eventHandlers:
+        - event: Initialized(address,address,uint256,uint256)
+          handler: handleInitialized
+        - event: ControlledTokenAdded(indexed address)
+          handler: handleControlledTokenAdded
+        - event: ReserveFeeControlledTokenSet(indexed address)
+          handler: handleReserveFeeControlledTokenSet
         - event: Deposited(indexed address,indexed address,indexed address,uint256)
           handler: handleDeposited
         - event: TimelockDeposited(indexed address,indexed address,indexed address,uint256)
           handler: handleTimelockDeposited
-        - event: Awarded(indexed address,indexed address,uint256)
+        - event: Awarded(indexed address,indexed address,uint256,uint256)
           handler: handleAwarded
         - event: AwardedExternalERC20(indexed address,indexed address,uint256)
           handler: handleAwardedExternalERC20
         - event: AwardedExternalERC721(indexed address,indexed address,uint256[])
           handler: handleAwardedExternalERC721
-        - event: InstantWithdrawal(indexed address,indexed address,indexed address,uint256,uint256,uint256)
+        - event: InstantWithdrawal(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleInstantWithdrawal
         - event: TimelockedWithdrawal(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTimelockedWithdrawal
         - event: TimelockedWithdrawalSwept(indexed address,indexed address,uint256)
           handler: handleTimelockedWithdrawalSwept
-        - event: PrizeStrategyDetached()
-          handler: handlePrizeStrategyDetached
+        - event: CreditRateSet(address,uint128,uint128)
+          handler: handleCreditRateSet
+        - event: PrizeStrategySet(indexed address)
+          handler: handlePrizeStrategySet
+        - event: EmergencyShutdown()
+          handler: handleEmergencyShutdown
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
   - name: Sponsorship

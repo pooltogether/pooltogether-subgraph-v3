@@ -1,6 +1,7 @@
 {
   comptrollers {
     id
+    owner
     reserveRateMantissa
 
     players {
@@ -20,10 +21,9 @@
     trustedForwarder
   }
 
-  prizeStrategies {
+  singleRandomWinnerPrizeStrategies {
     id
-
-    creator
+    owner
 
     compoundPrizePoolBuilder {
       id
@@ -33,38 +33,25 @@
       id
     }
 
-    comptroller {
-      id
-    }
     ticket
     rng
     sponsorship
 
-    currentPrizeId
-    currentState
-
     prizePeriodSeconds
     prizePeriodStartedAt
-
-    exitFeeMantissa
-    creditRateMantissa
-
-    prizes {
-      id
-
-      net
-      gross
-      reserveFee
-    }
   }
 
   prizePools {
     id
-
-    # trustedForwarder
-    prizeStrategy {
+    owner
+    comptroller {
       id
     }
+    trustedForwarder
+    prizeStrategy
+    deactivated
+
+    reserveFeeControlledToken
 
     underlyingCollateralToken
     underlyingCollateralDecimals
@@ -75,12 +62,27 @@
     maxTimelockDuration
     timelockTotalSupply
 
+    currentPrizeId
+    currentState
+
     playerCount
     totalSupply
 
     cumulativePrizeGross
     cumulativePrizeReserveFee
     cumulativePrizeNet
+
+    tokenCreditRates {
+      id
+    }
+
+    prizes {
+      id
+
+      net
+      gross
+      reserveFee
+    }
 
     players {
       id
@@ -103,7 +105,7 @@
   prizes {
     id
 
-    prizeStrategy {
+    prizePool {
       id
     }
 
@@ -149,9 +151,7 @@
     symbol
     decimals
 
-    prizeStrategy {
-      id
-    }
+    prizeStrategy
   }
 
   sponsorships {
@@ -161,9 +161,7 @@
     symbol
     decimals
 
-    prizeStrategy {
-      id
-    }
+    prizeStrategy
   }
 
   balanceDrips {
@@ -191,7 +189,6 @@
       id
     }
     address
-    lastExchangeRateMantissa
   }
 
   volumeDrips {
@@ -249,5 +246,14 @@
     dripToken
     address
     balance
+  }
+
+  creditRates {
+    id
+    prizePool {
+      id
+    }
+    creditLimitMantissa
+    creditRateMantissa
   }
 }

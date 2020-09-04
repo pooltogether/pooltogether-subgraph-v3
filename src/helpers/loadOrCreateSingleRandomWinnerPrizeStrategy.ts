@@ -1,7 +1,7 @@
 import { Address, Bytes, BigInt, log } from "@graphprotocol/graph-ts"
 import {
   PrizePool,
-  PrizeStrategy,
+  SingleRandomWinnerPrizeStrategy,
   Prize,
 } from '../../generated/schema'
 import {
@@ -21,71 +21,35 @@ import {
   PrizePool as PrizePoolTemplate
 } from '../../generated/templates'
 
-import { prizeId } from './idTemplates'
-import { createSponsorship } from '../helpers/createSponsorship'
-import { createTicket } from '../helpers/createTicket'
+
+import { createSponsorship } from './createSponsorship'
+import { createTicket } from './createTicket'
 
 const ZERO = BigInt.fromI32(0)
 const ONE = BigInt.fromI32(1)
 
-export function loadOrCreatePrizeStrategy(
+export function loadOrCreateSingleRandomWinnerPrizeStrategy(
   blockNumber: BigInt,
   builder: Address,
   creator: Address,
   prizePool: Address,
   prizeStrategy: Address,
-): PrizeStrategy {
-  let _prizeStrategy = PrizeStrategy.load(prizeStrategy.toHex())
+): SingleRandomWinnerPrizeStrategy {
+  let _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(prizeStrategy.toHex())
 
   if (!_prizeStrategy) {
-    _prizeStrategy = new PrizeStrategy(prizeStrategy.toHex())
+    _prizeStrategy = new SingleRandomWinnerPrizeStrategy(prizeStrategy.toHex())
     const boundPrizeStrategy = PrizeStrategyContract.bind(prizeStrategy)
 
-
-    // const boundYieldToken = ERC20Contract.bind(boundPrizeStrategy.cToken())
-    // _prizeStrategy.yieldToken = boundPrizeStrategy.cToken()
-    // _prizeStrategy.yieldDecimals = BigInt.fromI32(boundYieldToken.decimals())
-    // _prizeStrategy.yieldName = boundYieldToken.name()
-    // _prizeStrategy.yieldSymbol = boundYieldToken.symbol()
-
-
-
     _prizeStrategy.compoundPrizePoolBuilder = builder.toHex()
-    _prizeStrategy.creator = creator
-
-    // _prizeStrategy.prizePoolModuleManager = moduleManager.toHex()
-
+    _prizeStrategy.owner = creator
     _prizeStrategy.prizePool = prizePool.toHex()
-    _prizeStrategy.comptroller = boundPrizeStrategy.comptroller().toHex()
     _prizeStrategy.ticket = boundPrizeStrategy.ticket()
     _prizeStrategy.rng = boundPrizeStrategy.rng()
     _prizeStrategy.sponsorship = boundPrizeStrategy.sponsorship()
-    // _prizeStrategy.trustedForwarder = boundPrizeStrategy.trustedForwarder()
-
-    _prizeStrategy.currentPrizeId = ONE
-    _prizeStrategy.currentState = 'Opened'
 
     _prizeStrategy.prizePeriodSeconds = boundPrizeStrategy.prizePeriodSeconds()
     _prizeStrategy.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
-
-    _prizeStrategy.exitFeeMantissa = boundPrizeStrategy.exitFeeMantissa()
-    _prizeStrategy.creditRateMantissa = boundPrizeStrategy.creditRateMantissa()
-
-    _prizeStrategy.prizesCount = ZERO
-
-    // const boundYieldService = CompoundYieldServiceContract.bind(yieldServiceAddress)
-    // prizeStrategy.cToken = boundYieldService.token().toHex()
-
-    // prizeStrategy.accountedBalance = boundYieldService.accountedBalance()
-    // prizeStrategy.balance = boundYieldService.balance()
-    // prizeStrategy.unaccountedBalance = boundYieldService.unaccountedBalance()
-
-    // const boundCToken = CTokenInterface.bind(boundYieldService.token())
-    // prizeStrategy.token = boundCToken.underlying().toHex()
-
-    // prizeStrategy.supplyRatePerBlock = boundCToken.supplyRatePerBlock()
-    // prizeStrategy.type = 'Compound' // down the road set this via createWithContext (instead of create())
-    // prizeStrategy.unaccountedBalance = boundYieldService.unaccountedBalance()
 
     _prizeStrategy.save()
 
@@ -94,29 +58,30 @@ export function loadOrCreatePrizeStrategy(
 
     const _pool = new PrizePool(prizePool.toHex())
     const boundPrizePool = PrizePoolContract.bind(prizePool)
-
     const boundToken = ControlledTokenContract.bind(boundPrizePool.token())
+    const boundTicket = ERC20Contract.bind(Address.fromString(_prizeStrategy.ticket.toHex()))
+
+    _pool.prizeStrategy = prizeStrategy
+    _pool.comptroller = boundPrizePool.comptroller().toHex()
+    _pool.owner = creator
+    _pool.deactivated = false
+
+    _pool.reserveFeeControlledToken = boundPrizePool.reserveFeeControlledToken()
+
     _pool.underlyingCollateralToken = boundPrizePool.token()
     _pool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
     _pool.underlyingCollateralName = boundToken.name()
     _pool.underlyingCollateralSymbol = boundToken.symbol()
 
-    _pool.prizeStrategy = prizeStrategy.toHex()
-    _pool.comptroller = boundPrizeStrategy.comptroller().toHex()
-
-    _pool.playerCount = ZERO
-
-    const callResult = boundPrizePool.try_maxExitFeeMantissa()
-    if (callResult.reverted) {
-      log.warning("maxExitFeeMantissa reverted", [])
-    } else {
-      _pool.maxExitFeeMantissa = callResult.value
-    }
-
+    _pool.maxExitFeeMantissa = boundPrizePool.maxExitFeeMantissa()
     _pool.maxTimelockDuration = boundPrizePool.maxTimelockDuration()
     _pool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
 
-    const boundTicket = ERC20Contract.bind(Address.fromString(_prizeStrategy.ticket.toHex()))
+    _pool.currentState = 'Opened'
+    _pool.currentPrizeId = ONE
+    _pool.prizesCount = ZERO
+
+    _pool.playerCount = ZERO
     _pool.totalSupply = boundTicket.totalSupply()
 
     _pool.cumulativePrizeGross = ZERO
@@ -124,6 +89,7 @@ export function loadOrCreatePrizeStrategy(
     _pool.cumulativePrizeNet = ZERO
 
     _pool.save()
+
 
 
     createSponsorship(
@@ -145,5 +111,5 @@ export function loadOrCreatePrizeStrategy(
     PrizePoolTemplate.create(prizePool)
   }
 
-  return _prizeStrategy as PrizeStrategy
+  return _prizeStrategy as SingleRandomWinnerPrizeStrategy
 }

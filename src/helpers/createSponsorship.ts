@@ -13,7 +13,7 @@ export function createSponsorship(
   SponsorshipTemplate.create(sponsorshipAddress)
 
   const _sponsorship = new Sponsorship(sponsorshipAddress.toHex())
-  _sponsorship.prizeStrategy = prizeStrategy.toHex()
+  _sponsorship.prizeStrategy = prizeStrategy
 
   const boundSponsorship = ControlledTokenContract.bind(sponsorshipAddress)
   _sponsorship.name = boundSponsorship.name()

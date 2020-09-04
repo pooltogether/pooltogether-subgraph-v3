@@ -68,11 +68,10 @@ export function loadOrCreateDripTokenPlayer(
 
 
 export function loadOrCreateBalanceDripPlayer(
-  comptroller: Address,
+  balanceDripId: string,
   player: Address,
-  balanceDripId: string
 ): BalanceDripPlayer {
-  const _playerId = balanceDripPlayerId(comptroller.toHex(), player.toHex(), balanceDripId)
+  const _playerId = balanceDripPlayerId(balanceDripId, player.toHex())
   let _player = BalanceDripPlayer.load(_playerId)
 
   if (!_player) {
@@ -81,7 +80,6 @@ export function loadOrCreateBalanceDripPlayer(
     log.warning('BalanceDripPlayer {}', [player.toHex()])
     _player.balanceDrip = balanceDripId
     _player.address = player
-    _player.lastExchangeRateMantissa = BigInt.fromI32(0)
     _player.save()
   }
 
@@ -92,10 +90,7 @@ export function loadOrCreateVolumeDripPlayer(
   volumeDripId: string,
   player: Address,
 ): VolumeDripPlayer {
-  const _playerId = volumeDripPlayerId(
-    volumeDripId,
-    player.toHex(),
-  )
+  const _playerId = volumeDripPlayerId(volumeDripId, player.toHex())
   let _player = VolumeDripPlayer.load(_playerId)
 
   if (!_player) {
