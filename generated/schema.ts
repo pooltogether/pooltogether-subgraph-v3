@@ -844,6 +844,15 @@ export class SingleRandomWinnerPrizeStrategy extends Entity {
   set prizePeriodStartedAt(value: BigInt) {
     this.set("prizePeriodStartedAt", Value.fromBigInt(value));
   }
+
+  get prizePeriodEndAt(): BigInt {
+    let value = this.get("prizePeriodEndAt");
+    return value.toBigInt();
+  }
+
+  set prizePeriodEndAt(value: BigInt) {
+    this.set("prizePeriodEndAt", Value.fromBigInt(value));
+  }
 }
 
 export class Ticket extends Entity {

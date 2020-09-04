@@ -39,6 +39,7 @@
 
     prizePeriodSeconds
     prizePeriodStartedAt
+    prizePeriodEndAt
   }
 
   prizePools {

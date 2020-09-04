@@ -50,6 +50,7 @@ export function loadOrCreateSingleRandomWinnerPrizeStrategy(
 
     _prizeStrategy.prizePeriodSeconds = boundPrizeStrategy.prizePeriodSeconds()
     _prizeStrategy.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
+    _prizeStrategy.prizePeriodEndAt = _prizeStrategy.prizePeriodStartedAt.plus(_prizeStrategy.prizePeriodSeconds)
 
     _prizeStrategy.save()
 

@@ -124,6 +124,7 @@ type SingleRandomWinnerPrizeStrategy @entity {
 
   prizePeriodSeconds: BigInt!
   prizePeriodStartedAt: BigInt!
+  prizePeriodEndAt: BigInt!
 }
 
 type Ticket @entity {
