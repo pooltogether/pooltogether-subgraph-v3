@@ -31,7 +31,7 @@ export function loadOrCreatePrizeStrategy(
   creator: Address,
   prizePool: Address,
   prizeStrategy: Address,
-): PrizeStrategy {
+): PrizeStrategy | null {
   let _prizeStrategy = PrizeStrategy.load(prizeStrategy.toHex())
 
   if (!_prizeStrategy) {
@@ -83,7 +83,6 @@ export function loadOrCreatePrizeStrategy(
     // prizeStrategy.type = 'Compound' // down the road set this via createWithContext (instead of create())
     // prizeStrategy.unaccountedBalance = boundYieldService.unaccountedBalance()
 
-    _prizeStrategy.save()
 
 
 
@@ -91,8 +90,18 @@ export function loadOrCreatePrizeStrategy(
     const _pool = new PrizePool(prizePool.toHex())
     const boundPrizePool = PrizePoolContract.bind(prizePool)
 
-    const boundToken = ERC20Contract.bind(boundPrizePool.token())
-    _pool.underlyingCollateralToken = boundPrizePool.token()
+
+    let token:Address = null
+    const callResultToken = boundPrizePool.try_token()
+    if (callResultToken.reverted) {
+      log.warning("PrizePool.try_token reverted", [])
+      return null
+    } else {
+      token = boundPrizePool.token()
+    }
+
+    const boundToken = ERC20Contract.bind(token)
+    _pool.underlyingCollateralToken = token
     _pool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
     _pool.underlyingCollateralName = boundToken.name()
     _pool.underlyingCollateralSymbol = boundToken.symbol()
@@ -104,6 +113,7 @@ export function loadOrCreatePrizeStrategy(
     const callResult = boundPrizePool.try_maxExitFeeMantissa()
     if (callResult.reverted) {
       log.warning("maxExitFeeMantissa reverted", [])
+      return null
     } else {
       _pool.maxExitFeeMantissa = callResult.value
     }
@@ -119,7 +129,7 @@ export function loadOrCreatePrizeStrategy(
     _pool.cumulativePrizeNet = ZERO
 
     _pool.save()
-
+    _prizeStrategy.save()
 
     createSponsorship(
       prizeStrategy,

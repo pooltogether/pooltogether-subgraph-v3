@@ -23,64 +23,21 @@ import {
   OwnershipTransferred,
 } from '../generated/templates/PrizePool/PrizePool'
 
+import {
+  decrementPlayerCount,
+  incrementPlayerCount,
+  decrementPlayerBalance,
+  incrementPlayerBalance,
+  decrementPlayerTimelockedBalance,
+  incrementPlayerTimelockedBalance,
+  updateTotalTicketSupply
+} from './helpers/prizePoolHelpers'
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 import { prizeId } from './helpers/idTemplates'
 
 const ZERO = BigInt.fromI32(0)
 const ONE = BigInt.fromI32(1)
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
-
-function updateTotalTicketSupply(_prizePool: PrizePool): void {
-  const _prizeStrategy = PrizeStrategy.load(_prizePool.prizeStrategy)
-
-  const ticket = _prizeStrategy.ticket
-
-  // TODO: handle edge cases like if token isn't ticket
-  // event.params.token
-  const boundTicket = ERC20Contract.bind(
-    Address.fromString(ticket.toHexString())
-  )
-  _prizePool.totalSupply = boundTicket.totalSupply()
-
-  _prizePool.save()
-}
-
-function decrementPlayerCount(_prizePool: PrizePool, _player: Player): void {
-  if (_player.balance.equals(ZERO)) {
-    log.warning('in instantWithdrawal if!', [])
-    _prizePool.playerCount = _prizePool.playerCount.minus(ONE)
-
-    _prizePool.save()
-  }
-}
-
-function incrementPlayerCount(_prizePool: PrizePool, playersCachedBalance: BigInt): void {
-  if (playersCachedBalance.equals(ZERO)) {
-    _prizePool.playerCount = _prizePool.playerCount.plus(ONE)
-
-    _prizePool.save()
-  }
-}
-
-function decrementPlayerBalance(_player: Player, amount: BigInt): void {
-  _player.balance = _player.balance.minus(amount)
-  _player.save()
-}
-
-function incrementPlayerBalance(_player: Player, amount: BigInt): void {
-  _player.balance = _player.balance.plus(amount)
-  _player.save()
-}
-
-function decrementPlayerTimelockedBalance(_player: Player, amount: BigInt): void {
-  _player.timelockedBalance = _player.timelockedBalance.minus(amount)
-  _player.save()
-}
-
-function incrementPlayerTimelockedBalance(_player: Player, amount: BigInt): void {
-  _player.timelockedBalance = _player.timelockedBalance.plus(amount)
-  _player.save()
-}
 
 export function handleAwarded(event: Awarded): void {
   const _prizePool = PrizePool.load(event.address.toHex())
@@ -120,19 +77,22 @@ export function handleAwarded(event: Awarded): void {
 }
 
 export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
+  // TODO: implement this
   // This is emitted when external rewards (other tokens, etc)
   // are awarded
-  log.warning('implement handleAwardedExternalERC20!', [])
+  log.warning('implement handleAwardedExternalERC20', [])
 }
 
 export function handleAwardedExternalERC721(event: AwardedExternalERC721): void {
+  // TODO: implement this
   // This is emitted when external rewards (nfts, etc)
   // are awarded
-  log.warning('implement handleAwardedExternalERC721!', [])
+  log.warning('implement handleAwardedExternalERC721', [])
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  log.warning('implement handleOwnershipTransferred!', [])
+  // TODO: implement this
+  // log.warning('implement handleOwnershipTransferred', [])
 }
 
 export function handleDeposited(event: Deposited): void {
@@ -156,8 +116,9 @@ export function handleDeposited(event: Deposited): void {
 
     updateTotalTicketSupply(_prizePool as PrizePool)
 
-    _player.address = event.params.to
-    _player.prizePool = event.address.toHex()
+    // this shouldn't be necessary ... already done when creating!
+    // _player.address = event.params.to
+    // _player.prizePool = event.address.toHex()
 
     incrementPlayerBalance(_player, event.params.amount)
     // check what shares are, if still a thing?
@@ -166,7 +127,6 @@ export function handleDeposited(event: Deposited): void {
     _player.save()
   } else if (token === _prizeStrategy.sponsorship) {
     // TODO: SPONSORSHIP
-
     // _sponsor.save()
   }
 
@@ -181,12 +141,12 @@ export function handleInstantWithdrawal(event: InstantWithdrawal): void {
   )
 
   decrementPlayerBalance(_player, event.params.amount)
+  // what are shares
   // _player.shares = _player.shares.minus(event.params.shares)
 
   updateTotalTicketSupply(_prizePool as PrizePool)
 
   decrementPlayerCount(_prizePool as PrizePool, _player)
-  log.warning('instantWithdrawal _player.balance: {}', [_player.balance.toString()])
 
   _prizePool.save()
   _player.save()

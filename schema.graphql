@@ -61,7 +61,7 @@ type PrizePool @entity {
   cumulativePrizeReserveFee: BigInt!
   cumulativePrizeNet: BigInt!
 
-  # sponsorships: [Sponsor!]! @derivedFrom(field: "prizePool")
+  sponsors: [Sponsor!]! @derivedFrom(field: "prizePool")
   players: [Player!]! @derivedFrom(field: "prizePool")
 }
 
@@ -173,9 +173,11 @@ type Prize @entity {
   winners: [Bytes!]
 }
 
-# type Sponsor @entity {
-#   id: ID! 
-#   address: Bytes!
-#   poolContract: PoolContract!
-#   sponsorshipAndFeeBalance: BigInt!
-# }
+type Sponsor @entity {
+  id: ID! 
+
+  address: Bytes!
+  balance: BigInt!
+
+  prizePool: PrizePool!
+}
