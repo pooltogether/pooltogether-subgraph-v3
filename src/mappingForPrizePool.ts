@@ -16,6 +16,7 @@ import {
   Initialized,
   ControlledTokenAdded,
   ReserveFeeControlledTokenSet,
+  LiquidityCapSet,
   Deposited,
   TimelockDeposited,
   Awarded,
@@ -105,6 +106,12 @@ export function handleControlledTokenAdded(event: ControlledTokenAdded): void {
 export function handleReserveFeeControlledTokenSet(event: ReserveFeeControlledTokenSet): void {
   const _prizePool = PrizePool.load(event.address.toHex())
   _prizePool.reserveFeeControlledToken = event.params.token
+  _prizePool.save()
+}
+
+export function handleLiquidityCapSet(event: LiquidityCapSet): void {
+  const _prizePool = PrizePool.load(event.address.toHex())
+  _prizePool.liquidityCap = event.params.liquidityCap
   _prizePool.save()
 }
 

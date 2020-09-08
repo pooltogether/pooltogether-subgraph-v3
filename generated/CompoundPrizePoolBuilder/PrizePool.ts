@@ -244,6 +244,24 @@ export class InstantWithdrawal__Params {
   }
 }
 
+export class LiquidityCapSet extends ethereum.Event {
+  get params(): LiquidityCapSet__Params {
+    return new LiquidityCapSet__Params(this);
+  }
+}
+
+export class LiquidityCapSet__Params {
+  _event: LiquidityCapSet;
+
+  constructor(event: LiquidityCapSet) {
+    this._event = event;
+  }
+
+  get liquidityCap(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
 export class OwnershipTransferred extends ethereum.Event {
   get params(): OwnershipTransferred__Params {
     return new OwnershipTransferred__Params(this);
@@ -723,6 +741,21 @@ export class PrizePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  liquidityCap(): BigInt {
+    let result = super.call("liquidityCap", "liquidityCap():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_liquidityCap(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("liquidityCap", "liquidityCap():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   maxExitFeeMantissa(): BigInt {
@@ -1516,6 +1549,36 @@ export class SetCreditRateOfCall__Outputs {
   _call: SetCreditRateOfCall;
 
   constructor(call: SetCreditRateOfCall) {
+    this._call = call;
+  }
+}
+
+export class SetLiquidityCapCall extends ethereum.Call {
+  get inputs(): SetLiquidityCapCall__Inputs {
+    return new SetLiquidityCapCall__Inputs(this);
+  }
+
+  get outputs(): SetLiquidityCapCall__Outputs {
+    return new SetLiquidityCapCall__Outputs(this);
+  }
+}
+
+export class SetLiquidityCapCall__Inputs {
+  _call: SetLiquidityCapCall;
+
+  constructor(call: SetLiquidityCapCall) {
+    this._call = call;
+  }
+
+  get _liquidityCap(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class SetLiquidityCapCall__Outputs {
+  _call: SetLiquidityCapCall;
+
+  constructor(call: SetLiquidityCapCall) {
     this._call = call;
   }
 }

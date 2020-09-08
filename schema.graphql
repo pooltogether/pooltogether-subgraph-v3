@@ -60,6 +60,7 @@ type PrizePool @entity {
   maxExitFeeMantissa: BigInt
   maxTimelockDuration: BigInt!
   timelockTotalSupply: BigInt!
+  liquidityCap: BigInt!
 
   playerCount: BigInt!
   totalSupply: BigInt! # move to PrizePool.Ticket relationship?

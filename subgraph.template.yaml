@@ -135,6 +135,8 @@ templates:
           handler: handleControlledTokenAdded
         - event: ReserveFeeControlledTokenSet(indexed address)
           handler: handleReserveFeeControlledTokenSet
+        - event: LiquidityCapSet(uint256)
+          handler: handleLiquidityCapSet
         - event: Deposited(indexed address,indexed address,indexed address,uint256)
           handler: handleDeposited
         - event: TimelockDeposited(indexed address,indexed address,indexed address,uint256)
