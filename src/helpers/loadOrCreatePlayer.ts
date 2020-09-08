@@ -25,8 +25,6 @@ export function loadOrCreatePlayer(
     _player.cumulativeWinnings = ZERO
 
     _player.save()
-  } else {
-    //
   }
 
   return _player as Player

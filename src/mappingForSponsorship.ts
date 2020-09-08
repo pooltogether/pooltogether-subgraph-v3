@@ -15,18 +15,17 @@ import {
 import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
 
 export function handleTransfer(event: Transfer): void {
-  const _ticket = Ticket.load(event.address.toHex())
-  const _prizeStrategy = PrizeStrategy.load(_ticket.prizeStrategy)
-  const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
-
-  log.warning("_prizePool.id: {}", [_prizePool.id])
+  log.warning("handleTransfer:", [])
+  // log.warning("handleTransfer: _prizePool.id: {}", [_prizePool.id])
   log.warning("event.from: {}", [event.params.from.toHex()])
   log.warning("event.to: {}", [event.params.to.toHex()])
   log.warning("event.value: {}", [event.params.value.toHex()])
 
-  // const sendingSponsorsCachedBalance = _sendingSponsor.balance
+  const _ticket = Ticket.load(event.address.toHex())
+  const _prizeStrategy = PrizeStrategy.load(_ticket.prizeStrategy)
+  const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
 
-
+  
   const _sendingSponsor = loadOrCreateSponsor(
     Address.fromString(_prizePool.id),
     event.params.from
@@ -40,12 +39,8 @@ export function handleTransfer(event: Transfer): void {
     Address.fromString(_prizePool.id),
     event.params.to
   )
-  // const receivingSponsorsCachedBalance = _receivingSponsor.balance
   incrementSponsorBalance(_receivingSponsor, event.params.value)
   _receivingSponsor.save()
-
-  // decrementSponsorCount(_prizePool as PrizePool, _sendingSponsor)
-  // incrementSponsorCount(_prizePool as PrizePool, receivingSponsorsCachedBalance)
 
   _prizePool.save()
 }

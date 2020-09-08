@@ -21,8 +21,6 @@ export function loadOrCreateSponsor(
     _sponsor.balance = ZERO
 
     _sponsor.save()
-  } else {
-    //
   }
 
   return _sponsor as Sponsor

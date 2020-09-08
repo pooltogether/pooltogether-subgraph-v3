@@ -5,9 +5,6 @@ import {
   Prize,
   PrizePool,
 } from '../generated/schema'
-import {
-  ERC20 as ERC20Contract,
-} from '../generated/templates/PrizePool/ERC20'
 
 import {
   PrizePool as PrizePoolContract,
@@ -28,11 +25,13 @@ import {
   incrementPlayerCount,
   decrementPlayerBalance,
   incrementPlayerBalance,
+  incrementSponsorBalance,
   decrementPlayerTimelockedBalance,
   incrementPlayerTimelockedBalance,
   updateTotalTicketSupply
 } from './helpers/prizePoolHelpers'
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
+import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
 import { prizeId } from './helpers/idTemplates'
 
 const ZERO = BigInt.fromI32(0)
@@ -96,6 +95,8 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 }
 
 export function handleDeposited(event: Deposited): void {
+  log.warning('handleDeposited {}', [ticketIsToken.toString()])
+  
   const _prizePool = PrizePool.load(event.address.toHex())
   const _prizeStrategy = PrizeStrategy.load(_prizePool.prizeStrategy)
 
@@ -104,6 +105,9 @@ export function handleDeposited(event: Deposited): void {
 
   const ticketAddress = Address.fromString(ticket.toHexString())
   const ticketIsToken = (token.equals(ticketAddress))
+
+  log.warning('ticketIsToken {}', [ticketIsToken.toString()])
+
   
   if (ticketIsToken) {
     const _player = loadOrCreatePlayer(
@@ -126,8 +130,16 @@ export function handleDeposited(event: Deposited): void {
 
     _player.save()
   } else if (token === _prizeStrategy.sponsorship) {
-    // TODO: SPONSORSHIP
-    // _sponsor.save()
+    log.warning('in deposit sponsorship', [])
+
+    const _sponsor = loadOrCreateSponsor(
+      Address.fromString(event.address.toHex()),
+      event.params.to
+    )
+
+    incrementSponsorBalance(_sponsor, event.params.amount)
+
+    _sponsor.save()
   }
 
   _prizePool.save()
