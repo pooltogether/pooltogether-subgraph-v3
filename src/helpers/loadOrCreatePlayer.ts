@@ -25,7 +25,6 @@ export function loadOrCreatePlayer(
   if (!_player) {
     _player = new Player(id)
 
-    // log.warning('Creating new _player {}', [player.toHex()])
     _player.prizePool = prizePool.toHex()
     _player.address = player
     _player.balance = ZERO
@@ -36,8 +35,6 @@ export function loadOrCreatePlayer(
     _player.cumulativeWinnings = ZERO
 
     _player.save()
-  } else {
-    // log.warning('Found existing _player {}', [player.toHex()])
   }
 
   return _player as Player

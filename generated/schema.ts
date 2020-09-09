@@ -382,6 +382,15 @@ export class PrizePool extends Entity {
     this.set("totalSupply", Value.fromBigInt(value));
   }
 
+  get totalSponsorship(): BigInt {
+    let value = this.get("totalSponsorship");
+    return value.toBigInt();
+  }
+
+  set totalSponsorship(value: BigInt) {
+    this.set("totalSponsorship", Value.fromBigInt(value));
+  }
+
   get cumulativePrizeGross(): BigInt {
     let value = this.get("cumulativePrizeGross");
     return value.toBigInt();
@@ -409,9 +418,46 @@ export class PrizePool extends Entity {
     this.set("cumulativePrizeNet", Value.fromBigInt(value));
   }
 
+<<<<<<< HEAD
   get currentPrizeId(): BigInt {
     let value = this.get("currentPrizeId");
     return value.toBigInt();
+=======
+  get sponsors(): Array<string> {
+    let value = this.get("sponsors");
+    return value.toStringArray();
+  }
+
+  set sponsors(value: Array<string>) {
+    this.set("sponsors", Value.fromStringArray(value));
+  }
+
+  get players(): Array<string> {
+    let value = this.get("players");
+    return value.toStringArray();
+  }
+
+  set players(value: Array<string>) {
+    this.set("players", Value.fromStringArray(value));
+  }
+}
+
+export class Player extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Player entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Player entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Player", id.toString(), this);
+>>>>>>> transfer-sponsorship
   }
 
   set currentPrizeId(value: BigInt) {
@@ -746,7 +792,11 @@ export class Prize extends Entity {
   }
 }
 
+<<<<<<< HEAD
 export class SingleRandomWinnerPrizeStrategy extends Entity {
+=======
+export class Sponsor extends Entity {
+>>>>>>> transfer-sponsorship
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -754,6 +804,7 @@ export class SingleRandomWinnerPrizeStrategy extends Entity {
 
   save(): void {
     let id = this.get("id");
+<<<<<<< HEAD
     assert(
       id !== null,
       "Cannot save SingleRandomWinnerPrizeStrategy entity without an ID"
@@ -1345,6 +1396,19 @@ export class VolumeDripPlayer extends Entity {
 
   static load(id: string): VolumeDripPlayer | null {
     return store.get("VolumeDripPlayer", id) as VolumeDripPlayer | null;
+=======
+    assert(id !== null, "Cannot save Sponsor entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Sponsor entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Sponsor", id.toString(), this);
+  }
+
+  static load(id: string): Sponsor | null {
+    return store.get("Sponsor", id) as Sponsor | null;
+>>>>>>> transfer-sponsorship
   }
 
   get id(): string {
@@ -1356,6 +1420,7 @@ export class VolumeDripPlayer extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+<<<<<<< HEAD
   get volumeDrip(): string {
     let value = this.get("volumeDrip");
     return value.toString();
@@ -1365,6 +1430,8 @@ export class VolumeDripPlayer extends Entity {
     this.set("volumeDrip", Value.fromString(value));
   }
 
+=======
+>>>>>>> transfer-sponsorship
   get address(): Bytes {
     let value = this.get("address");
     return value.toBytes();
@@ -1374,6 +1441,7 @@ export class VolumeDripPlayer extends Entity {
     this.set("address", Value.fromBytes(value));
   }
 
+<<<<<<< HEAD
   get periodIndex(): BigInt {
     let value = this.get("periodIndex");
     return value.toBigInt();
@@ -1383,6 +1451,8 @@ export class VolumeDripPlayer extends Entity {
     this.set("periodIndex", Value.fromBigInt(value));
   }
 
+=======
+>>>>>>> transfer-sponsorship
   get balance(): BigInt {
     let value = this.get("balance");
     return value.toBigInt();
@@ -1391,6 +1461,7 @@ export class VolumeDripPlayer extends Entity {
   set balance(value: BigInt) {
     this.set("balance", Value.fromBigInt(value));
   }
+<<<<<<< HEAD
 }
 
 export class VolumeDripPeriod extends Entity {
@@ -1531,6 +1602,8 @@ export class VolumeDrip extends Entity {
   set id(value: string) {
     this.set("id", Value.fromString(value));
   }
+=======
+>>>>>>> transfer-sponsorship
 
   get prizePool(): string {
     let value = this.get("prizePool");
@@ -1540,6 +1613,7 @@ export class VolumeDrip extends Entity {
   set prizePool(value: string) {
     this.set("prizePool", Value.fromString(value));
   }
+<<<<<<< HEAD
 
   get measureToken(): Bytes {
     let value = this.get("measureToken");
@@ -1645,4 +1719,6 @@ export class VolumeDrip extends Entity {
   set deactivated(value: boolean) {
     this.set("deactivated", Value.fromBoolean(value));
   }
+=======
+>>>>>>> transfer-sponsorship
 }

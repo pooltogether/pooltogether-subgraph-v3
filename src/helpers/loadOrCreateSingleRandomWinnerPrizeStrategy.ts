@@ -52,7 +52,6 @@ export function loadOrCreateSingleRandomWinnerPrizeStrategy(
     _prizeStrategy.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
     _prizeStrategy.prizePeriodEndAt = _prizeStrategy.prizePeriodStartedAt.plus(_prizeStrategy.prizePeriodSeconds)
 
-    _prizeStrategy.save()
 
 
 
@@ -85,13 +84,16 @@ export function loadOrCreateSingleRandomWinnerPrizeStrategy(
 
     _pool.playerCount = ZERO
     _pool.totalSupply = boundTicket.totalSupply()
-
+    
+    const boundSponsorship = ERC20Contract.bind(Address.fromString(_prizeStrategy.sponsorship.toHex()))
+    _pool.totalSponsorship = boundSponsorship.totalSupply()
+    
     _pool.cumulativePrizeGross = ZERO
     _pool.cumulativePrizeReserveFee = ZERO
     _pool.cumulativePrizeNet = ZERO
 
     _pool.save()
-
+    _prizeStrategy.save()
 
 
     createSponsorship(

@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: CompoundPrizePoolBuilder
-    network: {{network}}
+    network: rinkeby
     source:
-      address: "{{compoundPrizePoolBuilder.address}}"
+      address: "0xD6d95376F29aE7060EF06db54b3a24DF20Bc93A5"
       abi: CompoundPrizePoolBuilder
-      startBlock: {{compoundPrizePoolBuilder.startBlock}}
+      startBlock: 7161669
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -36,11 +36,11 @@ dataSources:
       file: ./src/mappingForCompoundPrizePoolBuilder.ts
   - name: Comptroller
     kind: ethereum/contract
-    network: {{network}}
+    network: rinkeby
     source:
-      address: "{{comptroller.address}}"
+      address: "0x61F8254f4a5979d12Eaa15b5631FDd52f7c6e7Ba"
       abi: Comptroller
-      startBlock: {{comptroller.startBlock}}
+      startBlock: 7161665
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -83,7 +83,7 @@ dataSources:
 templates:
   - name: PrizeStrategy
     kind: ethereum/contract
-    network: {{network}}
+    network: rinkeby
     source:
       abi: PrizeStrategy
     mapping:
@@ -113,7 +113,7 @@ templates:
           handler: handleOwnershipTransferred
   - name: PrizePool
     kind: ethereum/contract
-    network: {{network}}
+    network: rinkeby
     source:
       abi: PrizePool
     mapping:
@@ -163,7 +163,7 @@ templates:
           handler: handleOwnershipTransferred
   - name: Sponsorship
     kind: ethereum/contract
-    network: {{network}}
+    network: rinkeby
     source:
       abi: ControlledToken
     mapping:
@@ -181,7 +181,7 @@ templates:
           handler: handleTransfer
   - name: Ticket
     kind: ethereum/contract
-    network: {{network}}
+    network: rinkeby
     source:
       abi: ControlledToken
     mapping:

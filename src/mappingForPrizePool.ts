@@ -1,13 +1,8 @@
 import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts'
 import {
-  Player,
   SingleRandomWinnerPrizeStrategy,
   PrizePool,
 } from '../generated/schema'
-
-import {
-  ERC20 as ERC20Contract,
-} from '../generated/templates/PrizePool/ERC20'
 
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
 
@@ -31,63 +26,25 @@ import {
   OwnershipTransferred,
 } from '../generated/templates/PrizePool/PrizePool'
 
+import {
+  decrementPlayerCount,
+  incrementPlayerCount,
+  decrementPlayerBalance,
+  incrementPlayerBalance,
+  decrementSponsorBalance,
+  incrementSponsorBalance,
+  decrementPlayerTimelockedBalance,
+  incrementPlayerTimelockedBalance,
+  updateTotals
+} from './helpers/prizePoolHelpers'
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
+import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
 import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePoolCreditRate'
+// import { prizeId } from './helpers/idTemplates'
 
 const ZERO = BigInt.fromI32(0)
 const ONE = BigInt.fromI32(1)
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
-
-function updateTotalTicketSupply(_prizePool: PrizePool): void {
-  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(_prizePool.prizeStrategy.toHex())
-  const ticket = _prizeStrategy.ticket
-
-  // TODO: handle edge cases like if token isn't ticket
-  // event.params.token
-  const boundTicket = ERC20Contract.bind(
-    Address.fromString(ticket.toHexString())
-  )
-  _prizePool.totalSupply = boundTicket.totalSupply()
-
-  _prizePool.save()
-}
-
-function decrementPlayerCount(_prizePool: PrizePool, _player: Player): void {
-  if (_player.balance.equals(ZERO)) {
-    log.warning('in instantWithdrawal if!', [])
-    _prizePool.playerCount = _prizePool.playerCount.minus(ONE)
-
-    _prizePool.save()
-  }
-}
-
-function incrementPlayerCount(_prizePool: PrizePool, playersCachedBalance: BigInt): void {
-  if (playersCachedBalance.equals(ZERO)) {
-    _prizePool.playerCount = _prizePool.playerCount.plus(ONE)
-
-    _prizePool.save()
-  }
-}
-
-function decrementPlayerBalance(_player: Player, amount: BigInt): void {
-  _player.balance = _player.balance.minus(amount)
-  _player.save()
-}
-
-function incrementPlayerBalance(_player: Player, amount: BigInt): void {
-  _player.balance = _player.balance.plus(amount)
-  _player.save()
-}
-
-function decrementPlayerTimelockedBalance(_player: Player, amount: BigInt): void {
-  _player.timelockedBalance = _player.timelockedBalance.minus(amount)
-  _player.save()
-}
-
-function incrementPlayerTimelockedBalance(_player: Player, amount: BigInt): void {
-  _player.timelockedBalance = _player.timelockedBalance.plus(amount)
-  _player.save()
-}
 
 
 export function handleInitialized(event: Initialized): void {
@@ -102,7 +59,6 @@ export function handleInitialized(event: Initialized): void {
 export function handleControlledTokenAdded(event: ControlledTokenAdded): void {
   log.warning('implement handleControlledTokenAdded!', [])
 }
-
 export function handleReserveFeeControlledTokenSet(event: ReserveFeeControlledTokenSet): void {
   const _prizePool = PrizePool.load(event.address.toHex())
   _prizePool.reserveFeeControlledToken = event.params.token
@@ -146,29 +102,26 @@ export function handleAwarded(event: Awarded): void {
   _prize.net = event.params.amount
   _prize.gross = _prize.net
   _prize.reserveFee = event.params.reserveFee
+
   if (_prize.reserveFee.gt(ZERO)) {
     _prize.gross = _prize.net.plus(_prize.reserveFee as BigInt)
   }
 
   const winner = event.params.winner.toHex()
+
   if (winner != ZERO_ADDRESS) {
-    // log.warning('GOT WINNER! {}', [winner])
     const winnerBytes = Bytes.fromHexString(winner) as Bytes
     _prize.winners = [winnerBytes]
-    // log.warning('_prize.winner: {}', [_prize.winner])
-
 
     const _player = loadOrCreatePlayer(event.address, Address.fromString(winner))
+
     _player.cumulativeWinnings = _player.cumulativeWinnings.plus(event.params.amount)
     incrementPlayerBalance(_player, event.params.amount)
-    // log.warning('Upping players cumulativeWinnings from {} to {}', [
-    //   _player.cumulativeWinnings.toString(),
-    //   event.params.amount.toString(),
-    // ])
+
     _player.save()
   }
-  _prize.save()
 
+  _prize.save()
 
   // Update Pool
   _prizePool.cumulativePrizeGross = _prizePool.cumulativePrizeGross.plus(_prize.gross as BigInt)
@@ -178,15 +131,17 @@ export function handleAwarded(event: Awarded): void {
 }
 
 export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
+  // TODO: implement this
   // This is emitted when external rewards (other tokens, etc)
   // are awarded
-  log.warning('implement handleAwardedExternalERC20!', [])
+  log.warning('implement handleAwardedExternalERC20', [])
 }
 
 export function handleAwardedExternalERC721(event: AwardedExternalERC721): void {
+  // TODO: implement this
   // This is emitted when external rewards (nfts, etc)
   // are awarded
-  log.warning('implement handleAwardedExternalERC721!', [])
+  log.warning('implement handleAwardedExternalERC721', [])
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
@@ -214,18 +169,24 @@ export function handleDeposited(event: Deposited): void {
     const playersCachedBalance = _player.balance
     incrementPlayerCount(_prizePool as PrizePool, playersCachedBalance)
 
-    updateTotalTicketSupply(_prizePool as PrizePool)
+    updateTotals(_prizePool as PrizePool)
 
-    _player.address = event.params.to
-    _player.prizePool = event.address.toHex()
+    // this shouldn't be necessary ... already done when creating!
+    // _player.address = event.params.to
+    // _player.prizePool = event.address.toHex()
 
     incrementPlayerBalance(_player, event.params.amount)
 
     _player.save()
-  } else if (token === _prizeStrategy.sponsorship) {
-    // TODO: SPONSORSHIP
+  } else {
+    const _sponsor = loadOrCreateSponsor(
+      Address.fromString(event.address.toHex()),
+      event.params.to
+    )
 
-    // _sponsor.save()
+    incrementSponsorBalance(_sponsor, event.params.amount)
+
+    _sponsor.save()
   }
 
   _prizePool.save()
@@ -233,26 +194,46 @@ export function handleDeposited(event: Deposited): void {
 
 export function handleInstantWithdrawal(event: InstantWithdrawal): void {
   const _prizePool = PrizePool.load(event.address.toHex())
-  const _player = loadOrCreatePlayer(
-    Address.fromString(event.address.toHex()),
-    event.params.from
-  )
+  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(_prizePool.prizeStrategy.toHexString())
 
-  decrementPlayerBalance(_player, event.params.amount)
+  const ticket = _prizeStrategy.ticket
+  const token = event.params.token
 
-  updateTotalTicketSupply(_prizePool as PrizePool)
+  const ticketAddress = Address.fromString(ticket.toHexString())
+  const ticketIsToken = token.equals(ticketAddress)
 
-  decrementPlayerCount(_prizePool as PrizePool, _player)
-  // log.warning('instantWithdrawal _player.balance: {}', [_player.balance.toString()])
+  if (ticketIsToken) {
+    const _player = loadOrCreatePlayer(
+      Address.fromString(event.address.toHex()),
+      event.params.from
+    )
+
+    decrementPlayerBalance(_player, event.params.amount)
+
+    updateTotals(_prizePool as PrizePool)
+
+    decrementPlayerCount(_prizePool as PrizePool, _player)
+
+    _player.save()
+  } else {
+    const _sponsor = loadOrCreateSponsor(
+      Address.fromString(event.address.toHex()),
+      event.params.from
+    )
+
+    decrementSponsorBalance(_sponsor, event.params.amount)
+
+    updateTotals(_prizePool as PrizePool)
+
+    _sponsor.save()
+  }
 
   _prizePool.save()
-  _player.save()
 }
 
 export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
   const _prizePool = PrizePool.load(event.address.toHex())
 
-  // const timelock = Timelock.load(event.address.toHex())
   const _player = loadOrCreatePlayer(
     Address.fromString(event.address.toHex()),
     event.params.from
@@ -263,7 +244,7 @@ export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
   decrementPlayerBalance(_player, event.params.amount)
   incrementPlayerTimelockedBalance(_player, event.params.amount)
 
-  updateTotalTicketSupply(_prizePool as PrizePool)
+  updateTotals(_prizePool as PrizePool)
 
   // This may need to be an association of many timelocked balances per player
   _player.unlockTimestamp = event.params.unlockTimestamp
@@ -288,6 +269,7 @@ export function handleTimelockedWithdrawalSwept(event: TimelockedWithdrawalSwept
 // back into the pool
 export function handleTimelockDeposited(event: TimelockDeposited): void {
   const _prizePool = PrizePool.load(event.address.toHex())
+
   const _player = loadOrCreatePlayer(
     Address.fromString(event.address.toHex()),
     event.params.to
@@ -296,7 +278,7 @@ export function handleTimelockDeposited(event: TimelockDeposited): void {
   const playersCachedBalance = _player.balance
   incrementPlayerCount(_prizePool as PrizePool, playersCachedBalance)
 
-  updateTotalTicketSupply(_prizePool as PrizePool)
+  updateTotals(_prizePool as PrizePool)
 
   decrementPlayerTimelockedBalance(_player, event.params.amount)
   incrementPlayerBalance(_player, event.params.amount)

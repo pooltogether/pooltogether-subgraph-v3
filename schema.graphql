@@ -63,8 +63,9 @@ type PrizePool @entity {
   liquidityCap: BigInt!
 
   playerCount: BigInt!
-  totalSupply: BigInt! # move to PrizePool.Ticket relationship?
-
+  totalSupply: BigInt! # move to Ticket entity?
+  totalSponsorship: BigInt! # move to Sponsorship entity?
+  
   cumulativePrizeGross: BigInt!
   cumulativePrizeReserveFee: BigInt!
   cumulativePrizeNet: BigInt!
@@ -77,8 +78,8 @@ type PrizePool @entity {
 
   tokenCreditRates: [CreditRate!]! @derivedFrom(field: "prizePool")
 
-  # sponsorships: [Sponsor!]! @derivedFrom(field: "prizePool")
   players: [Player!]! @derivedFrom(field: "prizePool")
+  sponsors: [Sponsor!]! @derivedFrom(field: "prizePool")
 
   balanceDrips: [BalanceDrip!]! @derivedFrom(field: "prizePool")
   volumeDrips: [VolumeDrip!]! @derivedFrom(field: "prizePool")
@@ -227,4 +228,13 @@ type VolumeDrip @entity {
   periods: [VolumeDripPeriod!]! @derivedFrom(field: "volumeDrip")
 
   deactivated: Boolean!
+}
+
+type Sponsor @entity {
+  id: ID! 
+
+  address: Bytes!
+  balance: BigInt!
+
+  prizePool: PrizePool!
 }
