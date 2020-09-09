@@ -55,7 +55,8 @@ type PrizePool @entity {
   timelockTotalSupply: BigInt!
 
   playerCount: BigInt!
-  totalSupply: BigInt! # move to PrizePool.Ticket relationship?
+  totalSupply: BigInt! # move to Ticket entity?
+  totalSponsorship: BigInt! # move to Sponsorship entity?
   
   cumulativePrizeGross: BigInt!
   cumulativePrizeReserveFee: BigInt!

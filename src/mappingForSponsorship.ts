@@ -1,46 +1,53 @@
 import { Address, log } from '@graphprotocol/graph-ts'
 import {
-  Transfer
+  Transfer,
 } from '../generated/templates/Ticket/ControlledToken'
 import {
   PrizeStrategy,
   PrizePool,
-  Ticket,
+  Sponsorship,
 } from '../generated/schema'
 
 import {
   decrementSponsorBalance,
   incrementSponsorBalance,
 } from './helpers/prizePoolHelpers'
+import {
+  determineTransferType
+} from './helpers/controlledTokenHelpers'
 import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
 
+
 export function handleTransfer(event: Transfer): void {
-  log.warning("handleTransfer:", [])
-  // log.warning("handleTransfer: _prizePool.id: {}", [_prizePool.id])
-  log.warning("event.from: {}", [event.params.from.toHex()])
-  log.warning("event.to: {}", [event.params.to.toHex()])
-  log.warning("event.value: {}", [event.params.value.toHex()])
+  const transferType = determineTransferType(event.params)
 
-  const _ticket = Ticket.load(event.address.toHex())
-  const _prizeStrategy = PrizeStrategy.load(_ticket.prizeStrategy)
-  const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
+  // Currently only handling sponsor to sponsor transfers here
+  // as Depositing handles 'Minted' and withdraw 'Burned'
+  if (transferType == "UserToUser") {
+    // log.warning('in Ticket#handleTransfer for UserToUser send', [])
+    const _sponsorship = Sponsorship.load(event.address.toHex())
+    const _prizeStrategy = PrizeStrategy.load(_sponsorship.prizeStrategy)
+    const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
 
-  
-  const _sendingSponsor = loadOrCreateSponsor(
-    Address.fromString(_prizePool.id),
-    event.params.from
-  )
-  decrementSponsorBalance(_sendingSponsor, event.params.value)
-  _sendingSponsor.save()
+    const _sendingSponsor = loadOrCreateSponsor(
+      Address.fromString(_prizePool.id),
+      event.params.from
+    )
+    decrementSponsorBalance(_sendingSponsor, event.params.value)
+
+    _sendingSponsor.save()
 
 
+    const _receivingSponsor = loadOrCreateSponsor(
+      Address.fromString(_prizePool.id),
+      event.params.to
+    )
 
-  const _receivingSponsor = loadOrCreateSponsor(
-    Address.fromString(_prizePool.id),
-    event.params.to
-  )
-  incrementSponsorBalance(_receivingSponsor, event.params.value)
-  _receivingSponsor.save()
+    incrementSponsorBalance(_receivingSponsor, event.params.value)
 
-  _prizePool.save()
+    _receivingSponsor.save()
+
+    _prizePool.save()
+  }
+
 }

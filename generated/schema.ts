@@ -297,6 +297,15 @@ export class PrizePool extends Entity {
     this.set("totalSupply", Value.fromBigInt(value));
   }
 
+  get totalSponsorship(): BigInt {
+    let value = this.get("totalSponsorship");
+    return value.toBigInt();
+  }
+
+  set totalSponsorship(value: BigInt) {
+    this.set("totalSponsorship", Value.fromBigInt(value));
+  }
+
   get cumulativePrizeGross(): BigInt {
     let value = this.get("cumulativePrizeGross");
     return value.toBigInt();

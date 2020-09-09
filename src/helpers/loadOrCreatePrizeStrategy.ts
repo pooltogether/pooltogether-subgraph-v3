@@ -124,6 +124,9 @@ export function loadOrCreatePrizeStrategy(
     const boundTicket = ERC20Contract.bind(Address.fromString(_prizeStrategy.ticket.toHex()))
     _pool.totalSupply = boundTicket.totalSupply()
     
+    const boundSponsorship = ERC20Contract.bind(Address.fromString(_prizeStrategy.sponsorship.toHex()))
+    _pool.totalSponsorship = boundSponsorship.totalSupply()
+    
     _pool.cumulativePrizeGross = ZERO
     _pool.cumulativePrizeReserveFee = ZERO
     _pool.cumulativePrizeNet = ZERO

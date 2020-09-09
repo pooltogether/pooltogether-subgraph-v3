@@ -15,17 +15,18 @@ const ONE = BigInt.fromI32(1)
 
 
 // PRIZE POOLS
-export function updateTotalTicketSupply(_prizePool: PrizePool): void {
+export function updateTotals(_prizePool: PrizePool): void {
   const _prizeStrategy = PrizeStrategy.load(_prizePool.prizeStrategy)
 
-  const ticket = _prizeStrategy.ticket
-
-  // TODO: handle edge cases like if token isn't ticket
-  // event.params.token
   const boundTicket = ERC20Contract.bind(
-    Address.fromString(ticket.toHexString())
+    Address.fromString(_prizeStrategy.ticket.toHexString())
   )
   _prizePool.totalSupply = boundTicket.totalSupply()
+
+  const boundSponsorship = ERC20Contract.bind(
+    Address.fromString(_prizeStrategy.sponsorship.toHexString())
+  )
+  _prizePool.totalSponsorship = boundSponsorship.totalSupply()
 
   _prizePool.save()
 }
