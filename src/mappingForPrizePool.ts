@@ -171,10 +171,6 @@ export function handleDeposited(event: Deposited): void {
 
     updateTotals(_prizePool as PrizePool)
 
-    // this shouldn't be necessary ... already done when creating!
-    // _player.address = event.params.to
-    // _player.prizePool = event.address.toHex()
-
     incrementPlayerBalance(_player, event.params.amount)
 
     _player.save()
@@ -185,6 +181,8 @@ export function handleDeposited(event: Deposited): void {
     )
 
     incrementSponsorBalance(_sponsor, event.params.amount)
+
+    updateTotals(_prizePool as PrizePool)
 
     _sponsor.save()
   }
