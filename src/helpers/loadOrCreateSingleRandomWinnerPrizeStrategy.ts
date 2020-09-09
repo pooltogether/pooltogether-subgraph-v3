@@ -77,6 +77,7 @@ export function loadOrCreateSingleRandomWinnerPrizeStrategy(
     _pool.maxExitFeeMantissa = boundPrizePool.maxExitFeeMantissa()
     _pool.maxTimelockDuration = boundPrizePool.maxTimelockDuration()
     _pool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
+    _pool.liquidityCap = ZERO
 
     _pool.currentState = 'Opened'
     _pool.currentPrizeId = ONE

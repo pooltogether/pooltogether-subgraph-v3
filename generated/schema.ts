@@ -355,6 +355,15 @@ export class PrizePool extends Entity {
     this.set("timelockTotalSupply", Value.fromBigInt(value));
   }
 
+  get liquidityCap(): BigInt {
+    let value = this.get("liquidityCap");
+    return value.toBigInt();
+  }
+
+  set liquidityCap(value: BigInt) {
+    this.set("liquidityCap", Value.fromBigInt(value));
+  }
+
   get playerCount(): BigInt {
     let value = this.get("playerCount");
     return value.toBigInt();
