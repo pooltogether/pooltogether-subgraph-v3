@@ -1,6 +1,6 @@
 import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts'
 import {
-  SingleRandomWinnerPrizeStrategy,
+  SingleRandomWinner,
   PrizePool,
 } from '../generated/schema'
 
@@ -90,6 +90,7 @@ export function handleEmergencyShutdown(event: EmergencyShutdown): void {
   _prizePool.save()
 }
 
+// TODO: Update
 export function handleAwarded(event: Awarded): void {
   const _prizePool = PrizePool.load(event.address.toHex())
 
@@ -150,9 +151,10 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   _prizePool.save()
 }
 
+// TODO: Update
 export function handleDeposited(event: Deposited): void {
   const _prizePool = PrizePool.load(event.address.toHex())
-  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(_prizePool.prizeStrategy.toHex())
+  const _prizeStrategy = SingleRandomWinner.load(_prizePool.prizeStrategy.toHex())
 
   const ticket = _prizeStrategy.ticket
   const token = event.params.token
@@ -190,9 +192,10 @@ export function handleDeposited(event: Deposited): void {
   _prizePool.save()
 }
 
+// TODO: Update
 export function handleInstantWithdrawal(event: InstantWithdrawal): void {
   const _prizePool = PrizePool.load(event.address.toHex())
-  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(_prizePool.prizeStrategy.toHexString())
+  const _prizeStrategy = SingleRandomWinner.load(_prizePool.prizeStrategy.toHexString())
 
   const ticket = _prizeStrategy.ticket
   const token = event.params.token
@@ -251,6 +254,7 @@ export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
   _prizePool.save()
 }
 
+// TODO: Update
 export function handleTimelockedWithdrawalSwept(event: TimelockedWithdrawalSwept): void {
   const _player = loadOrCreatePlayer(
     Address.fromString(event.address.toHex()),

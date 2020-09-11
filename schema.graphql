@@ -65,7 +65,7 @@ type PrizePool @entity {
   playerCount: BigInt!
   totalSupply: BigInt! # move to Ticket entity?
   totalSponsorship: BigInt! # move to Sponsorship entity?
-  
+
   cumulativePrizeGross: BigInt!
   cumulativePrizeReserveFee: BigInt!
   cumulativePrizeNet: BigInt!
@@ -113,7 +113,7 @@ type Prize @entity {
   winners: [Bytes!]
 }
 
-type SingleRandomWinnerPrizeStrategy @entity {
+type SingleRandomWinner @entity {
   id: ID!
 
   owner: Bytes!
@@ -231,7 +231,7 @@ type VolumeDrip @entity {
 }
 
 type Sponsor @entity {
-  id: ID! 
+  id: ID!
 
   address: Bytes!
   balance: BigInt!

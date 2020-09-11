@@ -24,8 +24,8 @@ dataSources:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         # - name: CompoundPrizePool
         #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
-        - name: PrizeStrategy
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizeStrategy.json
+        - name: SingleRandomWinner
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
         - name: CompoundPrizePoolBuilder
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolBuilder.json
         - name: ControlledToken
@@ -33,6 +33,8 @@ dataSources:
       eventHandlers:
         - event: CompoundPrizePoolCreated(indexed address,indexed address,indexed address)
           handler: handleCompoundPrizePoolCreated
+        - event: SingleRandomWinnerCreated(indexed address,indexed address,indexed address)
+          handler: handleSingleRandomWinnerCreated
       file: ./src/mappingForCompoundPrizePoolBuilder.ts
   - name: Comptroller
     kind: ethereum/contract
@@ -81,23 +83,23 @@ dataSources:
         - event: VolumeDripDripped(indexed address,indexed address,indexed address,bool,address,uint256)
           handler: handleVolumeDripDripped
 templates:
-  - name: PrizeStrategy
+  - name: SingleRandomWinner
     kind: ethereum/contract
     network: {{network}}
     source:
-      abi: PrizeStrategy
+      abi: SingleRandomWinner
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappingForPrizeStrategy.ts
+      file: ./src/mappingForSingleRandomWinner.ts
       entities:
-        - SingleRandomWinnerPrizeStrategy
+        - SingleRandomWinner
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: PrizeStrategy
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizeStrategy.json
+        - name: SingleRandomWinner
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
         - name: RNGInterface
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/RNGInterface.json
       eventHandlers:
@@ -111,6 +113,14 @@ templates:
           handler: handleRngServiceUpdated
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
+        - event: ExternalErc20AwardAdded(indexed address)
+          handler: handleExternalErc20AwardAdded
+        - event: ExternalErc20AwardRemoved(indexed address)
+          handler: handleExternalErc20AwardRemoved
+        - event: ExternalErc721AwardAdded(indexed address,uint256[])
+          handler: handleExternalErc721AwardAdded
+        - event: ExternalErc721AwardRemoved(indexed address)
+          handler: handleExternalErc721AwardRemoved
   - name: PrizePool
     kind: ethereum/contract
     network: {{network}}
@@ -137,21 +147,21 @@ templates:
           handler: handleReserveFeeControlledTokenSet
         - event: LiquidityCapSet(uint256)
           handler: handleLiquidityCapSet
-        - event: Deposited(indexed address,indexed address,indexed address,uint256)
+        - event: Deposited(indexed address,indexed address,indexed address,uint256,address)
           handler: handleDeposited
         - event: TimelockDeposited(indexed address,indexed address,indexed address,uint256)
           handler: handleTimelockDeposited
-        - event: Awarded(indexed address,indexed address,uint256,uint256)
+        - event: Awarded(indexed address,indexed address,uint256)
           handler: handleAwarded
         - event: AwardedExternalERC20(indexed address,indexed address,uint256)
           handler: handleAwardedExternalERC20
         - event: AwardedExternalERC721(indexed address,indexed address,uint256[])
           handler: handleAwardedExternalERC721
-        - event: InstantWithdrawal(indexed address,indexed address,indexed address,uint256,uint256)
+        - event: InstantWithdrawal(indexed address,indexed address,indexed address,uint256,uint256,uint256)
           handler: handleInstantWithdrawal
         - event: TimelockedWithdrawal(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTimelockedWithdrawal
-        - event: TimelockedWithdrawalSwept(indexed address,indexed address,uint256)
+        - event: TimelockedWithdrawalSwept(indexed address,indexed address,uint256,uint256)
           handler: handleTimelockedWithdrawalSwept
         - event: CreditRateSet(address,uint128,uint128)
           handler: handleCreditRateSet

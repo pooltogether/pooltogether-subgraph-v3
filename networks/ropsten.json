@@ -1,0 +1,11 @@
+{
+  "network": "ropsten",
+  "compoundPrizePoolBuilder": {
+    "address": "0xdffF916E2813757c7970a98a7668CFf73E03B1e6",
+    "startBlock": "8659692"
+  },
+  "comptroller": {
+    "address": "0xEF889edD0dCf30dAF0fe2675723B221497A33961",
+    "startBlock": "8659684"
+  }
+}

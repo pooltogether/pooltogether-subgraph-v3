@@ -1,24 +1,28 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 import {
   PrizePool,
-  SingleRandomWinnerPrizeStrategy,
+  SingleRandomWinner,
 } from '../generated/schema'
 
 import {
-  PrizeStrategy as PrizeStrategyContract,
+  SingleRandomWinner as SingleRandomWinnerContract,
   PrizePoolOpened,
   PrizePoolAwardStarted,
   PrizePoolAwarded,
   RngServiceUpdated,
   OwnershipTransferred,
-} from '../generated/templates/PrizeStrategy/PrizeStrategy'
+  ExternalErc20AwardAdded,
+  ExternalErc20AwardRemoved,
+  ExternalErc721AwardAdded,
+  ExternalErc721AwardRemoved,
+} from '../generated/templates/SingleRandomWinner/SingleRandomWinner'
 
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
 
 const ONE = BigInt.fromI32(1)
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(event.address.toHex())
+  const _prizeStrategy = SingleRandomWinner.load(event.address.toHex())
   _prizeStrategy.owner = event.params.newOwner
   _prizeStrategy.save()
 }
@@ -28,8 +32,8 @@ export function handlePrizePoolOpened(event: PrizePoolOpened): void {
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
-  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(event.address.toHex())
-  const boundPrizeStrategy = PrizeStrategyContract.bind(event.address)
+  const _prizeStrategy = SingleRandomWinner.load(event.address.toHex())
+  const boundPrizeStrategy = SingleRandomWinnerContract.bind(event.address)
 
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
   _prizePool.currentState = "Started"
@@ -49,7 +53,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 }
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
-  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(event.address.toHexString())
+  const _prizeStrategy = SingleRandomWinner.load(event.address.toHexString())
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
 
   // Record prize history
@@ -70,7 +74,31 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
 }
 
 export function handleRngServiceUpdated(event: RngServiceUpdated): void {
-  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(event.address.toHexString())
+  const _prizeStrategy = SingleRandomWinner.load(event.address.toHexString())
   _prizeStrategy.rng = event.params.rngService
   _prizeStrategy.save()
+}
+
+export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): void {
+  // TODO: implement this
+  // This is emitted when external rewards (other tokens, etc) are added to the prize
+  log.warning('implement handleExternalErc20AwardAdded', [])
+}
+
+export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved): void {
+  // TODO: implement this
+  // This is emitted when external rewards (other tokens, etc) are added to the prize
+  log.warning('implement handleExternalErc20AwardRemoved', [])
+}
+
+export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded): void {
+  // TODO: implement this
+  // This is emitted when external rewards (other tokens, etc) are added to the prize
+  log.warning('implement handleExternalErc721AwardAdded', [])
+}
+
+export function handleExternalErc721AwardRemoved(event: ExternalErc721AwardRemoved): void {
+  // TODO: implement this
+  // This is emitted when external rewards (other tokens, etc) are added to the prize
+  log.warning('implement handleExternalErc721AwardRemoved', [])
 }

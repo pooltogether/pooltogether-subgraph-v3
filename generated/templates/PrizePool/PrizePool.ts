@@ -34,10 +34,6 @@ export class Awarded__Params {
   get amount(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
-
-  get reserveFee(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
 }
 
 export class AwardedExternalERC20 extends ethereum.Event {
@@ -164,6 +160,10 @@ export class Deposited__Params {
   get amount(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
+
+  get referrer(): Address {
+    return this._event.parameters[4].value.toAddress();
+  }
 }
 
 export class EmergencyShutdown extends ethereum.Event {
@@ -239,8 +239,12 @@ export class InstantWithdrawal__Params {
     return this._event.parameters[3].value.toBigInt();
   }
 
-  get exitFee(): BigInt {
+  get redeemed(): BigInt {
     return this._event.parameters[4].value.toBigInt();
+  }
+
+  get exitFee(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
   }
 }
 
@@ -299,6 +303,24 @@ export class PrizeStrategySet__Params {
 
   get prizeStrategy(): Address {
     return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class ReserveFeeCaptured extends ethereum.Event {
+  get params(): ReserveFeeCaptured__Params {
+    return new ReserveFeeCaptured__Params(this);
+  }
+}
+
+export class ReserveFeeCaptured__Params {
+  _event: ReserveFeeCaptured;
+
+  constructor(event: ReserveFeeCaptured) {
+    this._event = event;
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -407,6 +429,10 @@ export class TimelockedWithdrawalSwept__Params {
 
   get amount(): BigInt {
     return this._event.parameters[2].value.toBigInt();
+  }
+
+  get redeemed(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -517,6 +543,38 @@ export class PrizePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  calculateEarlyExitFee(controlledToken: Address, amount: BigInt): BigInt {
+    let result = super.call(
+      "calculateEarlyExitFee",
+      "calculateEarlyExitFee(address,uint256):(uint256)",
+      [
+        ethereum.Value.fromAddress(controlledToken),
+        ethereum.Value.fromUnsignedBigInt(amount)
+      ]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_calculateEarlyExitFee(
+    controlledToken: Address,
+    amount: BigInt
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "calculateEarlyExitFee",
+      "calculateEarlyExitFee(address,uint256):(uint256)",
+      [
+        ethereum.Value.fromAddress(controlledToken),
+        ethereum.Value.fromUnsignedBigInt(amount)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   calculateReserveFee(amount: BigInt): BigInt {
     let result = super.call(
       "calculateReserveFee",
@@ -532,6 +590,45 @@ export class PrizePool extends ethereum.SmartContract {
       "calculateReserveFee",
       "calculateReserveFee(uint256):(uint256)",
       [ethereum.Value.fromUnsignedBigInt(amount)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  calculateTimelockDuration(
+    from: Address,
+    controlledToken: Address,
+    amount: BigInt
+  ): BigInt {
+    let result = super.call(
+      "calculateTimelockDuration",
+      "calculateTimelockDuration(address,address,uint256):(uint256)",
+      [
+        ethereum.Value.fromAddress(from),
+        ethereum.Value.fromAddress(controlledToken),
+        ethereum.Value.fromUnsignedBigInt(amount)
+      ]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_calculateTimelockDuration(
+    from: Address,
+    controlledToken: Address,
+    amount: BigInt
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "calculateTimelockDuration",
+      "calculateTimelockDuration(address,address,uint256):(uint256)",
+      [
+        ethereum.Value.fromAddress(from),
+        ethereum.Value.fromAddress(controlledToken),
+        ethereum.Value.fromUnsignedBigInt(amount)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -561,6 +658,29 @@ export class PrizePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  captureAwardBalance(): BigInt {
+    let result = super.call(
+      "captureAwardBalance",
+      "captureAwardBalance():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_captureAwardBalance(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "captureAwardBalance",
+      "captureAwardBalance():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   comptroller(): Address {
@@ -1159,36 +1279,6 @@ export class AwardCall__Outputs {
   }
 }
 
-export class AwardBalanceCall extends ethereum.Call {
-  get inputs(): AwardBalanceCall__Inputs {
-    return new AwardBalanceCall__Inputs(this);
-  }
-
-  get outputs(): AwardBalanceCall__Outputs {
-    return new AwardBalanceCall__Outputs(this);
-  }
-}
-
-export class AwardBalanceCall__Inputs {
-  _call: AwardBalanceCall;
-
-  constructor(call: AwardBalanceCall) {
-    this._call = call;
-  }
-}
-
-export class AwardBalanceCall__Outputs {
-  _call: AwardBalanceCall;
-
-  constructor(call: AwardBalanceCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
 export class AwardExternalERC20Call extends ethereum.Call {
   get inputs(): AwardExternalERC20Call__Inputs {
     return new AwardExternalERC20Call__Inputs(this);
@@ -1368,6 +1458,78 @@ export class BeforeTokenTransferCall__Outputs {
 
   constructor(call: BeforeTokenTransferCall) {
     this._call = call;
+  }
+}
+
+export class CalculateTimelockDurationCall extends ethereum.Call {
+  get inputs(): CalculateTimelockDurationCall__Inputs {
+    return new CalculateTimelockDurationCall__Inputs(this);
+  }
+
+  get outputs(): CalculateTimelockDurationCall__Outputs {
+    return new CalculateTimelockDurationCall__Outputs(this);
+  }
+}
+
+export class CalculateTimelockDurationCall__Inputs {
+  _call: CalculateTimelockDurationCall;
+
+  constructor(call: CalculateTimelockDurationCall) {
+    this._call = call;
+  }
+
+  get from(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get controlledToken(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+}
+
+export class CalculateTimelockDurationCall__Outputs {
+  _call: CalculateTimelockDurationCall;
+
+  constructor(call: CalculateTimelockDurationCall) {
+    this._call = call;
+  }
+
+  get value0(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class CaptureAwardBalanceCall extends ethereum.Call {
+  get inputs(): CaptureAwardBalanceCall__Inputs {
+    return new CaptureAwardBalanceCall__Inputs(this);
+  }
+
+  get outputs(): CaptureAwardBalanceCall__Outputs {
+    return new CaptureAwardBalanceCall__Outputs(this);
+  }
+}
+
+export class CaptureAwardBalanceCall__Inputs {
+  _call: CaptureAwardBalanceCall;
+
+  constructor(call: CaptureAwardBalanceCall) {
+    this._call = call;
+  }
+}
+
+export class CaptureAwardBalanceCall__Outputs {
+  _call: CaptureAwardBalanceCall;
+
+  constructor(call: CaptureAwardBalanceCall) {
+    this._call = call;
+  }
+
+  get value0(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
   }
 }
 

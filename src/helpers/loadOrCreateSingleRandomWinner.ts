@@ -1,7 +1,7 @@
 import { Address, Bytes, BigInt, log } from "@graphprotocol/graph-ts"
 import {
   PrizePool,
-  SingleRandomWinnerPrizeStrategy,
+  SingleRandomWinner,
   Prize,
 } from '../../generated/schema'
 import {
@@ -14,8 +14,8 @@ import {
   PrizePool as PrizePoolContract,
 } from '../../generated/templates/PrizePool/PrizePool'
 import {
-  PrizeStrategy as PrizeStrategyContract,
-} from '../../generated/templates/PrizeStrategy/PrizeStrategy'
+  SingleRandomWinner as SingleRandomWinnerContract,
+} from '../../generated/templates/SingleRandomWinner/SingleRandomWinner'
 import {
   PrizeStrategy as PrizeStrategyTemplate,
   PrizePool as PrizePoolTemplate
@@ -28,18 +28,18 @@ import { createTicket } from './createTicket'
 const ZERO = BigInt.fromI32(0)
 const ONE = BigInt.fromI32(1)
 
-export function loadOrCreateSingleRandomWinnerPrizeStrategy(
+export function loadOrCreateSingleRandomWinner(
   blockNumber: BigInt,
   builder: Address,
   creator: Address,
   prizePool: Address,
   prizeStrategy: Address,
-): SingleRandomWinnerPrizeStrategy {
-  let _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(prizeStrategy.toHex())
+): SingleRandomWinner {
+  let _prizeStrategy = SingleRandomWinner.load(prizeStrategy.toHex())
 
   if (!_prizeStrategy) {
-    _prizeStrategy = new SingleRandomWinnerPrizeStrategy(prizeStrategy.toHex())
-    const boundPrizeStrategy = PrizeStrategyContract.bind(prizeStrategy)
+    _prizeStrategy = new SingleRandomWinner(prizeStrategy.toHex())
+    const boundPrizeStrategy = SingleRandomWinnerContract.bind(prizeStrategy)
 
     _prizeStrategy.compoundPrizePoolBuilder = builder.toHex()
     _prizeStrategy.owner = creator
@@ -84,10 +84,10 @@ export function loadOrCreateSingleRandomWinnerPrizeStrategy(
 
     _pool.playerCount = ZERO
     _pool.totalSupply = boundTicket.totalSupply()
-    
+
     const boundSponsorship = ERC20Contract.bind(Address.fromString(_prizeStrategy.sponsorship.toHex()))
     _pool.totalSponsorship = boundSponsorship.totalSupply()
-    
+
     _pool.cumulativePrizeGross = ZERO
     _pool.cumulativePrizeReserveFee = ZERO
     _pool.cumulativePrizeNet = ZERO
@@ -115,5 +115,5 @@ export function loadOrCreateSingleRandomWinnerPrizeStrategy(
     PrizePoolTemplate.create(prizePool)
   }
 
-  return _prizeStrategy as SingleRandomWinnerPrizeStrategy
+  return _prizeStrategy as SingleRandomWinner
 }
