@@ -16,14 +16,14 @@ type CreditRate @entity {
   creditRateMantissa: BigInt!
 }
 
-# type CreditBalance @entity {
-#   id: ID!
-#   prizePool: PrizePool!
+type CreditBalance @entity {
+  id: ID!
+  prizePool: PrizePool!
 
-#   balance: BigInt
-#   timestamp: BigInt
-#   initialized: Boolean
-# }
+  balance: BigInt
+  timestamp: BigInt
+  initialized: Boolean
+}
 
 type CompoundPrizePoolBuilder @entity {
   id: ID!
@@ -65,7 +65,7 @@ type PrizePool @entity {
   playerCount: BigInt!
   totalSupply: BigInt! # move to Ticket entity?
   totalSponsorship: BigInt! # move to Sponsorship entity?
-  
+
   cumulativePrizeGross: BigInt!
   cumulativePrizeReserveFee: BigInt!
   cumulativePrizeNet: BigInt!
@@ -77,6 +77,7 @@ type PrizePool @entity {
   prizes: [Prize!]! @derivedFrom(field: "prizePool")
 
   tokenCreditRates: [CreditRate!]! @derivedFrom(field: "prizePool")
+  tokenCreditBalances: [CreditBalance!]! @derivedFrom(field: "prizePool")
 
   players: [Player!]! @derivedFrom(field: "prizePool")
   sponsors: [Sponsor!]! @derivedFrom(field: "prizePool")
@@ -104,16 +105,14 @@ type Prize @entity {
   rngRequestId: BigInt
   randomNumber: BigInt
 
-  gross: BigInt
-  net: BigInt
-  reserveFee: BigInt
+  amount: BigInt
 
   totalTicketSupply: BigInt # cache of num tickets sold when this prize was awarded
 
   winners: [Bytes!]
 }
 
-type SingleRandomWinnerPrizeStrategy @entity {
+type SingleRandomWinner @entity {
   id: ID!
 
   owner: Bytes!
@@ -127,6 +126,9 @@ type SingleRandomWinnerPrizeStrategy @entity {
   prizePeriodSeconds: BigInt!
   prizePeriodStartedAt: BigInt!
   prizePeriodEndAt: BigInt!
+
+  externalErc20Awards: [ExternalErc20Award!]! @derivedFrom(field: "prizeStrategy")
+  externalErc721Awards: [ExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")
 }
 
 type Ticket @entity {
@@ -147,6 +149,21 @@ type Sponsorship @entity {
   name: String!
   symbol: String!
   decimals: BigInt!
+}
+
+type ExternalErc20Award @entity {
+  id: ID!
+  prizeStrategy: SingleRandomWinner!
+
+  address: Bytes!
+}
+
+type ExternalErc721Award @entity {
+  id: ID!
+  prizeStrategy: SingleRandomWinner!
+
+  address: Bytes!
+  tokenIds: [BigInt!]
 }
 
 type Player @entity {
@@ -231,7 +248,7 @@ type VolumeDrip @entity {
 }
 
 type Sponsor @entity {
-  id: ID! 
+  id: ID!
 
   address: Bytes!
   balance: BigInt!

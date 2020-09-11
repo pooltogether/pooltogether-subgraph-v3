@@ -10,6 +10,82 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class ExternalErc20AwardAdded extends ethereum.Event {
+  get params(): ExternalErc20AwardAdded__Params {
+    return new ExternalErc20AwardAdded__Params(this);
+  }
+}
+
+export class ExternalErc20AwardAdded__Params {
+  _event: ExternalErc20AwardAdded;
+
+  constructor(event: ExternalErc20AwardAdded) {
+    this._event = event;
+  }
+
+  get externalErc20(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class ExternalErc20AwardRemoved extends ethereum.Event {
+  get params(): ExternalErc20AwardRemoved__Params {
+    return new ExternalErc20AwardRemoved__Params(this);
+  }
+}
+
+export class ExternalErc20AwardRemoved__Params {
+  _event: ExternalErc20AwardRemoved;
+
+  constructor(event: ExternalErc20AwardRemoved) {
+    this._event = event;
+  }
+
+  get externalErc20Award(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class ExternalErc721AwardAdded extends ethereum.Event {
+  get params(): ExternalErc721AwardAdded__Params {
+    return new ExternalErc721AwardAdded__Params(this);
+  }
+}
+
+export class ExternalErc721AwardAdded__Params {
+  _event: ExternalErc721AwardAdded;
+
+  constructor(event: ExternalErc721AwardAdded) {
+    this._event = event;
+  }
+
+  get externalErc721(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get tokenIds(): Array<BigInt> {
+    return this._event.parameters[1].value.toBigIntArray();
+  }
+}
+
+export class ExternalErc721AwardRemoved extends ethereum.Event {
+  get params(): ExternalErc721AwardRemoved__Params {
+    return new ExternalErc721AwardRemoved__Params(this);
+  }
+}
+
+export class ExternalErc721AwardRemoved__Params {
+  _event: ExternalErc721AwardRemoved;
+
+  constructor(event: ExternalErc721AwardRemoved) {
+    this._event = event;
+  }
+
+  get externalErc721Award(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
 export class OwnershipTransferred extends ethereum.Event {
   get params(): OwnershipTransferred__Params {
     return new OwnershipTransferred__Params(this);
@@ -128,9 +204,9 @@ export class RngServiceUpdated__Params {
   }
 }
 
-export class PrizeStrategy extends ethereum.SmartContract {
-  static bind(address: Address): PrizeStrategy {
-    return new PrizeStrategy("PrizeStrategy", address);
+export class SingleRandomWinner extends ethereum.SmartContract {
+  static bind(address: Address): SingleRandomWinner {
+    return new SingleRandomWinner("SingleRandomWinner", address);
   }
 
   calculateNextPrizePeriodStartTime(currentTime: BigInt): BigInt {
@@ -838,100 +914,6 @@ export class CompleteAwardCall__Outputs {
   }
 }
 
-export class CurrentPrizeCall extends ethereum.Call {
-  get inputs(): CurrentPrizeCall__Inputs {
-    return new CurrentPrizeCall__Inputs(this);
-  }
-
-  get outputs(): CurrentPrizeCall__Outputs {
-    return new CurrentPrizeCall__Outputs(this);
-  }
-}
-
-export class CurrentPrizeCall__Inputs {
-  _call: CurrentPrizeCall;
-
-  constructor(call: CurrentPrizeCall) {
-    this._call = call;
-  }
-}
-
-export class CurrentPrizeCall__Outputs {
-  _call: CurrentPrizeCall;
-
-  constructor(call: CurrentPrizeCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
-export class EstimatePrizeCall extends ethereum.Call {
-  get inputs(): EstimatePrizeCall__Inputs {
-    return new EstimatePrizeCall__Inputs(this);
-  }
-
-  get outputs(): EstimatePrizeCall__Outputs {
-    return new EstimatePrizeCall__Outputs(this);
-  }
-}
-
-export class EstimatePrizeCall__Inputs {
-  _call: EstimatePrizeCall;
-
-  constructor(call: EstimatePrizeCall) {
-    this._call = call;
-  }
-}
-
-export class EstimatePrizeCall__Outputs {
-  _call: EstimatePrizeCall;
-
-  constructor(call: EstimatePrizeCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
-export class EstimatePrizeWithBlockTimeCall extends ethereum.Call {
-  get inputs(): EstimatePrizeWithBlockTimeCall__Inputs {
-    return new EstimatePrizeWithBlockTimeCall__Inputs(this);
-  }
-
-  get outputs(): EstimatePrizeWithBlockTimeCall__Outputs {
-    return new EstimatePrizeWithBlockTimeCall__Outputs(this);
-  }
-}
-
-export class EstimatePrizeWithBlockTimeCall__Inputs {
-  _call: EstimatePrizeWithBlockTimeCall;
-
-  constructor(call: EstimatePrizeWithBlockTimeCall) {
-    this._call = call;
-  }
-
-  get secondsPerBlockMantissa(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class EstimatePrizeWithBlockTimeCall__Outputs {
-  _call: EstimatePrizeWithBlockTimeCall;
-
-  constructor(call: EstimatePrizeWithBlockTimeCall) {
-    this._call = call;
-  }
-
-  get value0(): BigInt {
-    return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
 export class InitializeCall extends ethereum.Call {
   get inputs(): InitializeCall__Inputs {
     return new InitializeCall__Inputs(this);
@@ -986,6 +968,74 @@ export class InitializeCall__Outputs {
   _call: InitializeCall;
 
   constructor(call: InitializeCall) {
+    this._call = call;
+  }
+}
+
+export class RemoveExternalErc20AwardCall extends ethereum.Call {
+  get inputs(): RemoveExternalErc20AwardCall__Inputs {
+    return new RemoveExternalErc20AwardCall__Inputs(this);
+  }
+
+  get outputs(): RemoveExternalErc20AwardCall__Outputs {
+    return new RemoveExternalErc20AwardCall__Outputs(this);
+  }
+}
+
+export class RemoveExternalErc20AwardCall__Inputs {
+  _call: RemoveExternalErc20AwardCall;
+
+  constructor(call: RemoveExternalErc20AwardCall) {
+    this._call = call;
+  }
+
+  get _externalErc20(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _prevExternalErc20(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class RemoveExternalErc20AwardCall__Outputs {
+  _call: RemoveExternalErc20AwardCall;
+
+  constructor(call: RemoveExternalErc20AwardCall) {
+    this._call = call;
+  }
+}
+
+export class RemoveExternalErc721AwardCall extends ethereum.Call {
+  get inputs(): RemoveExternalErc721AwardCall__Inputs {
+    return new RemoveExternalErc721AwardCall__Inputs(this);
+  }
+
+  get outputs(): RemoveExternalErc721AwardCall__Outputs {
+    return new RemoveExternalErc721AwardCall__Outputs(this);
+  }
+}
+
+export class RemoveExternalErc721AwardCall__Inputs {
+  _call: RemoveExternalErc721AwardCall;
+
+  constructor(call: RemoveExternalErc721AwardCall) {
+    this._call = call;
+  }
+
+  get _externalErc721(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _prevExternalErc721(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class RemoveExternalErc721AwardCall__Outputs {
+  _call: RemoveExternalErc721AwardCall;
+
+  constructor(call: RemoveExternalErc721AwardCall) {
     this._call = call;
   }
 }

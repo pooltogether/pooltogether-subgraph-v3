@@ -3,7 +3,7 @@ import {
   Transfer,
 } from '../generated/templates/Ticket/ControlledToken'
 import {
-  PrizeStrategy,
+  SingleRandomWinner,
   PrizePool,
   Ticket,
 } from '../generated/schema'
@@ -22,13 +22,13 @@ import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 
 export function handleTransfer(event: Transfer): void {
   const transferType = determineTransferType(event.params)
-  
+
   // Currently only handling player to player transfers here
   // as Depositing handles 'Minted' and withdraw 'Burned'
   if (transferType == "UserToUser") {
     // log.warning('in Ticket#handleTransfer for UserToUser send', [])
     const _ticket = Ticket.load(event.address.toHex())
-    const _prizeStrategy = PrizeStrategy.load(_ticket.prizeStrategy)
+    const _prizeStrategy = SingleRandomWinner.load(_ticket.prizeStrategy.toHex())
     const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
 
     const _sendingPlayer = loadOrCreatePlayer(

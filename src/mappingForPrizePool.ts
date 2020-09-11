@@ -1,6 +1,6 @@
 import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts'
 import {
-  SingleRandomWinnerPrizeStrategy,
+  SingleRandomWinner,
   PrizePool,
 } from '../generated/schema'
 
@@ -11,6 +11,7 @@ import {
   Initialized,
   ControlledTokenAdded,
   ReserveFeeControlledTokenSet,
+  ReserveFeeCaptured,
   LiquidityCapSet,
   Deposited,
   TimelockDeposited,
@@ -90,6 +91,13 @@ export function handleEmergencyShutdown(event: EmergencyShutdown): void {
   _prizePool.save()
 }
 
+export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
+  const _prizePool = PrizePool.load(event.address.toHex())
+  _prizePool.cumulativePrizeReserveFee = _prizePool.cumulativePrizeReserveFee.plus(event.params.amount)
+  _prizePool.save()
+
+}
+
 export function handleAwarded(event: Awarded): void {
   const _prizePool = PrizePool.load(event.address.toHex())
 
@@ -98,35 +106,25 @@ export function handleAwarded(event: Awarded): void {
     event.address.toHex(),
     _prizePool.currentPrizeId.toString()
   )
+  _prize.amount = event.params.amount
 
-  _prize.net = event.params.amount
-  _prize.gross = _prize.net
-  _prize.reserveFee = event.params.reserveFee
-
-  if (_prize.reserveFee.gt(ZERO)) {
-    _prize.gross = _prize.net.plus(_prize.reserveFee as BigInt)
-  }
 
   const winner = event.params.winner.toHex()
-
   if (winner != ZERO_ADDRESS) {
     const winnerBytes = Bytes.fromHexString(winner) as Bytes
     _prize.winners = [winnerBytes]
 
     const _player = loadOrCreatePlayer(event.address, Address.fromString(winner))
-
     _player.cumulativeWinnings = _player.cumulativeWinnings.plus(event.params.amount)
     incrementPlayerBalance(_player, event.params.amount)
-
     _player.save()
   }
 
   _prize.save()
 
-  // Update Pool
-  _prizePool.cumulativePrizeGross = _prizePool.cumulativePrizeGross.plus(_prize.gross as BigInt)
-  _prizePool.cumulativePrizeReserveFee = _prizePool.cumulativePrizeReserveFee.plus(event.params.reserveFee)
+  // Update Pool (Reserve Fee updated in handleReserveFeeCaptured)
   _prizePool.cumulativePrizeNet = _prizePool.cumulativePrizeNet.plus(event.params.amount)
+  _prizePool.cumulativePrizeGross = _prizePool.cumulativePrizeNet.plus(_prizePool.cumulativePrizeReserveFee)
   _prizePool.save()
 }
 
@@ -152,7 +150,7 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 
 export function handleDeposited(event: Deposited): void {
   const _prizePool = PrizePool.load(event.address.toHex())
-  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(_prizePool.prizeStrategy.toHex())
+  const _prizeStrategy = SingleRandomWinner.load(_prizePool.prizeStrategy.toHex())
 
   const ticket = _prizeStrategy.ticket
   const token = event.params.token
@@ -192,7 +190,7 @@ export function handleDeposited(event: Deposited): void {
 
 export function handleInstantWithdrawal(event: InstantWithdrawal): void {
   const _prizePool = PrizePool.load(event.address.toHex())
-  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(_prizePool.prizeStrategy.toHexString())
+  const _prizeStrategy = SingleRandomWinner.load(_prizePool.prizeStrategy.toHexString())
 
   const ticket = _prizeStrategy.ticket
   const token = event.params.token
