@@ -2,6 +2,7 @@ import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 import {
   PrizePool,
   SingleRandomWinner,
+  ExternalErc20Award,
 } from '../generated/schema'
 
 import {
@@ -18,6 +19,10 @@ import {
 } from '../generated/templates/SingleRandomWinner/SingleRandomWinner'
 
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
+import {
+  loadOrCreateExternalErc20Award,
+  loadOrCreateExternalErc721Award,
+} from './helpers/loadOrCreateExternalAward'
 
 const ONE = BigInt.fromI32(1)
 
@@ -80,9 +85,16 @@ export function handleRngServiceUpdated(event: RngServiceUpdated): void {
 }
 
 export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): void {
-  // TODO: implement this
-  // This is emitted when external rewards (other tokens, etc) are added to the prize
-  log.warning('implement handleExternalErc20AwardAdded', [])
+  const _prizeStrategyAddress = event.address.toHex()
+  const _prizeStrategy = SingleRandomWinner.load(_prizeStrategyAddress)
+
+  const externalAward = loadOrCreateExternalErc20Award(_prizeStrategyAddress, event.params.externalErc20)
+
+  const externalErc20Awards = _prizeStrategy.externalErc20Awards
+  externalErc20Awards.push(externalAward.id)
+  _prizeStrategy.externalErc20Awards = externalErc20Awards
+
+  _prizeStrategy.save()
 }
 
 export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved): void {
@@ -92,9 +104,17 @@ export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved
 }
 
 export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded): void {
-  // TODO: implement this
-  // This is emitted when external rewards (other tokens, etc) are added to the prize
-  log.warning('implement handleExternalErc721AwardAdded', [])
+  const _prizeStrategyAddress = event.address.toHex()
+  const _prizeStrategy = SingleRandomWinner.load(_prizeStrategyAddress)
+
+  const externalAward = loadOrCreateExternalErc721Award(_prizeStrategyAddress, event.params.externalErc721)
+  externalAward.tokenIds = event.params.tokenIds
+
+  const externalErc721Awards = _prizeStrategy.externalErc721Awards
+  externalErc721Awards.push(externalAward.id)
+  _prizeStrategy.externalErc721Awards = externalErc721Awards
+
+  _prizeStrategy.save()
 }
 
 export function handleExternalErc721AwardRemoved(event: ExternalErc721AwardRemoved): void {

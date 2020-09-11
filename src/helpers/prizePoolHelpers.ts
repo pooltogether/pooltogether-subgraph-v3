@@ -2,7 +2,7 @@ import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 
 import {
   Player,
-  PrizeStrategy,
+  SingleRandomWinner,
   PrizePool,
   Sponsor,
 } from '../../generated/schema'
@@ -16,7 +16,7 @@ const ONE = BigInt.fromI32(1)
 
 // PRIZE POOLS
 export function updateTotals(_prizePool: PrizePool): void {
-  const _prizeStrategy = PrizeStrategy.load(_prizePool.prizeStrategy)
+  const _prizeStrategy = SingleRandomWinner.load(_prizePool.prizeStrategy.toString())
 
   const boundTicket = ERC20Contract.bind(
     Address.fromString(_prizeStrategy.ticket.toHexString())

@@ -11,6 +11,10 @@ export function creditRateId(prizePoolAddress: string, tokenAddress: string): st
   return prizePoolAddress + '-' + tokenAddress
 }
 
+export function externalAwardId(prizeStrategyAddress: string, tokenAddress: string): string {
+  return prizeStrategyAddress + '-' + tokenAddress
+}
+
 export function dripTokenId(
   comptrollerAddress: string,
   sourceAddress: string,

@@ -17,7 +17,7 @@ import {
   SingleRandomWinner as SingleRandomWinnerContract,
 } from '../../generated/templates/SingleRandomWinner/SingleRandomWinner'
 import {
-  PrizeStrategy as PrizeStrategyTemplate,
+  SingleRandomWinner as SingleRandomWinnerTemplate,
   PrizePool as PrizePoolTemplate
 } from '../../generated/templates'
 
@@ -109,7 +109,7 @@ export function loadOrCreateSingleRandomWinner(
 
 
     // Start listening for events from the dynamically generated contract
-    PrizeStrategyTemplate.create(prizeStrategy)
+    SingleRandomWinnerTemplate.create(prizeStrategy)
 
     // Start listening for events from the dynamically generated contract
     PrizePoolTemplate.create(prizePool)

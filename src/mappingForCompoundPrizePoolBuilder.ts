@@ -13,9 +13,7 @@ export function handleCompoundPrizePoolCreated(event: CompoundPrizePoolCreated):
 
   const comptrollerAddress = Address.fromString(builder.comptroller)
   loadOrCreateComptroller(comptrollerAddress)
-}
 
-export function handleSingleRandomWinnerCreated(event: SingleRandomWinnerCreated): void {
   loadOrCreateSingleRandomWinner(
     event.block.number,
     event.address,
@@ -23,4 +21,8 @@ export function handleSingleRandomWinnerCreated(event: SingleRandomWinnerCreated
     event.params.prizePool,
     event.params.prizeStrategy,
   )
+}
+
+export function handleSingleRandomWinnerCreated(event: SingleRandomWinnerCreated): void {
+  // no-op
 }
