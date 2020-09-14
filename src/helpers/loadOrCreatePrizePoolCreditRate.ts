@@ -1,4 +1,5 @@
-import { Address, BigInt } from "@graphprotocol/graph-ts"
+import { Address } from '@graphprotocol/graph-ts'
+
 import {
   CreditRate,
 } from '../../generated/schema'
@@ -7,7 +8,8 @@ import {
   creditRateId,
 } from './idTemplates'
 
-const ZERO = BigInt.fromI32(0)
+import { ZERO } from './common'
+
 
 export function loadOrCreatePrizePoolCreditRate(
   prizePool: Address,

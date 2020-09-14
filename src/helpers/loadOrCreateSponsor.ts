@@ -1,9 +1,10 @@
-import { Address, BigInt, log } from '@graphprotocol/graph-ts'
+import { Address } from '@graphprotocol/graph-ts'
 import { Sponsor } from '../../generated/schema'
 
 import { playerId } from './idTemplates'
 
-const ZERO = BigInt.fromI32(0)
+import { ZERO } from './common'
+
 
 export function loadOrCreateSponsor(
   prizePool: Address,
@@ -16,7 +17,7 @@ export function loadOrCreateSponsor(
     _sponsor = new Sponsor(id)
 
     _sponsor.prizePool = prizePool.toHex()
-    
+
     _sponsor.address = player
     _sponsor.balance = ZERO
 

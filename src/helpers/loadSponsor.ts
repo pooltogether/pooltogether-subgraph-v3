@@ -1,7 +1,9 @@
-import { BigInt, Address } from "@graphprotocol/graph-ts"
+import { Address } from '@graphprotocol/graph-ts'
+
 import {
   Sponsor
 } from '../../generated/schema'
+
 
 function formatSponsorId(sponsorAddress: Address, poolAddress: Address): string {
   return 'sponsor-' + sponsorAddress.toHex() + '_pool-' + poolAddress.toHex()

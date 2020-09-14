@@ -34,26 +34,16 @@ export class PrizePool extends DataSourceTemplate {
   }
 }
 
-export class Sponsorship extends DataSourceTemplate {
+export class ControlledToken extends DataSourceTemplate {
   static create(address: Address): void {
-    DataSourceTemplate.create("Sponsorship", [address.toHex()]);
+    DataSourceTemplate.create("ControlledToken", [address.toHex()]);
   }
 
   static createWithContext(address: Address, context: DataSourceContext): void {
     DataSourceTemplate.createWithContext(
-      "Sponsorship",
+      "ControlledToken",
       [address.toHex()],
       context
     );
-  }
-}
-
-export class Ticket extends DataSourceTemplate {
-  static create(address: Address): void {
-    DataSourceTemplate.create("Ticket", [address.toHex()]);
-  }
-
-  static createWithContext(address: Address, context: DataSourceContext): void {
-    DataSourceTemplate.createWithContext("Ticket", [address.toHex()], context);
   }
 }

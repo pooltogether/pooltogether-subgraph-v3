@@ -1,8 +1,8 @@
-import { Address, BigInt, log } from '@graphprotocol/graph-ts'
+import { log } from '@graphprotocol/graph-ts'
 import {
   PrizePool,
   SingleRandomWinner,
-  ExternalErc20Award,
+  ControlledToken,
 } from '../generated/schema'
 
 import {
@@ -24,7 +24,8 @@ import {
   loadOrCreateExternalErc721Award,
 } from './helpers/loadOrCreateExternalAward'
 
-const ONE = BigInt.fromI32(1)
+import { ONE } from './helpers/common'
+
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const _prizeStrategy = SingleRandomWinner.load(event.address.toHex())
@@ -60,6 +61,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   const _prizeStrategy = SingleRandomWinner.load(event.address.toHexString())
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
+  const _ticket = ControlledToken.load(_prizeStrategy.ticket)
 
   // Record prize history
   const _prize = loadOrCreatePrize(
@@ -70,7 +72,7 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   _prize.randomNumber = event.params.randomNumber
   _prize.awardedBlock = event.block.number
   _prize.awardedTimestamp = event.block.timestamp
-  _prize.totalTicketSupply = _prizePool.totalSupply
+  _prize.totalTicketSupply = _ticket.totalSupply
   _prize.save()
 
   _prizePool.currentState = "Awarded"

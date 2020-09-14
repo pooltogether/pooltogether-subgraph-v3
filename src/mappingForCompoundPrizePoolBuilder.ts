@@ -1,28 +1,63 @@
 import { Address } from '@graphprotocol/graph-ts'
+
+import {
+  CompoundPrizePoolBuilder as CompoundPrizePoolBuilderContract,
+} from '../generated/CompoundPrizePoolBuilder/CompoundPrizePoolBuilder'
+
 import {
   CompoundPrizePoolCreated,
   SingleRandomWinnerCreated,
 } from '../generated/CompoundPrizePoolBuilder/CompoundPrizePoolBuilder'
 
+import {
+  SingleRandomWinner,
+} from '../generated/schema'
+
 import { loadOrCreateComptroller } from './helpers/loadOrCreateComptroller'
+import { loadOrCreatePrizePool } from './helpers/loadOrCreatePrizePool'
 import { loadOrCreateSingleRandomWinner } from './helpers/loadOrCreateSingleRandomWinner'
-import { loadOrCreateCompoundPrizePoolBuilder } from './helpers/loadOrCreateCompoundPrizePoolBuilder'
+import { createControlledToken } from './helpers/createControlledToken'
+
 
 export function handleCompoundPrizePoolCreated(event: CompoundPrizePoolCreated): void {
-  const builder = loadOrCreateCompoundPrizePoolBuilder(event.address)
+  const compoundPrizePoolBuilderAddress = event.address
+  const boundCompoundPrizePoolBuilder = CompoundPrizePoolBuilderContract.bind(compoundPrizePoolBuilderAddress)
 
-  const comptrollerAddress = Address.fromString(builder.comptroller)
-  loadOrCreateComptroller(comptrollerAddress)
+  const comptroller = boundCompoundPrizePoolBuilder.comptroller()
+  const trustedForwarder = boundCompoundPrizePoolBuilder.trustedForwarder()
 
-  loadOrCreateSingleRandomWinner(
-    event.block.number,
-    event.address,
+  loadOrCreateComptroller(comptroller)
+
+  loadOrCreatePrizePool(
     event.params.creator,
     event.params.prizePool,
     event.params.prizeStrategy,
+    comptroller,
+    trustedForwarder,
   )
 }
 
 export function handleSingleRandomWinnerCreated(event: SingleRandomWinnerCreated): void {
-  // no-op
+
+  const singleRandomWinner = loadOrCreateSingleRandomWinner(
+    event.params.singleRandomWinner,
+  )
+
+  const ticket = createControlledToken(
+    'Ticket',
+    event.params.ticket,
+    Address.fromString(singleRandomWinner.prizePool),
+    event.params.singleRandomWinner
+  )
+  const sponsorship = createControlledToken(
+    'Sponsorship',
+    event.params.sponsorship,
+    Address.fromString(singleRandomWinner.prizePool),
+    event.params.singleRandomWinner
+  )
+
+  singleRandomWinner.ticket = ticket.id
+  singleRandomWinner.sponsorship = sponsorship.id
+
+  singleRandomWinner.save()
 }

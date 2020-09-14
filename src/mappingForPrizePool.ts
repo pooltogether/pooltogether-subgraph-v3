@@ -1,13 +1,13 @@
-import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts'
+import { Address, Bytes, log } from '@graphprotocol/graph-ts'
 import {
   SingleRandomWinner,
+  PrizeStrategy,
   PrizePool,
 } from '../generated/schema'
 
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
 
 import {
-  PrizePool as PrizePoolContract,
   Initialized,
   ControlledTokenAdded,
   ReserveFeeControlledTokenSet,
@@ -38,14 +38,12 @@ import {
   incrementPlayerTimelockedBalance,
   updateTotals
 } from './helpers/prizePoolHelpers'
+
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
 import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePoolCreditRate'
-// import { prizeId } from './helpers/idTemplates'
 
-const ZERO = BigInt.fromI32(0)
-const ONE = BigInt.fromI32(1)
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+import { ZERO, ZERO_ADDRESS } from './helpers/common'
 
 
 export function handleInitialized(event: Initialized): void {
@@ -80,9 +78,10 @@ export function handleCreditRateSet(event: CreditRateSet): void {
 }
 
 export function handlePrizeStrategySet(event: PrizeStrategySet): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
-  _prizePool.prizeStrategy = event.params.prizeStrategy
-  _prizePool.save()
+  const _prizeStrategyAddress = event.params.prizeStrategy.toHex()
+  const _prizeStrategy = PrizeStrategy.load(_prizeStrategyAddress)
+  _prizeStrategy.singleRandomWinner = _prizeStrategyAddress
+  _prizeStrategy.save()
 }
 
 export function handleEmergencyShutdown(event: EmergencyShutdown): void {
@@ -149,38 +148,57 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 }
 
 export function handleDeposited(event: Deposited): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
-  const _prizeStrategy = SingleRandomWinner.load(_prizePool.prizeStrategy.toHex())
+  const _prizePoolAddress = event.address.toHex()
+  const _prizePool = PrizePool.load(_prizePoolAddress)
 
-  const ticket = _prizeStrategy.ticket
-  const token = event.params.token
+  const _prizeStrategyId = _prizePool.prizeStrategy
+  const _prizeStrategy = PrizeStrategy.load(_prizeStrategyId)
 
-  const ticketAddress = Address.fromString(ticket.toHexString())
-  const ticketIsToken = (token.equals(ticketAddress))
+  const _singleRandomWinner = SingleRandomWinner.load(_prizeStrategy.singleRandomWinner)
+
+  const tokenAddress = event.params.token
+  const ticketAddress = Address.fromString(_singleRandomWinner.ticket)
+  const ticketIsToken = (tokenAddress.equals(ticketAddress))
+
+  log.debug('handleDeposited - STEP 1', [tokenAddress.toHex(), ticketAddress.toHex()])
 
   if (ticketIsToken) {
     const _player = loadOrCreatePlayer(
-      Address.fromString(event.address.toHex()),
+      Address.fromString(_prizePoolAddress),
       event.params.to
     )
+
+    log.debug('handleDeposited - STEP 2', [])
 
     const playersCachedBalance = _player.balance
     incrementPlayerCount(_prizePool as PrizePool, playersCachedBalance)
 
+    log.debug('handleDeposited - STEP 3', [])
+
     updateTotals(_prizePool as PrizePool)
 
+    log.debug('handleDeposited - STEP 4', [])
+
     incrementPlayerBalance(_player, event.params.amount)
+
+    log.debug('handleDeposited - STEP 5', [])
 
     _player.save()
   } else {
     const _sponsor = loadOrCreateSponsor(
-      Address.fromString(event.address.toHex()),
+      Address.fromString(_prizePoolAddress),
       event.params.to
     )
 
+    log.debug('handleDeposited - STEP 6', [])
+
     incrementSponsorBalance(_sponsor, event.params.amount)
 
+    log.debug('handleDeposited - STEP 7', [])
+
     updateTotals(_prizePool as PrizePool)
+
+    log.debug('handleDeposited - STEP 8', [])
 
     _sponsor.save()
   }
@@ -189,18 +207,23 @@ export function handleDeposited(event: Deposited): void {
 }
 
 export function handleInstantWithdrawal(event: InstantWithdrawal): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
-  const _prizeStrategy = SingleRandomWinner.load(_prizePool.prizeStrategy.toHexString())
+  const _prizePoolAddress = event.address.toHex()
+  const _prizePool = PrizePool.load(_prizePoolAddress)
 
-  const ticket = _prizeStrategy.ticket
+  const _prizeStrategyId = _prizePool.prizeStrategy
+  const _prizeStrategy = PrizeStrategy.load(_prizeStrategyId)
+
+  const _singleRandomWinner = SingleRandomWinner.load(_prizeStrategy.singleRandomWinner)
+
+  const ticket = _singleRandomWinner.ticket
   const token = event.params.token
 
-  const ticketAddress = Address.fromString(ticket.toHexString())
+  const ticketAddress = Address.fromString(ticket)
   const ticketIsToken = token.equals(ticketAddress)
 
   if (ticketIsToken) {
     const _player = loadOrCreatePlayer(
-      Address.fromString(event.address.toHex()),
+      Address.fromString(_prizePoolAddress),
       event.params.from
     )
 
@@ -213,7 +236,7 @@ export function handleInstantWithdrawal(event: InstantWithdrawal): void {
     _player.save()
   } else {
     const _sponsor = loadOrCreateSponsor(
-      Address.fromString(event.address.toHex()),
+      Address.fromString(_prizePoolAddress),
       event.params.from
     )
 
@@ -228,10 +251,11 @@ export function handleInstantWithdrawal(event: InstantWithdrawal): void {
 }
 
 export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
+  const _prizePoolAddress = event.address.toHex()
+  const _prizePool = PrizePool.load(_prizePoolAddress)
 
   const _player = loadOrCreatePlayer(
-    Address.fromString(event.address.toHex()),
+    Address.fromString(_prizePoolAddress),
     event.params.from
   )
 
@@ -250,8 +274,9 @@ export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
 }
 
 export function handleTimelockedWithdrawalSwept(event: TimelockedWithdrawalSwept): void {
+  const _prizePoolAddress = event.address.toHex()
   const _player = loadOrCreatePlayer(
-    Address.fromString(event.address.toHex()),
+    Address.fromString(_prizePoolAddress),
     event.params.from
   )
 
@@ -264,10 +289,11 @@ export function handleTimelockedWithdrawalSwept(event: TimelockedWithdrawalSwept
 // This happens when a player deposits some of their timelocked funds
 // back into the pool
 export function handleTimelockDeposited(event: TimelockDeposited): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
+  const _prizePoolAddress = event.address.toHex()
+  const _prizePool = PrizePool.load(_prizePoolAddress)
 
   const _player = loadOrCreatePlayer(
-    Address.fromString(event.address.toHex()),
+    Address.fromString(_prizePoolAddress),
     event.params.to
   )
 

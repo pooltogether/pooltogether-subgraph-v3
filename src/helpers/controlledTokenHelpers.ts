@@ -1,8 +1,8 @@
 import {
   Transfer__Params
-} from '../../generated/templates/Ticket/ControlledToken'
+} from '../../generated/templates/ControlledToken/ControlledToken'
 
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
+import { ZERO_ADDRESS } from './common'
 
 export function determineTransferType(params: Transfer__Params): string {
   let transferType = "Mint"
