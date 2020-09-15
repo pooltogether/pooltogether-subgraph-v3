@@ -68,6 +68,9 @@
         }
       }
 
+      totalSupply
+      totalSponsorship
+
       playerCount
       players {
         id

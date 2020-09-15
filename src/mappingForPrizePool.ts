@@ -160,28 +160,18 @@ export function handleDeposited(event: Deposited): void {
   const ticketAddress = Address.fromString(_singleRandomWinner.ticket)
   const ticketIsToken = (tokenAddress.equals(ticketAddress))
 
-  log.debug('handleDeposited - STEP 1', [tokenAddress.toHex(), ticketAddress.toHex()])
-
   if (ticketIsToken) {
     const _player = loadOrCreatePlayer(
       Address.fromString(_prizePoolAddress),
       event.params.to
     )
 
-    log.debug('handleDeposited - STEP 2', [])
-
     const playersCachedBalance = _player.balance
     incrementPlayerCount(_prizePool as PrizePool, playersCachedBalance)
 
-    log.debug('handleDeposited - STEP 3', [])
-
     updateTotals(_prizePool as PrizePool)
 
-    log.debug('handleDeposited - STEP 4', [])
-
     incrementPlayerBalance(_player, event.params.amount)
-
-    log.debug('handleDeposited - STEP 5', [])
 
     _player.save()
   } else {
@@ -190,15 +180,9 @@ export function handleDeposited(event: Deposited): void {
       event.params.to
     )
 
-    log.debug('handleDeposited - STEP 6', [])
-
     incrementSponsorBalance(_sponsor, event.params.amount)
 
-    log.debug('handleDeposited - STEP 7', [])
-
     updateTotals(_prizePool as PrizePool)
-
-    log.debug('handleDeposited - STEP 8', [])
 
     _sponsor.save()
   }

@@ -31,6 +31,10 @@ export function updateTotals(_prizePool: PrizePool): void {
   const boundSponsorship = ERC20Contract.bind(Address.fromString(sponsorshipAddress))
   sponsorship.totalSupply = boundSponsorship.totalSupply()
   sponsorship.save()
+
+  _prizePool.totalSupply = ticket.totalSupply
+  _prizePool.totalSponsorship = sponsorship.totalSupply
+  _prizePool.save()
 }
 
 export function decrementPlayerCount(_prizePool: PrizePool, _player: Player): void {
