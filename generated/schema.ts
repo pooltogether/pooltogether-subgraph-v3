@@ -12,202 +12,6 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class CreditRate extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save CreditRate entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save CreditRate entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("CreditRate", id.toString(), this);
-  }
-
-  static load(id: string): CreditRate | null {
-    return store.get("CreditRate", id) as CreditRate | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
-  }
-
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
-  }
-
-  get creditLimitMantissa(): BigInt {
-    let value = this.get("creditLimitMantissa");
-    return value.toBigInt();
-  }
-
-  set creditLimitMantissa(value: BigInt) {
-    this.set("creditLimitMantissa", Value.fromBigInt(value));
-  }
-
-  get creditRateMantissa(): BigInt {
-    let value = this.get("creditRateMantissa");
-    return value.toBigInt();
-  }
-
-  set creditRateMantissa(value: BigInt) {
-    this.set("creditRateMantissa", Value.fromBigInt(value));
-  }
-}
-
-export class CreditBalance extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save CreditBalance entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save CreditBalance entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("CreditBalance", id.toString(), this);
-  }
-
-  static load(id: string): CreditBalance | null {
-    return store.get("CreditBalance", id) as CreditBalance | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
-  }
-
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
-  }
-
-  get balance(): BigInt | null {
-    let value = this.get("balance");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set balance(value: BigInt | null) {
-    if (value === null) {
-      this.unset("balance");
-    } else {
-      this.set("balance", Value.fromBigInt(value as BigInt));
-    }
-  }
-
-  get timestamp(): BigInt | null {
-    let value = this.get("timestamp");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set timestamp(value: BigInt | null) {
-    if (value === null) {
-      this.unset("timestamp");
-    } else {
-      this.set("timestamp", Value.fromBigInt(value as BigInt));
-    }
-  }
-
-  get initialized(): boolean {
-    let value = this.get("initialized");
-    return value.toBoolean();
-  }
-
-  set initialized(value: boolean) {
-    this.set("initialized", Value.fromBoolean(value));
-  }
-}
-
-export class CompoundPrizePoolBuilder extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(
-      id !== null,
-      "Cannot save CompoundPrizePoolBuilder entity without an ID"
-    );
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save CompoundPrizePoolBuilder entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("CompoundPrizePoolBuilder", id.toString(), this);
-  }
-
-  static load(id: string): CompoundPrizePoolBuilder | null {
-    return store.get(
-      "CompoundPrizePoolBuilder",
-      id
-    ) as CompoundPrizePoolBuilder | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get comptroller(): string {
-    let value = this.get("comptroller");
-    return value.toString();
-  }
-
-  set comptroller(value: string) {
-    this.set("comptroller", Value.fromString(value));
-  }
-
-  get trustedForwarder(): Bytes {
-    let value = this.get("trustedForwarder");
-    return value.toBytes();
-  }
-
-  set trustedForwarder(value: Bytes) {
-    this.set("trustedForwarder", Value.fromBytes(value));
-  }
-}
-
 export class Comptroller extends Entity {
   constructor(id: string) {
     super();
@@ -323,30 +127,22 @@ export class PrizePool extends Entity {
     this.set("comptroller", Value.fromString(value));
   }
 
-  get prizeStrategy(): Bytes {
+  get prizeStrategy(): string {
     let value = this.get("prizeStrategy");
+    return value.toString();
+  }
+
+  set prizeStrategy(value: string) {
+    this.set("prizeStrategy", Value.fromString(value));
+  }
+
+  get trustedForwarder(): Bytes {
+    let value = this.get("trustedForwarder");
     return value.toBytes();
   }
 
-  set prizeStrategy(value: Bytes) {
-    this.set("prizeStrategy", Value.fromBytes(value));
-  }
-
-  get trustedForwarder(): Bytes | null {
-    let value = this.get("trustedForwarder");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set trustedForwarder(value: Bytes | null) {
-    if (value === null) {
-      this.unset("trustedForwarder");
-    } else {
-      this.set("trustedForwarder", Value.fromBytes(value as Bytes));
-    }
+  set trustedForwarder(value: Bytes) {
+    this.set("trustedForwarder", Value.fromBytes(value));
   }
 
   get deactivated(): boolean {
@@ -592,6 +388,206 @@ export class PrizePool extends Entity {
   }
 }
 
+export class PrizeStrategy extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save PrizeStrategy entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save PrizeStrategy entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("PrizeStrategy", id.toString(), this);
+  }
+
+  static load(id: string): PrizeStrategy | null {
+    return store.get("PrizeStrategy", id) as PrizeStrategy | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get singleRandomWinner(): string | null {
+    let value = this.get("singleRandomWinner");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set singleRandomWinner(value: string | null) {
+    if (value === null) {
+      this.unset("singleRandomWinner");
+    } else {
+      this.set("singleRandomWinner", Value.fromString(value as string));
+    }
+  }
+}
+
+export class SingleRandomWinner extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save SingleRandomWinner entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SingleRandomWinner entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SingleRandomWinner", id.toString(), this);
+  }
+
+  static load(id: string): SingleRandomWinner | null {
+    return store.get("SingleRandomWinner", id) as SingleRandomWinner | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get owner(): Bytes {
+    let value = this.get("owner");
+    return value.toBytes();
+  }
+
+  set owner(value: Bytes) {
+    this.set("owner", Value.fromBytes(value));
+  }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get rng(): Bytes {
+    let value = this.get("rng");
+    return value.toBytes();
+  }
+
+  set rng(value: Bytes) {
+    this.set("rng", Value.fromBytes(value));
+  }
+
+  get ticket(): string {
+    let value = this.get("ticket");
+    return value.toString();
+  }
+
+  set ticket(value: string) {
+    this.set("ticket", Value.fromString(value));
+  }
+
+  get sponsorship(): string {
+    let value = this.get("sponsorship");
+    return value.toString();
+  }
+
+  set sponsorship(value: string) {
+    this.set("sponsorship", Value.fromString(value));
+  }
+
+  get prizePeriodSeconds(): BigInt {
+    let value = this.get("prizePeriodSeconds");
+    return value.toBigInt();
+  }
+
+  set prizePeriodSeconds(value: BigInt) {
+    this.set("prizePeriodSeconds", Value.fromBigInt(value));
+  }
+
+  get prizePeriodStartedAt(): BigInt {
+    let value = this.get("prizePeriodStartedAt");
+    return value.toBigInt();
+  }
+
+  set prizePeriodStartedAt(value: BigInt) {
+    this.set("prizePeriodStartedAt", Value.fromBigInt(value));
+  }
+
+  get prizePeriodEndAt(): BigInt {
+    let value = this.get("prizePeriodEndAt");
+    return value.toBigInt();
+  }
+
+  set prizePeriodEndAt(value: BigInt) {
+    this.set("prizePeriodEndAt", Value.fromBigInt(value));
+  }
+
+  get externalErc20Awards(): Array<string> | null {
+    let value = this.get("externalErc20Awards");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set externalErc20Awards(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("externalErc20Awards");
+    } else {
+      this.set(
+        "externalErc20Awards",
+        Value.fromStringArray(value as Array<string>)
+      );
+    }
+  }
+
+  get externalErc721Awards(): Array<string> | null {
+    let value = this.get("externalErc721Awards");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set externalErc721Awards(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("externalErc721Awards");
+    } else {
+      this.set(
+        "externalErc721Awards",
+        Value.fromStringArray(value as Array<string>)
+      );
+    }
+  }
+}
+
 export class Prize extends Entity {
   constructor(id: string) {
     super();
@@ -620,6 +616,15 @@ export class Prize extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
   }
 
   get awardStartOperator(): Bytes | null {
@@ -654,15 +659,6 @@ export class Prize extends Entity {
     } else {
       this.set("awardedOperator", Value.fromBytes(value as Bytes));
     }
-  }
-
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
-  }
-
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
   }
 
   get prizePeriodStartedTimestamp(): BigInt | null {
@@ -822,7 +818,7 @@ export class Prize extends Entity {
   }
 }
 
-export class SingleRandomWinner extends Entity {
+export class ControlledToken extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -830,17 +826,17 @@ export class SingleRandomWinner extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save SingleRandomWinner entity without an ID");
+    assert(id !== null, "Cannot save ControlledToken entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save SingleRandomWinner entity with non-string ID. " +
+      "Cannot save ControlledToken entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("SingleRandomWinner", id.toString(), this);
+    store.set("ControlledToken", id.toString(), this);
   }
 
-  static load(id: string): SingleRandomWinner | null {
-    return store.get("SingleRandomWinner", id) as SingleRandomWinner | null;
+  static load(id: string): ControlledToken | null {
+    return store.get("ControlledToken", id) as ControlledToken | null;
   }
 
   get id(): string {
@@ -850,24 +846,6 @@ export class SingleRandomWinner extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
-  }
-
-  get owner(): Bytes {
-    let value = this.get("owner");
-    return value.toBytes();
-  }
-
-  set owner(value: Bytes) {
-    this.set("owner", Value.fromBytes(value));
-  }
-
-  get compoundPrizePoolBuilder(): string {
-    let value = this.get("compoundPrizePoolBuilder");
-    return value.toString();
-  }
-
-  set compoundPrizePoolBuilder(value: string) {
-    this.set("compoundPrizePoolBuilder", Value.fromString(value));
   }
 
   get prizePool(): string {
@@ -879,116 +857,22 @@ export class SingleRandomWinner extends Entity {
     this.set("prizePool", Value.fromString(value));
   }
 
-  get ticket(): Bytes {
-    let value = this.get("ticket");
-    return value.toBytes();
-  }
-
-  set ticket(value: Bytes) {
-    this.set("ticket", Value.fromBytes(value));
-  }
-
-  get rng(): Bytes {
-    let value = this.get("rng");
-    return value.toBytes();
-  }
-
-  set rng(value: Bytes) {
-    this.set("rng", Value.fromBytes(value));
-  }
-
-  get sponsorship(): Bytes {
-    let value = this.get("sponsorship");
-    return value.toBytes();
-  }
-
-  set sponsorship(value: Bytes) {
-    this.set("sponsorship", Value.fromBytes(value));
-  }
-
-  get prizePeriodSeconds(): BigInt {
-    let value = this.get("prizePeriodSeconds");
-    return value.toBigInt();
-  }
-
-  set prizePeriodSeconds(value: BigInt) {
-    this.set("prizePeriodSeconds", Value.fromBigInt(value));
-  }
-
-  get prizePeriodStartedAt(): BigInt {
-    let value = this.get("prizePeriodStartedAt");
-    return value.toBigInt();
-  }
-
-  set prizePeriodStartedAt(value: BigInt) {
-    this.set("prizePeriodStartedAt", Value.fromBigInt(value));
-  }
-
-  get prizePeriodEndAt(): BigInt {
-    let value = this.get("prizePeriodEndAt");
-    return value.toBigInt();
-  }
-
-  set prizePeriodEndAt(value: BigInt) {
-    this.set("prizePeriodEndAt", Value.fromBigInt(value));
-  }
-
-  get externalErc20Awards(): Array<string> {
-    let value = this.get("externalErc20Awards");
-    return value.toStringArray();
-  }
-
-  set externalErc20Awards(value: Array<string>) {
-    this.set("externalErc20Awards", Value.fromStringArray(value));
-  }
-
-  get externalErc721Awards(): Array<string> {
-    let value = this.get("externalErc721Awards");
-    return value.toStringArray();
-  }
-
-  set externalErc721Awards(value: Array<string>) {
-    this.set("externalErc721Awards", Value.fromStringArray(value));
-  }
-}
-
-export class Ticket extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Ticket entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Ticket entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Ticket", id.toString(), this);
-  }
-
-  static load(id: string): Ticket | null {
-    return store.get("Ticket", id) as Ticket | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
+  get prizeStrategy(): string {
+    let value = this.get("prizeStrategy");
     return value.toString();
   }
 
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
+  set prizeStrategy(value: string) {
+    this.set("prizeStrategy", Value.fromString(value));
   }
 
-  get prizeStrategy(): Bytes {
-    let value = this.get("prizeStrategy");
-    return value.toBytes();
+  get type(): string {
+    let value = this.get("type");
+    return value.toString();
   }
 
-  set prizeStrategy(value: Bytes) {
-    this.set("prizeStrategy", Value.fromBytes(value));
+  set type(value: string) {
+    this.set("type", Value.fromString(value));
   }
 
   get name(): string {
@@ -1017,72 +901,14 @@ export class Ticket extends Entity {
   set decimals(value: BigInt) {
     this.set("decimals", Value.fromBigInt(value));
   }
-}
 
-export class Sponsorship extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Sponsorship entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Sponsorship entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Sponsorship", id.toString(), this);
-  }
-
-  static load(id: string): Sponsorship | null {
-    return store.get("Sponsorship", id) as Sponsorship | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get prizeStrategy(): Bytes {
-    let value = this.get("prizeStrategy");
-    return value.toBytes();
-  }
-
-  set prizeStrategy(value: Bytes) {
-    this.set("prizeStrategy", Value.fromBytes(value));
-  }
-
-  get name(): string {
-    let value = this.get("name");
-    return value.toString();
-  }
-
-  set name(value: string) {
-    this.set("name", Value.fromString(value));
-  }
-
-  get symbol(): string {
-    let value = this.get("symbol");
-    return value.toString();
-  }
-
-  set symbol(value: string) {
-    this.set("symbol", Value.fromString(value));
-  }
-
-  get decimals(): BigInt {
-    let value = this.get("decimals");
+  get totalSupply(): BigInt {
+    let value = this.get("totalSupply");
     return value.toBigInt();
   }
 
-  set decimals(value: BigInt) {
-    this.set("decimals", Value.fromBigInt(value));
+  set totalSupply(value: BigInt) {
+    this.set("totalSupply", Value.fromBigInt(value));
   }
 }
 
@@ -1114,15 +940,6 @@ export class ExternalErc20Award extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
-  }
-
-  get prizeStrategy(): string {
-    let value = this.get("prizeStrategy");
-    return value.toString();
-  }
-
-  set prizeStrategy(value: string) {
-    this.set("prizeStrategy", Value.fromString(value));
   }
 
   get address(): Bytes {
@@ -1163,15 +980,6 @@ export class ExternalErc721Award extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
-  }
-
-  get prizeStrategy(): string {
-    let value = this.get("prizeStrategy");
-    return value.toString();
-  }
-
-  set prizeStrategy(value: string) {
-    this.set("prizeStrategy", Value.fromString(value));
   }
 
   get address(): Bytes {
@@ -1283,6 +1091,205 @@ export class Player extends Entity {
 
   set cumulativeWinnings(value: BigInt) {
     this.set("cumulativeWinnings", Value.fromBigInt(value));
+  }
+}
+
+export class Sponsor extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Sponsor entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Sponsor entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Sponsor", id.toString(), this);
+  }
+
+  static load(id: string): Sponsor | null {
+    return store.get("Sponsor", id) as Sponsor | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get balance(): BigInt {
+    let value = this.get("balance");
+    return value.toBigInt();
+  }
+
+  set balance(value: BigInt) {
+    this.set("balance", Value.fromBigInt(value));
+  }
+}
+
+export class CreditRate extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save CreditRate entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save CreditRate entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("CreditRate", id.toString(), this);
+  }
+
+  static load(id: string): CreditRate | null {
+    return store.get("CreditRate", id) as CreditRate | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get creditLimitMantissa(): BigInt {
+    let value = this.get("creditLimitMantissa");
+    return value.toBigInt();
+  }
+
+  set creditLimitMantissa(value: BigInt) {
+    this.set("creditLimitMantissa", Value.fromBigInt(value));
+  }
+
+  get creditRateMantissa(): BigInt {
+    let value = this.get("creditRateMantissa");
+    return value.toBigInt();
+  }
+
+  set creditRateMantissa(value: BigInt) {
+    this.set("creditRateMantissa", Value.fromBigInt(value));
+  }
+}
+
+export class CreditBalance extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save CreditBalance entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save CreditBalance entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("CreditBalance", id.toString(), this);
+  }
+
+  static load(id: string): CreditBalance | null {
+    return store.get("CreditBalance", id) as CreditBalance | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+
+  get balance(): BigInt | null {
+    let value = this.get("balance");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set balance(value: BigInt | null) {
+    if (value === null) {
+      this.unset("balance");
+    } else {
+      this.set("balance", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get timestamp(): BigInt | null {
+    let value = this.get("timestamp");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set timestamp(value: BigInt | null) {
+    if (value === null) {
+      this.unset("timestamp");
+    } else {
+      this.set("timestamp", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get initialized(): boolean {
+    let value = this.get("initialized");
+    return value.toBoolean();
+  }
+
+  set initialized(value: boolean) {
+    this.set("initialized", Value.fromBoolean(value));
   }
 }
 
@@ -1847,63 +1854,5 @@ export class VolumeDrip extends Entity {
 
   set deactivated(value: boolean) {
     this.set("deactivated", Value.fromBoolean(value));
-  }
-}
-
-export class Sponsor extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id !== null, "Cannot save Sponsor entity without an ID");
-    assert(
-      id.kind == ValueKind.STRING,
-      "Cannot save Sponsor entity with non-string ID. " +
-        'Considering using .toHex() to convert the "id" to a string.'
-    );
-    store.set("Sponsor", id.toString(), this);
-  }
-
-  static load(id: string): Sponsor | null {
-    return store.get("Sponsor", id) as Sponsor | null;
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get address(): Bytes {
-    let value = this.get("address");
-    return value.toBytes();
-  }
-
-  set address(value: Bytes) {
-    this.set("address", Value.fromBytes(value));
-  }
-
-  get balance(): BigInt {
-    let value = this.get("balance");
-    return value.toBigInt();
-  }
-
-  set balance(value: BigInt) {
-    this.set("balance", Value.fromBigInt(value));
-  }
-
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
-  }
-
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
   }
 }

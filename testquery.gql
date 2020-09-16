@@ -1,261 +1,152 @@
 {
-  comptrollers {
+  comptrollers(first: 1) {
     id
     owner
     reserveRateMantissa
 
-    players {
-      id
-    }
-    prizePools {
-      id
-    }
-  }
-
-  compoundPrizePoolBuilders {
-    id
-
-    comptroller {
-      id
-    }
-    trustedForwarder
-  }
-
-  singleRandomWinnerPrizeStrategies {
-    id
-    owner
-
-    compoundPrizePoolBuilder {
-      id
-    }
-
-    prizePool {
-      id
-    }
-
-    ticket
-    rng
-    sponsorship
-
-    prizePeriodSeconds
-    prizePeriodStartedAt
-    prizePeriodEndAt
-  }
-
-  prizePools {
-    id
-    owner
-    comptroller {
-      id
-    }
-    trustedForwarder
-    prizeStrategy
-    deactivated
-
-    reserveFeeControlledToken
-
-    underlyingCollateralToken
-    underlyingCollateralDecimals
-    underlyingCollateralName
-    underlyingCollateralSymbol
-
-    maxExitFeeMantissa
-    maxTimelockDuration
-    timelockTotalSupply
-    liquidityCap
-
-    currentPrizeId
-    currentState
-
-    playerCount
-    totalSupply
-
-    cumulativePrizeGross
-    cumulativePrizeReserveFee
-    cumulativePrizeNet
-
-    tokenCreditRates {
-      id
-    }
-
-    prizes {
-      id
-
-      net
-      gross
-      reserveFee
-    }
-
-    players {
-      id
-      address
-      balance
-      timelockedBalance
-      unlockTimestamp
-    }
-
-    balanceDrips {
+    prizePools(first: 1) {
       id
       deactivated
+      owner
+      trustedForwarder
+      comptroller {
+        id
+      }
+
+      reserveFeeControlledToken
+
+      underlyingCollateralToken
+      underlyingCollateralName
+      underlyingCollateralSymbol
+      underlyingCollateralDecimals
+
+    	maxExitFeeMantissa
+      maxTimelockDuration
+      timelockTotalSupply
+      liquidityCap
+
+      currentPrizeId
+      currentState
+
+      cumulativePrizeNet
+      cumulativePrizeGross
+      cumulativePrizeReserveFee
+
+      prizeStrategy {
+        singleRandomWinner {
+          id
+          owner
+          rng
+          ticket {
+            id
+            type
+            name
+            symbol
+            decimals
+            totalSupply
+          }
+          sponsorship {
+            id
+            type
+            name
+            symbol
+            decimals
+            totalSupply
+          }
+
+          prizePeriodSeconds
+          prizePeriodStartedAt
+          prizePeriodEndAt
+
+          externalErc20Awards {
+            address
+          }
+          externalErc721Awards {
+            address
+            tokenIds
+          }
+        }
+      }
+
+      totalSupply
+      totalSponsorship
+
+      playerCount
+      players {
+        id
+        address
+        balance
+        timelockedBalance
+        unlockTimestamp
+        cumulativeWinnings
+      }
+
+      prizesCount
+      prizes {
+        id
+        awardedBlock
+        randomNumber
+        amount
+        totalTicketSupply
+        winners
+      }
+
+      tokenCreditRates {
+        creditRateMantissa
+        creditLimitMantissa
+      }
+
+      tokenCreditBalances {
+        balance
+        timestamp
+        initialized
+      }
+
+      sponsors {
+        id
+        address
+        balance
+      }
+
+      balanceDrips {
+        id
+        measureToken
+        dripToken
+
+        dripRatePerSecond
+        exchangeRateMantissa
+        timestamp
+
+        players {
+          address
+        }
+      }
+      volumeDrips {
+        id
+        measureToken
+        dripToken
+        dripAmount
+
+        deactivated
+  			referral
+
+        periodSeconds
+        periodCount
+        periods {
+          id
+          periodIndex
+          totalSupply
+          dripAmount
+          endTime
+          isDripping
+        }
+        deposits {
+          id
+          address
+          periodIndex
+          balance
+        }
+      }
     }
-    volumeDrips {
-      id
-      deactivated
-    }
-  }
-
-  prizes {
-    id
-
-    prizePool {
-      id
-    }
-
-    gross
-    net
-    reserveFee
-
-    randomNumber
-    rngRequestId
-
-    awardStartOperator
-    awardedOperator
-
-    prizePeriodStartedTimestamp
-    lockBlock
-
-    awardedBlock
-    awardedTimestamp
-
-    totalTicketSupply
-
-    winners
-  }
-
-  players {
-    id
-
-    prizePool {
-      id
-    }
-
-    address
-    balance
-    timelockedBalance
-    unlockTimestamp
-    cumulativeWinnings
-  }
-
-  tickets {
-    id
-
-    name
-    symbol
-    decimals
-
-    prizeStrategy
-  }
-
-  sponsorships {
-    id
-
-    name
-    symbol
-    decimals
-
-    prizeStrategy
-  }
-
-  balanceDrips {
-    id
-    prizePool {
-      id
-    }
-    measureToken
-    dripToken
-
-    dripRatePerSecond
-    exchangeRateMantissa
-    timestamp
-
-    players {
-      id
-    }
-
-    deactivated
-  }
-
-  balanceDripPlayers {
-    id
-    balanceDrip {
-      id
-    }
-    address
-  }
-
-  volumeDrips {
-    id
-    prizePool {
-      id
-    }
-    measureToken
-    dripToken
-		referral
-
-    periodSeconds
-    dripAmount
-    periodCount
-
-    deposits {
-      id
-    }
-    periods {
-      id
-    }
-
-    deactivated
-  }
-
-  volumeDripPlayers {
-    id
-    volumeDrip {
-      id
-    }
-    address
-    periodIndex
-    balance
-  }
-
-  volumeDripPeriods {
-    id
-    volumeDrip {
-      id
-    }
-
-    periodIndex
-    totalSupply
-    dripAmount
-    endTime
-
-    isDripping
-  }
-
-  dripTokenPlayers {
-   	id
-    comptroller {
-      id
-    }
-    dripToken
-    address
-    balance
-  }
-
-  creditRates {
-    id
-    prizePool {
-      id
-    }
-    creditLimitMantissa
-    creditRateMantissa
   }
 }

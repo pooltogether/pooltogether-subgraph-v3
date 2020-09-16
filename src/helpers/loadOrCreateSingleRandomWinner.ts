@@ -1,119 +1,58 @@
-import { Address, Bytes, BigInt, log } from "@graphprotocol/graph-ts"
+import { Address, Bytes, BigInt, log } from '@graphprotocol/graph-ts'
+
 import {
   PrizePool,
+  PrizeStrategy,
   SingleRandomWinner,
-  Prize,
 } from '../../generated/schema'
+
 import {
-  ERC20 as ERC20Contract,
-} from '../../generated/CompoundPrizePoolBuilder/ERC20'
-import {
-  ControlledToken as ControlledTokenContract,
-} from '../../generated/CompoundPrizePoolBuilder/ControlledToken'
-import {
-  PrizePool as PrizePoolContract,
-} from '../../generated/templates/PrizePool/PrizePool'
+  SingleRandomWinner as SingleRandomWinnerTemplate,
+} from '../../generated/templates'
+
 import {
   SingleRandomWinner as SingleRandomWinnerContract,
 } from '../../generated/templates/SingleRandomWinner/SingleRandomWinner'
-import {
-  SingleRandomWinner as SingleRandomWinnerTemplate,
-  PrizePool as PrizePoolTemplate
-} from '../../generated/templates'
 
+import { ZERO_ADDRESS } from './common'
 
-import { createSponsorship } from './createSponsorship'
-import { createTicket } from './createTicket'
-
-const ZERO = BigInt.fromI32(0)
-const ONE = BigInt.fromI32(1)
 
 export function loadOrCreateSingleRandomWinner(
-  blockNumber: BigInt,
-  builder: Address,
-  creator: Address,
-  prizePool: Address,
-  prizeStrategy: Address,
+  singleRandomWinner: Address,
 ): SingleRandomWinner {
-  let _prizeStrategy = SingleRandomWinner.load(prizeStrategy.toHex())
+  const _singleRandomWinnerAddress = singleRandomWinner.toHex()
+  let _singleRandomWinner = SingleRandomWinner.load(_singleRandomWinnerAddress)
 
-  if (!_prizeStrategy) {
-    _prizeStrategy = new SingleRandomWinner(prizeStrategy.toHex())
-    const boundPrizeStrategy = SingleRandomWinnerContract.bind(prizeStrategy)
+  if (!_singleRandomWinner) {
+    // Create SingleRandomWinner
+    _singleRandomWinner = new SingleRandomWinner(_singleRandomWinnerAddress)
+    const boundSingleRandomWinner = SingleRandomWinnerContract.bind(singleRandomWinner)
 
-    _prizeStrategy.compoundPrizePoolBuilder = builder.toHex()
-    _prizeStrategy.owner = creator
-    _prizeStrategy.prizePool = prizePool.toHex()
-    _prizeStrategy.ticket = boundPrizeStrategy.ticket()
-    _prizeStrategy.rng = boundPrizeStrategy.rng()
-    _prizeStrategy.sponsorship = boundPrizeStrategy.sponsorship()
-
-    _prizeStrategy.prizePeriodSeconds = boundPrizeStrategy.prizePeriodSeconds()
-    _prizeStrategy.prizePeriodStartedAt = boundPrizeStrategy.prizePeriodStartedAt()
-    _prizeStrategy.prizePeriodEndAt = _prizeStrategy.prizePeriodStartedAt.plus(_prizeStrategy.prizePeriodSeconds)
-
-
-
-
-
-    const _pool = new PrizePool(prizePool.toHex())
-    const boundPrizePool = PrizePoolContract.bind(prizePool)
-    const boundToken = ControlledTokenContract.bind(boundPrizePool.token())
-    const boundTicket = ERC20Contract.bind(Address.fromString(_prizeStrategy.ticket.toHex()))
-
-    _pool.prizeStrategy = prizeStrategy
-    _pool.comptroller = boundPrizePool.comptroller().toHex()
-    _pool.owner = creator
-    _pool.deactivated = false
-
-    _pool.reserveFeeControlledToken = boundPrizePool.reserveFeeControlledToken()
-
-    _pool.underlyingCollateralToken = boundPrizePool.token()
-    _pool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
-    _pool.underlyingCollateralName = boundToken.name()
-    _pool.underlyingCollateralSymbol = boundToken.symbol()
-
-    _pool.maxExitFeeMantissa = boundPrizePool.maxExitFeeMantissa()
-    _pool.maxTimelockDuration = boundPrizePool.maxTimelockDuration()
-    _pool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
-    _pool.liquidityCap = ZERO
-
-    _pool.currentState = 'Opened'
-    _pool.currentPrizeId = ONE
-    _pool.prizesCount = ZERO
-
-    _pool.playerCount = ZERO
-    _pool.totalSupply = boundTicket.totalSupply()
-
-    const boundSponsorship = ERC20Contract.bind(Address.fromString(_prizeStrategy.sponsorship.toHex()))
-    _pool.totalSponsorship = boundSponsorship.totalSupply()
-
-    _pool.cumulativePrizeGross = ZERO
-    _pool.cumulativePrizeReserveFee = ZERO
-    _pool.cumulativePrizeNet = ZERO
-
-    _pool.save()
+    // Update PrizeStrategy Link
+    let _prizeStrategy = PrizeStrategy.load(_singleRandomWinnerAddress)
+    _prizeStrategy.singleRandomWinner = _singleRandomWinner.id
     _prizeStrategy.save()
 
-
-    createSponsorship(
-      prizeStrategy,
-      boundPrizeStrategy.sponsorship()
-    )
-
-    createTicket(
-      prizeStrategy,
-      boundPrizeStrategy.ticket()
-    )
+    const _prizePoolAddress = _prizeStrategy.prizePool
+    const _prizePool = PrizePool.load(_prizePoolAddress)
 
 
+    _singleRandomWinner.owner = _prizePool.owner
+    _singleRandomWinner.prizePool = _prizePool.id
+    _singleRandomWinner.rng = boundSingleRandomWinner.rng()
+    _singleRandomWinner.ticket = ZERO_ADDRESS // boundPrizeStrategy.ticket()
+    _singleRandomWinner.sponsorship = ZERO_ADDRESS // boundPrizeStrategy.sponsorship()
+
+    _singleRandomWinner.prizePeriodSeconds = boundSingleRandomWinner.prizePeriodSeconds()
+    _singleRandomWinner.prizePeriodStartedAt = boundSingleRandomWinner.prizePeriodStartedAt()
+    _singleRandomWinner.prizePeriodEndAt = _singleRandomWinner.prizePeriodStartedAt.plus(_singleRandomWinner.prizePeriodSeconds)
+
+    _singleRandomWinner.save()
 
     // Start listening for events from the dynamically generated contract
-    SingleRandomWinnerTemplate.create(prizeStrategy)
+    SingleRandomWinnerTemplate.create(singleRandomWinner)
 
-    // Start listening for events from the dynamically generated contract
-    PrizePoolTemplate.create(prizePool)
   }
 
-  return _prizeStrategy as SingleRandomWinner
+  return _singleRandomWinner as SingleRandomWinner
 }

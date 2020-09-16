@@ -3,31 +3,37 @@ import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 import {
   Player,
   SingleRandomWinner,
+  PrizeStrategy,
   PrizePool,
   Sponsor,
+  ControlledToken,
 } from '../../generated/schema'
+
 import {
   ERC20 as ERC20Contract,
 } from '../../generated/templates/PrizePool/ERC20'
 
-const ZERO = BigInt.fromI32(0)
-const ONE = BigInt.fromI32(1)
+import { ZERO, ONE } from './common'
 
-
-// PRIZE POOLS
 export function updateTotals(_prizePool: PrizePool): void {
-  const _prizeStrategy = SingleRandomWinner.load(_prizePool.prizeStrategy.toString())
+  const prizeStrategyId = _prizePool.prizeStrategy
+  const prizeStrategy = PrizeStrategy.load(prizeStrategyId)
+  const singleRandomWinner = SingleRandomWinner.load(prizeStrategy.singleRandomWinner)
 
-  const boundTicket = ERC20Contract.bind(
-    Address.fromString(_prizeStrategy.ticket.toHexString())
-  )
-  _prizePool.totalSupply = boundTicket.totalSupply()
+  const ticketAddress = singleRandomWinner.ticket
+  const ticket = ControlledToken.load(ticketAddress)
+  const boundTicket = ERC20Contract.bind(Address.fromString(ticketAddress))
+  ticket.totalSupply = boundTicket.totalSupply()
+  ticket.save()
 
-  const boundSponsorship = ERC20Contract.bind(
-    Address.fromString(_prizeStrategy.sponsorship.toHexString())
-  )
-  _prizePool.totalSponsorship = boundSponsorship.totalSupply()
+  const sponsorshipAddress = singleRandomWinner.sponsorship
+  const sponsorship = ControlledToken.load(sponsorshipAddress)
+  const boundSponsorship = ERC20Contract.bind(Address.fromString(sponsorshipAddress))
+  sponsorship.totalSupply = boundSponsorship.totalSupply()
+  sponsorship.save()
 
+  _prizePool.totalSupply = ticket.totalSupply
+  _prizePool.totalSponsorship = sponsorship.totalSupply
   _prizePool.save()
 }
 

@@ -1,4 +1,5 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts'
+
 import {
   Player,
   DripTokenPlayer,
@@ -13,7 +14,8 @@ import {
   volumeDripPlayerId,
 } from './idTemplates'
 
-const ZERO = BigInt.fromI32(0)
+import { ZERO } from './common'
+
 
 export function loadOrCreatePlayer(
   prizePool: Address,
@@ -31,7 +33,6 @@ export function loadOrCreatePlayer(
 
     _player.timelockedBalance = ZERO
     _player.unlockTimestamp = ZERO
-
     _player.cumulativeWinnings = ZERO
 
     _player.save()
@@ -82,6 +83,7 @@ export function loadOrCreateBalanceDripPlayer(
 
   return _player as BalanceDripPlayer
 }
+
 
 export function loadOrCreateVolumeDripPlayer(
   volumeDripId: string,

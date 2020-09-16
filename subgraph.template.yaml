@@ -22,8 +22,6 @@ dataSources:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
-        # - name: CompoundPrizePool
-        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
         - name: SingleRandomWinner
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
         - name: CompoundPrizePoolBuilder
@@ -173,7 +171,7 @@ templates:
           handler: handleEmergencyShutdown
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-  - name: Sponsorship
+  - name: ControlledToken
     kind: ethereum/contract
     network: {{network}}
     source:
@@ -182,27 +180,9 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappingForSponsorship.ts
+      file: ./src/mappingForControlledToken.ts
       entities:
-        - Sponsorship
-      abis:
-        - name: ControlledToken
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
-      eventHandlers:
-        - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
-  - name: Ticket
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      abi: ControlledToken
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappingForTicket.ts
-      entities:
-        - Ticket
+        - ControlledToken
       abis:
         - name: ControlledToken
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
