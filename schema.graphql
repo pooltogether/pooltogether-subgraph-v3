@@ -12,7 +12,6 @@ enum ControlledTokenType {
 enum PrizePoolType {
   Compound
   yVault
-  Aave
 }
 
 # ID: `${comptroller.address}`
