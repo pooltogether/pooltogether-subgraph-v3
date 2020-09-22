@@ -1,11 +1,11 @@
 {
   "network": "rinkeby",
   "compoundPrizePoolBuilder": {
-    "address": "0xAE17b0BA282FBb24e5ba050C56302c02D2CF6c31",
-    "startBlock": "7175313"
+    "address": "0x99774B8A48a9651dA652FfD2C71e127aF5F76DD5",
+    "startBlock": "7220118"
   },
   "comptroller": {
-    "address": "0x7bdD8C15Bc4C5033086AD22D240F5ab493B74CA5",
-    "startBlock": "7175309"
+    "address": "0x958CfeFe5D550549A7abCFCEA1Be4cb54Ed99Fc7",
+    "startBlock": "7220113"
   }
 }

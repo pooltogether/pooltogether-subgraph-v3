@@ -22,6 +22,8 @@ dataSources:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        - name: CompoundPrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
         - name: SingleRandomWinner
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
         - name: CompoundPrizePoolBuilder
@@ -136,6 +138,8 @@ templates:
           file: ./abis/ERC20.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        - name: CompoundPrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
       eventHandlers:
         - event: Initialized(address,address,uint256,uint256)
           handler: handleInitialized
