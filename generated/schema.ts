@@ -163,6 +163,15 @@ export class PrizePool extends Entity {
     this.set("reserveFeeControlledToken", Value.fromBytes(value));
   }
 
+  get yieldToken(): Bytes {
+    let value = this.get("yieldToken");
+    return value.toBytes();
+  }
+
+  set yieldToken(value: Bytes) {
+    this.set("yieldToken", Value.fromBytes(value));
+  }
+
   get underlyingCollateralToken(): Bytes {
     let value = this.get("underlyingCollateralToken");
     return value.toBytes();

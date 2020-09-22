@@ -36,6 +36,8 @@ type PrizePool @entity {
 
   reserveFeeControlledToken: Bytes!
 
+  yieldToken: Bytes!
+
   underlyingCollateralToken: Bytes!
   underlyingCollateralDecimals: BigInt!
   underlyingCollateralName: String!

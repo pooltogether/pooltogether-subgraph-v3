@@ -13,6 +13,10 @@ import {
 } from '../../generated/templates/PrizePool/PrizePool'
 
 import {
+  CompoundPrizePool as CompoundPrizePoolContract,
+} from '../../generated/templates/PrizePool/CompoundPrizePool'
+
+import {
   ControlledToken as ControlledTokenContract,
 } from '../../generated/templates/ControlledToken/ControlledToken'
 
@@ -22,6 +26,7 @@ import { ZERO, ONE } from './common'
 
 
 export function loadOrCreatePrizePool(
+  prizePoolType: string,
   creator: Address,
   prizePool: Address,
   prizeStrategy: Address,
@@ -45,6 +50,11 @@ export function loadOrCreatePrizePool(
 
     _prizePool.reserveFeeControlledToken = boundPrizePool.reserveFeeControlledToken()
 
+    if (prizePoolType === 'Compound') {
+      const boundCompoundPrizePool = CompoundPrizePoolContract.bind(prizePool)
+      _prizePool.yieldToken = boundCompoundPrizePool.cToken()
+    }
+
     _prizePool.underlyingCollateralToken = boundPrizePool.token()
     _prizePool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
     _prizePool.underlyingCollateralName = boundToken.name()
@@ -54,6 +64,9 @@ export function loadOrCreatePrizePool(
     _prizePool.maxTimelockDuration = boundPrizePool.maxTimelockDuration()
     _prizePool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
     _prizePool.liquidityCap = ZERO
+
+    _prizePool.totalSupply = ZERO
+    _prizePool.totalSponsorship = ZERO
 
     _prizePool.currentState = 'Opened'
     _prizePool.currentPrizeId = ONE

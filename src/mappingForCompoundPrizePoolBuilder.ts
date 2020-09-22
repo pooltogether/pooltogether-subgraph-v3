@@ -29,6 +29,7 @@ export function handleCompoundPrizePoolCreated(event: CompoundPrizePoolCreated):
   loadOrCreateComptroller(comptroller)
 
   loadOrCreatePrizePool(
+    'Compound',
     event.params.creator,
     event.params.prizePool,
     event.params.prizeStrategy,
