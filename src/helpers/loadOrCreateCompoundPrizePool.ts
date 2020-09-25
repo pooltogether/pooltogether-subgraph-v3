@@ -2,6 +2,7 @@ import { Address, BigInt } from '@graphprotocol/graph-ts'
 
 import {
   PrizePool,
+  CompoundPrizePool,
 } from '../../generated/schema'
 
 import {
@@ -9,12 +10,12 @@ import {
 } from '../../generated/templates'
 
 import {
-  PrizePool as PrizePoolContract,
-} from '../../generated/templates/PrizePool/PrizePool'
+  CompoundPrizePool as CompoundPrizePoolTemplate,
+} from '../../generated/templates'
 
 import {
   CompoundPrizePool as CompoundPrizePoolContract,
-} from '../../generated/templates/PrizePool/CompoundPrizePool'
+} from '../../generated/templates/CompoundPrizePool/CompoundPrizePool'
 
 import {
   ControlledToken as ControlledTokenContract,
@@ -25,8 +26,7 @@ import { loadOrCreatePrizeStrategy } from './loadOrCreatePrizeStrategy'
 import { ZERO, ONE } from './common'
 
 
-export function loadOrCreatePrizePool(
-  prizePoolType: string,
+export function loadOrCreateCompoundPrizePool(
   creator: Address,
   prizePool: Address,
   prizeStrategy: Address,
@@ -37,10 +37,12 @@ export function loadOrCreatePrizePool(
 
   if (!_prizePool) {
     _prizePool = new PrizePool(prizePool.toHex())
+    const _compoundPrizePool = new CompoundPrizePool(prizePool.toHex())
     const _prizeStrategy = loadOrCreatePrizeStrategy(prizePool, prizeStrategy)
 
-    const boundPrizePool = PrizePoolContract.bind(prizePool)
-    const boundToken = ControlledTokenContract.bind(boundPrizePool.token())
+    const boundCompoundPrizePool = CompoundPrizePoolContract.bind(prizePool)
+    const poolTokenAddress = boundCompoundPrizePool.token()
+    const boundToken = ControlledTokenContract.bind(poolTokenAddress)
 
     _prizePool.owner = creator
     _prizePool.comptroller = comptroller.toHex()
@@ -48,21 +50,19 @@ export function loadOrCreatePrizePool(
     _prizePool.trustedForwarder = trustedForwarder
     _prizePool.deactivated = false
 
-    _prizePool.reserveFeeControlledToken = boundPrizePool.reserveFeeControlledToken()
+    _prizePool.prizePoolType = 'Compound'
+    _prizePool.compoundPrizePool = _compoundPrizePool.id
 
-    if (prizePoolType === 'Compound') {
-      const boundCompoundPrizePool = CompoundPrizePoolContract.bind(prizePool)
-      _prizePool.yieldToken = boundCompoundPrizePool.cToken()
-    }
+    _prizePool.reserveFeeControlledToken = boundCompoundPrizePool.reserveFeeControlledToken()
 
-    _prizePool.underlyingCollateralToken = boundPrizePool.token()
+    _prizePool.underlyingCollateralToken = poolTokenAddress
     _prizePool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
     _prizePool.underlyingCollateralName = boundToken.name()
     _prizePool.underlyingCollateralSymbol = boundToken.symbol()
 
-    _prizePool.maxExitFeeMantissa = boundPrizePool.maxExitFeeMantissa()
-    _prizePool.maxTimelockDuration = boundPrizePool.maxTimelockDuration()
-    _prizePool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
+    _prizePool.maxExitFeeMantissa = boundCompoundPrizePool.maxExitFeeMantissa()
+    _prizePool.maxTimelockDuration = boundCompoundPrizePool.maxTimelockDuration()
+    _prizePool.timelockTotalSupply = boundCompoundPrizePool.timelockTotalSupply()
     _prizePool.liquidityCap = ZERO
 
     _prizePool.totalSupply = ZERO
@@ -79,9 +79,11 @@ export function loadOrCreatePrizePool(
     _prizePool.cumulativePrizeNet = ZERO
 
     _prizePool.save()
+    _compoundPrizePool.save()
 
     // Start listening for events from the dynamically generated contract
     PrizePoolTemplate.create(prizePool)
+    CompoundPrizePoolTemplate.create(prizePool)
   }
 
   return _prizePool as PrizePool

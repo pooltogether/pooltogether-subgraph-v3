@@ -154,6 +154,32 @@ export class PrizePool extends Entity {
     this.set("deactivated", Value.fromBoolean(value));
   }
 
+  get prizePoolType(): string {
+    let value = this.get("prizePoolType");
+    return value.toString();
+  }
+
+  set prizePoolType(value: string) {
+    this.set("prizePoolType", Value.fromString(value));
+  }
+
+  get compoundPrizePool(): string | null {
+    let value = this.get("compoundPrizePool");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set compoundPrizePool(value: string | null) {
+    if (value === null) {
+      this.unset("compoundPrizePool");
+    } else {
+      this.set("compoundPrizePool", Value.fromString(value as string));
+    }
+  }
+
   get reserveFeeControlledToken(): Bytes {
     let value = this.get("reserveFeeControlledToken");
     return value.toBytes();
@@ -161,15 +187,6 @@ export class PrizePool extends Entity {
 
   set reserveFeeControlledToken(value: Bytes) {
     this.set("reserveFeeControlledToken", Value.fromBytes(value));
-  }
-
-  get yieldToken(): Bytes {
-    let value = this.get("yieldToken");
-    return value.toBytes();
-  }
-
-  set yieldToken(value: Bytes) {
-    this.set("yieldToken", Value.fromBytes(value));
   }
 
   get underlyingCollateralToken(): Bytes {
@@ -394,6 +411,54 @@ export class PrizePool extends Entity {
 
   set volumeDrips(value: Array<string>) {
     this.set("volumeDrips", Value.fromStringArray(value));
+  }
+}
+
+export class CompoundPrizePool extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save CompoundPrizePool entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save CompoundPrizePool entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("CompoundPrizePool", id.toString(), this);
+  }
+
+  static load(id: string): CompoundPrizePool | null {
+    return store.get("CompoundPrizePool", id) as CompoundPrizePool | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get cToken(): Bytes | null {
+    let value = this.get("cToken");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set cToken(value: Bytes | null) {
+    if (value === null) {
+      this.unset("cToken");
+    } else {
+      this.set("cToken", Value.fromBytes(value as Bytes));
+    }
   }
 }
 

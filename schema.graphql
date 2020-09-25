@@ -9,10 +9,10 @@ enum ControlledTokenType {
   Sponsorship
 }
 
-enum YieldServiceTokenType {
-  cToken
+enum PrizePoolType {
+  Compound
+  yVault
 }
-
 
 # ID: `${comptroller.address}`
 type Comptroller @entity {
@@ -34,9 +34,10 @@ type PrizePool @entity {
   trustedForwarder: Bytes!
   deactivated: Boolean!
 
-  reserveFeeControlledToken: Bytes!
+  prizePoolType: PrizePoolType!
+  compoundPrizePool: CompoundPrizePool
 
-  yieldToken: Bytes!
+  reserveFeeControlledToken: Bytes!
 
   underlyingCollateralToken: Bytes!
   underlyingCollateralDecimals: BigInt!
@@ -70,6 +71,13 @@ type PrizePool @entity {
 
   balanceDrips: [BalanceDrip!]! @derivedFrom(field: "prizePool")
   volumeDrips: [VolumeDrip!]! @derivedFrom(field: "prizePool")
+}
+
+# ID: `${compoundPrizePool.address}`
+type CompoundPrizePool @entity {
+  id: ID!
+
+  cToken: Bytes
 }
 
 # ID: `${prizeStrategy.address}`

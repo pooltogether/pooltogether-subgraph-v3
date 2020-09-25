@@ -9,12 +9,8 @@ import {
   SingleRandomWinnerCreated,
 } from '../generated/CompoundPrizePoolBuilder/CompoundPrizePoolBuilder'
 
-import {
-  SingleRandomWinner,
-} from '../generated/schema'
-
 import { loadOrCreateComptroller } from './helpers/loadOrCreateComptroller'
-import { loadOrCreatePrizePool } from './helpers/loadOrCreatePrizePool'
+import { loadOrCreateCompoundPrizePool } from './helpers/loadOrCreateCompoundPrizePool'
 import { loadOrCreateSingleRandomWinner } from './helpers/loadOrCreateSingleRandomWinner'
 import { createControlledToken } from './helpers/createControlledToken'
 
@@ -28,8 +24,7 @@ export function handleCompoundPrizePoolCreated(event: CompoundPrizePoolCreated):
 
   loadOrCreateComptroller(comptroller)
 
-  loadOrCreatePrizePool(
-    'Compound',
+  loadOrCreateCompoundPrizePool(
     event.params.creator,
     event.params.prizePool,
     event.params.prizeStrategy,

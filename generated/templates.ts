@@ -20,6 +20,20 @@ export class SingleRandomWinner extends DataSourceTemplate {
   }
 }
 
+export class CompoundPrizePool extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("CompoundPrizePool", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "CompoundPrizePool",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
 export class PrizePool extends DataSourceTemplate {
   static create(address: Address): void {
     DataSourceTemplate.create("PrizePool", [address.toHex()]);

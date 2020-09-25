@@ -121,6 +121,28 @@ templates:
           handler: handleExternalErc721AwardAdded
         - event: ExternalErc721AwardRemoved(indexed address)
           handler: handleExternalErc721AwardRemoved
+  - name: CompoundPrizePool
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: CompoundPrizePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForCompoundPrizePool.ts
+      entities:
+        - CompoundPrizePool
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        - name: CompoundPrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
+      eventHandlers:
+        - event: CompoundPrizePoolInitialized(indexed address)
+          handler: handleCompoundPrizePoolInitialized
   - name: PrizePool
     kind: ethereum/contract
     network: {{network}}
