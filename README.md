@@ -6,7 +6,7 @@
 
 <br />
 
-### PoolTogether v3 Subgraph
+## PoolTogether v3 Subgraph
 
 The official PoolTogether v3 subgraph.
 
@@ -16,12 +16,12 @@ The official PoolTogether v3 subgraph.
 $ yarn prepare:local && graph codegen subgraph.local.yaml && graph build subgraph.local.yaml && yarn create:local && yarn deploy:local
 ```
 
-##### For Kovan:
+###### For Kovan:
 ```sh
 $ yarn prepare:kovan && graph codegen subgraph.kovan.yaml && yarn deploy:kovan
 ```
 
-##### For Rinkeby:
+###### For Rinkeby:
 ```sh
 $ yarn prepare:rinkeby && graph codegen subgraph.rinkeby.yaml && yarn deploy:rinkeby
 ```
@@ -30,7 +30,7 @@ $ yarn prepare:rinkeby && graph codegen subgraph.rinkeby.yaml && yarn deploy:rin
 
 First you'll need to setup a graph node, then you can deploy the project to it.
 
-##### Local Graph Node
+###### Local Graph Node
 
 1. Clone the Graph Node repo:
 
@@ -56,7 +56,7 @@ $ ./setup.sh
 $ docker-compose up
 ```
 
-##### Deploying the Subgraph Locally
+###### Deploying the Subgraph Locally
 
 Make sure you've already deployed the PoolTogether contracts.  If you haven't done so, check out the [mock project](https://github.com/pooltogether/pooltogether-contracts-mock).  Once the contracts are deployed, you can set up the subgraph:
 
