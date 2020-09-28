@@ -36,32 +36,6 @@ export class CompoundPrizePoolCreated__Params {
   }
 }
 
-export class SingleRandomWinnerCreated extends ethereum.Event {
-  get params(): SingleRandomWinnerCreated__Params {
-    return new SingleRandomWinnerCreated__Params(this);
-  }
-}
-
-export class SingleRandomWinnerCreated__Params {
-  _event: SingleRandomWinnerCreated;
-
-  constructor(event: SingleRandomWinnerCreated) {
-    this._event = event;
-  }
-
-  get singleRandomWinner(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get ticket(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get sponsorship(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
 export class CompoundPrizePoolBuilder__createCompoundPrizePoolInputConfigStruct extends ethereum.Tuple {
   get cToken(): Address {
     return this[0].toAddress();
@@ -179,29 +153,6 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  controlledTokenProxyFactory(): Address {
-    let result = super.call(
-      "controlledTokenProxyFactory",
-      "controlledTokenProxyFactory():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_controlledTokenProxyFactory(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "controlledTokenProxyFactory",
-      "controlledTokenProxyFactory():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   createCompoundPrizePool(
     config: CompoundPrizePoolBuilder__createCompoundPrizePoolInputConfigStruct,
     prizeStrategy: Address
@@ -272,58 +223,20 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  proxyFactory(): Address {
-    let result = super.call("proxyFactory", "proxyFactory():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_proxyFactory(): ethereum.CallResult<Address> {
-    let result = super.tryCall("proxyFactory", "proxyFactory():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  singleRandomWinnerProxyFactory(): Address {
+  singleRandomWinnerBuilder(): Address {
     let result = super.call(
-      "singleRandomWinnerProxyFactory",
-      "singleRandomWinnerProxyFactory():(address)",
+      "singleRandomWinnerBuilder",
+      "singleRandomWinnerBuilder():(address)",
       []
     );
 
     return result[0].toAddress();
   }
 
-  try_singleRandomWinnerProxyFactory(): ethereum.CallResult<Address> {
+  try_singleRandomWinnerBuilder(): ethereum.CallResult<Address> {
     let result = super.tryCall(
-      "singleRandomWinnerProxyFactory",
-      "singleRandomWinnerProxyFactory():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  ticketProxyFactory(): Address {
-    let result = super.call(
-      "ticketProxyFactory",
-      "ticketProxyFactory():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_ticketProxyFactory(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "ticketProxyFactory",
-      "ticketProxyFactory():(address)",
+      "singleRandomWinnerBuilder",
+      "singleRandomWinnerBuilder():(address)",
       []
     );
     if (result.reverted) {
@@ -378,28 +291,16 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _singleRandomWinnerProxyFactory(): Address {
+  get _trustedForwarder(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get _trustedForwarder(): Address {
+  get _compoundPrizePoolProxyFactory(): Address {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get _compoundPrizePoolProxyFactory(): Address {
+  get _singleRandomWinnerBuilder(): Address {
     return this._call.inputValues[3].value.toAddress();
-  }
-
-  get _controlledTokenProxyFactory(): Address {
-    return this._call.inputValues[4].value.toAddress();
-  }
-
-  get _proxyFactory(): Address {
-    return this._call.inputValues[5].value.toAddress();
-  }
-
-  get _ticketProxyFactory(): Address {
-    return this._call.inputValues[6].value.toAddress();
   }
 }
 

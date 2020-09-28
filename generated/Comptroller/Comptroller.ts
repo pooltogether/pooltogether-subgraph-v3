@@ -1006,7 +1006,7 @@ export class BeforeTokenTransferCall__Inputs {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get amount(): BigInt {
+  get value2(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
 
@@ -1176,6 +1176,56 @@ export class InitializeCall__Outputs {
 
   constructor(call: InitializeCall) {
     this._call = call;
+  }
+}
+
+export class PokeDripsCall extends ethereum.Call {
+  get inputs(): PokeDripsCall__Inputs {
+    return new PokeDripsCall__Inputs(this);
+  }
+
+  get outputs(): PokeDripsCall__Outputs {
+    return new PokeDripsCall__Outputs(this);
+  }
+}
+
+export class PokeDripsCall__Inputs {
+  _call: PokeDripsCall;
+
+  constructor(call: PokeDripsCall) {
+    this._call = call;
+  }
+
+  get pairs(): Array<PokeDripsCallPairsStruct> {
+    return this._call.inputValues[0].value.toTupleArray<
+      PokeDripsCallPairsStruct
+    >();
+  }
+
+  get user(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get dripTokens(): Array<Address> {
+    return this._call.inputValues[2].value.toAddressArray();
+  }
+}
+
+export class PokeDripsCall__Outputs {
+  _call: PokeDripsCall;
+
+  constructor(call: PokeDripsCall) {
+    this._call = call;
+  }
+}
+
+export class PokeDripsCallPairsStruct extends ethereum.Tuple {
+  get source(): Address {
+    return this[0].toAddress();
+  }
+
+  get measure(): Address {
+    return this[1].toAddress();
   }
 }
 

@@ -1,8 +1,6 @@
-import { Address, Bytes, BigInt, log } from '@graphprotocol/graph-ts'
+import { Address } from '@graphprotocol/graph-ts'
 
 import {
-  PrizePool,
-  PrizeStrategy,
   SingleRandomWinner,
 } from '../../generated/schema'
 
@@ -13,6 +11,9 @@ import {
 import {
   SingleRandomWinner as SingleRandomWinnerContract,
 } from '../../generated/templates/SingleRandomWinner/SingleRandomWinner'
+
+import { loadOrCreatePrizePool } from './loadOrCreatePrizePool'
+import { loadOrCreatePrizeStrategy } from './loadOrCreatePrizeStrategy'
 
 import { ZERO_ADDRESS } from './common'
 
@@ -26,32 +27,31 @@ export function loadOrCreateSingleRandomWinner(
   if (!_singleRandomWinner) {
     // Create SingleRandomWinner
     _singleRandomWinner = new SingleRandomWinner(_singleRandomWinnerAddress)
-    const boundSingleRandomWinner = SingleRandomWinnerContract.bind(singleRandomWinner)
+    const _boundSingleRandomWinner = SingleRandomWinnerContract.bind(singleRandomWinner)
+
+    // Get Prize Pool
+    const _prizePoolAddress = _boundSingleRandomWinner.prizePool()
+    const _prizePool = loadOrCreatePrizePool(_prizePoolAddress, singleRandomWinner)
 
     // Update PrizeStrategy Link
-    let _prizeStrategy = PrizeStrategy.load(_singleRandomWinnerAddress)
+    const _prizeStrategy = loadOrCreatePrizeStrategy(_prizePoolAddress, singleRandomWinner)
     _prizeStrategy.singleRandomWinner = _singleRandomWinner.id
     _prizeStrategy.save()
 
-    const _prizePoolAddress = _prizeStrategy.prizePool
-    const _prizePool = PrizePool.load(_prizePoolAddress)
-
-
     _singleRandomWinner.owner = _prizePool.owner
     _singleRandomWinner.prizePool = _prizePool.id
-    _singleRandomWinner.rng = boundSingleRandomWinner.rng()
-    _singleRandomWinner.ticket = ZERO_ADDRESS // boundPrizeStrategy.ticket()
-    _singleRandomWinner.sponsorship = ZERO_ADDRESS // boundPrizeStrategy.sponsorship()
+    _singleRandomWinner.rng = _boundSingleRandomWinner.rng()
+    _singleRandomWinner.ticket = ZERO_ADDRESS
+    _singleRandomWinner.sponsorship = ZERO_ADDRESS
 
-    _singleRandomWinner.prizePeriodSeconds = boundSingleRandomWinner.prizePeriodSeconds()
-    _singleRandomWinner.prizePeriodStartedAt = boundSingleRandomWinner.prizePeriodStartedAt()
+    _singleRandomWinner.prizePeriodSeconds = _boundSingleRandomWinner.prizePeriodSeconds()
+    _singleRandomWinner.prizePeriodStartedAt = _boundSingleRandomWinner.prizePeriodStartedAt()
     _singleRandomWinner.prizePeriodEndAt = _singleRandomWinner.prizePeriodStartedAt.plus(_singleRandomWinner.prizePeriodSeconds)
 
     _singleRandomWinner.save()
 
     // Start listening for events from the dynamically generated contract
     SingleRandomWinnerTemplate.create(singleRandomWinner)
-
   }
 
   return _singleRandomWinner as SingleRandomWinner

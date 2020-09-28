@@ -643,12 +643,16 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[1].value.toString();
   }
 
+  get _decimals(): i32 {
+    return this._call.inputValues[2].value.toI32();
+  }
+
   get _trustedForwarder(): Address {
-    return this._call.inputValues[2].value.toAddress();
+    return this._call.inputValues[3].value.toAddress();
   }
 
   get _controller(): Address {
-    return this._call.inputValues[3].value.toAddress();
+    return this._call.inputValues[4].value.toAddress();
   }
 }
 

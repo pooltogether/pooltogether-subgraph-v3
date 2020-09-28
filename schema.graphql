@@ -34,7 +34,7 @@ type PrizePool @entity {
   trustedForwarder: Bytes!
   deactivated: Boolean!
 
-  prizePoolType: PrizePoolType!
+  prizePoolType: PrizePoolType
   compoundPrizePool: CompoundPrizePool
 
   reserveFeeControlledToken: Bytes!

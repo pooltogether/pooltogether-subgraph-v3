@@ -21,7 +21,7 @@ import {
   InstantWithdrawal,
   TimelockedWithdrawal,
   TimelockedWithdrawalSwept,
-  CreditRateSet,
+  CreditPlanSet,
   PrizeStrategySet,
   EmergencyShutdown,
   OwnershipTransferred,
@@ -41,6 +41,7 @@ import {
 
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
+import { loadOrCreatePrizeStrategy } from './helpers/loadOrCreatePrizeStrategy'
 import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePoolCreditRate'
 
 import { ZERO, ZERO_ADDRESS } from './helpers/common'
@@ -70,17 +71,18 @@ export function handleLiquidityCapSet(event: LiquidityCapSet): void {
   _prizePool.save()
 }
 
-export function handleCreditRateSet(event: CreditRateSet): void {
-  const _creditRate = loadOrCreatePrizePoolCreditRate(event.address, event.params.controlledToken)
+export function handleCreditPlanSet(event: CreditPlanSet): void {
+  const _creditRate = loadOrCreatePrizePoolCreditRate(event.address, event.params.token)
   _creditRate.creditLimitMantissa = event.params.creditLimitMantissa
   _creditRate.creditRateMantissa = event.params.creditRateMantissa
   _creditRate.save()
 }
 
 export function handlePrizeStrategySet(event: PrizeStrategySet): void {
-  const _prizeStrategyAddress = event.params.prizeStrategy.toHex()
-  const _prizeStrategy = PrizeStrategy.load(_prizeStrategyAddress)
-  _prizeStrategy.singleRandomWinner = _prizeStrategyAddress
+  const _prizePoolAddress = event.address
+  const _prizeStrategyAddress = event.params.prizeStrategy
+  const _prizeStrategy = loadOrCreatePrizeStrategy(_prizePoolAddress, _prizeStrategyAddress)
+  _prizeStrategy.singleRandomWinner = _prizeStrategyAddress.toHex()
   _prizeStrategy.save()
 }
 
