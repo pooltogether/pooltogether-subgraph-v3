@@ -154,13 +154,21 @@ export class PrizePool extends Entity {
     this.set("deactivated", Value.fromBoolean(value));
   }
 
-  get prizePoolType(): string {
+  get prizePoolType(): string | null {
     let value = this.get("prizePoolType");
-    return value.toString();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set prizePoolType(value: string) {
-    this.set("prizePoolType", Value.fromString(value));
+  set prizePoolType(value: string | null) {
+    if (value === null) {
+      this.unset("prizePoolType");
+    } else {
+      this.set("prizePoolType", Value.fromString(value as string));
+    }
   }
 
   get compoundPrizePool(): string | null {

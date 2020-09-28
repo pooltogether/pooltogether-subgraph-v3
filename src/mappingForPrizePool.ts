@@ -41,6 +41,7 @@ import {
 
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
+import { loadOrCreatePrizeStrategy } from './helpers/loadOrCreatePrizeStrategy'
 import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePoolCreditRate'
 
 import { ZERO, ZERO_ADDRESS } from './helpers/common'
@@ -78,9 +79,10 @@ export function handleCreditPlanSet(event: CreditPlanSet): void {
 }
 
 export function handlePrizeStrategySet(event: PrizeStrategySet): void {
-  const _prizeStrategyAddress = event.params.prizeStrategy.toHex()
-  const _prizeStrategy = PrizeStrategy.load(_prizeStrategyAddress)
-  _prizeStrategy.singleRandomWinner = _prizeStrategyAddress
+  const _prizePoolAddress = event.address
+  const _prizeStrategyAddress = event.params.prizeStrategy
+  const _prizeStrategy = loadOrCreatePrizeStrategy(_prizePoolAddress, _prizeStrategyAddress)
+  _prizeStrategy.singleRandomWinner = _prizeStrategyAddress.toHex()
   _prizeStrategy.save()
 }
 
