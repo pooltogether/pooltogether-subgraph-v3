@@ -4,10 +4,9 @@ import {
   PrizeStrategy,
 } from '../../generated/schema'
 
-
 export function loadOrCreatePrizeStrategy(
-  prizePool: Address,
   prizeStrategy: Address,
+  prizePool: Address,
 ): PrizeStrategy {
   let _prizeStrategy = PrizeStrategy.load(prizeStrategy.toHex())
 

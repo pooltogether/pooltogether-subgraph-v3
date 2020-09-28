@@ -21,7 +21,7 @@ import {
   InstantWithdrawal,
   TimelockedWithdrawal,
   TimelockedWithdrawalSwept,
-  CreditRateSet,
+  CreditPlanSet,
   PrizeStrategySet,
   EmergencyShutdown,
   OwnershipTransferred,
@@ -70,8 +70,8 @@ export function handleLiquidityCapSet(event: LiquidityCapSet): void {
   _prizePool.save()
 }
 
-export function handleCreditRateSet(event: CreditRateSet): void {
-  const _creditRate = loadOrCreatePrizePoolCreditRate(event.address, event.params.controlledToken)
+export function handleCreditPlanSet(event: CreditPlanSet): void {
+  const _creditRate = loadOrCreatePrizePoolCreditRate(event.address, event.params.token)
   _creditRate.creditLimitMantissa = event.params.creditLimitMantissa
   _creditRate.creditRateMantissa = event.params.creditRateMantissa
   _creditRate.save()

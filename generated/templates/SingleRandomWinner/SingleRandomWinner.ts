@@ -186,6 +186,38 @@ export class PrizePoolOpened__Params {
   }
 }
 
+export class RngRequestFailed extends ethereum.Event {
+  get params(): RngRequestFailed__Params {
+    return new RngRequestFailed__Params(this);
+  }
+}
+
+export class RngRequestFailed__Params {
+  _event: RngRequestFailed;
+
+  constructor(event: RngRequestFailed) {
+    this._event = event;
+  }
+}
+
+export class RngRequestTimeoutSet extends ethereum.Event {
+  get params(): RngRequestTimeoutSet__Params {
+    return new RngRequestTimeoutSet__Params(this);
+  }
+}
+
+export class RngRequestTimeoutSet__Params {
+  _event: RngRequestTimeoutSet;
+
+  constructor(event: RngRequestTimeoutSet) {
+    this._event = event;
+  }
+
+  get rngRequestTimeout(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
 export class RngServiceUpdated extends ethereum.Event {
   get params(): RngServiceUpdated__Params {
     return new RngServiceUpdated__Params(this);
@@ -287,50 +319,6 @@ export class SingleRandomWinner extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  estimatePrize(): BigInt {
-    let result = super.call("estimatePrize", "estimatePrize():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_estimatePrize(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "estimatePrize",
-      "estimatePrize():(uint256)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  estimatePrizeWithBlockTime(secondsPerBlockMantissa: BigInt): BigInt {
-    let result = super.call(
-      "estimatePrizeWithBlockTime",
-      "estimatePrizeWithBlockTime(uint256):(uint256)",
-      [ethereum.Value.fromUnsignedBigInt(secondsPerBlockMantissa)]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_estimatePrizeWithBlockTime(
-    secondsPerBlockMantissa: BigInt
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "estimatePrizeWithBlockTime",
-      "estimatePrizeWithBlockTime(uint256):(uint256)",
-      [ethereum.Value.fromUnsignedBigInt(secondsPerBlockMantissa)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   estimateRemainingBlocksToPrize(secondsPerBlockMantissa: BigInt): BigInt {
     let result = super.call(
       "estimateRemainingBlocksToPrize",
@@ -347,54 +335,6 @@ export class SingleRandomWinner extends ethereum.SmartContract {
     let result = super.tryCall(
       "estimateRemainingBlocksToPrize",
       "estimateRemainingBlocksToPrize(uint256):(uint256)",
-      [ethereum.Value.fromUnsignedBigInt(secondsPerBlockMantissa)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  estimateRemainingPrize(): BigInt {
-    let result = super.call(
-      "estimateRemainingPrize",
-      "estimateRemainingPrize():(uint256)",
-      []
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_estimateRemainingPrize(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "estimateRemainingPrize",
-      "estimateRemainingPrize():(uint256)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  estimateRemainingPrizeWithBlockTime(secondsPerBlockMantissa: BigInt): BigInt {
-    let result = super.call(
-      "estimateRemainingPrizeWithBlockTime",
-      "estimateRemainingPrizeWithBlockTime(uint256):(uint256)",
-      [ethereum.Value.fromUnsignedBigInt(secondsPerBlockMantissa)]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_estimateRemainingPrizeWithBlockTime(
-    secondsPerBlockMantissa: BigInt
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "estimateRemainingPrizeWithBlockTime",
-      "estimateRemainingPrizeWithBlockTime(uint256):(uint256)",
       [ethereum.Value.fromUnsignedBigInt(secondsPerBlockMantissa)]
     );
     if (result.reverted) {
@@ -519,6 +459,21 @@ export class SingleRandomWinner extends ethereum.SmartContract {
 
   try_isRngRequested(): ethereum.CallResult<boolean> {
     let result = super.tryCall("isRngRequested", "isRngRequested():(bool)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isRngTimedOut(): boolean {
+    let result = super.call("isRngTimedOut", "isRngTimedOut():(bool)", []);
+
+    return result[0].toBoolean();
+  }
+
+  try_isRngTimedOut(): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isRngTimedOut", "isRngTimedOut():(bool)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -686,6 +641,29 @@ export class SingleRandomWinner extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  rngRequestTimeout(): BigInt {
+    let result = super.call(
+      "rngRequestTimeout",
+      "rngRequestTimeout():(uint32)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_rngRequestTimeout(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "rngRequestTimeout",
+      "rngRequestTimeout():(uint32)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   sponsorship(): Address {
     let result = super.call("sponsorship", "sponsorship():(address)", []);
 
@@ -821,11 +799,11 @@ export class BeforeTokenMintCall__Inputs {
     this._call = call;
   }
 
-  get to(): Address {
+  get value0(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get amount(): BigInt {
+  get value1(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
   }
 
@@ -833,7 +811,7 @@ export class BeforeTokenMintCall__Inputs {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get referrer(): Address {
+  get value3(): Address {
     return this._call.inputValues[3].value.toAddress();
   }
 }
@@ -863,15 +841,15 @@ export class BeforeTokenTransferCall__Inputs {
     this._call = call;
   }
 
-  get from(): Address {
+  get value0(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get to(): Address {
+  get value1(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get amount(): BigInt {
+  get value2(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
 
@@ -1062,6 +1040,36 @@ export class RenounceOwnershipCall__Outputs {
   _call: RenounceOwnershipCall;
 
   constructor(call: RenounceOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class SetRngRequestTimeoutCall extends ethereum.Call {
+  get inputs(): SetRngRequestTimeoutCall__Inputs {
+    return new SetRngRequestTimeoutCall__Inputs(this);
+  }
+
+  get outputs(): SetRngRequestTimeoutCall__Outputs {
+    return new SetRngRequestTimeoutCall__Outputs(this);
+  }
+}
+
+export class SetRngRequestTimeoutCall__Inputs {
+  _call: SetRngRequestTimeoutCall;
+
+  constructor(call: SetRngRequestTimeoutCall) {
+    this._call = call;
+  }
+
+  get _rngRequestTimeout(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class SetRngRequestTimeoutCall__Outputs {
+  _call: SetRngRequestTimeoutCall;
+
+  constructor(call: SetRngRequestTimeoutCall) {
     this._call = call;
   }
 }
