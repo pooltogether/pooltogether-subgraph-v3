@@ -37,48 +37,44 @@ export class SingleRandomWinnerCreated__Params {
 }
 
 export class SingleRandomWinnerBuilder__createSingleRandomWinnerInputConfigStruct extends ethereum.Tuple {
-  get proxyAdmin(): Address {
+  get rngService(): Address {
     return this[0].toAddress();
   }
 
-  get rngService(): Address {
-    return this[1].toAddress();
-  }
-
   get prizePeriodStart(): BigInt {
-    return this[2].toBigInt();
+    return this[1].toBigInt();
   }
 
   get prizePeriodSeconds(): BigInt {
-    return this[3].toBigInt();
+    return this[2].toBigInt();
   }
 
   get ticketName(): string {
-    return this[4].toString();
+    return this[3].toString();
   }
 
   get ticketSymbol(): string {
-    return this[5].toString();
+    return this[4].toString();
   }
 
   get sponsorshipName(): string {
-    return this[6].toString();
+    return this[5].toString();
   }
 
   get sponsorshipSymbol(): string {
-    return this[7].toString();
+    return this[6].toString();
   }
 
   get ticketCreditLimitMantissa(): BigInt {
-    return this[8].toBigInt();
+    return this[7].toBigInt();
   }
 
   get ticketCreditRateMantissa(): BigInt {
-    return this[9].toBigInt();
+    return this[8].toBigInt();
   }
 
   get externalERC20Awards(): Array<Address> {
-    return this[10].toAddressArray();
+    return this[9].toAddressArray();
   }
 }
 
@@ -133,7 +129,7 @@ export class SingleRandomWinnerBuilder extends ethereum.SmartContract {
   ): Address {
     let result = super.call(
       "createSingleRandomWinner",
-      "createSingleRandomWinner(address,(address,address,uint256,uint256,string,string,string,string,uint256,uint256,address[]),uint8,address):(address)",
+      "createSingleRandomWinner(address,(address,uint256,uint256,string,string,string,string,uint256,uint256,address[]),uint8,address):(address)",
       [
         ethereum.Value.fromAddress(prizePool),
         ethereum.Value.fromTuple(config),
@@ -153,7 +149,7 @@ export class SingleRandomWinnerBuilder extends ethereum.SmartContract {
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "createSingleRandomWinner",
-      "createSingleRandomWinner(address,(address,address,uint256,uint256,string,string,string,string,uint256,uint256,address[]),uint8,address):(address)",
+      "createSingleRandomWinner(address,(address,uint256,uint256,string,string,string,string,uint256,uint256,address[]),uint8,address):(address)",
       [
         ethereum.Value.fromAddress(prizePool),
         ethereum.Value.fromTuple(config),
@@ -161,21 +157,6 @@ export class SingleRandomWinnerBuilder extends ethereum.SmartContract {
         ethereum.Value.fromAddress(owner)
       ]
     );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  proxyFactory(): Address {
-    let result = super.call("proxyFactory", "proxyFactory():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_proxyFactory(): ethereum.CallResult<Address> {
-    let result = super.tryCall("proxyFactory", "proxyFactory():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -286,12 +267,8 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[3].value.toAddress();
   }
 
-  get _proxyFactory(): Address {
-    return this._call.inputValues[4].value.toAddress();
-  }
-
   get _ticketProxyFactory(): Address {
-    return this._call.inputValues[5].value.toAddress();
+    return this._call.inputValues[4].value.toAddress();
   }
 }
 
@@ -350,47 +327,43 @@ export class CreateSingleRandomWinnerCall__Outputs {
 }
 
 export class CreateSingleRandomWinnerCallConfigStruct extends ethereum.Tuple {
-  get proxyAdmin(): Address {
+  get rngService(): Address {
     return this[0].toAddress();
   }
 
-  get rngService(): Address {
-    return this[1].toAddress();
-  }
-
   get prizePeriodStart(): BigInt {
-    return this[2].toBigInt();
+    return this[1].toBigInt();
   }
 
   get prizePeriodSeconds(): BigInt {
-    return this[3].toBigInt();
+    return this[2].toBigInt();
   }
 
   get ticketName(): string {
-    return this[4].toString();
+    return this[3].toString();
   }
 
   get ticketSymbol(): string {
-    return this[5].toString();
+    return this[4].toString();
   }
 
   get sponsorshipName(): string {
-    return this[6].toString();
+    return this[5].toString();
   }
 
   get sponsorshipSymbol(): string {
-    return this[7].toString();
+    return this[6].toString();
   }
 
   get ticketCreditLimitMantissa(): BigInt {
-    return this[8].toBigInt();
+    return this[7].toBigInt();
   }
 
   get ticketCreditRateMantissa(): BigInt {
-    return this[9].toBigInt();
+    return this[8].toBigInt();
   }
 
   get externalERC20Awards(): Array<Address> {
-    return this[10].toAddressArray();
+    return this[9].toAddressArray();
   }
 }

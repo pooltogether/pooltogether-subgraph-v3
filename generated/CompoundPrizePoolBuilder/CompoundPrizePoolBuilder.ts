@@ -10,16 +10,16 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class CompoundPrizePoolCreated extends ethereum.Event {
-  get params(): CompoundPrizePoolCreated__Params {
-    return new CompoundPrizePoolCreated__Params(this);
+export class PrizePoolCreated extends ethereum.Event {
+  get params(): PrizePoolCreated__Params {
+    return new PrizePoolCreated__Params(this);
   }
 }
 
-export class CompoundPrizePoolCreated__Params {
-  _event: CompoundPrizePoolCreated;
+export class PrizePoolCreated__Params {
+  _event: PrizePoolCreated;
 
-  constructor(event: CompoundPrizePoolCreated) {
+  constructor(event: PrizePoolCreated) {
     this._event = event;
   }
 
@@ -65,48 +65,44 @@ export class CompoundPrizePoolBuilder__createSingleRandomWinnerInputPrizePoolCon
 }
 
 export class CompoundPrizePoolBuilder__createSingleRandomWinnerInputPrizeStrategyConfigStruct extends ethereum.Tuple {
-  get proxyAdmin(): Address {
+  get rngService(): Address {
     return this[0].toAddress();
   }
 
-  get rngService(): Address {
-    return this[1].toAddress();
-  }
-
   get prizePeriodStart(): BigInt {
-    return this[2].toBigInt();
+    return this[1].toBigInt();
   }
 
   get prizePeriodSeconds(): BigInt {
-    return this[3].toBigInt();
+    return this[2].toBigInt();
   }
 
   get ticketName(): string {
-    return this[4].toString();
+    return this[3].toString();
   }
 
   get ticketSymbol(): string {
-    return this[5].toString();
+    return this[4].toString();
   }
 
   get sponsorshipName(): string {
-    return this[6].toString();
+    return this[5].toString();
   }
 
   get sponsorshipSymbol(): string {
-    return this[7].toString();
+    return this[6].toString();
   }
 
   get ticketCreditLimitMantissa(): BigInt {
-    return this[8].toBigInt();
+    return this[7].toBigInt();
   }
 
   get ticketCreditRateMantissa(): BigInt {
-    return this[9].toBigInt();
+    return this[8].toBigInt();
   }
 
   get externalERC20Awards(): Array<Address> {
-    return this[10].toAddressArray();
+    return this[9].toAddressArray();
   }
 }
 
@@ -190,14 +186,16 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
 
   createSingleRandomWinner(
     prizePoolConfig: CompoundPrizePoolBuilder__createSingleRandomWinnerInputPrizePoolConfigStruct,
-    prizeStrategyConfig: CompoundPrizePoolBuilder__createSingleRandomWinnerInputPrizeStrategyConfigStruct
+    prizeStrategyConfig: CompoundPrizePoolBuilder__createSingleRandomWinnerInputPrizeStrategyConfigStruct,
+    decimals: i32
   ): Address {
     let result = super.call(
       "createSingleRandomWinner",
-      "createSingleRandomWinner((address,uint256,uint256),(address,address,uint256,uint256,string,string,string,string,uint256,uint256,address[])):(address)",
+      "createSingleRandomWinner((address,uint256,uint256),(address,uint256,uint256,string,string,string,string,uint256,uint256,address[]),uint8):(address)",
       [
         ethereum.Value.fromTuple(prizePoolConfig),
-        ethereum.Value.fromTuple(prizeStrategyConfig)
+        ethereum.Value.fromTuple(prizeStrategyConfig),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(decimals))
       ]
     );
 
@@ -206,14 +204,16 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
 
   try_createSingleRandomWinner(
     prizePoolConfig: CompoundPrizePoolBuilder__createSingleRandomWinnerInputPrizePoolConfigStruct,
-    prizeStrategyConfig: CompoundPrizePoolBuilder__createSingleRandomWinnerInputPrizeStrategyConfigStruct
+    prizeStrategyConfig: CompoundPrizePoolBuilder__createSingleRandomWinnerInputPrizeStrategyConfigStruct,
+    decimals: i32
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "createSingleRandomWinner",
-      "createSingleRandomWinner((address,uint256,uint256),(address,address,uint256,uint256,string,string,string,string,uint256,uint256,address[])):(address)",
+      "createSingleRandomWinner((address,uint256,uint256),(address,uint256,uint256,string,string,string,string,uint256,uint256,address[]),uint8):(address)",
       [
         ethereum.Value.fromTuple(prizePoolConfig),
-        ethereum.Value.fromTuple(prizeStrategyConfig)
+        ethereum.Value.fromTuple(prizeStrategyConfig),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(decimals))
       ]
     );
     if (result.reverted) {
@@ -388,6 +388,10 @@ export class CreateSingleRandomWinnerCall__Inputs {
   get prizeStrategyConfig(): CreateSingleRandomWinnerCallPrizeStrategyConfigStruct {
     return this._call.inputValues[1].value.toTuple() as CreateSingleRandomWinnerCallPrizeStrategyConfigStruct;
   }
+
+  get decimals(): i32 {
+    return this._call.inputValues[2].value.toI32();
+  }
 }
 
 export class CreateSingleRandomWinnerCall__Outputs {
@@ -417,47 +421,43 @@ export class CreateSingleRandomWinnerCallPrizePoolConfigStruct extends ethereum.
 }
 
 export class CreateSingleRandomWinnerCallPrizeStrategyConfigStruct extends ethereum.Tuple {
-  get proxyAdmin(): Address {
+  get rngService(): Address {
     return this[0].toAddress();
   }
 
-  get rngService(): Address {
-    return this[1].toAddress();
-  }
-
   get prizePeriodStart(): BigInt {
-    return this[2].toBigInt();
+    return this[1].toBigInt();
   }
 
   get prizePeriodSeconds(): BigInt {
-    return this[3].toBigInt();
+    return this[2].toBigInt();
   }
 
   get ticketName(): string {
-    return this[4].toString();
+    return this[3].toString();
   }
 
   get ticketSymbol(): string {
-    return this[5].toString();
+    return this[4].toString();
   }
 
   get sponsorshipName(): string {
-    return this[6].toString();
+    return this[5].toString();
   }
 
   get sponsorshipSymbol(): string {
-    return this[7].toString();
+    return this[6].toString();
   }
 
   get ticketCreditLimitMantissa(): BigInt {
-    return this[8].toBigInt();
+    return this[7].toBigInt();
   }
 
   get ticketCreditRateMantissa(): BigInt {
-    return this[9].toBigInt();
+    return this[8].toBigInt();
   }
 
   get externalERC20Awards(): Array<Address> {
-    return this[10].toAddressArray();
+    return this[9].toAddressArray();
   }
 }
