@@ -1,15 +1,15 @@
 {
   "network": "rinkeby",
   "compoundPrizePoolBuilder": {
-    "address": "0x69333521C9D887cb011993c344D6f256fc9D3763",
-    "startBlock": "7256194"
+    "address": "0xB3A909961C9A9107DFba6e187F4DfB6EDF19E0A4",
+    "startBlock": "7282564"
   },
   "singleRandomWinnerBuilder": {
-    "address": "0x3B3DE9CD8c713B063aB1B141Ee7F9Ab5ec538bB3",
-    "startBlock": "7256193"
+    "address": "0x2506573e1BD25e1e7206B9c505800635ddA563AA",
+    "startBlock": "7282563"
   },
   "comptroller": {
-    "address": "0xD0B7c93f43A275D596de6CF173979063392C5021",
-    "startBlock": "7256187"
+    "address": "0x58B45255E1DCE36C6D997BF2713a6D3ba61ABB3D",
+    "startBlock": "7282557"
   }
 }

@@ -158,10 +158,6 @@ export class PrizePoolAwarded__Params {
   get randomNumber(): BigInt {
     return this._event.parameters[1].value.toBigInt();
   }
-
-  get prize(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
 }
 
 export class PrizePoolOpened extends ethereum.Event {
