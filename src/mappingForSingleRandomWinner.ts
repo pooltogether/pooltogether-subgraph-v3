@@ -19,6 +19,7 @@ import {
 } from '../generated/templates/SingleRandomWinner/SingleRandomWinner'
 
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
+import { loadOrCreateSingleRandomWinner } from './helpers/loadOrCreateSingleRandomWinner'
 import {
   loadOrCreateExternalErc20Award,
   loadOrCreateExternalErc721Award,
@@ -28,7 +29,7 @@ import { ONE } from './helpers/common'
 
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  const _prizeStrategy = SingleRandomWinner.load(event.address.toHex())
+  const _prizeStrategy = loadOrCreateSingleRandomWinner(event.address)
   _prizeStrategy.owner = event.params.newOwner
   _prizeStrategy.save()
 }

@@ -13,17 +13,17 @@ The official PoolTogether v3 subgraph.
 #### Quick-use:
 
 ```sh
-$ yarn prepare:local && graph codegen subgraph.local.yaml && graph build subgraph.local.yaml && yarn create:local && yarn deploy:local
+$ yarn clean && yarn prepare:local && graph codegen subgraph.local.yaml && graph build subgraph.local.yaml && yarn create:local && yarn deploy:local
 ```
 
 ###### For Kovan:
 ```sh
-$ yarn prepare:kovan && graph codegen subgraph.kovan.yaml && yarn deploy:kovan
+$ yarn clean && yarn prepare:kovan && yarn gen:kovan && yarn deploy:kovan
 ```
 
 ###### For Rinkeby:
 ```sh
-$ yarn prepare:rinkeby && graph codegen subgraph.rinkeby.yaml && yarn deploy:rinkeby
+$ yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby
 ```
 
 #### Local Setup

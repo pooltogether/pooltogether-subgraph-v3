@@ -2,7 +2,7 @@
   "name": "pooltogether",
   "license": "MIT",
   "scripts": {
-    "reinstall": "rm -rf node_modules/ && rm -f yarn.lock && yarn",
+    "reinstall": "rm -rf node_modules/ && yarn",
     "clean": "rm -rf build/ generated/",
     "prepare:local": "mustache networks/local.json subgraph.template.yaml subgraph.local.yaml",
     "create:local": "graph create --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
@@ -26,7 +26,7 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.18.0",
     "@graphprotocol/graph-ts": "^0.18.1",
-    "@pooltogether/pooltogether-contracts": "^3.0.0-alpha.35",
+    "@pooltogether/pooltogether-contracts": "^3.0.0-alpha.40",
     "mustache": "^4.0.1"
   }
 }
