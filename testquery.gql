@@ -1,10 +1,10 @@
 {
-  comptrollers(first: 1) {
+  comptrollers {
     id
     owner
     reserveRateMantissa
 
-    prizePools(first: 1) {
+    prizePools {
       id
       deactivated
       owner
