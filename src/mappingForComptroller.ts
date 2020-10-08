@@ -13,7 +13,6 @@ import {
 import {
   Comptroller as ComptrollerContract,
 
-  ReserveRateMantissaSet,
   OwnershipTransferred,
 
   DripTokenDripped,
@@ -47,19 +46,11 @@ import {
 
 
 
-
-export function handleReserveRateMantissaSet(event: ReserveRateMantissaSet): void {
-  const _comptroller:Comptroller = loadOrCreateComptroller(event.address)
-  _comptroller.reserveRateMantissa = event.params.reserveRateMantissa
-  _comptroller.save()
-}
-
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const _comptroller:Comptroller = loadOrCreateComptroller(event.address)
   _comptroller.owner = event.params.newOwner
   _comptroller.save()
 }
-
 
 
 ///////////////////////////////////////

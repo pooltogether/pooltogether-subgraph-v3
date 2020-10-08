@@ -14,14 +14,21 @@ enum PrizePoolType {
   yVault
 }
 
+# ID: `${reserve.address}`
+type Reserve @entity {
+  id: ID!
+  owner: Bytes!
+
+  recipient: Bytes
+  rateMantissa: BigInt
+}
+
 # ID: `${comptroller.address}`
 type Comptroller @entity {
   id: ID!
   owner: Bytes!
-  reserveRateMantissa: BigInt!
 
   players: [DripTokenPlayer!]! @derivedFrom(field: "comptroller")
-  prizePools: [PrizePool!]! @derivedFrom(field: "comptroller")
 }
 
 # ID: `${prizePool.address}`
@@ -29,11 +36,11 @@ type PrizePool @entity {
   id: ID!
 
   owner: Bytes!
-  comptroller: Comptroller!
-  prizeStrategy: PrizeStrategy!
+  reserve: Reserve!
   trustedForwarder: Bytes!
   deactivated: Boolean!
 
+  prizeStrategy: PrizeStrategy
   prizePoolType: PrizePoolType
   compoundPrizePool: CompoundPrizePool
 
@@ -94,6 +101,7 @@ type SingleRandomWinner @entity {
 
   owner: Bytes!
 
+  tokenListener: Comptroller
   prizePool: PrizePool!
   rng: Bytes!
   ticket: ControlledToken!

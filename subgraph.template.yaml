@@ -2,6 +2,74 @@ specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
+  - name: Reserve
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{reserve.address}}"
+      abi: Reserve
+      startBlock: {{reserve.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForReserve.ts
+      entities:
+        - Reserve
+      abis:
+        - name: Reserve
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/Reserve.json
+      eventHandlers:
+        - event: ReserveRecipientSet(indexed address)
+          handler: handleReserveRecipientSet
+        - event: ReserveRateMantissaSet(uint256)
+          handler: handleReserveRateMantissaSet
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+  - name: Comptroller
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{comptroller.address}}"
+      abi: Comptroller
+      startBlock: {{comptroller.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForComptroller.ts
+      entities:
+        - Comptroller
+      abis:
+        - name: Comptroller
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
+      eventHandlers:
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: DripTokenDripped(indexed address,indexed address,uint256)
+          handler: handleDripTokenDripped
+        - event: DripTokenClaimed(indexed address,indexed address,indexed address,uint256)
+          handler: handleDripTokenClaimed
+        - event: BalanceDripActivated(indexed address,indexed address,indexed address,uint256)
+          handler: handleBalanceDripActivated
+        - event: BalanceDripDeactivated(indexed address,indexed address,indexed address)
+          handler: handleBalanceDripDeactivated
+        - event: BalanceDripRateSet(indexed address,indexed address,indexed address,uint256)
+          handler: handleBalanceDripRateSet
+        - event: BalanceDripDripped(indexed address,indexed address,indexed address,address,uint256)
+          handler: handleBalanceDripDripped
+        - event: VolumeDripActivated(indexed address,indexed address,indexed address,bool,uint256,uint256)
+          handler: handleVolumeDripActivated
+        - event: VolumeDripDeactivated(indexed address,indexed address,indexed address,bool)
+          handler: handleVolumeDripDeactivated
+        - event: VolumeDripSet(indexed address,indexed address,indexed address,bool,uint256,uint256)
+          handler: handleVolumeDripSet
+        - event: VolumeDripPeriodStarted(indexed address,indexed address,indexed address,bool,uint32,uint256,uint256)
+          handler: handleVolumeDripPeriodStarted
+        - event: VolumeDripPeriodEnded(indexed address,indexed address,indexed address,bool,uint32,uint256)
+          handler: handleVolumeDripPeriodEnded
+        - event: VolumeDripDripped(indexed address,indexed address,indexed address,bool,address,uint256)
+          handler: handleVolumeDripDripped
   - name: CompoundPrizePoolBuilder
     kind: ethereum/contract
     network: {{network}}
@@ -31,7 +99,7 @@ dataSources:
         - name: ControlledToken
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
-        - event: PrizePoolCreated(indexed address,indexed address,indexed address)
+        - event: PrizePoolCreated(indexed address,indexed address)
           handler: handleCompoundPrizePoolCreated
       file: ./src/mappingForCompoundPrizePoolBuilder.ts
   - name: SingleRandomWinnerBuilder
@@ -68,52 +136,6 @@ dataSources:
         - event: SingleRandomWinnerCreated(indexed address,indexed address,indexed address)
           handler: handleSingleRandomWinnerCreated
       file: ./src/mappingForSingleRandomWinnerBuilder.ts
-  - name: Comptroller
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      address: "{{comptroller.address}}"
-      abi: Comptroller
-      startBlock: {{comptroller.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappingForComptroller.ts
-      entities:
-        - Comptroller
-      abis:
-        - name: Comptroller
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
-      eventHandlers:
-        - event: ReserveRateMantissaSet(uint256)
-          handler: handleReserveRateMantissaSet
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
-        - event: DripTokenDripped(indexed address,indexed address,uint256)
-          handler: handleDripTokenDripped
-        - event: DripTokenClaimed(indexed address,indexed address,indexed address,uint256)
-          handler: handleDripTokenClaimed
-        - event: BalanceDripActivated(indexed address,indexed address,indexed address,uint256)
-          handler: handleBalanceDripActivated
-        - event: BalanceDripDeactivated(indexed address,indexed address,indexed address)
-          handler: handleBalanceDripDeactivated
-        - event: BalanceDripRateSet(indexed address,indexed address,indexed address,uint256)
-          handler: handleBalanceDripRateSet
-        - event: BalanceDripDripped(indexed address,indexed address,indexed address,address,uint256)
-          handler: handleBalanceDripDripped
-        - event: VolumeDripActivated(indexed address,indexed address,indexed address,bool,uint256,uint256)
-          handler: handleVolumeDripActivated
-        - event: VolumeDripDeactivated(indexed address,indexed address,indexed address,bool)
-          handler: handleVolumeDripDeactivated
-        - event: VolumeDripSet(indexed address,indexed address,indexed address,bool,uint256,uint256)
-          handler: handleVolumeDripSet
-        - event: VolumeDripPeriodStarted(indexed address,indexed address,indexed address,bool,uint32,uint256,uint256)
-          handler: handleVolumeDripPeriodStarted
-        - event: VolumeDripPeriodEnded(indexed address,indexed address,indexed address,bool,uint32,uint256)
-          handler: handleVolumeDripPeriodEnded
-        - event: VolumeDripDripped(indexed address,indexed address,indexed address,bool,address,uint256)
-          handler: handleVolumeDripDripped
 templates:
   - name: SingleRandomWinner
     kind: ethereum/contract
@@ -135,13 +157,15 @@ templates:
         - name: RNGInterface
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/RNGInterface.json
       eventHandlers:
+        - event: TokenListenerUpdated(indexed address)
+          handler: handleTokenListenerUpdated
         - event: PrizePoolOpened(indexed address,indexed uint256)
           handler: handlePrizePoolOpened
         - event: PrizePoolAwardStarted(indexed address,indexed address,indexed uint32,uint32)
           handler: handlePrizePoolAwardStarted
         - event: PrizePoolAwarded(indexed address,uint256)
           handler: handlePrizePoolAwarded
-        - event: RngServiceUpdated(address)
+        - event: RngServiceUpdated(indexed address)
           handler: handleRngServiceUpdated
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
@@ -201,7 +225,7 @@ templates:
           handler: handleControlledTokenAdded
         - event: ReserveFeeControlledTokenSet(indexed address)
           handler: handleReserveFeeControlledTokenSet
-        - event: ReserveFeeCaptured(indexed address,uint256)
+        - event: ReserveFeeCaptured(indexed address,indexed address,uint256)
           handler: handleReserveFeeCaptured
         - event: LiquidityCapSet(uint256)
           handler: handleLiquidityCapSet

@@ -208,24 +208,6 @@ export class OwnershipTransferred__Params {
   }
 }
 
-export class ReserveRateMantissaSet extends ethereum.Event {
-  get params(): ReserveRateMantissaSet__Params {
-    return new ReserveRateMantissaSet__Params(this);
-  }
-}
-
-export class ReserveRateMantissaSet__Params {
-  _event: ReserveRateMantissaSet;
-
-  constructor(event: ReserveRateMantissaSet) {
-    this._event = event;
-  }
-
-  get reserveRateMantissa(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
 export class VolumeDripActivated extends ethereum.Event {
   get params(): VolumeDripActivated__Params {
     return new VolumeDripActivated__Params(this);
@@ -778,29 +760,6 @@ export class Comptroller extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  reserveRateMantissa(): BigInt {
-    let result = super.call(
-      "reserveRateMantissa",
-      "reserveRateMantissa():(uint256)",
-      []
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_reserveRateMantissa(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "reserveRateMantissa",
-      "reserveRateMantissa():(uint256)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   updateDrips(
     pairs: Array<Comptroller__updateDripsInputPairsStruct>,
     user: Address,
@@ -840,6 +799,32 @@ export class Comptroller extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(
       value[0].toTupleArray<Comptroller__updateDripsResultValue0Struct>()
     );
+  }
+}
+
+export class ConstructorCall extends ethereum.Call {
+  get inputs(): ConstructorCall__Inputs {
+    return new ConstructorCall__Inputs(this);
+  }
+
+  get outputs(): ConstructorCall__Outputs {
+    return new ConstructorCall__Outputs(this);
+  }
+}
+
+export class ConstructorCall__Inputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
+export class ConstructorCall__Outputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
   }
 }
 
@@ -1006,7 +991,7 @@ export class BeforeTokenTransferCall__Inputs {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get value2(): BigInt {
+  get amount(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
 
@@ -1149,36 +1134,6 @@ export class DeactivateVolumeDripCall__Outputs {
   }
 }
 
-export class InitializeCall extends ethereum.Call {
-  get inputs(): InitializeCall__Inputs {
-    return new InitializeCall__Inputs(this);
-  }
-
-  get outputs(): InitializeCall__Outputs {
-    return new InitializeCall__Outputs(this);
-  }
-}
-
-export class InitializeCall__Inputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
-  }
-
-  get _owner(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class InitializeCall__Outputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
-  }
-}
-
 export class PokeDripsCall extends ethereum.Call {
   get inputs(): PokeDripsCall__Inputs {
     return new PokeDripsCall__Inputs(this);
@@ -1293,36 +1248,6 @@ export class SetBalanceDripRateCall__Outputs {
   _call: SetBalanceDripRateCall;
 
   constructor(call: SetBalanceDripRateCall) {
-    this._call = call;
-  }
-}
-
-export class SetReserveRateMantissaCall extends ethereum.Call {
-  get inputs(): SetReserveRateMantissaCall__Inputs {
-    return new SetReserveRateMantissaCall__Inputs(this);
-  }
-
-  get outputs(): SetReserveRateMantissaCall__Outputs {
-    return new SetReserveRateMantissaCall__Outputs(this);
-  }
-}
-
-export class SetReserveRateMantissaCall__Inputs {
-  _call: SetReserveRateMantissaCall;
-
-  constructor(call: SetReserveRateMantissaCall) {
-    this._call = call;
-  }
-
-  get __reserveRateMantissa(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-}
-
-export class SetReserveRateMantissaCall__Outputs {
-  _call: SetReserveRateMantissaCall;
-
-  constructor(call: SetReserveRateMantissaCall) {
     this._call = call;
   }
 }

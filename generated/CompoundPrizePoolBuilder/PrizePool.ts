@@ -249,7 +249,7 @@ export class Initialized__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get comptroller(): Address {
+  get reserve(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -371,12 +371,16 @@ export class ReserveFeeCaptured__Params {
     this._event = event;
   }
 
-  get token(): Address {
+  get to(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
+  get token(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
   get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -489,6 +493,32 @@ export class TimelockedWithdrawalSwept__Params {
 
   get redeemed(): BigInt {
     return this._event.parameters[3].value.toBigInt();
+  }
+}
+
+export class TransferredExternalERC20 extends ethereum.Event {
+  get params(): TransferredExternalERC20__Params {
+    return new TransferredExternalERC20__Params(this);
+  }
+}
+
+export class TransferredExternalERC20__Params {
+  _event: TransferredExternalERC20;
+
+  constructor(event: TransferredExternalERC20) {
+    this._event = event;
+  }
+
+  get to(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get token(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -796,21 +826,6 @@ export class PrizePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  comptroller(): Address {
-    let result = super.call("comptroller", "comptroller():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_comptroller(): ethereum.CallResult<Address> {
-    let result = super.tryCall("comptroller", "comptroller():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   creditPlanOf(controlledToken: Address): PrizePool__creditPlanOfResult {
     let result = super.call(
       "creditPlanOf",
@@ -881,29 +896,6 @@ export class PrizePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  getTrustedForwarder(): Address {
-    let result = super.call(
-      "getTrustedForwarder",
-      "getTrustedForwarder():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_getTrustedForwarder(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "getTrustedForwarder",
-      "getTrustedForwarder():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   isShutdown(): boolean {
@@ -1032,6 +1024,21 @@ export class PrizePool extends ethereum.SmartContract {
       "prizeStrategy():(address)",
       []
     );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  reserve(): Address {
+    let result = super.call("reserve", "reserve():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_reserve(): ethereum.CallResult<Address> {
+    let result = super.tryCall("reserve", "reserve():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -1184,6 +1191,29 @@ export class PrizePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddressArray());
+  }
+
+  trustedForwarder(): Address {
+    let result = super.call(
+      "trustedForwarder",
+      "trustedForwarder():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_trustedForwarder(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "trustedForwarder",
+      "trustedForwarder():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   versionRecipient(): string {
@@ -1753,24 +1783,20 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _prizeStrategy(): Address {
+  get _reserve(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get _comptroller(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
   get _controlledTokens(): Array<Address> {
-    return this._call.inputValues[3].value.toAddressArray();
+    return this._call.inputValues[2].value.toAddressArray();
   }
 
   get _maxExitFeeMantissa(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
+    return this._call.inputValues[3].value.toBigInt();
   }
 
   get _maxTimelockDuration(): BigInt {
-    return this._call.inputValues[5].value.toBigInt();
+    return this._call.inputValues[4].value.toBigInt();
   }
 }
 
@@ -2004,6 +2030,44 @@ export class TimelockDepositToCall__Outputs {
   _call: TimelockDepositToCall;
 
   constructor(call: TimelockDepositToCall) {
+    this._call = call;
+  }
+}
+
+export class TransferExternalERC20Call extends ethereum.Call {
+  get inputs(): TransferExternalERC20Call__Inputs {
+    return new TransferExternalERC20Call__Inputs(this);
+  }
+
+  get outputs(): TransferExternalERC20Call__Outputs {
+    return new TransferExternalERC20Call__Outputs(this);
+  }
+}
+
+export class TransferExternalERC20Call__Inputs {
+  _call: TransferExternalERC20Call;
+
+  constructor(call: TransferExternalERC20Call) {
+    this._call = call;
+  }
+
+  get to(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get externalToken(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+}
+
+export class TransferExternalERC20Call__Outputs {
+  _call: TransferExternalERC20Call;
+
+  constructor(call: TransferExternalERC20Call) {
     this._call = call;
   }
 }

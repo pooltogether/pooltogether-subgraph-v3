@@ -16,15 +16,14 @@ import { loadOrCreatePrizePool } from './loadOrCreatePrizePool'
 
 
 export function loadOrCreateCompoundPrizePool(
-  prizePool: Address,
-  prizeStrategy: Address,
+  prizePool: Address
 ): CompoundPrizePool {
   let _compoundPrizePool = CompoundPrizePool.load(prizePool.toHex())
 
   if (!_compoundPrizePool) {
     _compoundPrizePool = new CompoundPrizePool(prizePool.toHex())
 
-    const _prizePool = loadOrCreatePrizePool(prizePool, prizeStrategy)
+    const _prizePool = loadOrCreatePrizePool(prizePool)
     _prizePool.prizePoolType = 'Compound'
     _prizePool.compoundPrizePool = _compoundPrizePool.id
     _prizePool.save()

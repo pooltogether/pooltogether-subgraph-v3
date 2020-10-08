@@ -5,8 +5,6 @@ import {
   PrizePool,
 } from '../generated/schema'
 
-import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
-
 import {
   Initialized,
   ControlledTokenAdded,
@@ -39,8 +37,10 @@ import {
   updateTotals
 } from './helpers/prizePoolHelpers'
 
+import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
+import { loadOrCreatePrizePool } from './helpers/loadOrCreatePrizePool'
 import { loadOrCreatePrizeStrategy } from './helpers/loadOrCreatePrizeStrategy'
 import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePoolCreditRate'
 
@@ -48,12 +48,7 @@ import { ZERO, ZERO_ADDRESS } from './helpers/common'
 
 
 export function handleInitialized(event: Initialized): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
-  _prizePool.comptroller = event.params.comptroller.toHex()
-  _prizePool.trustedForwarder = event.params.trustedForwarder
-  _prizePool.maxExitFeeMantissa = event.params.maxExitFeeMantissa
-  _prizePool.maxTimelockDuration = event.params.maxTimelockDuration
-  _prizePool.save()
+  // no-op
 }
 
 export function handleControlledTokenAdded(event: ControlledTokenAdded): void {
@@ -81,9 +76,13 @@ export function handleCreditPlanSet(event: CreditPlanSet): void {
 export function handlePrizeStrategySet(event: PrizeStrategySet): void {
   const _prizePoolAddress = event.address
   const _prizeStrategyAddress = event.params.prizeStrategy
-  const _prizeStrategy = loadOrCreatePrizeStrategy(_prizePoolAddress, _prizeStrategyAddress)
+  const _prizeStrategy = loadOrCreatePrizeStrategy(_prizeStrategyAddress, _prizePoolAddress)
   _prizeStrategy.singleRandomWinner = _prizeStrategyAddress.toHex()
   _prizeStrategy.save()
+
+  const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
+  _prizePool.prizeStrategy = _prizeStrategy.id
+  _prizePool.save()
 }
 
 export function handleEmergencyShutdown(event: EmergencyShutdown): void {
@@ -144,7 +143,7 @@ export function handleAwardedExternalERC721(event: AwardedExternalERC721): void 
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
+  const _prizePool = loadOrCreatePrizePool(event.address)
   _prizePool.owner = event.params.newOwner
   _prizePool.save()
 }

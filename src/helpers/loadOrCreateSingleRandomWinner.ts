@@ -31,16 +31,17 @@ export function loadOrCreateSingleRandomWinner(
 
     // Get Prize Pool
     const _prizePoolAddress = _boundSingleRandomWinner.prizePool()
-    const _prizePool = loadOrCreatePrizePool(_prizePoolAddress, singleRandomWinner)
+    const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
 
     // Update PrizeStrategy Link
-    const _prizeStrategy = loadOrCreatePrizeStrategy(_prizePoolAddress, singleRandomWinner)
+    const _prizeStrategy = loadOrCreatePrizeStrategy(singleRandomWinner, _prizePoolAddress)
     _prizeStrategy.singleRandomWinner = _singleRandomWinner.id
     _prizeStrategy.save()
 
     _singleRandomWinner.owner = _prizePool.owner
     _singleRandomWinner.prizePool = _prizePool.id
     _singleRandomWinner.rng = _boundSingleRandomWinner.rng()
+    _singleRandomWinner.tokenListener = ZERO_ADDRESS
     _singleRandomWinner.ticket = ZERO_ADDRESS
     _singleRandomWinner.sponsorship = ZERO_ADDRESS
 
