@@ -84,10 +84,10 @@ dataSources:
       entities:
         - CompoundPrizePoolBuilder
       abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: Comptroller
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
+        # - name: ERC20
+        #   file: ./abis/ERC20.json
+        # - name: Comptroller
+        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: CompoundPrizePool
@@ -116,8 +116,8 @@ dataSources:
       entities:
         - SingleRandomWinnerBuilder
       abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
+        # - name: ERC20
+        #   file: ./abis/ERC20.json
         # - name: Comptroller
         #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
         - name: PrizePool
@@ -150,8 +150,10 @@ templates:
       entities:
         - SingleRandomWinner
       abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
+        # - name: ERC20
+        #   file: ./abis/ERC20.json
+        - name: PrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: SingleRandomWinner
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
         - name: RNGInterface
@@ -190,8 +192,8 @@ templates:
       entities:
         - CompoundPrizePool
       abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
+        # - name: ERC20
+        #   file: ./abis/ERC20.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: CompoundPrizePool
@@ -266,6 +268,8 @@ templates:
       entities:
         - ControlledToken
       abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
         - name: ControlledToken
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
