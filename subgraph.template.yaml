@@ -2,30 +2,6 @@ specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
-  - name: Reserve
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      address: "{{reserve.address}}"
-      abi: Reserve
-      startBlock: {{reserve.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappingForReserve.ts
-      entities:
-        - Reserve
-      abis:
-        - name: Reserve
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/Reserve.json
-      eventHandlers:
-        - event: ReserveRecipientSet(indexed address)
-          handler: handleReserveRecipientSet
-        - event: ReserveRateMantissaSet(uint256)
-          handler: handleReserveRateMantissaSet
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
   - name: Comptroller
     kind: ethereum/contract
     network: {{network}}

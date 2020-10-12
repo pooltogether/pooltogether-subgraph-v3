@@ -14,15 +14,6 @@ enum PrizePoolType {
   yVault
 }
 
-# ID: `${reserve.address}`
-type Reserve @entity {
-  id: ID!
-  owner: Bytes!
-
-  recipient: Bytes
-  rateMantissa: BigInt
-}
-
 # ID: `${comptroller.address}`
 type Comptroller @entity {
   id: ID!
@@ -36,7 +27,7 @@ type PrizePool @entity {
   id: ID!
 
   owner: Bytes!
-  reserve: Reserve!
+  reserve: Bytes!
   trustedForwarder: Bytes!
   deactivated: Boolean!
 

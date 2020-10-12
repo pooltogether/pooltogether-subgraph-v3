@@ -1,11 +1,4 @@
 {
-  reserves {
-    id
-    owner
-    recipient
-    rateMantissa
-  }
-
   comptrollers {
     id
     owner
@@ -21,9 +14,7 @@
     id
     deactivated
     owner
-    reserve {
-      id
-    }
+    reserve
     trustedForwarder
     prizeStrategy {
       id

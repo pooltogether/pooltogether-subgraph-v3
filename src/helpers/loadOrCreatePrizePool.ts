@@ -16,8 +16,6 @@ import {
   ControlledToken as ControlledTokenContract,
 } from '../../generated/templates/ControlledToken/ControlledToken'
 
-import { loadOrCreateReserve } from './loadOrCreateReserve'
-
 import { ZERO, ONE } from './common'
 
 
@@ -33,11 +31,8 @@ export function loadOrCreatePrizePool(
     const poolTokenAddress = boundPrizePool.token()
     const boundToken = ControlledTokenContract.bind(poolTokenAddress)
 
-    const reserveAddress = boundPrizePool.reserve()
-    const reserve = loadOrCreateReserve(reserveAddress)
-
     _prizePool.owner = boundPrizePool.owner()
-    _prizePool.reserve = reserve.id
+    _prizePool.reserve = boundPrizePool.reserve()
     _prizePool.trustedForwarder = boundPrizePool.trustedForwarder()
     _prizePool.deactivated = false
 
