@@ -34,7 +34,6 @@ import {
   incrementSponsorBalance,
   decrementPlayerTimelockedBalance,
   incrementPlayerTimelockedBalance,
-  updateTotals
 } from './helpers/prizePoolHelpers'
 
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
@@ -104,7 +103,7 @@ export function handleAwarded(event: Awarded): void {
   // Record prize history
   const _prize = loadOrCreatePrize(
     event.address.toHex(),
-    _prizePool.currentPrizeId.toString()
+    _prizePool.currentPrize
   )
   _prize.amount = event.params.amount
 
@@ -170,8 +169,6 @@ export function handleDeposited(event: Deposited): void {
     const playersCachedBalance = _player.balance
     incrementPlayerCount(_prizePool as PrizePool, playersCachedBalance)
 
-    updateTotals(_prizePool as PrizePool)
-
     incrementPlayerBalance(_player, event.params.amount)
 
     _player.save()
@@ -182,8 +179,6 @@ export function handleDeposited(event: Deposited): void {
     )
 
     incrementSponsorBalance(_sponsor, event.params.amount)
-
-    updateTotals(_prizePool as PrizePool)
 
     _sponsor.save()
   }
@@ -214,8 +209,6 @@ export function handleInstantWithdrawal(event: InstantWithdrawal): void {
 
     decrementPlayerBalance(_player, event.params.amount)
 
-    updateTotals(_prizePool as PrizePool)
-
     decrementPlayerCount(_prizePool as PrizePool, _player)
 
     _player.save()
@@ -226,8 +219,6 @@ export function handleInstantWithdrawal(event: InstantWithdrawal): void {
     )
 
     decrementSponsorBalance(_sponsor, event.params.amount)
-
-    updateTotals(_prizePool as PrizePool)
 
     _sponsor.save()
   }
@@ -248,8 +239,6 @@ export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
 
   decrementPlayerBalance(_player, event.params.amount)
   incrementPlayerTimelockedBalance(_player, event.params.amount)
-
-  updateTotals(_prizePool as PrizePool)
 
   // This may need to be an association of many timelocked balances per player
   _player.unlockTimestamp = event.params.unlockTimestamp
@@ -284,8 +273,6 @@ export function handleTimelockDeposited(event: TimelockDeposited): void {
 
   const playersCachedBalance = _player.balance
   incrementPlayerCount(_prizePool as PrizePool, playersCachedBalance)
-
-  updateTotals(_prizePool as PrizePool)
 
   decrementPlayerTimelockedBalance(_player, event.params.amount)
   incrementPlayerBalance(_player, event.params.amount)

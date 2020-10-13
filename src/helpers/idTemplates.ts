@@ -1,6 +1,6 @@
 
-export function prizeId(prizePool: string, currentPrizeId: string): string {
-  return prizePool + '-' + currentPrizeId
+export function prizeId(_prizePool: string, _id: string): string {
+  return _prizePool + '-' + _id
 }
 
 export function playerId(prizePoolAddress: string, playerAddress: string): string {

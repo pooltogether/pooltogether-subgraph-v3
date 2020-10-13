@@ -276,24 +276,6 @@ export class PrizePool extends Entity {
     this.set("playerCount", Value.fromBigInt(value));
   }
 
-  get totalSupply(): BigInt {
-    let value = this.get("totalSupply");
-    return value.toBigInt();
-  }
-
-  set totalSupply(value: BigInt) {
-    this.set("totalSupply", Value.fromBigInt(value));
-  }
-
-  get totalSponsorship(): BigInt {
-    let value = this.get("totalSponsorship");
-    return value.toBigInt();
-  }
-
-  set totalSponsorship(value: BigInt) {
-    this.set("totalSponsorship", Value.fromBigInt(value));
-  }
-
   get cumulativePrizeGross(): BigInt {
     let value = this.get("cumulativePrizeGross");
     return value.toBigInt();
@@ -321,13 +303,13 @@ export class PrizePool extends Entity {
     this.set("cumulativePrizeNet", Value.fromBigInt(value));
   }
 
-  get currentPrizeId(): BigInt {
-    let value = this.get("currentPrizeId");
-    return value.toBigInt();
+  get currentPrize(): string {
+    let value = this.get("currentPrize");
+    return value.toString();
   }
 
-  set currentPrizeId(value: BigInt) {
-    this.set("currentPrizeId", Value.fromBigInt(value));
+  set currentPrize(value: string) {
+    this.set("currentPrize", Value.fromString(value));
   }
 
   get currentState(): string {
@@ -944,15 +926,6 @@ export class ControlledToken extends Entity {
 
   set prizePool(value: string) {
     this.set("prizePool", Value.fromString(value));
-  }
-
-  get prizeStrategy(): string {
-    let value = this.get("prizeStrategy");
-    return value.toString();
-  }
-
-  set prizeStrategy(value: string) {
-    this.set("prizeStrategy", Value.fromString(value));
   }
 
   get type(): string {

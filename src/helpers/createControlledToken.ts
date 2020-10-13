@@ -20,7 +20,6 @@ export function createControlledToken(
   const boundToken = ControlledTokenContract.bind(tokenAddress)
 
   token.prizePool = prizePoolAddress.toHex()
-  token.prizeStrategy = prizeStrategyAddress.toHex()
 
   token.type = tokenType
   token.name = boundToken.name()

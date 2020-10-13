@@ -48,14 +48,12 @@ type PrizePool @entity {
   liquidityCap: BigInt!
 
   playerCount: BigInt!
-  totalSupply: BigInt!
-  totalSponsorship: BigInt!
 
   cumulativePrizeGross: BigInt!
   cumulativePrizeReserveFee: BigInt!
   cumulativePrizeNet: BigInt!
 
-  currentPrizeId: BigInt!
+  currentPrize: Prize!
   currentState: PrizePoolState!
 
   prizesCount: BigInt!
@@ -135,7 +133,6 @@ type Prize @entity {
 type ControlledToken @entity {
   id: ID!
   prizePool: PrizePool!
-  prizeStrategy: PrizeStrategy!
 
   type: ControlledTokenType!
   name: String!

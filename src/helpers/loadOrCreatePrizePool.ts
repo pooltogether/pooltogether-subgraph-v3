@@ -16,6 +16,9 @@ import {
   ControlledToken as ControlledTokenContract,
 } from '../../generated/templates/ControlledToken/ControlledToken'
 
+
+import { loadOrCreatePrize } from './loadOrCreatePrize'
+import { prizeId } from './idTemplates'
 import { ZERO, ONE } from './common'
 
 
@@ -48,13 +51,13 @@ export function loadOrCreatePrizePool(
     _prizePool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
     _prizePool.liquidityCap = ZERO
 
-    _prizePool.totalSupply = ZERO
-    _prizePool.totalSponsorship = ZERO
-
     _prizePool.currentState = 'Opened'
-    _prizePool.currentPrizeId = ONE
-    _prizePool.prizesCount = ZERO
 
+    const _newPrize = loadOrCreatePrize(prizePool.toHex(), '1')
+    _newPrize.save()
+    _prizePool.currentPrize = prizeId(prizePool.toHex(), '1')
+
+    _prizePool.prizesCount = ZERO
     _prizePool.playerCount = ZERO
 
     _prizePool.cumulativePrizeGross = ZERO
@@ -62,6 +65,7 @@ export function loadOrCreatePrizePool(
     _prizePool.cumulativePrizeNet = ZERO
 
     _prizePool.save()
+    
 
     // Start listening for events from the dynamically generated contract
     PrizePoolTemplate.create(prizePool)

@@ -2,16 +2,16 @@ import { Prize } from '../../generated/schema'
 
 import { prizeId } from './idTemplates'
 
-export function loadOrCreatePrize(prizePoolAddress: string, currentPrizeId: string): Prize {
+export function loadOrCreatePrize(_prizePoolAddress: string, _prizeId: string): Prize {
   const id = prizeId(
-    prizePoolAddress,
-    currentPrizeId
+    _prizePoolAddress,
+    _prizeId
   )
   let prize = Prize.load(id)
 
   if (!prize) {
     prize = new Prize(id)
-    prize.prizePool = prizePoolAddress
+    prize.prizePool = _prizePoolAddress
     prize.save()
   }
 

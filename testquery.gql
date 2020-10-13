@@ -16,6 +16,7 @@
     owner
     reserve
     trustedForwarder
+
     prizeStrategy {
       id
       prizePool {
@@ -33,9 +34,11 @@
         rng
         ticket {
           id
+          totalSupply
         }
         sponsorship {
           id
+          totalSupply
         }
         prizePeriodSeconds
         prizePeriodStartedAt
@@ -66,14 +69,12 @@
 
     liquidityCap
     timelockTotalSupply
-    totalSupply
-    totalSponsorship
 
     cumulativePrizeNet
     cumulativePrizeGross
     cumulativePrizeReserveFee
 
-    currentPrizeId
+    currentPrize
     currentState
 
     tokenCreditRates {

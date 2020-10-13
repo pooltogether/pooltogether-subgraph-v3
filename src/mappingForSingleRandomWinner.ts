@@ -1,8 +1,13 @@
-import { log } from '@graphprotocol/graph-ts'
+import { Address, log } from '@graphprotocol/graph-ts'
+
 import {
   PrizePool,
   SingleRandomWinner,
 } from '../generated/schema'
+
+import {
+  ControlledToken as ControlledTokenContract
+} from '../generated/templates/ControlledToken/ControlledToken'
 
 import {
   SingleRandomWinner as SingleRandomWinnerContract,
@@ -25,6 +30,7 @@ import {
   loadOrCreateExternalErc20Award,
   loadOrCreateExternalErc721Award,
 } from './helpers/loadOrCreateExternalAward'
+import { prizeId } from './helpers/idTemplates'
 
 import { ONE } from './helpers/common'
 
@@ -58,7 +64,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 
   const _prize = loadOrCreatePrize(
     _prizeStrategy.prizePool,
-    _prizePool.currentPrizeId.toString()
+    _prizePool.currentPrize
   )
 
   _prize.prizePeriodStartedTimestamp = boundPrizeStrategy.prizePeriodStartedAt()
@@ -75,17 +81,26 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   // Record prize history
   const _prize = loadOrCreatePrize(
     _prizeStrategy.prizePool,
-    _prizePool.currentPrizeId.toString()
+    _prizePool.currentPrize
   )
   _prize.awardedOperator = event.params.operator
   _prize.randomNumber = event.params.randomNumber
   _prize.awardedBlock = event.block.number
   _prize.awardedTimestamp = event.block.timestamp
-  _prize.totalTicketSupply = _prizePool.totalSupply
+
+  const boundToken = ControlledTokenContract.bind(Address.fromString(_prizeStrategy.ticket))
+  _prize.totalTicketSupply = boundToken.totalSupply()
+
   _prize.save()
 
   _prizePool.currentState = "Awarded"
-  _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
+  // _prizePool.currentPrize = _prizePool.currentPrize.plus(ONE)
+  
+  const newPrizeId = _prize.id.split('-')[1]
+  const _newPrize = loadOrCreatePrize(_prizeStrategy.prizePool, newPrizeId)
+  _newPrize.save()
+  _prizePool.currentPrize = prizeId(_prizeStrategy.prizePool, newPrizeId)
+
   _prizePool.save()
 }
 
