@@ -2,52 +2,14 @@
   comptrollers {
     id
     owner
-    players {
-      id
-      dripToken
-      address
-      balance
-    }
   }
 
-  prizePools(first:1) {
+  prizePools {
     id
     deactivated
     owner
-    reserve
     trustedForwarder
-    prizeStrategy {
-      id
-      prizePool {
-        id
-      }
-      singleRandomWinner {
-        id
-        owner
-        tokenListener {
-          id
-        }
-        prizePool {
-          id
-        }
-        rng
-        ticket {
-          id
-        }
-        sponsorship {
-          id
-        }
-        prizePeriodSeconds
-        prizePeriodStartedAt
-        prizePeriodEndAt
-        externalErc20Awards {
-          id
-        }
-        externalErc721Awards {
-          id
-        }
-      }
-    }
+
     prizePoolType
     compoundPrizePool {
       id
@@ -63,103 +25,116 @@
 
     maxExitFeeMantissa
     maxTimelockDuration
-
-    liquidityCap
     timelockTotalSupply
-    totalSupply
-    totalSponsorship
+    liquidityCap
+
+    currentPrizeId
+    currentState
 
     cumulativePrizeNet
     cumulativePrizeGross
     cumulativePrizeReserveFee
 
-    currentPrizeId
-    currentState
-
-    tokenCreditRates {
-      id
-    }
-    tokenCreditBalances {
-      id
-    }
-
-    prizesCount
-    prizes {
-      id
-      prizePool {
+    prizeStrategy {
+      singleRandomWinner {
         id
+        owner
+        rng
+        ticket {
+          id
+          type
+          name
+          symbol
+          decimals
+          totalSupply
+        }
+        sponsorship {
+          id
+          type
+          name
+          symbol
+          decimals
+          totalSupply
+        }
+
+        prizePeriodSeconds
+        prizePeriodStartedAt
+        prizePeriodEndAt
+
+        externalErc20Awards {
+          address
+        }
+        externalErc721Awards {
+          address
+          tokenIds
+        }
       }
-
-      awardStartOperator
-      awardedOperator
-      awardedBlock
-      awardedTimestamp
-
-      prizePeriodStartedTimestamp
-      lockBlock
-
-      rngRequestId
-      randomNumber
-
-      amount
-      totalTicketSupply
-      winners
     }
+
+    totalSupply
+    totalSponsorship
 
     playerCount
     players {
       id
-      prizePool {
-        id
-      }
       address
       balance
       timelockedBalance
       unlockTimestamp
       cumulativeWinnings
     }
+
+    prizesCount
+    prizes {
+      id
+      awardedBlock
+      randomNumber
+      amount
+      totalTicketSupply
+      winners
+    }
+
+    tokenCreditRates {
+      creditRateMantissa
+      creditLimitMantissa
+    }
+
+    tokenCreditBalances {
+      balance
+      timestamp
+      initialized
+    }
+
     sponsors {
       id
-      prizePool {
-        id
-      }
       address
       balance
     }
 
     balanceDrips {
       id
-      prizePool {
-        id
-      }
       measureToken
       dripToken
+
       dripRatePerSecond
       exchangeRateMantissa
       timestamp
+
       players {
-        id
         address
       }
-      deactivated
     }
     volumeDrips {
       id
-      prizePool {
-        id
-      }
       measureToken
       dripToken
+      dripAmount
+
+      deactivated
       referral
+
       periodSeconds
       periodCount
-      dripAmount
-      deposits {
-        id
-        address
-        periodIndex
-        balance
-      }
       periods {
         id
         periodIndex
@@ -168,7 +143,12 @@
         endTime
         isDripping
       }
-      deactivated
+      deposits {
+        id
+        address
+        periodIndex
+        balance
+      }
     }
   }
 }

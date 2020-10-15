@@ -4,21 +4,29 @@
   "scripts": {
     "reinstall": "rm -rf node_modules/ && yarn",
     "clean": "rm -rf build/ generated/",
+
     "prepare:local": "mustache networks/local.json subgraph.template.yaml subgraph.local.yaml",
     "create:local": "graph create --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
     "remove:local": "graph remove --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
+
     "prepare:mainnet": "mustache networks/mainnet.json subgraph.template.yaml subgraph.yaml",
-    "prepare:kovan": "mustache networks/kovan.json subgraph.template.yaml subgraph.kovan.yaml",
     "prepare:rinkeby": "mustache networks/rinkeby.json subgraph.template.yaml subgraph.rinkeby.yaml",
     "prepare:ropsten": "mustache networks/ropsten.json subgraph.template.yaml subgraph.ropsten.yaml",
+
     "gen:mainnet": "graph codegen subgraph.yaml",
-    "gen:kovan": "graph codegen subgraph.kovan.yaml",
     "gen:rinkeby": "graph codegen subgraph.rinkeby.yaml",
     "gen:ropsten": "graph codegen subgraph.ropsten.yaml",
+
     "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/ptv3-subgraph subgraph.yaml",
-    "deploy:kovan": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/v3-kovan subgraph.kovan.yaml",
+
+    "deploy:rinkeby": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-v3 subgraph.rinkeby.yaml",
     "deploy:rinkeby-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3 subgraph.rinkeby.yaml",
     "deploy:rinkeby-dev": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-secord-v3 subgraph.rinkeby.yaml",
+
+    "deploy:ropsten": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/ropsten-v3 subgraph.ropsten.yaml",
+    "deploy:ropsten-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/ropsten-staging-v3 subgraph.ropsten.yaml",
+    "deploy:ropsten-dev": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/ropsten-secord-v3 subgraph.ropsten.yaml",
+
     "deploy:local": "graph deploy --node http://127.0.0.1:8020 --ipfs http://localhost:5001 pooltogether/ptv3-subgraph subgraph.local.yaml",
     "codegen": "graph codegen",
     "build": "graph build",
