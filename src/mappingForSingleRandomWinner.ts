@@ -2,11 +2,11 @@ import { log } from '@graphprotocol/graph-ts'
 import {
   PrizePool,
   SingleRandomWinner,
-  ControlledToken,
 } from '../generated/schema'
 
 import {
   SingleRandomWinner as SingleRandomWinnerContract,
+  TokenListenerUpdated,
   PrizePoolOpened,
   PrizePoolAwardStarted,
   PrizePoolAwarded,
@@ -18,6 +18,7 @@ import {
   ExternalErc721AwardRemoved,
 } from '../generated/templates/SingleRandomWinner/SingleRandomWinner'
 
+import { loadOrCreateComptroller } from './helpers/loadOrCreateComptroller'
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
 import { loadOrCreateSingleRandomWinner } from './helpers/loadOrCreateSingleRandomWinner'
 import {
@@ -31,6 +32,14 @@ import { ONE } from './helpers/common'
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const _prizeStrategy = loadOrCreateSingleRandomWinner(event.address)
   _prizeStrategy.owner = event.params.newOwner
+  _prizeStrategy.save()
+}
+
+export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
+  const _prizeStrategy = loadOrCreateSingleRandomWinner(event.address)
+  const _comptroller = loadOrCreateComptroller(event.params.tokenListener)
+
+  _prizeStrategy.tokenListener = _comptroller.id
   _prizeStrategy.save()
 }
 

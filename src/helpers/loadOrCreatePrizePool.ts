@@ -16,14 +16,11 @@ import {
   ControlledToken as ControlledTokenContract,
 } from '../../generated/templates/ControlledToken/ControlledToken'
 
-import { loadOrCreatePrizeStrategy } from './loadOrCreatePrizeStrategy'
-
 import { ZERO, ONE } from './common'
 
 
 export function loadOrCreatePrizePool(
-  prizePool: Address,
-  prizeStrategy: Address
+  prizePool: Address
 ): PrizePool {
   let _prizePool = PrizePool.load(prizePool.toHex())
 
@@ -31,15 +28,12 @@ export function loadOrCreatePrizePool(
     _prizePool = new PrizePool(prizePool.toHex())
     const boundPrizePool = PrizePoolContract.bind(prizePool)
 
-    const _prizeStrategy = loadOrCreatePrizeStrategy(prizePool, prizeStrategy)
-
     const poolTokenAddress = boundPrizePool.token()
     const boundToken = ControlledTokenContract.bind(poolTokenAddress)
 
     _prizePool.owner = boundPrizePool.owner()
-    _prizePool.comptroller = boundPrizePool.comptroller().toHex()
-    _prizePool.prizeStrategy = _prizeStrategy.id
-    _prizePool.trustedForwarder = boundPrizePool.getTrustedForwarder()
+    _prizePool.reserve = boundPrizePool.reserve()
+    _prizePool.trustedForwarder = boundPrizePool.trustedForwarder()
     _prizePool.deactivated = false
 
     _prizePool.reserveFeeControlledToken = boundPrizePool.reserveFeeControlledToken()

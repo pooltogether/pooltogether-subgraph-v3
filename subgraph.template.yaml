@@ -2,72 +2,6 @@ specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
-  - name: CompoundPrizePoolBuilder
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      address: "{{compoundPrizePoolBuilder.address}}"
-      abi: CompoundPrizePoolBuilder
-      startBlock: {{compoundPrizePoolBuilder.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - CompoundPrizePoolBuilder
-      abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: Comptroller
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
-        - name: PrizePool
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
-        - name: CompoundPrizePool
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
-        - name: SingleRandomWinner
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
-        - name: CompoundPrizePoolBuilder
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolBuilder.json
-        - name: ControlledToken
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
-      eventHandlers:
-        - event: PrizePoolCreated(indexed address,indexed address,indexed address)
-          handler: handleCompoundPrizePoolCreated
-      file: ./src/mappingForCompoundPrizePoolBuilder.ts
-  - name: SingleRandomWinnerBuilder
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      address: "{{singleRandomWinnerBuilder.address}}"
-      abi: SingleRandomWinnerBuilder
-      startBlock: {{singleRandomWinnerBuilder.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - SingleRandomWinnerBuilder
-      abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
-        # - name: Comptroller
-        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
-        - name: PrizePool
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
-        # - name: CompoundPrizePool
-        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
-        - name: SingleRandomWinner
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
-        - name: SingleRandomWinnerBuilder
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinnerBuilder.json
-        # - name: CompoundPrizePoolBuilder
-        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolBuilder.json
-        - name: ControlledToken
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
-      eventHandlers:
-        - event: SingleRandomWinnerCreated(indexed address,indexed address,indexed address)
-          handler: handleSingleRandomWinnerCreated
-      file: ./src/mappingForSingleRandomWinnerBuilder.ts
   - name: Comptroller
     kind: ethereum/contract
     network: {{network}}
@@ -86,8 +20,6 @@ dataSources:
         - name: Comptroller
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
       eventHandlers:
-        - event: ReserveRateMantissaSet(uint256)
-          handler: handleReserveRateMantissaSet
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
         - event: DripTokenDripped(indexed address,indexed address,uint256)
@@ -114,6 +46,72 @@ dataSources:
           handler: handleVolumeDripPeriodEnded
         - event: VolumeDripDripped(indexed address,indexed address,indexed address,bool,address,uint256)
           handler: handleVolumeDripDripped
+  - name: CompoundPrizePoolBuilder
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{compoundPrizePoolBuilder.address}}"
+      abi: CompoundPrizePoolBuilder
+      startBlock: {{compoundPrizePoolBuilder.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - CompoundPrizePoolBuilder
+      abis:
+        # - name: ERC20
+        #   file: ./abis/ERC20.json
+        # - name: Comptroller
+        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
+        - name: PrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        - name: CompoundPrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
+        - name: SingleRandomWinner
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
+        - name: CompoundPrizePoolBuilder
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolBuilder.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
+      eventHandlers:
+        - event: PrizePoolCreated(indexed address,indexed address)
+          handler: handleCompoundPrizePoolCreated
+      file: ./src/mappingForCompoundPrizePoolBuilder.ts
+  - name: SingleRandomWinnerBuilder
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{singleRandomWinnerBuilder.address}}"
+      abi: SingleRandomWinnerBuilder
+      startBlock: {{singleRandomWinnerBuilder.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - SingleRandomWinnerBuilder
+      abis:
+        # - name: ERC20
+        #   file: ./abis/ERC20.json
+        # - name: Comptroller
+        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
+        - name: PrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        # - name: CompoundPrizePool
+        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
+        - name: SingleRandomWinner
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
+        - name: SingleRandomWinnerBuilder
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinnerBuilder.json
+        # - name: CompoundPrizePoolBuilder
+        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolBuilder.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
+      eventHandlers:
+        - event: SingleRandomWinnerCreated(indexed address,indexed address,indexed address)
+          handler: handleSingleRandomWinnerCreated
+      file: ./src/mappingForSingleRandomWinnerBuilder.ts
 templates:
   - name: SingleRandomWinner
     kind: ethereum/contract
@@ -128,20 +126,24 @@ templates:
       entities:
         - SingleRandomWinner
       abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
+        # - name: ERC20
+        #   file: ./abis/ERC20.json
+        - name: PrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: SingleRandomWinner
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
         - name: RNGInterface
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/RNGInterface.json
       eventHandlers:
+        - event: TokenListenerUpdated(indexed address)
+          handler: handleTokenListenerUpdated
         - event: PrizePoolOpened(indexed address,indexed uint256)
           handler: handlePrizePoolOpened
         - event: PrizePoolAwardStarted(indexed address,indexed address,indexed uint32,uint32)
           handler: handlePrizePoolAwardStarted
         - event: PrizePoolAwarded(indexed address,uint256)
           handler: handlePrizePoolAwarded
-        - event: RngServiceUpdated(address)
+        - event: RngServiceUpdated(indexed address)
           handler: handleRngServiceUpdated
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
@@ -166,8 +168,8 @@ templates:
       entities:
         - CompoundPrizePool
       abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
+        # - name: ERC20
+        #   file: ./abis/ERC20.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: CompoundPrizePool
@@ -201,7 +203,7 @@ templates:
           handler: handleControlledTokenAdded
         - event: ReserveFeeControlledTokenSet(indexed address)
           handler: handleReserveFeeControlledTokenSet
-        - event: ReserveFeeCaptured(indexed address,uint256)
+        - event: ReserveFeeCaptured(indexed address,indexed address,uint256)
           handler: handleReserveFeeCaptured
         - event: LiquidityCapSet(uint256)
           handler: handleLiquidityCapSet
@@ -242,6 +244,8 @@ templates:
       entities:
         - ControlledToken
       abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
         - name: ControlledToken
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:

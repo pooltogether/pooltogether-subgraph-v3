@@ -192,29 +192,6 @@ export class ControlledToken extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  getTrustedForwarder(): Address {
-    let result = super.call(
-      "getTrustedForwarder",
-      "getTrustedForwarder():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_getTrustedForwarder(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "getTrustedForwarder",
-      "getTrustedForwarder():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   increaseAllowance(spender: Address, addedValue: BigInt): boolean {
     let result = super.call(
       "increaseAllowance",
@@ -372,6 +349,29 @@ export class ControlledToken extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  trustedForwarder(): Address {
+    let result = super.call(
+      "trustedForwarder",
+      "trustedForwarder():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_trustedForwarder(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "trustedForwarder",
+      "trustedForwarder():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   versionRecipient(): string {

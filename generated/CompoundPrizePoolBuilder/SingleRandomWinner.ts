@@ -232,6 +232,24 @@ export class RngServiceUpdated__Params {
   }
 }
 
+export class TokenListenerUpdated extends ethereum.Event {
+  get params(): TokenListenerUpdated__Params {
+    return new TokenListenerUpdated__Params(this);
+  }
+}
+
+export class TokenListenerUpdated__Params {
+  _event: TokenListenerUpdated;
+
+  constructor(event: TokenListenerUpdated) {
+    this._event = event;
+  }
+
+  get tokenListener(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
 export class SingleRandomWinner extends ethereum.SmartContract {
   static bind(address: Address): SingleRandomWinner {
     return new SingleRandomWinner("SingleRandomWinner", address);
@@ -384,29 +402,6 @@ export class SingleRandomWinner extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  getTrustedForwarder(): Address {
-    let result = super.call(
-      "getTrustedForwarder",
-      "getTrustedForwarder():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_getTrustedForwarder(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "getTrustedForwarder",
-      "getTrustedForwarder():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   isPrizePeriodOver(): boolean {
@@ -690,6 +685,48 @@ export class SingleRandomWinner extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  tokenListener(): Address {
+    let result = super.call("tokenListener", "tokenListener():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_tokenListener(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "tokenListener",
+      "tokenListener():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  trustedForwarder(): Address {
+    let result = super.call(
+      "trustedForwarder",
+      "trustedForwarder():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_trustedForwarder(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "trustedForwarder",
+      "trustedForwarder():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   versionRecipient(): string {
     let result = super.call(
       "versionRecipient",
@@ -795,11 +832,11 @@ export class BeforeTokenMintCall__Inputs {
     this._call = call;
   }
 
-  get value0(): Address {
+  get to(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get value1(): BigInt {
+  get amount(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
   }
 
@@ -807,7 +844,7 @@ export class BeforeTokenMintCall__Inputs {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get value3(): Address {
+  get referrer(): Address {
     return this._call.inputValues[3].value.toAddress();
   }
 }
@@ -837,15 +874,15 @@ export class BeforeTokenTransferCall__Inputs {
     this._call = call;
   }
 
-  get value0(): Address {
+  get from(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get value1(): Address {
+  get to(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get value2(): BigInt {
+  get amount(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
 
@@ -1096,6 +1133,36 @@ export class SetRngServiceCall__Outputs {
   _call: SetRngServiceCall;
 
   constructor(call: SetRngServiceCall) {
+    this._call = call;
+  }
+}
+
+export class SetTokenListenerCall extends ethereum.Call {
+  get inputs(): SetTokenListenerCall__Inputs {
+    return new SetTokenListenerCall__Inputs(this);
+  }
+
+  get outputs(): SetTokenListenerCall__Outputs {
+    return new SetTokenListenerCall__Outputs(this);
+  }
+}
+
+export class SetTokenListenerCall__Inputs {
+  _call: SetTokenListenerCall;
+
+  constructor(call: SetTokenListenerCall) {
+    this._call = call;
+  }
+
+  get _tokenListener(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetTokenListenerCall__Outputs {
+  _call: SetTokenListenerCall;
+
+  constructor(call: SetTokenListenerCall) {
     this._call = call;
   }
 }

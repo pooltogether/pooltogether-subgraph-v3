@@ -30,10 +30,6 @@ export class PrizePoolCreated__Params {
   get prizePool(): Address {
     return this._event.parameters[1].value.toAddress();
   }
-
-  get prizeStrategy(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
 }
 
 export class CompoundPrizePoolBuilder__createCompoundPrizePoolInputConfigStruct extends ethereum.Tuple {
@@ -134,48 +130,25 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  comptroller(): Address {
-    let result = super.call("comptroller", "comptroller():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_comptroller(): ethereum.CallResult<Address> {
-    let result = super.tryCall("comptroller", "comptroller():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   createCompoundPrizePool(
-    config: CompoundPrizePoolBuilder__createCompoundPrizePoolInputConfigStruct,
-    prizeStrategy: Address
+    config: CompoundPrizePoolBuilder__createCompoundPrizePoolInputConfigStruct
   ): Address {
     let result = super.call(
       "createCompoundPrizePool",
-      "createCompoundPrizePool((address,uint256,uint256),address):(address)",
-      [
-        ethereum.Value.fromTuple(config),
-        ethereum.Value.fromAddress(prizeStrategy)
-      ]
+      "createCompoundPrizePool((address,uint256,uint256)):(address)",
+      [ethereum.Value.fromTuple(config)]
     );
 
     return result[0].toAddress();
   }
 
   try_createCompoundPrizePool(
-    config: CompoundPrizePoolBuilder__createCompoundPrizePoolInputConfigStruct,
-    prizeStrategy: Address
+    config: CompoundPrizePoolBuilder__createCompoundPrizePoolInputConfigStruct
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "createCompoundPrizePool",
-      "createCompoundPrizePool((address,uint256,uint256),address):(address)",
-      [
-        ethereum.Value.fromTuple(config),
-        ethereum.Value.fromAddress(prizeStrategy)
-      ]
+      "createCompoundPrizePool((address,uint256,uint256)):(address)",
+      [ethereum.Value.fromTuple(config)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -216,6 +189,21 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
         ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(decimals))
       ]
     );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  reserve(): Address {
+    let result = super.call("reserve", "reserve():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_reserve(): ethereum.CallResult<Address> {
+    let result = super.tryCall("reserve", "reserve():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -287,7 +275,7 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get _comptroller(): Address {
+  get _reserve(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
@@ -331,10 +319,6 @@ export class CreateCompoundPrizePoolCall__Inputs {
 
   get config(): CreateCompoundPrizePoolCallConfigStruct {
     return this._call.inputValues[0].value.toTuple() as CreateCompoundPrizePoolCallConfigStruct;
-  }
-
-  get prizeStrategy(): Address {
-    return this._call.inputValues[1].value.toAddress();
   }
 }
 

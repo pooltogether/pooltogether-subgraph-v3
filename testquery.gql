@@ -40,6 +40,7 @@
         id
         owner
         rng
+        
         ticket {
           id
           type

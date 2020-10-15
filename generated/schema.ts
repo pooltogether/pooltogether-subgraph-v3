@@ -51,15 +51,6 @@ export class Comptroller extends Entity {
     this.set("owner", Value.fromBytes(value));
   }
 
-  get reserveRateMantissa(): BigInt {
-    let value = this.get("reserveRateMantissa");
-    return value.toBigInt();
-  }
-
-  set reserveRateMantissa(value: BigInt) {
-    this.set("reserveRateMantissa", Value.fromBigInt(value));
-  }
-
   get players(): Array<string> {
     let value = this.get("players");
     return value.toStringArray();
@@ -67,15 +58,6 @@ export class Comptroller extends Entity {
 
   set players(value: Array<string>) {
     this.set("players", Value.fromStringArray(value));
-  }
-
-  get prizePools(): Array<string> {
-    let value = this.get("prizePools");
-    return value.toStringArray();
-  }
-
-  set prizePools(value: Array<string>) {
-    this.set("prizePools", Value.fromStringArray(value));
   }
 }
 
@@ -118,22 +100,13 @@ export class PrizePool extends Entity {
     this.set("owner", Value.fromBytes(value));
   }
 
-  get comptroller(): string {
-    let value = this.get("comptroller");
-    return value.toString();
+  get reserve(): Bytes {
+    let value = this.get("reserve");
+    return value.toBytes();
   }
 
-  set comptroller(value: string) {
-    this.set("comptroller", Value.fromString(value));
-  }
-
-  get prizeStrategy(): string {
-    let value = this.get("prizeStrategy");
-    return value.toString();
-  }
-
-  set prizeStrategy(value: string) {
-    this.set("prizeStrategy", Value.fromString(value));
+  set reserve(value: Bytes) {
+    this.set("reserve", Value.fromBytes(value));
   }
 
   get trustedForwarder(): Bytes {
@@ -152,6 +125,23 @@ export class PrizePool extends Entity {
 
   set deactivated(value: boolean) {
     this.set("deactivated", Value.fromBoolean(value));
+  }
+
+  get prizeStrategy(): string | null {
+    let value = this.get("prizeStrategy");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set prizeStrategy(value: string | null) {
+    if (value === null) {
+      this.unset("prizeStrategy");
+    } else {
+      this.set("prizeStrategy", Value.fromString(value as string));
+    }
   }
 
   get prizePoolType(): string | null {
@@ -564,6 +554,23 @@ export class SingleRandomWinner extends Entity {
 
   set owner(value: Bytes) {
     this.set("owner", Value.fromBytes(value));
+  }
+
+  get tokenListener(): string | null {
+    let value = this.get("tokenListener");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set tokenListener(value: string | null) {
+    if (value === null) {
+      this.unset("tokenListener");
+    } else {
+      this.set("tokenListener", Value.fromString(value as string));
+    }
   }
 
   get prizePool(): string {
