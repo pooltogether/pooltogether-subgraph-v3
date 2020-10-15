@@ -230,7 +230,8 @@ type BalanceDripPlayer @entity {
 # dynamically generated type, not mapped to a specific contract
 type BalanceDrip @entity {
   id: ID!
-  prizePool: PrizePool!
+  
+  sourceAddress: Bytes
   measureToken: Bytes!
   dripToken: Bytes!
 
@@ -273,7 +274,8 @@ type VolumeDripPeriod @entity {
 # dynamically generated type, not mapped to a specific contract
 type VolumeDrip @entity {
   id: ID!
-  prizePool: PrizePool!
+  
+  sourceAddress: Bytes
   measureToken: Bytes!
   dripToken: Bytes!
   referral: Boolean!

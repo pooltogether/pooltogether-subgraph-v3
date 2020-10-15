@@ -52,7 +52,7 @@ export function loadOrCreateBalanceDrip(
 
   if (!_balanceDrip) {
     _balanceDrip = new BalanceDrip(id)
-    _balanceDrip.prizePool = sourceAddress.toHex()
+    _balanceDrip.sourceAddress = sourceAddress
     _balanceDrip.measureToken = measureTokenAddress
     _balanceDrip.dripToken = dripTokenAddress
     _balanceDrip.deactivated = false
@@ -81,7 +81,7 @@ export function loadOrCreateVolumeDrip(
 
   if (!_volumeDrip) {
     _volumeDrip = new VolumeDrip(id)
-    _volumeDrip.prizePool = sourceAddress.toHex()
+    _volumeDrip.sourceAddress = sourceAddress
     _volumeDrip.measureToken = measureTokenAddress
     _volumeDrip.dripToken = dripTokenAddress
     _volumeDrip.referral = isReferral
