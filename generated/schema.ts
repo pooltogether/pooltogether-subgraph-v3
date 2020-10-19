@@ -1010,15 +1010,6 @@ export class ControlledToken extends Entity {
     this.set("prizePool", Value.fromString(value));
   }
 
-  get prizeStrategy(): string {
-    let value = this.get("prizeStrategy");
-    return value.toString();
-  }
-
-  set prizeStrategy(value: string) {
-    this.set("prizeStrategy", Value.fromString(value));
-  }
-
   get type(): string {
     let value = this.get("type");
     return value.toString();

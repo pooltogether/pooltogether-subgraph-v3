@@ -22,10 +22,10 @@ dataSources:
       eventHandlers:
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-        - event: DripTokenDripped(indexed address,indexed address,uint256)
-          handler: handleDripTokenDripped
-        - event: DripTokenClaimed(indexed address,indexed address,indexed address,uint256)
-          handler: handleDripTokenClaimed
+        # - event: DripTokenDripped(indexed address,indexed address,uint256)
+        #   handler: handleDripTokenDripped
+        # - event: DripTokenClaimed(indexed address,indexed address,indexed address,uint256)
+        #   handler: handleDripTokenClaimed
         - event: BalanceDripActivated(indexed address,indexed address,indexed address,uint256)
           handler: handleBalanceDripActivated
         - event: BalanceDripDeactivated(indexed address,indexed address,indexed address)

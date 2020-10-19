@@ -99,7 +99,7 @@ export function loadOrCreateVolumeDripPlayer(
     _player.volumeDrip = volumeDripId
     _player.address = player
     _player.periodIndex = BigInt.fromI32(0)
-    // _player.balance = BigInt.fromI32(0)
+    _player.balance = BigInt.fromI32(0)
     _player.save()
   }
 
