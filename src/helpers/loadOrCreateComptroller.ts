@@ -51,6 +51,7 @@ export function loadOrCreateBalanceDrip(
 
   if (!_balanceDrip) {
     _balanceDrip = new BalanceDrip(id)
+    _balanceDrip.comptroller = comptrollerAddress.toHex()
     _balanceDrip.sourceAddress = sourceAddress
     _balanceDrip.measureToken = measureTokenAddress
     _balanceDrip.dripToken = dripTokenAddress
@@ -80,6 +81,7 @@ export function loadOrCreateVolumeDrip(
 
   if (!_volumeDrip) {
     _volumeDrip = new VolumeDrip(id)
+    _volumeDrip.comptroller = comptrollerAddress.toHex()
     _volumeDrip.sourceAddress = sourceAddress
     _volumeDrip.measureToken = measureTokenAddress
     _volumeDrip.dripToken = dripTokenAddress

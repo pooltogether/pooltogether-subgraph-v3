@@ -60,10 +60,6 @@ dataSources:
       entities:
         - CompoundPrizePoolBuilder
       abis:
-        # - name: ERC20
-        #   file: ./abis/ERC20.json
-        # - name: Comptroller
-        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: CompoundPrizePool
@@ -76,7 +72,7 @@ dataSources:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
         - event: PrizePoolCreated(indexed address,indexed address)
-          handler: handleCompoundPrizePoolCreated
+          handler: handlePrizePoolCreated
       file: ./src/mappingForCompoundPrizePoolBuilder.ts
   - name: SingleRandomWinnerBuilder
     kind: ethereum/contract
@@ -92,20 +88,12 @@ dataSources:
       entities:
         - SingleRandomWinnerBuilder
       abis:
-        # - name: ERC20
-        #   file: ./abis/ERC20.json
-        # - name: Comptroller
-        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
-        # - name: CompoundPrizePool
-        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
         - name: SingleRandomWinner
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
         - name: SingleRandomWinnerBuilder
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinnerBuilder.json
-        # - name: CompoundPrizePoolBuilder
-        #   file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolBuilder.json
         - name: ControlledToken
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
@@ -126,8 +114,6 @@ templates:
       entities:
         - SingleRandomWinner
       abis:
-        # - name: ERC20
-        #   file: ./abis/ERC20.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: SingleRandomWinner
@@ -168,8 +154,6 @@ templates:
       entities:
         - CompoundPrizePool
       abis:
-        # - name: ERC20
-        #   file: ./abis/ERC20.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: CompoundPrizePool

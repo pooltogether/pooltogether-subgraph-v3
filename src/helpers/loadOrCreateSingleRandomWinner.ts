@@ -12,9 +12,6 @@ import {
   SingleRandomWinner as SingleRandomWinnerContract,
 } from '../../generated/templates/SingleRandomWinner/SingleRandomWinner'
 
-import { loadOrCreatePrizePool } from './loadOrCreatePrizePool'
-import { loadOrCreatePrizeStrategy } from './loadOrCreatePrizeStrategy'
-
 import { ZERO_ADDRESS } from './common'
 
 
@@ -29,17 +26,8 @@ export function loadOrCreateSingleRandomWinner(
     _singleRandomWinner = new SingleRandomWinner(_singleRandomWinnerAddress)
     const _boundSingleRandomWinner = SingleRandomWinnerContract.bind(singleRandomWinner)
 
-    // Get Prize Pool
-    const _prizePoolAddress = _boundSingleRandomWinner.prizePool()
-    const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
-
-    // Update PrizeStrategy Link
-    const _prizeStrategy = loadOrCreatePrizeStrategy(singleRandomWinner, _prizePoolAddress)
-    _prizeStrategy.singleRandomWinner = _singleRandomWinner.id
-    _prizeStrategy.save()
-
-    _singleRandomWinner.owner = _prizePool.owner
-    _singleRandomWinner.prizePool = _prizePool.id
+    _singleRandomWinner.owner = _boundSingleRandomWinner.owner()
+    _singleRandomWinner.prizePool = _boundSingleRandomWinner.prizePool().toHex() // _prizePool.id
     _singleRandomWinner.rng = _boundSingleRandomWinner.rng()
     _singleRandomWinner.tokenListener = ZERO_ADDRESS
     _singleRandomWinner.ticket = ZERO_ADDRESS

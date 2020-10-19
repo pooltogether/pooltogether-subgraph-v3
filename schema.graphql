@@ -20,16 +20,18 @@ type Comptroller @entity {
   owner: Bytes!
 
   players: [DripTokenPlayer!]! @derivedFrom(field: "comptroller")
+  balanceDrips: [BalanceDrip!]! @derivedFrom(field: "comptroller")
+  volumeDrips: [VolumeDrip!]! @derivedFrom(field: "comptroller")
 }
 
 # ID: `${prizePool.address}`
 type PrizePool @entity {
   id: ID!
-
-  owner: Bytes!
-  reserve: Bytes!
-  trustedForwarder: Bytes!
   deactivated: Boolean!
+
+  owner: Bytes
+  reserve: Bytes
+  trustedForwarder: Bytes
 
   prizeStrategy: PrizeStrategy
   prizePoolType: PrizePoolType
@@ -42,7 +44,7 @@ type PrizePool @entity {
   underlyingCollateralName: String!
   underlyingCollateralSymbol: String!
 
-  maxExitFeeMantissa: BigInt
+  maxExitFeeMantissa: BigInt!
   maxTimelockDuration: BigInt!
   timelockTotalSupply: BigInt!
   liquidityCap: BigInt!
@@ -66,9 +68,6 @@ type PrizePool @entity {
 
   players: [Player!]! @derivedFrom(field: "prizePool")
   sponsors: [Sponsor!]! @derivedFrom(field: "prizePool")
-
-  balanceDrips: [BalanceDrip!]! @derivedFrom(field: "prizePool")
-  volumeDrips: [VolumeDrip!]! @derivedFrom(field: "prizePool")
 }
 
 # ID: `${compoundPrizePool.address}`
@@ -81,7 +80,7 @@ type CompoundPrizePool @entity {
 # ID: `${prizeStrategy.address}`
 type PrizeStrategy @entity {
   id: ID!
-  prizePool: PrizePool!
+  prizePool: PrizePool
 
   singleRandomWinner: SingleRandomWinner
 }
@@ -90,13 +89,13 @@ type PrizeStrategy @entity {
 type SingleRandomWinner @entity {
   id: ID!
 
-  owner: Bytes!
+  owner: Bytes
 
   tokenListener: Comptroller
-  prizePool: PrizePool!
-  rng: Bytes!
-  ticket: ControlledToken!
-  sponsorship: ControlledToken!
+  prizePool: PrizePool
+  rng: Bytes
+  ticket: ControlledToken
+  sponsorship: ControlledToken
 
   prizePeriodSeconds: BigInt!
   prizePeriodStartedAt: BigInt!
@@ -135,7 +134,6 @@ type Prize @entity {
 type ControlledToken @entity {
   id: ID!
   prizePool: PrizePool!
-  prizeStrategy: PrizeStrategy!
 
   type: ControlledTokenType!
   name: String!
@@ -214,7 +212,7 @@ type DripTokenPlayer @entity {
   address: Bytes!
 
   # claimable balance
-  balance: BigInt!
+  # balance: BigInt!
 }
 
 # ID: `${balanceDripId}-${player.address}`
@@ -229,8 +227,10 @@ type BalanceDripPlayer @entity {
 # dynamically generated type, not mapped to a specific contract
 type BalanceDrip @entity {
   id: ID!
-  
-  sourceAddress: Bytes
+
+  comptroller: Comptroller!
+
+  sourceAddress: Bytes!
   measureToken: Bytes!
   dripToken: Bytes!
 
@@ -273,8 +273,10 @@ type VolumeDripPeriod @entity {
 # dynamically generated type, not mapped to a specific contract
 type VolumeDrip @entity {
   id: ID!
-  
-  sourceAddress: Bytes
+
+  comptroller: Comptroller!
+
+  sourceAddress: Bytes!
   measureToken: Bytes!
   dripToken: Bytes!
   referral: Boolean!

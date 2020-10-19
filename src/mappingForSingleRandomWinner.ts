@@ -29,6 +29,10 @@ import {
 import { ONE } from './helpers/common'
 
 
+export function handlePrizePoolOpened(event: PrizePoolOpened): void {
+  // no-op
+}
+
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const _prizeStrategy = loadOrCreateSingleRandomWinner(event.address)
   _prizeStrategy.owner = event.params.newOwner
@@ -41,10 +45,6 @@ export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
 
   _prizeStrategy.tokenListener = _comptroller.id
   _prizeStrategy.save()
-}
-
-export function handlePrizePoolOpened(event: PrizePoolOpened): void {
-  // no-op
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
