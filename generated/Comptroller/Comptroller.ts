@@ -208,6 +208,32 @@ export class OwnershipTransferred__Params {
   }
 }
 
+export class TransferredOut extends ethereum.Event {
+  get params(): TransferredOut__Params {
+    return new TransferredOut__Params(this);
+  }
+}
+
+export class TransferredOut__Params {
+  _event: TransferredOut;
+
+  constructor(event: TransferredOut) {
+    this._event = event;
+  }
+
+  get token(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get to(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
 export class VolumeDripActivated extends ethereum.Event {
   get params(): VolumeDripActivated__Params {
     return new VolumeDripActivated__Params(this);
@@ -350,6 +376,10 @@ export class VolumeDripPeriodEnded__Params {
   get totalSupply(): BigInt {
     return this._event.parameters[5].value.toBigInt();
   }
+
+  get drippedTokens(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
+  }
 }
 
 export class VolumeDripPeriodStarted extends ethereum.Event {
@@ -432,6 +462,16 @@ export class VolumeDripSet__Params {
   }
 }
 
+export class Comptroller__balanceOfClaimsResultValue0Struct extends ethereum.Tuple {
+  get dripToken(): Address {
+    return this[0].toAddress();
+  }
+
+  get balance(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
 export class Comptroller__getBalanceDripResult {
   value0: BigInt;
   value1: BigInt;
@@ -492,6 +532,26 @@ export class Comptroller__getVolumeDripPeriodResult {
   }
 }
 
+export class Comptroller__updateAndClaimDripsResultValue0Struct extends ethereum.Tuple {
+  get dripToken(): Address {
+    return this[0].toAddress();
+  }
+
+  get balance(): BigInt {
+    return this[1].toBigInt();
+  }
+}
+
+export class Comptroller__updateAndClaimDripsInputPairsStruct extends ethereum.Tuple {
+  get source(): Address {
+    return this[0].toAddress();
+  }
+
+  get measure(): Address {
+    return this[1].toAddress();
+  }
+}
+
 export class Comptroller__updateDripsResultValue0Struct extends ethereum.Tuple {
   get dripToken(): Address {
     return this[0].toAddress();
@@ -517,30 +577,139 @@ export class Comptroller extends ethereum.SmartContract {
     return new Comptroller("Comptroller", address);
   }
 
-  balanceOfDrip(dripToken: Address, user: Address): BigInt {
+  balanceOfClaims(
+    user: Address,
+    dripTokens: Array<Address>
+  ): Array<Comptroller__balanceOfClaimsResultValue0Struct> {
+    let result = super.call(
+      "balanceOfClaims",
+      "balanceOfClaims(address,address[]):(tuple[])",
+      [
+        ethereum.Value.fromAddress(user),
+        ethereum.Value.fromAddressArray(dripTokens)
+      ]
+    );
+
+    return result[0].toTupleArray<
+      Comptroller__balanceOfClaimsResultValue0Struct
+    >();
+  }
+
+  try_balanceOfClaims(
+    user: Address,
+    dripTokens: Array<Address>
+  ): ethereum.CallResult<
+    Array<Comptroller__balanceOfClaimsResultValue0Struct>
+  > {
+    let result = super.tryCall(
+      "balanceOfClaims",
+      "balanceOfClaims(address,address[]):(tuple[])",
+      [
+        ethereum.Value.fromAddress(user),
+        ethereum.Value.fromAddressArray(dripTokens)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      value[0].toTupleArray<Comptroller__balanceOfClaimsResultValue0Struct>()
+    );
+  }
+
+  balanceOfDrip(user: Address, dripToken: Address): BigInt {
     let result = super.call(
       "balanceOfDrip",
       "balanceOfDrip(address,address):(uint256)",
-      [ethereum.Value.fromAddress(dripToken), ethereum.Value.fromAddress(user)]
+      [ethereum.Value.fromAddress(user), ethereum.Value.fromAddress(dripToken)]
     );
 
     return result[0].toBigInt();
   }
 
   try_balanceOfDrip(
-    dripToken: Address,
-    user: Address
+    user: Address,
+    dripToken: Address
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "balanceOfDrip",
       "balanceOfDrip(address,address):(uint256)",
-      [ethereum.Value.fromAddress(dripToken), ethereum.Value.fromAddress(user)]
+      [ethereum.Value.fromAddress(user), ethereum.Value.fromAddress(dripToken)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getActiveBalanceDripTokens(
+    source: Address,
+    measure: Address
+  ): Array<Address> {
+    let result = super.call(
+      "getActiveBalanceDripTokens",
+      "getActiveBalanceDripTokens(address,address):(address[])",
+      [ethereum.Value.fromAddress(source), ethereum.Value.fromAddress(measure)]
+    );
+
+    return result[0].toAddressArray();
+  }
+
+  try_getActiveBalanceDripTokens(
+    source: Address,
+    measure: Address
+  ): ethereum.CallResult<Array<Address>> {
+    let result = super.tryCall(
+      "getActiveBalanceDripTokens",
+      "getActiveBalanceDripTokens(address,address):(address[])",
+      [ethereum.Value.fromAddress(source), ethereum.Value.fromAddress(measure)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddressArray());
+  }
+
+  getActiveVolumeDripTokens(
+    source: Address,
+    measure: Address,
+    isReferral: boolean
+  ): Array<Address> {
+    let result = super.call(
+      "getActiveVolumeDripTokens",
+      "getActiveVolumeDripTokens(address,address,bool):(address[])",
+      [
+        ethereum.Value.fromAddress(source),
+        ethereum.Value.fromAddress(measure),
+        ethereum.Value.fromBoolean(isReferral)
+      ]
+    );
+
+    return result[0].toAddressArray();
+  }
+
+  try_getActiveVolumeDripTokens(
+    source: Address,
+    measure: Address,
+    isReferral: boolean
+  ): ethereum.CallResult<Array<Address>> {
+    let result = super.tryCall(
+      "getActiveVolumeDripTokens",
+      "getActiveVolumeDripTokens(address,address,bool):(address[])",
+      [
+        ethereum.Value.fromAddress(source),
+        ethereum.Value.fromAddress(measure),
+        ethereum.Value.fromBoolean(isReferral)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddressArray());
   }
 
   getBalanceDrip(
@@ -758,6 +927,53 @@ export class Comptroller extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  updateAndClaimDrips(
+    pairs: Array<Comptroller__updateAndClaimDripsInputPairsStruct>,
+    user: Address,
+    dripTokens: Array<Address>
+  ): Array<Comptroller__updateAndClaimDripsResultValue0Struct> {
+    let result = super.call(
+      "updateAndClaimDrips",
+      "updateAndClaimDrips(tuple[],address,address[]):(tuple[])",
+      [
+        ethereum.Value.fromTupleArray(pairs),
+        ethereum.Value.fromAddress(user),
+        ethereum.Value.fromAddressArray(dripTokens)
+      ]
+    );
+
+    return result[0].toTupleArray<
+      Comptroller__updateAndClaimDripsResultValue0Struct
+    >();
+  }
+
+  try_updateAndClaimDrips(
+    pairs: Array<Comptroller__updateAndClaimDripsInputPairsStruct>,
+    user: Address,
+    dripTokens: Array<Address>
+  ): ethereum.CallResult<
+    Array<Comptroller__updateAndClaimDripsResultValue0Struct>
+  > {
+    let result = super.tryCall(
+      "updateAndClaimDrips",
+      "updateAndClaimDrips(tuple[],address,address[]):(tuple[])",
+      [
+        ethereum.Value.fromTupleArray(pairs),
+        ethereum.Value.fromAddress(user),
+        ethereum.Value.fromAddressArray(dripTokens)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      value[0].toTupleArray<
+        Comptroller__updateAndClaimDripsResultValue0Struct
+      >()
+    );
   }
 
   updateDrips(
@@ -991,7 +1207,7 @@ export class BeforeTokenTransferCall__Inputs {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get amount(): BigInt {
+  get value2(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
 
@@ -1005,6 +1221,56 @@ export class BeforeTokenTransferCall__Outputs {
 
   constructor(call: BeforeTokenTransferCall) {
     this._call = call;
+  }
+}
+
+export class CaptureClaimsForBalanceDripsForPairsCall extends ethereum.Call {
+  get inputs(): CaptureClaimsForBalanceDripsForPairsCall__Inputs {
+    return new CaptureClaimsForBalanceDripsForPairsCall__Inputs(this);
+  }
+
+  get outputs(): CaptureClaimsForBalanceDripsForPairsCall__Outputs {
+    return new CaptureClaimsForBalanceDripsForPairsCall__Outputs(this);
+  }
+}
+
+export class CaptureClaimsForBalanceDripsForPairsCall__Inputs {
+  _call: CaptureClaimsForBalanceDripsForPairsCall;
+
+  constructor(call: CaptureClaimsForBalanceDripsForPairsCall) {
+    this._call = call;
+  }
+
+  get pairs(): Array<CaptureClaimsForBalanceDripsForPairsCallPairsStruct> {
+    return this._call.inputValues[0].value.toTupleArray<
+      CaptureClaimsForBalanceDripsForPairsCallPairsStruct
+    >();
+  }
+
+  get user(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get dripTokens(): Array<Address> {
+    return this._call.inputValues[2].value.toAddressArray();
+  }
+}
+
+export class CaptureClaimsForBalanceDripsForPairsCall__Outputs {
+  _call: CaptureClaimsForBalanceDripsForPairsCall;
+
+  constructor(call: CaptureClaimsForBalanceDripsForPairsCall) {
+    this._call = call;
+  }
+}
+
+export class CaptureClaimsForBalanceDripsForPairsCallPairsStruct extends ethereum.Tuple {
+  get source(): Address {
+    return this[0].toAddress();
+  }
+
+  get measure(): Address {
+    return this[1].toAddress();
   }
 }
 
@@ -1042,6 +1308,40 @@ export class ClaimDripCall__Outputs {
   _call: ClaimDripCall;
 
   constructor(call: ClaimDripCall) {
+    this._call = call;
+  }
+}
+
+export class ClaimDripsCall extends ethereum.Call {
+  get inputs(): ClaimDripsCall__Inputs {
+    return new ClaimDripsCall__Inputs(this);
+  }
+
+  get outputs(): ClaimDripsCall__Outputs {
+    return new ClaimDripsCall__Outputs(this);
+  }
+}
+
+export class ClaimDripsCall__Inputs {
+  _call: ClaimDripsCall;
+
+  constructor(call: ClaimDripsCall) {
+    this._call = call;
+  }
+
+  get user(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get dripTokens(): Array<Address> {
+    return this._call.inputValues[1].value.toAddressArray();
+  }
+}
+
+export class ClaimDripsCall__Outputs {
+  _call: ClaimDripsCall;
+
+  constructor(call: ClaimDripsCall) {
     this._call = call;
   }
 }
@@ -1134,26 +1434,26 @@ export class DeactivateVolumeDripCall__Outputs {
   }
 }
 
-export class PokeDripsCall extends ethereum.Call {
-  get inputs(): PokeDripsCall__Inputs {
-    return new PokeDripsCall__Inputs(this);
+export class MintAndCaptureVolumeDripsForPairsCall extends ethereum.Call {
+  get inputs(): MintAndCaptureVolumeDripsForPairsCall__Inputs {
+    return new MintAndCaptureVolumeDripsForPairsCall__Inputs(this);
   }
 
-  get outputs(): PokeDripsCall__Outputs {
-    return new PokeDripsCall__Outputs(this);
+  get outputs(): MintAndCaptureVolumeDripsForPairsCall__Outputs {
+    return new MintAndCaptureVolumeDripsForPairsCall__Outputs(this);
   }
 }
 
-export class PokeDripsCall__Inputs {
-  _call: PokeDripsCall;
+export class MintAndCaptureVolumeDripsForPairsCall__Inputs {
+  _call: MintAndCaptureVolumeDripsForPairsCall;
 
-  constructor(call: PokeDripsCall) {
+  constructor(call: MintAndCaptureVolumeDripsForPairsCall) {
     this._call = call;
   }
 
-  get pairs(): Array<PokeDripsCallPairsStruct> {
+  get pairs(): Array<MintAndCaptureVolumeDripsForPairsCallPairsStruct> {
     return this._call.inputValues[0].value.toTupleArray<
-      PokeDripsCallPairsStruct
+      MintAndCaptureVolumeDripsForPairsCallPairsStruct
     >();
   }
 
@@ -1161,20 +1461,24 @@ export class PokeDripsCall__Inputs {
     return this._call.inputValues[1].value.toAddress();
   }
 
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
   get dripTokens(): Array<Address> {
-    return this._call.inputValues[2].value.toAddressArray();
+    return this._call.inputValues[3].value.toAddressArray();
   }
 }
 
-export class PokeDripsCall__Outputs {
-  _call: PokeDripsCall;
+export class MintAndCaptureVolumeDripsForPairsCall__Outputs {
+  _call: MintAndCaptureVolumeDripsForPairsCall;
 
-  constructor(call: PokeDripsCall) {
+  constructor(call: MintAndCaptureVolumeDripsForPairsCall) {
     this._call = call;
   }
 }
 
-export class PokeDripsCallPairsStruct extends ethereum.Tuple {
+export class MintAndCaptureVolumeDripsForPairsCallPairsStruct extends ethereum.Tuple {
   get source(): Address {
     return this[0].toAddress();
   }
@@ -1302,6 +1606,44 @@ export class SetVolumeDripCall__Outputs {
   }
 }
 
+export class TransferOutCall extends ethereum.Call {
+  get inputs(): TransferOutCall__Inputs {
+    return new TransferOutCall__Inputs(this);
+  }
+
+  get outputs(): TransferOutCall__Outputs {
+    return new TransferOutCall__Outputs(this);
+  }
+}
+
+export class TransferOutCall__Inputs {
+  _call: TransferOutCall;
+
+  constructor(call: TransferOutCall) {
+    this._call = call;
+  }
+
+  get token(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get to(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+}
+
+export class TransferOutCall__Outputs {
+  _call: TransferOutCall;
+
+  constructor(call: TransferOutCall) {
+    this._call = call;
+  }
+}
+
 export class TransferOwnershipCall extends ethereum.Call {
   get inputs(): TransferOwnershipCall__Inputs {
     return new TransferOwnershipCall__Inputs(this);
@@ -1329,6 +1671,90 @@ export class TransferOwnershipCall__Outputs {
 
   constructor(call: TransferOwnershipCall) {
     this._call = call;
+  }
+}
+
+export class UpdateActiveBalanceDripsForPairsCall extends ethereum.Call {
+  get inputs(): UpdateActiveBalanceDripsForPairsCall__Inputs {
+    return new UpdateActiveBalanceDripsForPairsCall__Inputs(this);
+  }
+
+  get outputs(): UpdateActiveBalanceDripsForPairsCall__Outputs {
+    return new UpdateActiveBalanceDripsForPairsCall__Outputs(this);
+  }
+}
+
+export class UpdateActiveBalanceDripsForPairsCall__Inputs {
+  _call: UpdateActiveBalanceDripsForPairsCall;
+
+  constructor(call: UpdateActiveBalanceDripsForPairsCall) {
+    this._call = call;
+  }
+
+  get pairs(): Array<UpdateActiveBalanceDripsForPairsCallPairsStruct> {
+    return this._call.inputValues[0].value.toTupleArray<
+      UpdateActiveBalanceDripsForPairsCallPairsStruct
+    >();
+  }
+}
+
+export class UpdateActiveBalanceDripsForPairsCall__Outputs {
+  _call: UpdateActiveBalanceDripsForPairsCall;
+
+  constructor(call: UpdateActiveBalanceDripsForPairsCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateActiveBalanceDripsForPairsCallPairsStruct extends ethereum.Tuple {
+  get source(): Address {
+    return this[0].toAddress();
+  }
+
+  get measure(): Address {
+    return this[1].toAddress();
+  }
+}
+
+export class UpdateActiveVolumeDripsForPairsCall extends ethereum.Call {
+  get inputs(): UpdateActiveVolumeDripsForPairsCall__Inputs {
+    return new UpdateActiveVolumeDripsForPairsCall__Inputs(this);
+  }
+
+  get outputs(): UpdateActiveVolumeDripsForPairsCall__Outputs {
+    return new UpdateActiveVolumeDripsForPairsCall__Outputs(this);
+  }
+}
+
+export class UpdateActiveVolumeDripsForPairsCall__Inputs {
+  _call: UpdateActiveVolumeDripsForPairsCall;
+
+  constructor(call: UpdateActiveVolumeDripsForPairsCall) {
+    this._call = call;
+  }
+
+  get pairs(): Array<UpdateActiveVolumeDripsForPairsCallPairsStruct> {
+    return this._call.inputValues[0].value.toTupleArray<
+      UpdateActiveVolumeDripsForPairsCallPairsStruct
+    >();
+  }
+}
+
+export class UpdateActiveVolumeDripsForPairsCall__Outputs {
+  _call: UpdateActiveVolumeDripsForPairsCall;
+
+  constructor(call: UpdateActiveVolumeDripsForPairsCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateActiveVolumeDripsForPairsCallPairsStruct extends ethereum.Tuple {
+  get source(): Address {
+    return this[0].toAddress();
+  }
+
+  get measure(): Address {
+    return this[1].toAddress();
   }
 }
 
@@ -1370,6 +1796,12 @@ export class UpdateAndClaimDripsCall__Outputs {
   constructor(call: UpdateAndClaimDripsCall) {
     this._call = call;
   }
+
+  get value0(): Array<UpdateAndClaimDripsCallValue0Struct> {
+    return this._call.outputValues[0].value.toTupleArray<
+      UpdateAndClaimDripsCallValue0Struct
+    >();
+  }
 }
 
 export class UpdateAndClaimDripsCallPairsStruct extends ethereum.Tuple {
@@ -1379,6 +1811,16 @@ export class UpdateAndClaimDripsCallPairsStruct extends ethereum.Tuple {
 
   get measure(): Address {
     return this[1].toAddress();
+  }
+}
+
+export class UpdateAndClaimDripsCallValue0Struct extends ethereum.Tuple {
+  get dripToken(): Address {
+    return this[0].toAddress();
+  }
+
+  get balance(): BigInt {
+    return this[1].toBigInt();
   }
 }
 

@@ -358,6 +358,77 @@ export class SingleRandomWinner extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  getExternalErc20Awards(): Array<Address> {
+    let result = super.call(
+      "getExternalErc20Awards",
+      "getExternalErc20Awards():(address[])",
+      []
+    );
+
+    return result[0].toAddressArray();
+  }
+
+  try_getExternalErc20Awards(): ethereum.CallResult<Array<Address>> {
+    let result = super.tryCall(
+      "getExternalErc20Awards",
+      "getExternalErc20Awards():(address[])",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddressArray());
+  }
+
+  getExternalErc721AwardTokenIds(_externalErc721: Address): Array<BigInt> {
+    let result = super.call(
+      "getExternalErc721AwardTokenIds",
+      "getExternalErc721AwardTokenIds(address):(uint256[])",
+      [ethereum.Value.fromAddress(_externalErc721)]
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_getExternalErc721AwardTokenIds(
+    _externalErc721: Address
+  ): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "getExternalErc721AwardTokenIds",
+      "getExternalErc721AwardTokenIds(address):(uint256[])",
+      [ethereum.Value.fromAddress(_externalErc721)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+  }
+
+  getExternalErc721Awards(): Array<Address> {
+    let result = super.call(
+      "getExternalErc721Awards",
+      "getExternalErc721Awards():(address[])",
+      []
+    );
+
+    return result[0].toAddressArray();
+  }
+
+  try_getExternalErc721Awards(): ethereum.CallResult<Array<Address>> {
+    let result = super.tryCall(
+      "getExternalErc721Awards",
+      "getExternalErc721Awards():(address[])",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddressArray());
+  }
+
   getLastRngLockBlock(): BigInt {
     let result = super.call(
       "getLastRngLockBlock",
@@ -1189,6 +1260,44 @@ export class StartAwardCall__Outputs {
   _call: StartAwardCall;
 
   constructor(call: StartAwardCall) {
+    this._call = call;
+  }
+}
+
+export class TransferExternalERC20Call extends ethereum.Call {
+  get inputs(): TransferExternalERC20Call__Inputs {
+    return new TransferExternalERC20Call__Inputs(this);
+  }
+
+  get outputs(): TransferExternalERC20Call__Outputs {
+    return new TransferExternalERC20Call__Outputs(this);
+  }
+}
+
+export class TransferExternalERC20Call__Inputs {
+  _call: TransferExternalERC20Call;
+
+  constructor(call: TransferExternalERC20Call) {
+    this._call = call;
+  }
+
+  get to(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get externalToken(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+}
+
+export class TransferExternalERC20Call__Outputs {
+  _call: TransferExternalERC20Call;
+
+  constructor(call: TransferExternalERC20Call) {
     this._call = call;
   }
 }

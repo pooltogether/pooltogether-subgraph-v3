@@ -83,21 +83,6 @@ export class SingleRandomWinnerBuilder extends ethereum.SmartContract {
     return new SingleRandomWinnerBuilder("SingleRandomWinnerBuilder", address);
   }
 
-  comptroller(): Address {
-    let result = super.call("comptroller", "comptroller():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_comptroller(): ethereum.CallResult<Address> {
-    let result = super.tryCall("comptroller", "comptroller():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   controlledTokenProxyFactory(): Address {
     let result = super.call(
       "controlledTokenProxyFactory",
@@ -251,24 +236,20 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get _comptroller(): Address {
+  get _singleRandomWinnerProxyFactory(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _singleRandomWinnerProxyFactory(): Address {
+  get _trustedForwarder(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get _trustedForwarder(): Address {
+  get _controlledTokenProxyFactory(): Address {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get _controlledTokenProxyFactory(): Address {
-    return this._call.inputValues[3].value.toAddress();
-  }
-
   get _ticketProxyFactory(): Address {
-    return this._call.inputValues[4].value.toAddress();
+    return this._call.inputValues[3].value.toAddress();
   }
 }
 

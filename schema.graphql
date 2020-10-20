@@ -30,7 +30,7 @@ type PrizePool @entity {
   deactivated: Boolean!
 
   owner: Bytes
-  reserve: Bytes
+  reserveRegistry: Bytes
   trustedForwarder: Bytes
 
   prizeStrategy: PrizeStrategy

@@ -32,7 +32,7 @@ export function loadOrCreatePrizePool(
     const boundToken = ControlledTokenContract.bind(poolTokenAddress)
 
     _prizePool.owner = boundPrizePool.owner()
-    _prizePool.reserve = Address.fromString(ZERO_ADDRESS)
+    _prizePool.reserveRegistry = Address.fromString(ZERO_ADDRESS)
     _prizePool.trustedForwarder = Address.fromString(ZERO_ADDRESS)
     _prizePool.deactivated = false
 

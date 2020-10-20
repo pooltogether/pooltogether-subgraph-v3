@@ -30,12 +30,13 @@
     "deploy:local": "graph deploy --node http://127.0.0.1:8020 --ipfs http://localhost:5001 pooltogether/ptv3-subgraph subgraph.local.yaml",
     "codegen": "graph codegen",
     "build": "graph build",
+    "build:rinkeby": "graph build subgraph.rinkeby.yaml",
     "auth": "graph auth https://api.thegraph.com/deploy/"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.18.0",
     "@graphprotocol/graph-ts": "^0.18.1",
-    "@pooltogether/pooltogether-contracts": "3.0.0-alpha.41",
+    "@pooltogether/pooltogether-contracts": "3.0.0-rc.1",
     "mustache": "^4.0.1"
   }
 }

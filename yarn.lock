@@ -414,25 +414,19 @@
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-3.2.0.tgz#3e6b3a7662d8ed64271ade96ef42655db983fd9d"
   integrity sha512-bUOmkSoPkjnUyMiKo6RYnb0VHBk5D9KKDAgNLzF41aqAM3TeE0yGdFF5dVRcV60pZdJLlyFT/jjXIZCWyyEzAQ==
 
-"@pooltogether/current-pool-data@^3.0.0-alpha.33":
-  version "3.0.0-alpha.33"
-  resolved "https://registry.yarnpkg.com/@pooltogether/current-pool-data/-/current-pool-data-3.0.0-alpha.33.tgz#d873e581148181d9d2ec0c7ef5b6cb9669bd419d"
-  integrity sha512-65L1gz+fGXDJ4z5LRnLnHQ+ogcL6cI/wjiSmOalJeTEt6aMrl9O0fMXI6gbAEi+n8iobrF62bkuBxCqU8OlMtQ==
-
 "@pooltogether/fixed-point@pooltogether/fixed-point.git#0.1.0-upgradeable.1":
   version "0.1.0"
   resolved "https://codeload.github.com/pooltogether/fixed-point/tar.gz/422e81ae8025680b870c7242ea9c01df72d72baf"
   dependencies:
     "@openzeppelin/contracts-ethereum-package" "^3.0.0"
 
-"@pooltogether/pooltogether-contracts@3.0.0-alpha.41":
-  version "3.0.0-alpha.41"
-  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0-alpha.41.tgz#4b4cca39c74a7f1dd3f352650ceb181ef3a8e83e"
-  integrity sha512-Jbxc7A8Nnh95yPBkF2UuhIdsxJK/48tZwdovKEWS1iRtTWBHXDbdjiJJsUwmGg2sZ3BkV5ynl4PaqmBsKlN3XQ==
+"@pooltogether/pooltogether-contracts@3.0.0-rc.1":
+  version "3.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0-rc.1.tgz#c2b6011484105083eecdbd645cfded63f30e5bfe"
+  integrity sha512-EJSjd2bF8rREgtNh+1IFbFDqe+Qv3eL7OgNsqSofdJTm9IA3kWnvOMYrMhuTPaOE5Z9QZ7iTJqquXe5J1XsIrw==
   dependencies:
     "@opengsn/gsn" "^2.0.1"
     "@openzeppelin/contracts-ethereum-package" "3.0.0"
-    "@pooltogether/current-pool-data" "^3.0.0-alpha.33"
     "@pooltogether/fixed-point" pooltogether/fixed-point.git#0.1.0-upgradeable.1
     "@pooltogether/pooltogether-rng-contracts" "^1.0.0-alpha.7"
     "@pooltogether/uniform-random-number" pooltogether/uniform-random-number#solidity-0.6
@@ -10091,9 +10085,9 @@ web3-provider-engine@14.2.1:
     xhr "^2.2.0"
     xtend "^4.0.1"
 
-"web3-provider-engine@git+https://github.com/trufflesuite/provider-engine.git#web3-one":
+"web3-provider-engine@https://github.com/trufflesuite/provider-engine#web3-one":
   version "14.0.6"
-  resolved "git+https://github.com/trufflesuite/provider-engine.git#9694f5b4e5500651bd2ff689df8529bb5cf6b96f"
+  resolved "https://github.com/trufflesuite/provider-engine#9694f5b4e5500651bd2ff689df8529bb5cf6b96f"
   dependencies:
     async "^2.5.0"
     backoff "^2.5.0"
