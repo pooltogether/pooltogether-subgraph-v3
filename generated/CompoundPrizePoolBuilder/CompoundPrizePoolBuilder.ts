@@ -196,14 +196,22 @@ export class CompoundPrizePoolBuilder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  reserve(): Address {
-    let result = super.call("reserve", "reserve():(address)", []);
+  reserveRegistry(): Address {
+    let result = super.call(
+      "reserveRegistry",
+      "reserveRegistry():(address)",
+      []
+    );
 
     return result[0].toAddress();
   }
 
-  try_reserve(): ethereum.CallResult<Address> {
-    let result = super.tryCall("reserve", "reserve():(address)", []);
+  try_reserveRegistry(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "reserveRegistry",
+      "reserveRegistry():(address)",
+      []
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -275,7 +283,7 @@ export class ConstructorCall__Inputs {
     this._call = call;
   }
 
-  get _reserve(): Address {
+  get _reserveRegistry(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 

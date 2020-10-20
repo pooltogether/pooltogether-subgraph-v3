@@ -8,7 +8,6 @@ import {
 import {
   Initialized,
   ControlledTokenAdded,
-  ReserveFeeControlledTokenSet,
   ReserveFeeCaptured,
   LiquidityCapSet,
   Deposited,
@@ -21,7 +20,6 @@ import {
   TimelockedWithdrawalSwept,
   CreditPlanSet,
   PrizeStrategySet,
-  EmergencyShutdown,
   OwnershipTransferred,
 } from '../generated/templates/PrizePool/PrizePool'
 
@@ -49,7 +47,7 @@ import { ZERO, ZERO_ADDRESS } from './helpers/common'
 
 export function handleInitialized(event: Initialized): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
-  _prizePool.reserve = event.params.reserve
+  _prizePool.reserveRegistry = event.params.reserveRegistry
   _prizePool.trustedForwarder = event.params.trustedForwarder
   _prizePool.maxExitFeeMantissa = event.params.maxExitFeeMantissa
   _prizePool.maxTimelockDuration = event.params.maxTimelockDuration
@@ -64,12 +62,6 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 
 export function handleControlledTokenAdded(event: ControlledTokenAdded): void {
   log.warning('implement handleControlledTokenAdded!', [])
-}
-
-export function handleReserveFeeControlledTokenSet(event: ReserveFeeControlledTokenSet): void {
-  const _prizePool = loadOrCreatePrizePool(event.address)
-  _prizePool.reserveFeeControlledToken = event.params.token
-  _prizePool.save()
 }
 
 export function handleLiquidityCapSet(event: LiquidityCapSet): void {
@@ -95,12 +87,6 @@ export function handlePrizeStrategySet(event: PrizeStrategySet): void {
 
   const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
   _prizePool.prizeStrategy = _prizeStrategy.id
-  _prizePool.save()
-}
-
-export function handleEmergencyShutdown(event: EmergencyShutdown): void {
-  const _prizePool = loadOrCreatePrizePool(event.address)
-  _prizePool.deactivated = true
   _prizePool.save()
 }
 

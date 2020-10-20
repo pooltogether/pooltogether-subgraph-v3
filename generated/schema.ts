@@ -135,8 +135,8 @@ export class PrizePool extends Entity {
     }
   }
 
-  get reserve(): Bytes | null {
-    let value = this.get("reserve");
+  get reserveRegistry(): Bytes | null {
+    let value = this.get("reserveRegistry");
     if (value === null) {
       return null;
     } else {
@@ -144,11 +144,11 @@ export class PrizePool extends Entity {
     }
   }
 
-  set reserve(value: Bytes | null) {
+  set reserveRegistry(value: Bytes | null) {
     if (value === null) {
-      this.unset("reserve");
+      this.unset("reserveRegistry");
     } else {
-      this.set("reserve", Value.fromBytes(value as Bytes));
+      this.set("reserveRegistry", Value.fromBytes(value as Bytes));
     }
   }
 

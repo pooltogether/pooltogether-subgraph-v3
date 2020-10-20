@@ -10,6 +10,24 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class AwardCaptured extends ethereum.Event {
+  get params(): AwardCaptured__Params {
+    return new AwardCaptured__Params(this);
+  }
+}
+
+export class AwardCaptured__Params {
+  _event: AwardCaptured;
+
+  constructor(event: AwardCaptured) {
+    this._event = event;
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
 export class Awarded extends ethereum.Event {
   get params(): Awarded__Params {
     return new Awarded__Params(this);
@@ -218,20 +236,6 @@ export class Deposited__Params {
   }
 }
 
-export class EmergencyShutdown extends ethereum.Event {
-  get params(): EmergencyShutdown__Params {
-    return new EmergencyShutdown__Params(this);
-  }
-}
-
-export class EmergencyShutdown__Params {
-  _event: EmergencyShutdown;
-
-  constructor(event: EmergencyShutdown) {
-    this._event = event;
-  }
-}
-
 export class Initialized extends ethereum.Event {
   get params(): Initialized__Params {
     return new Initialized__Params(this);
@@ -249,7 +253,7 @@ export class Initialized__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get reserve(): Address {
+  get reserveRegistry(): Address {
     return this._event.parameters[1].value.toAddress();
   }
 
@@ -371,34 +375,30 @@ export class ReserveFeeCaptured__Params {
     this._event = event;
   }
 
+  get amount(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
+export class ReserveWithdrawal extends ethereum.Event {
+  get params(): ReserveWithdrawal__Params {
+    return new ReserveWithdrawal__Params(this);
+  }
+}
+
+export class ReserveWithdrawal__Params {
+  _event: ReserveWithdrawal;
+
+  constructor(event: ReserveWithdrawal) {
+    this._event = event;
+  }
+
   get to(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get token(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
   get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class ReserveFeeControlledTokenSet extends ethereum.Event {
-  get params(): ReserveFeeControlledTokenSet__Params {
-    return new ReserveFeeControlledTokenSet__Params(this);
-  }
-}
-
-export class ReserveFeeControlledTokenSet__Params {
-  _event: ReserveFeeControlledTokenSet;
-
-  constructor(event: ReserveFeeControlledTokenSet) {
-    this._event = event;
-  }
-
-  get token(): Address {
-    return this._event.parameters[0].value.toAddress();
+    return this._event.parameters[1].value.toBigInt();
   }
 }
 
@@ -898,21 +898,6 @@ export class PrizePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  isShutdown(): boolean {
-    let result = super.call("isShutdown", "isShutdown():(bool)", []);
-
-    return result[0].toBoolean();
-  }
-
-  try_isShutdown(): ethereum.CallResult<boolean> {
-    let result = super.tryCall("isShutdown", "isShutdown():(bool)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
   isTrustedForwarder(forwarder: Address): boolean {
     let result = super.call(
       "isTrustedForwarder",
@@ -1031,35 +1016,20 @@ export class PrizePool extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  reserve(): Address {
-    let result = super.call("reserve", "reserve():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_reserve(): ethereum.CallResult<Address> {
-    let result = super.tryCall("reserve", "reserve():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  reserveFeeControlledToken(): Address {
+  reserveRegistry(): Address {
     let result = super.call(
-      "reserveFeeControlledToken",
-      "reserveFeeControlledToken():(address)",
+      "reserveRegistry",
+      "reserveRegistry():(address)",
       []
     );
 
     return result[0].toAddress();
   }
 
-  try_reserveFeeControlledToken(): ethereum.CallResult<Address> {
+  try_reserveRegistry(): ethereum.CallResult<Address> {
     let result = super.tryCall(
-      "reserveFeeControlledToken",
-      "reserveFeeControlledToken():(address)",
+      "reserveRegistry",
+      "reserveRegistry():(address)",
       []
     );
     if (result.reverted) {
@@ -1067,6 +1037,29 @@ export class PrizePool extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  reserveTotalSupply(): BigInt {
+    let result = super.call(
+      "reserveTotalSupply",
+      "reserveTotalSupply():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_reserveTotalSupply(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "reserveTotalSupply",
+      "reserveTotalSupply():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   sweepTimelockBalances(users: Array<Address>): BigInt {
@@ -1274,6 +1267,29 @@ export class PrizePool extends ethereum.SmartContract {
         ethereum.Value.fromAddress(controlledToken),
         ethereum.Value.fromUnsignedBigInt(maximumExitFee)
       ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  withdrawReserve(to: Address): BigInt {
+    let result = super.call(
+      "withdrawReserve",
+      "withdrawReserve(address):(uint256)",
+      [ethereum.Value.fromAddress(to)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_withdrawReserve(to: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "withdrawReserve",
+      "withdrawReserve(address):(uint256)",
+      [ethereum.Value.fromAddress(to)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1736,32 +1752,6 @@ export class DepositToCall__Outputs {
   }
 }
 
-export class EmergencyShutdownCall extends ethereum.Call {
-  get inputs(): EmergencyShutdownCall__Inputs {
-    return new EmergencyShutdownCall__Inputs(this);
-  }
-
-  get outputs(): EmergencyShutdownCall__Outputs {
-    return new EmergencyShutdownCall__Outputs(this);
-  }
-}
-
-export class EmergencyShutdownCall__Inputs {
-  _call: EmergencyShutdownCall;
-
-  constructor(call: EmergencyShutdownCall) {
-    this._call = call;
-  }
-}
-
-export class EmergencyShutdownCall__Outputs {
-  _call: EmergencyShutdownCall;
-
-  constructor(call: EmergencyShutdownCall) {
-    this._call = call;
-  }
-}
-
 export class InitializeCall extends ethereum.Call {
   get inputs(): InitializeCall__Inputs {
     return new InitializeCall__Inputs(this);
@@ -1783,7 +1773,7 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _reserve(): Address {
+  get _reserveRegistry(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
@@ -1928,36 +1918,6 @@ export class SetPrizeStrategyCall__Outputs {
   _call: SetPrizeStrategyCall;
 
   constructor(call: SetPrizeStrategyCall) {
-    this._call = call;
-  }
-}
-
-export class SetReserveFeeControlledTokenCall extends ethereum.Call {
-  get inputs(): SetReserveFeeControlledTokenCall__Inputs {
-    return new SetReserveFeeControlledTokenCall__Inputs(this);
-  }
-
-  get outputs(): SetReserveFeeControlledTokenCall__Outputs {
-    return new SetReserveFeeControlledTokenCall__Outputs(this);
-  }
-}
-
-export class SetReserveFeeControlledTokenCall__Inputs {
-  _call: SetReserveFeeControlledTokenCall;
-
-  constructor(call: SetReserveFeeControlledTokenCall) {
-    this._call = call;
-  }
-
-  get controlledToken(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class SetReserveFeeControlledTokenCall__Outputs {
-  _call: SetReserveFeeControlledTokenCall;
-
-  constructor(call: SetReserveFeeControlledTokenCall) {
     this._call = call;
   }
 }
@@ -2140,6 +2100,40 @@ export class WithdrawInstantlyFromCall__Outputs {
   _call: WithdrawInstantlyFromCall;
 
   constructor(call: WithdrawInstantlyFromCall) {
+    this._call = call;
+  }
+
+  get value0(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class WithdrawReserveCall extends ethereum.Call {
+  get inputs(): WithdrawReserveCall__Inputs {
+    return new WithdrawReserveCall__Inputs(this);
+  }
+
+  get outputs(): WithdrawReserveCall__Outputs {
+    return new WithdrawReserveCall__Outputs(this);
+  }
+}
+
+export class WithdrawReserveCall__Inputs {
+  _call: WithdrawReserveCall;
+
+  constructor(call: WithdrawReserveCall) {
+    this._call = call;
+  }
+
+  get to(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class WithdrawReserveCall__Outputs {
+  _call: WithdrawReserveCall;
+
+  constructor(call: WithdrawReserveCall) {
     this._call = call;
   }
 
