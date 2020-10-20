@@ -5,6 +5,10 @@ import {
 } from '../../generated/schema'
 
 import {
+  ControlledToken as ControlledTokenTemplate,
+} from '../../generated/templates'
+
+import {
   ControlledToken as ControlledTokenContract
 } from '../../generated/templates/ControlledToken/ControlledToken'
 
@@ -28,6 +32,8 @@ export function createControlledToken(
   token.totalSupply = ZERO
 
   token.save()
+
+  ControlledTokenTemplate.create(tokenAddress)
 
   return token as ControlledToken
 }
