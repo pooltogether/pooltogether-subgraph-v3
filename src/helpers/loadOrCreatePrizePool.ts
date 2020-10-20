@@ -16,7 +16,7 @@ import {
   ControlledToken as ControlledTokenContract,
 } from '../../generated/templates/ControlledToken/ControlledToken'
 
-import { ZERO, ONE } from './common'
+import { ZERO, ONE, ZERO_ADDRESS } from './common'
 
 
 export function loadOrCreatePrizePool(
@@ -32,19 +32,19 @@ export function loadOrCreatePrizePool(
     const boundToken = ControlledTokenContract.bind(poolTokenAddress)
 
     _prizePool.owner = boundPrizePool.owner()
-    _prizePool.reserve = boundPrizePool.reserve()
-    _prizePool.trustedForwarder = boundPrizePool.trustedForwarder()
+    _prizePool.reserve = Address.fromString(ZERO_ADDRESS)
+    _prizePool.trustedForwarder = Address.fromString(ZERO_ADDRESS)
     _prizePool.deactivated = false
 
-    _prizePool.reserveFeeControlledToken = boundPrizePool.reserveFeeControlledToken()
+    _prizePool.reserveFeeControlledToken = Address.fromString(ZERO_ADDRESS)
 
     _prizePool.underlyingCollateralToken = poolTokenAddress
     _prizePool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
     _prizePool.underlyingCollateralName = boundToken.name()
     _prizePool.underlyingCollateralSymbol = boundToken.symbol()
 
-    _prizePool.maxExitFeeMantissa = boundPrizePool.maxExitFeeMantissa()
-    _prizePool.maxTimelockDuration = boundPrizePool.maxTimelockDuration()
+    _prizePool.maxExitFeeMantissa = ZERO
+    _prizePool.maxTimelockDuration = ZERO
     _prizePool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
     _prizePool.liquidityCap = ZERO
 

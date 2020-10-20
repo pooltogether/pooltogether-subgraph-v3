@@ -17,14 +17,12 @@ export function handleSingleRandomWinnerCreated(event: SingleRandomWinnerCreated
   const ticket = createControlledToken(
     'Ticket',
     event.params.ticket,
-    Address.fromString(singleRandomWinner.prizePool),
-    event.params.singleRandomWinner
+    Address.fromString(singleRandomWinner.prizePool)
   )
   const sponsorship = createControlledToken(
     'Sponsorship',
     event.params.sponsorship,
-    Address.fromString(singleRandomWinner.prizePool),
-    event.params.singleRandomWinner
+    Address.fromString(singleRandomWinner.prizePool)
   )
 
   singleRandomWinner.ticket = ticket.id

@@ -48,20 +48,32 @@ import { ZERO, ZERO_ADDRESS } from './helpers/common'
 
 
 export function handleInitialized(event: Initialized): void {
-  // no-op
+  const _prizePool = loadOrCreatePrizePool(event.address)
+  _prizePool.reserve = event.params.reserve
+  _prizePool.trustedForwarder = event.params.trustedForwarder
+  _prizePool.maxExitFeeMantissa = event.params.maxExitFeeMantissa
+  _prizePool.maxTimelockDuration = event.params.maxTimelockDuration
+  _prizePool.save()
+}
+
+export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+  const _prizePool = loadOrCreatePrizePool(event.address)
+  _prizePool.owner = event.params.newOwner
+  _prizePool.save()
 }
 
 export function handleControlledTokenAdded(event: ControlledTokenAdded): void {
   log.warning('implement handleControlledTokenAdded!', [])
 }
+
 export function handleReserveFeeControlledTokenSet(event: ReserveFeeControlledTokenSet): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
+  const _prizePool = loadOrCreatePrizePool(event.address)
   _prizePool.reserveFeeControlledToken = event.params.token
   _prizePool.save()
 }
 
 export function handleLiquidityCapSet(event: LiquidityCapSet): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
+  const _prizePool = loadOrCreatePrizePool(event.address)
   _prizePool.liquidityCap = event.params.liquidityCap
   _prizePool.save()
 }
@@ -76,6 +88,7 @@ export function handleCreditPlanSet(event: CreditPlanSet): void {
 export function handlePrizeStrategySet(event: PrizeStrategySet): void {
   const _prizePoolAddress = event.address
   const _prizeStrategyAddress = event.params.prizeStrategy
+
   const _prizeStrategy = loadOrCreatePrizeStrategy(_prizeStrategyAddress, _prizePoolAddress)
   _prizeStrategy.singleRandomWinner = _prizeStrategyAddress.toHex()
   _prizeStrategy.save()
@@ -86,20 +99,20 @@ export function handlePrizeStrategySet(event: PrizeStrategySet): void {
 }
 
 export function handleEmergencyShutdown(event: EmergencyShutdown): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
+  const _prizePool = loadOrCreatePrizePool(event.address)
   _prizePool.deactivated = true
   _prizePool.save()
 }
 
 export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
+  const _prizePool = loadOrCreatePrizePool(event.address)
   _prizePool.cumulativePrizeReserveFee = _prizePool.cumulativePrizeReserveFee.plus(event.params.amount)
   _prizePool.save()
 
 }
 
 export function handleAwarded(event: Awarded): void {
-  const _prizePool = PrizePool.load(event.address.toHex())
+  const _prizePool = loadOrCreatePrizePool(event.address)
 
   // Record prize history
   const _prize = loadOrCreatePrize(
@@ -142,15 +155,9 @@ export function handleAwardedExternalERC721(event: AwardedExternalERC721): void 
   log.warning('implement handleAwardedExternalERC721', [])
 }
 
-export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  const _prizePool = loadOrCreatePrizePool(event.address)
-  _prizePool.owner = event.params.newOwner
-  _prizePool.save()
-}
-
 export function handleDeposited(event: Deposited): void {
-  const _prizePoolAddress = event.address.toHex()
-  const _prizePool = PrizePool.load(_prizePoolAddress)
+  const _prizePoolAddress = event.address
+  const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
 
   const _prizeStrategyId = _prizePool.prizeStrategy
   const _prizeStrategy = PrizeStrategy.load(_prizeStrategyId)
@@ -163,7 +170,7 @@ export function handleDeposited(event: Deposited): void {
 
   if (ticketIsToken) {
     const _player = loadOrCreatePlayer(
-      Address.fromString(_prizePoolAddress),
+      _prizePoolAddress,
       event.params.to
     )
 
@@ -177,7 +184,7 @@ export function handleDeposited(event: Deposited): void {
     _player.save()
   } else {
     const _sponsor = loadOrCreateSponsor(
-      Address.fromString(_prizePoolAddress),
+      _prizePoolAddress,
       event.params.to
     )
 
@@ -192,8 +199,8 @@ export function handleDeposited(event: Deposited): void {
 }
 
 export function handleInstantWithdrawal(event: InstantWithdrawal): void {
-  const _prizePoolAddress = event.address.toHex()
-  const _prizePool = PrizePool.load(_prizePoolAddress)
+  const _prizePoolAddress = event.address
+  const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
 
   const _prizeStrategyId = _prizePool.prizeStrategy
   const _prizeStrategy = PrizeStrategy.load(_prizeStrategyId)
@@ -208,7 +215,7 @@ export function handleInstantWithdrawal(event: InstantWithdrawal): void {
 
   if (ticketIsToken) {
     const _player = loadOrCreatePlayer(
-      Address.fromString(_prizePoolAddress),
+      _prizePoolAddress,
       event.params.from
     )
 
@@ -221,7 +228,7 @@ export function handleInstantWithdrawal(event: InstantWithdrawal): void {
     _player.save()
   } else {
     const _sponsor = loadOrCreateSponsor(
-      Address.fromString(_prizePoolAddress),
+      _prizePoolAddress,
       event.params.from
     )
 
@@ -236,11 +243,11 @@ export function handleInstantWithdrawal(event: InstantWithdrawal): void {
 }
 
 export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
-  const _prizePoolAddress = event.address.toHex()
-  const _prizePool = PrizePool.load(_prizePoolAddress)
+  const _prizePoolAddress = event.address
+  const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
 
   const _player = loadOrCreatePlayer(
-    Address.fromString(_prizePoolAddress),
+    _prizePoolAddress,
     event.params.from
   )
 
@@ -259,9 +266,9 @@ export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
 }
 
 export function handleTimelockedWithdrawalSwept(event: TimelockedWithdrawalSwept): void {
-  const _prizePoolAddress = event.address.toHex()
+  const _prizePoolAddress = event.address
   const _player = loadOrCreatePlayer(
-    Address.fromString(_prizePoolAddress),
+    _prizePoolAddress,
     event.params.from
   )
 
@@ -274,11 +281,11 @@ export function handleTimelockedWithdrawalSwept(event: TimelockedWithdrawalSwept
 // This happens when a player deposits some of their timelocked funds
 // back into the pool
 export function handleTimelockDeposited(event: TimelockDeposited): void {
-  const _prizePoolAddress = event.address.toHex()
-  const _prizePool = PrizePool.load(_prizePoolAddress)
+  const _prizePoolAddress = event.address
+  const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
 
   const _player = loadOrCreatePlayer(
-    Address.fromString(_prizePoolAddress),
+    _prizePoolAddress,
     event.params.to
   )
 

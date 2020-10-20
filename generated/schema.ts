@@ -59,6 +59,24 @@ export class Comptroller extends Entity {
   set players(value: Array<string>) {
     this.set("players", Value.fromStringArray(value));
   }
+
+  get balanceDrips(): Array<string> {
+    let value = this.get("balanceDrips");
+    return value.toStringArray();
+  }
+
+  set balanceDrips(value: Array<string>) {
+    this.set("balanceDrips", Value.fromStringArray(value));
+  }
+
+  get volumeDrips(): Array<string> {
+    let value = this.get("volumeDrips");
+    return value.toStringArray();
+  }
+
+  set volumeDrips(value: Array<string>) {
+    this.set("volumeDrips", Value.fromStringArray(value));
+  }
 }
 
 export class PrizePool extends Entity {
@@ -91,33 +109,6 @@ export class PrizePool extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get owner(): Bytes {
-    let value = this.get("owner");
-    return value.toBytes();
-  }
-
-  set owner(value: Bytes) {
-    this.set("owner", Value.fromBytes(value));
-  }
-
-  get reserve(): Bytes {
-    let value = this.get("reserve");
-    return value.toBytes();
-  }
-
-  set reserve(value: Bytes) {
-    this.set("reserve", Value.fromBytes(value));
-  }
-
-  get trustedForwarder(): Bytes {
-    let value = this.get("trustedForwarder");
-    return value.toBytes();
-  }
-
-  set trustedForwarder(value: Bytes) {
-    this.set("trustedForwarder", Value.fromBytes(value));
-  }
-
   get deactivated(): boolean {
     let value = this.get("deactivated");
     return value.toBoolean();
@@ -125,6 +116,57 @@ export class PrizePool extends Entity {
 
   set deactivated(value: boolean) {
     this.set("deactivated", Value.fromBoolean(value));
+  }
+
+  get owner(): Bytes | null {
+    let value = this.get("owner");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set owner(value: Bytes | null) {
+    if (value === null) {
+      this.unset("owner");
+    } else {
+      this.set("owner", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get reserve(): Bytes | null {
+    let value = this.get("reserve");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set reserve(value: Bytes | null) {
+    if (value === null) {
+      this.unset("reserve");
+    } else {
+      this.set("reserve", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get trustedForwarder(): Bytes | null {
+    let value = this.get("trustedForwarder");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set trustedForwarder(value: Bytes | null) {
+    if (value === null) {
+      this.unset("trustedForwarder");
+    } else {
+      this.set("trustedForwarder", Value.fromBytes(value as Bytes));
+    }
   }
 
   get prizeStrategy(): string | null {
@@ -223,21 +265,13 @@ export class PrizePool extends Entity {
     this.set("underlyingCollateralSymbol", Value.fromString(value));
   }
 
-  get maxExitFeeMantissa(): BigInt | null {
+  get maxExitFeeMantissa(): BigInt {
     let value = this.get("maxExitFeeMantissa");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
+    return value.toBigInt();
   }
 
-  set maxExitFeeMantissa(value: BigInt | null) {
-    if (value === null) {
-      this.unset("maxExitFeeMantissa");
-    } else {
-      this.set("maxExitFeeMantissa", Value.fromBigInt(value as BigInt));
-    }
+  set maxExitFeeMantissa(value: BigInt) {
+    this.set("maxExitFeeMantissa", Value.fromBigInt(value));
   }
 
   get maxTimelockDuration(): BigInt {
@@ -392,24 +426,6 @@ export class PrizePool extends Entity {
   set sponsors(value: Array<string>) {
     this.set("sponsors", Value.fromStringArray(value));
   }
-
-  get balanceDrips(): Array<string> {
-    let value = this.get("balanceDrips");
-    return value.toStringArray();
-  }
-
-  set balanceDrips(value: Array<string>) {
-    this.set("balanceDrips", Value.fromStringArray(value));
-  }
-
-  get volumeDrips(): Array<string> {
-    let value = this.get("volumeDrips");
-    return value.toStringArray();
-  }
-
-  set volumeDrips(value: Array<string>) {
-    this.set("volumeDrips", Value.fromStringArray(value));
-  }
 }
 
 export class CompoundPrizePool extends Entity {
@@ -490,13 +506,21 @@ export class PrizeStrategy extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get prizePool(): string {
+  get prizePool(): string | null {
     let value = this.get("prizePool");
-    return value.toString();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
+  set prizePool(value: string | null) {
+    if (value === null) {
+      this.unset("prizePool");
+    } else {
+      this.set("prizePool", Value.fromString(value as string));
+    }
   }
 
   get singleRandomWinner(): string | null {
@@ -547,13 +571,21 @@ export class SingleRandomWinner extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get owner(): Bytes {
+  get owner(): Bytes | null {
     let value = this.get("owner");
-    return value.toBytes();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set owner(value: Bytes) {
-    this.set("owner", Value.fromBytes(value));
+  set owner(value: Bytes | null) {
+    if (value === null) {
+      this.unset("owner");
+    } else {
+      this.set("owner", Value.fromBytes(value as Bytes));
+    }
   }
 
   get tokenListener(): string | null {
@@ -573,40 +605,72 @@ export class SingleRandomWinner extends Entity {
     }
   }
 
-  get prizePool(): string {
+  get prizePool(): string | null {
     let value = this.get("prizePool");
-    return value.toString();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
+  set prizePool(value: string | null) {
+    if (value === null) {
+      this.unset("prizePool");
+    } else {
+      this.set("prizePool", Value.fromString(value as string));
+    }
   }
 
-  get rng(): Bytes {
+  get rng(): Bytes | null {
     let value = this.get("rng");
-    return value.toBytes();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set rng(value: Bytes) {
-    this.set("rng", Value.fromBytes(value));
+  set rng(value: Bytes | null) {
+    if (value === null) {
+      this.unset("rng");
+    } else {
+      this.set("rng", Value.fromBytes(value as Bytes));
+    }
   }
 
-  get ticket(): string {
+  get ticket(): string | null {
     let value = this.get("ticket");
-    return value.toString();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set ticket(value: string) {
-    this.set("ticket", Value.fromString(value));
+  set ticket(value: string | null) {
+    if (value === null) {
+      this.unset("ticket");
+    } else {
+      this.set("ticket", Value.fromString(value as string));
+    }
   }
 
-  get sponsorship(): string {
+  get sponsorship(): string | null {
     let value = this.get("sponsorship");
-    return value.toString();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set sponsorship(value: string) {
-    this.set("sponsorship", Value.fromString(value));
+  set sponsorship(value: string | null) {
+    if (value === null) {
+      this.unset("sponsorship");
+    } else {
+      this.set("sponsorship", Value.fromString(value as string));
+    }
   }
 
   get prizePeriodSeconds(): BigInt {
@@ -944,15 +1008,6 @@ export class ControlledToken extends Entity {
 
   set prizePool(value: string) {
     this.set("prizePool", Value.fromString(value));
-  }
-
-  get prizeStrategy(): string {
-    let value = this.get("prizeStrategy");
-    return value.toString();
-  }
-
-  set prizeStrategy(value: string) {
-    this.set("prizeStrategy", Value.fromString(value));
   }
 
   get type(): string {
@@ -1438,15 +1493,6 @@ export class DripTokenPlayer extends Entity {
   set address(value: Bytes) {
     this.set("address", Value.fromBytes(value));
   }
-
-  get balance(): BigInt {
-    let value = this.get("balance");
-    return value.toBigInt();
-  }
-
-  set balance(value: BigInt) {
-    this.set("balance", Value.fromBigInt(value));
-  }
 }
 
 export class BalanceDripPlayer extends Entity {
@@ -1528,13 +1574,22 @@ export class BalanceDrip extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get prizePool(): string {
-    let value = this.get("prizePool");
+  get comptroller(): string {
+    let value = this.get("comptroller");
     return value.toString();
   }
 
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
+  set comptroller(value: string) {
+    this.set("comptroller", Value.fromString(value));
+  }
+
+  get sourceAddress(): Bytes {
+    let value = this.get("sourceAddress");
+    return value.toBytes();
+  }
+
+  set sourceAddress(value: Bytes) {
+    this.set("sourceAddress", Value.fromBytes(value));
   }
 
   get measureToken(): Bytes {
@@ -1831,13 +1886,22 @@ export class VolumeDrip extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get prizePool(): string {
-    let value = this.get("prizePool");
+  get comptroller(): string {
+    let value = this.get("comptroller");
     return value.toString();
   }
 
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
+  set comptroller(value: string) {
+    this.set("comptroller", Value.fromString(value));
+  }
+
+  get sourceAddress(): Bytes {
+    let value = this.get("sourceAddress");
+    return value.toBytes();
+  }
+
+  set sourceAddress(value: Bytes) {
+    this.set("sourceAddress", Value.fromBytes(value));
   }
 
   get measureToken(): Bytes {

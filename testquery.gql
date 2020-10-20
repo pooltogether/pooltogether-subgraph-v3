@@ -2,6 +2,46 @@
   comptrollers {
     id
     owner
+
+    balanceDrips {
+      id
+      measureToken
+      dripToken
+
+      dripRatePerSecond
+      exchangeRateMantissa
+      timestamp
+
+      players {
+        address
+      }
+    }
+    volumeDrips {
+      id
+      measureToken
+      dripToken
+      dripAmount
+
+      deactivated
+      referral
+
+      periodSeconds
+      periodCount
+      periods {
+        id
+        periodIndex
+        totalSupply
+        dripAmount
+        endTime
+        isDripping
+      }
+      deposits {
+        id
+        address
+        periodIndex
+        balance
+      }
+    }
   }
 
   prizePools {
@@ -40,7 +80,7 @@
         id
         owner
         rng
-        
+
         ticket {
           id
           type
@@ -111,46 +151,5 @@
       address
       balance
     }
-
-    balanceDrips {
-      id
-      measureToken
-      dripToken
-
-      dripRatePerSecond
-      exchangeRateMantissa
-      timestamp
-
-      players {
-        address
-      }
-    }
-    volumeDrips {
-      id
-      measureToken
-      dripToken
-      dripAmount
-
-      deactivated
-      referral
-
-      periodSeconds
-      periodCount
-      periods {
-        id
-        periodIndex
-        totalSupply
-        dripAmount
-        endTime
-        isDripping
-      }
-      deposits {
-        id
-        address
-        periodIndex
-        balance
-      }
-    }
   }
 }
-
