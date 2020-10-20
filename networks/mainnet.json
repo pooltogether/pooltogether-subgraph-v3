@@ -1,0 +1,15 @@
+{
+  "network": "rinkeby",
+  "compoundPrizePoolBuilder": {
+    "address": "0x0000000000000000000000000000000000000000",
+    "startBlock": "11094383"
+  },
+  "singleRandomWinnerBuilder": {
+    "address": "0x0000000000000000000000000000000000000000",
+    "startBlock": "11094383"
+  },
+  "comptroller": {
+    "address": "0x0000000000000000000000000000000000000000",
+    "startBlock": "11094383"
+  }
+}

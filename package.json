@@ -9,7 +9,7 @@
     "create:local": "graph create --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
     "remove:local": "graph remove --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
 
-    "prepare:mainnet": "mustache networks/mainnet.json subgraph.template.yaml subgraph.yaml",
+    "prepare:mainnet": "mustache networks/mainnet.json subgraph.template.yaml subgraph.mainnet.yaml",
     "prepare:rinkeby": "mustache networks/rinkeby.json subgraph.template.yaml subgraph.rinkeby.yaml",
     "prepare:ropsten": "mustache networks/ropsten.json subgraph.template.yaml subgraph.ropsten.yaml",
 
@@ -17,7 +17,7 @@
     "gen:rinkeby": "graph codegen subgraph.rinkeby.yaml",
     "gen:ropsten": "graph codegen subgraph.ropsten.yaml",
 
-    "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/ptv3-subgraph subgraph.yaml",
+    "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-v3 subgraph.mainnet.yaml",
 
     "deploy:rinkeby": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-v3 subgraph.rinkeby.yaml",
     "deploy:rinkeby-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3 subgraph.rinkeby.yaml",
