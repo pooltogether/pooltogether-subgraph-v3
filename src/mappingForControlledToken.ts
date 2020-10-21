@@ -28,12 +28,12 @@ export function handleTransfer(event: Transfer): void {
 
   // Currently only handling user to user transfers here
   // as depositing handles 'Minted' and withdraw handles 'Burned'
-  if (transferType !== 'UserToUser') { return }
+  if (transferType != 'UserToUser') { return }
 
   const token = ControlledToken.load(event.address.toHex())
 
   // Tickets
-  if (token.type === 'Ticket') {
+  if (token.type == 'Ticket') {
     const sendingPlayer = loadOrCreatePlayer(
       Address.fromString(token.prizePool),
       event.params.from
@@ -50,7 +50,7 @@ export function handleTransfer(event: Transfer): void {
   }
 
   // Sponsorship
-  if (token.type === 'Sponsorship') {
+  if (token.type == 'Sponsorship') {
     const sendingSponsor = loadOrCreateSponsor(
       Address.fromString(token.prizePool),
       event.params.from
