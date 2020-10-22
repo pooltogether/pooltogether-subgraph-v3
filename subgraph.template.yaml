@@ -120,6 +120,8 @@ templates:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
         - name: RNGInterface
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/RNGInterface.json
+        - name: Comptroller
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
       eventHandlers:
         - event: TokenListenerUpdated(indexed address)
           handler: handleTokenListenerUpdated
