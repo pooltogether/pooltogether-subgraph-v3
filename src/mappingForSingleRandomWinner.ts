@@ -119,6 +119,10 @@ export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded):
   const _prizeStrategy = SingleRandomWinner.load(_prizeStrategyAddress)
 
   const externalAward = loadOrCreateExternalErc721Award(_prizeStrategyAddress, event.params.externalErc721)
+  log.warning('event.params.tokenIds: {}', [event.params.tokenIds.toString()])
+  log.warning('event.params.externalErc721: {}', [event.params.externalErc721.toString()])
+  log.warning('event.params: {}', [event.params.toString()])
+
   externalAward.tokenIds = event.params.tokenIds
 
   const externalErc721Awards = _prizeStrategy.externalErc721Awards
