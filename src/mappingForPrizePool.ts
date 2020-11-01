@@ -1,4 +1,4 @@
-import { Address, Bytes, log } from '@graphprotocol/graph-ts'
+import { Address, Bytes, log, store } from '@graphprotocol/graph-ts'
 import {
   SingleRandomWinner,
   PrizeStrategy,
@@ -135,32 +135,21 @@ export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
   log.warning('implement handleAwardedExternalERC20', [])
 }
 
-// This is emitted when external rewards (nfts, etc)
-  // are awarded
+// This is emitted when external rewards (nfts, etc) are awarded
 export function handleAwardedExternalERC721(event: AwardedExternalERC721): void {
-  log.warning('implement handleAwardedExternalERC721', [])
-
   const _prizePool = loadOrCreatePrizePool(event.address)
 
   const _prizeStrategyId = _prizePool.prizeStrategy
   const _prizeStrategy = SingleRandomWinner.load(_prizeStrategyId)
-
-  // address indexed winner,
-  //   address indexed token,
-  //     uint256[] tokenIds
 
   const externalAward = loadOrCreateExternalErc721Award(
     _prizePool.prizeStrategy,
     event.params.token
   )
 
-  const externalErc721Awards = _prizeStrategy.externalErc721Awards
-  const index = externalErc721Awards.indexOf(externalAward.id, 0);
-  if (index > -1) {
-    externalErc721Awards.splice(index, 1);
-  }
-  // delete externalErc721Awards[externalAward.id]
-  _prizeStrategy.externalErc721Awards = externalErc721Awards
+  store.remove('ExternalErc721Award', externalAward.id)
+
+  _prizeStrategy.externalErc721Awards = []
 
   _prizeStrategy.save()
 }
