@@ -83,6 +83,9 @@ type PrizeStrategy @entity {
   prizePool: PrizePool
 
   singleRandomWinner: SingleRandomWinner
+
+  externalErc20Awards: [ExternalErc20Award!]! @derivedFrom(field: "prizeStrategy")
+  externalErc721Awards: [ExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")
 }
 
 # ID: `${singleRandomWinner.address}`   (will be same address as PrizeStrategy)
@@ -100,9 +103,6 @@ type SingleRandomWinner @entity {
   prizePeriodSeconds: BigInt!
   prizePeriodStartedAt: BigInt!
   prizePeriodEndAt: BigInt!
-
-  externalErc20Awards: [ExternalErc20Award!]   # ! @derivedFrom(field: "prizeStrategy")
-  externalErc721Awards: [ExternalErc721Award!]   # ! @derivedFrom(field: "prizeStrategy")
 }
 
 # ID: `${prizePool.address}-${prizeId}`
@@ -147,7 +147,14 @@ type ControlledToken @entity {
 # dynamically generated type, not mapped to a specific contract
 type ExternalErc20Award @entity {
   id: ID!
+
   address: Bytes!
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+  
+  balanceAwarded: BigInt
+  prizeStrategy: PrizeStrategy
 }
 
 # ID: `${prizeStrategy.address}-${token.address}`
@@ -156,6 +163,7 @@ type ExternalErc721Award @entity {
   id: ID!
   address: Bytes!
   tokenIds: [BigInt!]
+  prizeStrategy: PrizeStrategy
 }
 
 # ID: `${prizePool.address}-${player.address}`

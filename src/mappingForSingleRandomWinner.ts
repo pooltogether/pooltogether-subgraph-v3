@@ -97,15 +97,9 @@ export function handleRngServiceUpdated(event: RngServiceUpdated): void {
 
 export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): void {
   const _prizeStrategyAddress = event.address.toHex()
-  const _prizeStrategy = SingleRandomWinner.load(_prizeStrategyAddress)
 
   const externalAward = loadOrCreateExternalErc20Award(_prizeStrategyAddress, event.params.externalErc20)
-
-  const externalErc20Awards = _prizeStrategy.externalErc20Awards
-  externalErc20Awards.push(externalAward.id)
-  _prizeStrategy.externalErc20Awards = externalErc20Awards
-
-  _prizeStrategy.save()
+  externalAward.save()
 }
 
 export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved): void {
@@ -115,20 +109,12 @@ export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved
 }
 
 export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded): void {
-  const _prizeStrategyAddress = event.address.toHex()
-  const _prizeStrategy = SingleRandomWinner.load(_prizeStrategyAddress)
+  const _singleRandomWinnerAddress = event.address.toHex()
 
-  const externalAward = loadOrCreateExternalErc721Award(_prizeStrategyAddress, event.params.externalErc721)
+  const externalAward = loadOrCreateExternalErc721Award(_singleRandomWinnerAddress, event.params.externalErc721)
 
   externalAward.tokenIds = event.params.tokenIds
   externalAward.save()
-
-
-  const externalErc721Awards = _prizeStrategy.externalErc721Awards
-  externalErc721Awards.push(externalAward.id)
-  _prizeStrategy.externalErc721Awards = externalErc721Awards
-
-  _prizeStrategy.save()
 }
 
 export function handleExternalErc721AwardRemoved(event: ExternalErc721AwardRemoved): void {

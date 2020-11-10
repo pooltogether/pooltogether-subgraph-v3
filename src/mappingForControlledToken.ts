@@ -9,6 +9,8 @@ import {
 } from '../generated/schema'
 
 import {
+  decrementPlayerCount,
+  incrementPlayerCount,
   decrementPlayerBalance,
   incrementPlayerBalance,
   decrementSponsorBalance,
@@ -21,6 +23,7 @@ import {
 
 import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
 import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
+import { loadOrCreatePrizePool } from './helpers/loadOrCreatePrizePool'
 
 
 export function handleTransfer(event: Transfer): void {
@@ -34,18 +37,23 @@ export function handleTransfer(event: Transfer): void {
 
   // Tickets
   if (token.type == 'Ticket') {
+    const _prizePool = loadOrCreatePrizePool(Address.fromString(token.prizePool))
+
     const sendingPlayer = loadOrCreatePlayer(
       Address.fromString(token.prizePool),
       event.params.from
     )
     decrementPlayerBalance(sendingPlayer, event.params.value)
+    decrementPlayerCount(_prizePool, sendingPlayer)
     sendingPlayer.save()
 
     const receivingPlayer = loadOrCreatePlayer(
       Address.fromString(token.prizePool),
       event.params.to
     )
+    const receivingPlayersCachedBalance = receivingPlayer.balance
     incrementPlayerBalance(receivingPlayer, event.params.value)
+    incrementPlayerCount(_prizePool, receivingPlayersCachedBalance)
     receivingPlayer.save()
   }
 

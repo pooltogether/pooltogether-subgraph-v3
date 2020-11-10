@@ -539,6 +539,24 @@ export class PrizeStrategy extends Entity {
       this.set("singleRandomWinner", Value.fromString(value as string));
     }
   }
+
+  get externalErc20Awards(): Array<string> {
+    let value = this.get("externalErc20Awards");
+    return value.toStringArray();
+  }
+
+  set externalErc20Awards(value: Array<string>) {
+    this.set("externalErc20Awards", Value.fromStringArray(value));
+  }
+
+  get externalErc721Awards(): Array<string> {
+    let value = this.get("externalErc721Awards");
+    return value.toStringArray();
+  }
+
+  set externalErc721Awards(value: Array<string>) {
+    this.set("externalErc721Awards", Value.fromStringArray(value));
+  }
 }
 
 export class SingleRandomWinner extends Entity {
@@ -698,46 +716,6 @@ export class SingleRandomWinner extends Entity {
 
   set prizePeriodEndAt(value: BigInt) {
     this.set("prizePeriodEndAt", Value.fromBigInt(value));
-  }
-
-  get externalErc20Awards(): Array<string> | null {
-    let value = this.get("externalErc20Awards");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
-  }
-
-  set externalErc20Awards(value: Array<string> | null) {
-    if (value === null) {
-      this.unset("externalErc20Awards");
-    } else {
-      this.set(
-        "externalErc20Awards",
-        Value.fromStringArray(value as Array<string>)
-      );
-    }
-  }
-
-  get externalErc721Awards(): Array<string> | null {
-    let value = this.get("externalErc721Awards");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
-  }
-
-  set externalErc721Awards(value: Array<string> | null) {
-    if (value === null) {
-      this.unset("externalErc721Awards");
-    } else {
-      this.set(
-        "externalErc721Awards",
-        Value.fromStringArray(value as Array<string>)
-      );
-    }
   }
 }
 
@@ -1094,6 +1072,67 @@ export class ExternalErc20Award extends Entity {
   set address(value: Bytes) {
     this.set("address", Value.fromBytes(value));
   }
+
+  get name(): string {
+    let value = this.get("name");
+    return value.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get symbol(): string {
+    let value = this.get("symbol");
+    return value.toString();
+  }
+
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
+  }
+
+  get decimals(): BigInt {
+    let value = this.get("decimals");
+    return value.toBigInt();
+  }
+
+  set decimals(value: BigInt) {
+    this.set("decimals", Value.fromBigInt(value));
+  }
+
+  get balanceAwarded(): BigInt | null {
+    let value = this.get("balanceAwarded");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set balanceAwarded(value: BigInt | null) {
+    if (value === null) {
+      this.unset("balanceAwarded");
+    } else {
+      this.set("balanceAwarded", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get prizeStrategy(): string | null {
+    let value = this.get("prizeStrategy");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set prizeStrategy(value: string | null) {
+    if (value === null) {
+      this.unset("prizeStrategy");
+    } else {
+      this.set("prizeStrategy", Value.fromString(value as string));
+    }
+  }
 }
 
 export class ExternalErc721Award extends Entity {
@@ -1149,6 +1188,23 @@ export class ExternalErc721Award extends Entity {
       this.unset("tokenIds");
     } else {
       this.set("tokenIds", Value.fromBigIntArray(value as Array<BigInt>));
+    }
+  }
+
+  get prizeStrategy(): string | null {
+    let value = this.get("prizeStrategy");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set prizeStrategy(value: string | null) {
+    if (value === null) {
+      this.unset("prizeStrategy");
+    } else {
+      this.set("prizeStrategy", Value.fromString(value as string));
     }
   }
 }

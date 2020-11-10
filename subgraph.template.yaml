@@ -114,6 +114,8 @@ templates:
       entities:
         - SingleRandomWinner
       abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: SingleRandomWinner

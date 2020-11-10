@@ -1,4 +1,8 @@
-import { Address } from '@graphprotocol/graph-ts'
+import { Address, BigInt, log } from '@graphprotocol/graph-ts'
+
+import {
+  ERC20 as ERC20Contract,
+} from '../../generated/templates/PrizePool/ERC20'
 
 import {
   ExternalErc20Award,
@@ -15,6 +19,13 @@ export function loadOrCreateExternalErc20Award(prizeStrategyAddress: string, tok
   if (!award) {
     award = new ExternalErc20Award(awardId)
     award.address = tokenAddress
+
+    const boundToken = ERC20Contract.bind(tokenAddress)
+
+    award.name = boundToken.name()
+    award.symbol = boundToken.symbol()
+    award.decimals = BigInt.fromI32(boundToken.decimals())
+
     award.save()
   }
 
