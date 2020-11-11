@@ -18,6 +18,7 @@ export function loadOrCreateExternalErc20Award(prizeStrategyAddress: string, tok
   let award = ExternalErc20Award.load(awardId)
   if (!award) {
     award = new ExternalErc20Award(awardId)
+    award.prizeStrategy = prizeStrategyAddress
     award.address = tokenAddress
 
     const boundToken = ERC20Contract.bind(tokenAddress)
