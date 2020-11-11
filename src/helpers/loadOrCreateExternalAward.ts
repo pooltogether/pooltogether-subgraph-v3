@@ -39,6 +39,7 @@ export function loadOrCreateExternalErc721Award(prizeStrategyAddress: string, to
   let award = ExternalErc721Award.load(awardId)
   if (!award) {
     award = new ExternalErc721Award(awardId)
+    award.prizeStrategy = prizeStrategyAddress
     award.address = tokenAddress
     award.save()
   }

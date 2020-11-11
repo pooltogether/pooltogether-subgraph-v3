@@ -150,14 +150,10 @@ export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
 export function handleAwardedExternalERC721(event: AwardedExternalERC721): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
 
-  const _prizeStrategyId = _prizePool.prizeStrategy
-  const _prizeStrategy = PrizeStrategy.load(_prizeStrategyId)
-
   const externalAward = loadOrCreateExternalErc721Award(
     _prizePool.prizeStrategy,
     event.params.token
   )
-  externalAward.prizeStrategy = _prizeStrategy.id
   externalAward.save()
 
   store.remove('ExternalErc721Award', externalAward.id)
