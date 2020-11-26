@@ -64,8 +64,8 @@ dataSources:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: CompoundPrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
-        - name: SingleRandomWinner
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
+        - name: PeriodicPrizeStrategy
+          file: ./abis/PeriodicPrizeStrategy.json
         - name: CompoundPrizePoolBuilder
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolBuilder.json
         - name: ControlledToken
@@ -74,56 +74,59 @@ dataSources:
         - event: PrizePoolCreated(indexed address,indexed address)
           handler: handlePrizePoolCreated
       file: ./src/mappingForCompoundPrizePoolBuilder.ts
-  - name: SingleRandomWinnerBuilder
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      address: "{{singleRandomWinnerBuilder.address}}"
-      abi: SingleRandomWinnerBuilder
-      startBlock: {{singleRandomWinnerBuilder.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - SingleRandomWinnerBuilder
-      abis:
-        - name: PrizePool
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
-        - name: SingleRandomWinner
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
-        - name: SingleRandomWinnerBuilder
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinnerBuilder.json
-        - name: ControlledToken
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
-      eventHandlers:
-        - event: SingleRandomWinnerCreated(indexed address,indexed address,indexed address)
-          handler: handleSingleRandomWinnerCreated
-      file: ./src/mappingForSingleRandomWinnerBuilder.ts
+  # - name: SingleRandomWinnerBuilder
+  #   kind: ethereum/contract
+  #   network: {{network}}
+  #   source:
+  #     address: "{{singleRandomWinnerBuilder.address}}"
+  #     abi: SingleRandomWinnerBuilder
+  #     startBlock: {{singleRandomWinnerBuilder.startBlock}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - SingleRandomWinnerBuilder
+  #     abis:
+  #       - name: PrizePool
+  #         file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+  #       - name: SingleRandomWinner
+  #         file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
+  #       - name: SingleRandomWinnerBuilder
+  #         file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinnerBuilder.json
+  #       - name: ControlledToken
+  #         file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
+  #     eventHandlers:
+  #       - event: SingleRandomWinnerCreated(indexed address,indexed address,indexed address)
+  #         handler: handleSingleRandomWinnerCreated
+  #     file: ./src/mappingForSingleRandomWinnerBuilder.ts
 templates:
-  - name: SingleRandomWinner
+  - name: PeriodicPrizeStrategy
     kind: ethereum/contract
     network: {{network}}
     source:
-      abi: SingleRandomWinner
+      abi: PeriodicPrizeStrategy
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappingForSingleRandomWinner.ts
+      file: ./src/mappingForPeriodicPrizeStrategy.ts
       entities:
-        - SingleRandomWinner
+        - PeriodicPrizeStrategy
+        - MultipleWinners
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
-        - name: SingleRandomWinner
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
+        - name: MultipleWinners
+          file: ./abis/MultipleWinners.json
         - name: RNGInterface
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/RNGInterface.json
         - name: Comptroller
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
+        - name: PeriodicPrizeStrategy
+          file: ./abis/PeriodicPrizeStrategy.json
       eventHandlers:
         - event: TokenListenerUpdated(indexed address)
           handler: handleTokenListenerUpdated

@@ -1,6 +1,6 @@
 import { Address, Bytes, log, store } from '@graphprotocol/graph-ts'
 import {
-  SingleRandomWinner,
+  PeriodicPrizeStrategy,
   PrizeStrategy,
   PrizePool,
 } from '../generated/schema'
@@ -84,7 +84,7 @@ export function handlePrizeStrategySet(event: PrizeStrategySet): void {
   const _prizeStrategyAddress = event.params.prizeStrategy
 
   const _prizeStrategy = loadOrCreatePrizeStrategy(_prizeStrategyAddress, _prizePoolAddress)
-  _prizeStrategy.singleRandomWinner = _prizeStrategyAddress.toHex()
+  _prizeStrategy.periodicPrizeStrategy = _prizeStrategyAddress.toHex()
   _prizeStrategy.save()
 
   const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
@@ -166,10 +166,10 @@ export function handleDeposited(event: Deposited): void {
   const _prizeStrategyId = _prizePool.prizeStrategy
   const _prizeStrategy = PrizeStrategy.load(_prizeStrategyId)
 
-  const _singleRandomWinner = SingleRandomWinner.load(_prizeStrategy.singleRandomWinner)
+  const _randomWinner = PeriodicPrizeStrategy.load(_prizeStrategy.periodicPrizeStrategy)
 
   const tokenAddress = event.params.token
-  const ticketAddress = Address.fromString(_singleRandomWinner.ticket)
+  const ticketAddress = Address.fromString(_randomWinner.ticket)
   const ticketIsToken = (tokenAddress.equals(ticketAddress))
 
   if (ticketIsToken) {
@@ -209,9 +209,9 @@ export function handleInstantWithdrawal(event: InstantWithdrawal): void {
   const _prizeStrategyId = _prizePool.prizeStrategy
   const _prizeStrategy = PrizeStrategy.load(_prizeStrategyId)
 
-  const _singleRandomWinner = SingleRandomWinner.load(_prizeStrategy.singleRandomWinner)
+  const _randomWinner = PeriodicPrizeStrategy.load(_prizeStrategy.periodicPrizeStrategy)
 
-  const ticket = _singleRandomWinner.ticket
+  const ticket = _randomWinner.ticket
   const token = event.params.token
 
   const ticketAddress = Address.fromString(ticket)

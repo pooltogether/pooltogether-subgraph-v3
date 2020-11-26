@@ -1,7 +1,15 @@
 {
   "network": "mainnet",
   "compoundPrizePoolBuilder": {
-    "address": "0xd15468525c35BDBC1eD8F2e09A00F8a173437f2f",
+    "address": "0x53369fd4680FfE3DfF39Fc6DDa9CfbfD43daeA2E",
     "startBlock": "1"
+  },
+  "singleRandomWinnerBuilder": {
+    "address": "0x3521eF8AaB0323004A6dD8b03CE890F4Ea3A13f5",
+    "startBlock": "11100500"
+  },
+  "comptroller": {
+    "address": "0x038B86d9d8FAFdd0a02ebd1A476432877b0107C8",
+    "startBlock": "11100500"
   }
 }

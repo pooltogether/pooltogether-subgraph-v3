@@ -2,7 +2,7 @@ import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 
 import {
   Player,
-  SingleRandomWinner,
+  PeriodicPrizeStrategy,
   PrizeStrategy,
   PrizePool,
   Sponsor,
@@ -18,15 +18,15 @@ import { ZERO, ONE } from './common'
 export function updateTotals(_prizePool: PrizePool): void {
   const prizeStrategyId = _prizePool.prizeStrategy
   const prizeStrategy = PrizeStrategy.load(prizeStrategyId)
-  const singleRandomWinner = SingleRandomWinner.load(prizeStrategy.singleRandomWinner)
+  const randomWinners = PeriodicPrizeStrategy.load(prizeStrategy.periodicPrizeStrategy)
 
-  const ticketAddress = singleRandomWinner.ticket
+  const ticketAddress = randomWinners.ticket
   const ticket = ControlledToken.load(ticketAddress)
   const boundTicket = ERC20Contract.bind(Address.fromString(ticketAddress))
   ticket.totalSupply = boundTicket.totalSupply()
   ticket.save()
 
-  const sponsorshipAddress = singleRandomWinner.sponsorship
+  const sponsorshipAddress = randomWinners.sponsorship
   const sponsorship = ControlledToken.load(sponsorshipAddress)
   const boundSponsorship = ERC20Contract.bind(Address.fromString(sponsorshipAddress))
   sponsorship.totalSupply = boundSponsorship.totalSupply()

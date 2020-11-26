@@ -1,11 +1,10 @@
 import { BigInt, log } from '@graphprotocol/graph-ts'
 import {
   PrizePool,
-  SingleRandomWinner,
+  PeriodicPrizeStrategy,
 } from '../generated/schema'
 
 import {
-  SingleRandomWinner as SingleRandomWinnerContract,
   TokenListenerUpdated,
   PrizePoolOpened,
   PrizePoolAwardStarted,
@@ -16,11 +15,14 @@ import {
   ExternalErc20AwardRemoved,
   ExternalErc721AwardAdded,
   ExternalErc721AwardRemoved,
-} from '../generated/templates/SingleRandomWinner/SingleRandomWinner'
+} from '../generated/templates/PeriodicPrizeStrategy/PeriodicPrizeStrategy'
+
+import {
+  MultipleWinners as MultipleWinnersContract} from "../generated/templates/PeriodicPrizeStrategy/MultipleWinners"
 
 import { loadOrCreateComptroller } from './helpers/loadOrCreateComptroller'
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
-import { loadOrCreateSingleRandomWinner } from './helpers/loadOrCreateSingleRandomWinner'
+import { loadOrCreateRandomWinners } from './helpers/loadOrCreateRandomWinners'
 import {
   loadOrCreateExternalErc20Award,
   loadOrCreateExternalErc721Award,
@@ -34,13 +36,13 @@ export function handlePrizePoolOpened(event: PrizePoolOpened): void {
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  const _prizeStrategy = loadOrCreateSingleRandomWinner(event.address)
+  const _prizeStrategy = loadOrCreateRandomWinners(event.address)
   _prizeStrategy.owner = event.params.newOwner
   _prizeStrategy.save()
 }
 
 export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
-  const _prizeStrategy = loadOrCreateSingleRandomWinner(event.address)
+  const _prizeStrategy = loadOrCreateRandomWinners(event.address)
   const _comptroller = loadOrCreateComptroller(event.params.tokenListener)
 
   _prizeStrategy.tokenListener = _comptroller.id
@@ -48,8 +50,8 @@ export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
-  const _prizeStrategy = SingleRandomWinner.load(event.address.toHex())
-  const boundPrizeStrategy = SingleRandomWinnerContract.bind(event.address)
+  const _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
+  const boundPrizeStrategy = MultipleWinnersContract.bind(event.address)
 
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
   _prizePool.currentState = "Started"
@@ -69,7 +71,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 }
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
-  const _prizeStrategy = SingleRandomWinner.load(event.address.toHexString())
+  const _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHexString())
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
 
   // Record prize history
@@ -90,7 +92,7 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
 }
 
 export function handleRngServiceUpdated(event: RngServiceUpdated): void {
-  const _prizeStrategy = SingleRandomWinner.load(event.address.toHexString())
+  const _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHexString())
   _prizeStrategy.rng = event.params.rngService
   _prizeStrategy.save()
 }
