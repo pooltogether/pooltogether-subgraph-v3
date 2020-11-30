@@ -50,7 +50,7 @@ dataSources:
     kind: ethereum/contract
     network: {{network}}
     source:
-      address: "{{compoundPrizePoolBuilder.address}}"
+      address: "{{compoundPrizePoolProxyFactory.address}}"
       abi: CompoundPrizePoolBuilder
       startBlock: {{compoundPrizePoolBuilder.startBlock}}
     mapping:
@@ -74,34 +74,55 @@ dataSources:
         - event: PrizePoolCreated(indexed address,indexed address)
           handler: handlePrizePoolCreated
       file: ./src/mappingForCompoundPrizePoolBuilder.ts
-  # - name: SingleRandomWinnerBuilder
-  #   kind: ethereum/contract
-  #   network: {{network}}
-  #   source:
-  #     address: "{{singleRandomWinnerBuilder.address}}"
-  #     abi: SingleRandomWinnerBuilder
-  #     startBlock: {{singleRandomWinnerBuilder.startBlock}}
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.4
-  #     language: wasm/assemblyscript
-  #     entities:
-  #       - SingleRandomWinnerBuilder
-  #     abis:
-  #       - name: PrizePool
-  #         file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
-  #       - name: SingleRandomWinner
-  #         file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
-  #       - name: SingleRandomWinnerBuilder
-  #         file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinnerBuilder.json
-  #       - name: ControlledToken
-  #         file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
-  #     eventHandlers:
-  #       - event: SingleRandomWinnerCreated(indexed address,indexed address,indexed address)
-  #         handler: handleSingleRandomWinnerCreated
-  #     file: ./src/mappingForSingleRandomWinnerBuilder.ts
+  
+  
+  - name: SingleRandomWinnerProxyFactory
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{singleRandomWinnerProxyFactory.address}}"
+      abi: SingleRandomWinnerProxyFactory
+      startBlock: {{singleRandomWinnerProxyFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - SingleRandomWinnerProxyFactory # or SingleRandomWinners?
+      abis:
+        - name: SingleRandomWinnerProxyFactory
+          file: ./abis/SingleRandomWinnerProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleSingleRandomWinnerCreated
+      file: ./src/mappingForSingleRandomWinnerProxyFactory.ts
+
+
+
+  - name: MultipleWinnersProxyFactory
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{multipleWinnersProxyFactory.address}}"
+      abi: MultipleWinnersProxyFactory
+      startBlock: {{multipleWinnersProxyFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MultipleWinnersProxyFactory # or multiple winners?
+      abis:
+        - name: MultipleWinnersProxyFactory
+          file: ./abis/MultipleWinnersProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleMultipleWinnersCreated
+      file: ./src/mappingForSingleRandomWinnerProxyFactory.ts
+
+
 templates:
-  - name: MultipleWinners # or PeriodicPrize this is an abstract contract - does this make sense to listen for this (or should is be MultipleWinners.sol)
+  - name: PeriodicPrizeStrategy 
     kind: ethereum/contract
     network: {{network}}
     source:
@@ -148,6 +169,28 @@ templates:
           handler: handleExternalErc721AwardAdded
         - event: ExternalErc721AwardRemoved(indexed address)
           handler: handleExternalErc721AwardRemoved
+
+
+  - name: MultipleWinners
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: MultipleWinners
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForMultipleWinners.ts
+      entities:
+        - MultipleWinners
+      abis:
+        - name: MultipleWinners
+          file: ./abis/MultipleWinners.json
+      eventHandlers:
+        - event: NumberOfWinnersSet(uint256)
+          handler: handleNumberOfWinnersSet
+
+  
   - name: CompoundPrizePool
     kind: ethereum/contract
     network: {{network}}

@@ -78,10 +78,8 @@ type CompoundPrizePool @entity {
 }
 
 # ID: `${prizeStrategy.address}`
-
 type PrizeStrategy @entity {
   id: ID!
-  prizePool: PrizePool
   periodicPrizeStrategy: PeriodicPrizeStrategy
 }
 
@@ -95,7 +93,7 @@ type PeriodicPrizeStrategy @entity {
   
   tokenListener: Comptroller
   prizePool: PrizePool 
-  rng: Bytes # is the address of the rng?
+  rng: Bytes
   
   ticket: ControlledToken 
   sponsorship: ControlledToken

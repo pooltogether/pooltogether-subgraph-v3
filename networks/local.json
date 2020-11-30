@@ -1,11 +1,15 @@
 {
   "network": "mainnet",
-  "compoundPrizePoolBuilder": {
+  "compoundPrizePoolProxyFactory": {
     "address": "0xDAb5B2DB98D85d8A1209F541Ee354d329d64F6B2",
     "startBlock": "1"
   },
-  "singleRandomWinnerBuilder": {
-    "address": "0x3521eF8AaB0323004A6dD8b03CE890F4Ea3A13f5",
+  "multipleWinnersProxyFactory": {
+    "address": "0xDAb5B2DB98D85d8A1209F541Ee354d329d64F6B2",
+    "startBlock": "1"
+  },
+  "singleRandomWinnerProxyFactory": {
+    "address": "0xDAb5B2DB98D85d8A1209F541Ee354d329d64F6B2",
     "startBlock": "1"
   },
   "comptroller": {

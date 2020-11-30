@@ -4,9 +4,13 @@
     "address": "0x45a9307cB7d99767E9c39638013A499dDbAb06Ea",
     "startBlock": "7399773"
   },
-  "singleRandomWinnerBuilder": {
-    "address": "0xEF0cB7EeFFf99849a7c6f24Cae7AAF6DaA6Fe07e",
-    "startBlock": "7399772"
+  "multipleWinnersProxyFactory": {
+    "address": "",
+    "startBlock": "1"
+  },
+  "singleRandomWinnerProxyFactory": {
+    "address": "",
+    "startBlock": "1"
   },
   "comptroller": {
     "address": "0xE70c3669371Be02cdE0809df6D9c514804CAd2F0",
