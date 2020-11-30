@@ -15,10 +15,10 @@ import {
   ExternalErc20AwardRemoved,
   ExternalErc721AwardAdded,
   ExternalErc721AwardRemoved,
-} from '../generated/templates/PeriodicPrizeStrategy/PeriodicPrizeStrategy'
+} from '../generated/templates/MultipleWinners/MultipleWinners'
 
 import {
-  MultipleWinners as MultipleWinnersContract} from "../generated/templates/PeriodicPrizeStrategy/MultipleWinners"
+  MultipleWinners as MultipleWinnersContract} from "../generated/templates/MultipleWinners/MultipleWinners"
 
 import { loadOrCreateComptroller } from './helpers/loadOrCreateComptroller'
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
@@ -32,11 +32,14 @@ import { ONE } from './helpers/common'
 
 
 export function handlePrizePoolOpened(event: PrizePoolOpened): void {
+  log.warning("Prize Pool Opened!",[])
   // no-op
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+  
   const _prizeStrategy = loadOrCreateRandomWinners(event.address)
+  log.warning("PrizeStrategy OwnershipTransferred for prizestrategyId {}",[_prizeStrategy.id])
   _prizeStrategy.owner = event.params.newOwner
   _prizeStrategy.save()
 }
@@ -50,8 +53,11 @@ export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
+  
   const _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
   const boundPrizeStrategy = MultipleWinnersContract.bind(event.address)
+
+  log.warning("handlePrizePoolAwardStarted called at PrizeStrategy {} with id {}",[event.address.toHex(), _prizeStrategy.id])
 
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
   _prizePool.currentState = "Started"

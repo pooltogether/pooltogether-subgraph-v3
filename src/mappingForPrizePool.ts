@@ -48,6 +48,7 @@ import { ZERO, ZERO_ADDRESS } from './helpers/common'
 
 
 export function handleInitialized(event: Initialized): void {
+  log.warning("PrizePool initialized ",[])
   const _prizePool = loadOrCreatePrizePool(event.address)
   _prizePool.reserveRegistry = event.params.reserveRegistry
   _prizePool.trustedForwarder = event.params.trustedForwarder
@@ -58,6 +59,7 @@ export function handleInitialized(event: Initialized): void {
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
+  log.warning("PrizePool OwnershipTransferred handler for id {} ", [_prizePool.id])
   _prizePool.owner = event.params.newOwner
   _prizePool.save()
 }

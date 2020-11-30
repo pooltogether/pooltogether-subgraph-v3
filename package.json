@@ -5,7 +5,7 @@
     "reinstall": "rm -rf node_modules/ && yarn",
     "clean": "rm -rf build/ generated/",
 
-    "prepare:local": "mustache networks/local.json subgraph.template.yaml subgraph.yaml",
+    "prepare:local": "mustache networks/local.json subgraph.template.yaml subgraph.local.yaml",
     "create:local": "graph create --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
     "remove:local": "graph remove --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
 
@@ -16,6 +16,7 @@
     "gen:mainnet": "graph codegen subgraph.yaml",
     "gen:rinkeby": "graph codegen subgraph.rinkeby.yaml",
     "gen:ropsten": "graph codegen subgraph.ropsten.yaml",
+    "gen:local": "graph codegen subgraph.local.yaml",
 
     "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-v3 subgraph.mainnet.yaml",
 

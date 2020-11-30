@@ -101,11 +101,11 @@ dataSources:
   #         handler: handleSingleRandomWinnerCreated
   #     file: ./src/mappingForSingleRandomWinnerBuilder.ts
 templates:
-  - name: PeriodicPrizeStrategy
+  - name: MultipleWinners # or PeriodicPrize this is an abstract contract - does this make sense to listen for this (or should is be MultipleWinners.sol)
     kind: ethereum/contract
     network: {{network}}
     source:
-      abi: PeriodicPrizeStrategy
+      abi: MultipleWinners
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

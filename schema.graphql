@@ -78,31 +78,34 @@ type CompoundPrizePool @entity {
 }
 
 # ID: `${prizeStrategy.address}`
+
 type PrizeStrategy @entity {
   id: ID!
   prizePool: PrizePool
-
-  singleRandomWinner: SingleRandomWinner
-
-  externalErc20Awards: [ExternalErc20Award!]! @derivedFrom(field: "prizeStrategy")
-  externalErc721Awards: [ExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")
+  periodicPrizeStrategy: PeriodicPrizeStrategy
 }
 
-# ID: `${singleRandomWinner.address}`   (will be same address as PrizeStrategy)
-type SingleRandomWinner @entity {
+
+ # ID: `${singleRandomWinner.address}` (will be same address as PrizeStrategy)
+type PeriodicPrizeStrategy @entity { 
   id: ID!
-
   owner: Bytes
-
+  
+  numberOfWinners: BigInt
+  
   tokenListener: Comptroller
-  prizePool: PrizePool
-  rng: Bytes
-  ticket: ControlledToken
+  prizePool: PrizePool 
+  rng: Bytes # is the address of the rng?
+  
+  ticket: ControlledToken 
   sponsorship: ControlledToken
-
-  prizePeriodSeconds: BigInt!
-  prizePeriodStartedAt: BigInt!
-  prizePeriodEndAt: BigInt!
+  
+  prizePeriodSeconds: BigInt! 
+  prizePeriodStartedAt: BigInt! 
+  prizePeriodEndAt: BigInt! 
+  
+  externalErc20Awards: [ExternalErc20Award!]! @derivedFrom(field: "prizeStrategy") 
+  externalErc721Awards: [ExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")
 }
 
 # ID: `${prizePool.address}-${prizeId}`
@@ -154,7 +157,7 @@ type ExternalErc20Award @entity {
   decimals: BigInt!
   
   balanceAwarded: BigInt
-  prizeStrategy: PrizeStrategy
+  prizeStrategy: PeriodicPrizeStrategy
 }
 
 # ID: `${prizeStrategy.address}-${token.address}`
@@ -163,7 +166,7 @@ type ExternalErc721Award @entity {
   id: ID!
   address: Bytes!
   tokenIds: [BigInt!]
-  prizeStrategy: PrizeStrategy
+  prizeStrategy: PeriodicPrizeStrategy
 }
 
 # ID: `${prizePool.address}-${player.address}`

@@ -48,6 +48,7 @@ import {
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const _comptroller:Comptroller = loadOrCreateComptroller(event.address)
+  log.warning("comptrolled OwnershipTransferred handler for id {} ", [_comptroller.id])
   _comptroller.owner = event.params.newOwner
   _comptroller.save()
 }

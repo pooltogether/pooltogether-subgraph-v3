@@ -1,14 +1,14 @@
-import { Address } from '@graphprotocol/graph-ts'
+import { Address ,log} from '@graphprotocol/graph-ts'
 
 import {
   PeriodicPrizeStrategy,
 } from '../../generated/schema'
 
 
-import { MultipleWinners } from '../../generated/templates/PeriodicPrizeStrategy/MultipleWinners'
+import { MultipleWinners } from '../../generated/templates/MultipleWinners/MultipleWinners'
 
 import {
-  PeriodicPrizeStrategy as PeriodicPrizeStrategyTemplate,
+  MultipleWinners as MultipleWinnersTemplate,
 } from '../../generated/templates'
 
 
@@ -22,10 +22,14 @@ export function loadOrCreateRandomWinners(
   const _multipleRandomWinnerAddress = multipleWinners.toHex() 
   let _multipleRandomWinners = PeriodicPrizeStrategy.load(_multipleRandomWinnerAddress)
 
+  log.warning("loadOrCreateRandomWinners called with {} ",[_multipleRandomWinnerAddress])
+
+
   if (!_multipleRandomWinners) { // if entity doesnt exist create 
+    
     _multipleRandomWinners = new PeriodicPrizeStrategy(_multipleRandomWinnerAddress)
     const _boundSingleRandomWinner = MultipleWinners.bind(multipleWinners) // bind to smart contract
-
+    log.warning("multpleRandomWinners did not exist so creating at {} ",[_multipleRandomWinners.id])
     // set fields by calling smart contract/constants
     _multipleRandomWinners.owner = _boundSingleRandomWinner.owner()
     _multipleRandomWinners.prizePool = _boundSingleRandomWinner.prizePool().toHex() // _prizePool.id
@@ -39,12 +43,13 @@ export function loadOrCreateRandomWinners(
 
     _multipleRandomWinners.prizePeriodSeconds = _boundSingleRandomWinner.prizePeriodSeconds()
     _multipleRandomWinners.prizePeriodStartedAt = _boundSingleRandomWinner.prizePeriodStartedAt()
-    _multipleRandomWinners.prizePeriodEndAt = _multipleRandomWinners.prizePeriodStartedAt.plus(_multipleRandomWinners.prizePeriodSeconds)
+    _multipleRandomWinners.prizePeriodEndAt = _multipleRandomWinners.prizePeriodStartedAt.plus(_multipleRandomWinners.prizePeriodSeconds) // can you do this?? bc scalar?
 
     _multipleRandomWinners.save()
 
     // Start listening for events from the dynamically generated contract
-    PeriodicPrizeStrategyTemplate.create(multipleWinners)
+    log.warning("now listening to this as a template at address {} ", [multipleWinners.toHex()])
+    MultipleWinnersTemplate.create(multipleWinners)
   }
 
   return _multipleRandomWinners as PeriodicPrizeStrategy // why is this casting neccessary?
