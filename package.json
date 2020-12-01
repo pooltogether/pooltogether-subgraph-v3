@@ -22,11 +22,9 @@
 
     "deploy:rinkeby": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-v3 subgraph.rinkeby.yaml",
     "deploy:rinkeby-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3 subgraph.rinkeby.yaml",
-    "deploy:rinkeby-dev": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-secord-v3 subgraph.rinkeby.yaml",
 
     "deploy:ropsten": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/ropsten-v3 subgraph.ropsten.yaml",
     "deploy:ropsten-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/ropsten-staging-v3 subgraph.ropsten.yaml",
-    "deploy:ropsten-dev": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/ropsten-secord-v3 subgraph.ropsten.yaml",
 
     "deploy:local": "graph deploy --node http://127.0.0.1:8020 --ipfs http://localhost:5001 pooltogether/ptv3-subgraph subgraph.local.yaml",
     "codegen": "graph codegen",
