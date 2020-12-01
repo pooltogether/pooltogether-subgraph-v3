@@ -52,7 +52,7 @@ dataSources:
     source:
       address: "{{compoundPrizePoolProxyFactory.address}}"
       abi: CompoundPrizePoolBuilder
-      startBlock: {{compoundPrizePoolBuilder.startBlock}}
+      startBlock: {{compoundPrizePoolProxyFactory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -75,30 +75,6 @@ dataSources:
           handler: handlePrizePoolCreated
       file: ./src/mappingForCompoundPrizePoolBuilder.ts
   
-  
-  - name: SingleRandomWinnerProxyFactory
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      address: "{{singleRandomWinnerProxyFactory.address}}"
-      abi: SingleRandomWinnerProxyFactory
-      startBlock: {{singleRandomWinnerProxyFactory.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - SingleRandomWinnerProxyFactory # or SingleRandomWinners?
-      abis:
-        - name: SingleRandomWinnerProxyFactory
-          file: ./abis/SingleRandomWinnerProxyFactory.json
-      eventHandlers:
-        - event: ProxyCreated(address)
-          handler: handleSingleRandomWinnerCreated
-      file: ./src/mappingForSingleRandomWinnerProxyFactory.ts
-
-
-
   - name: MultipleWinnersProxyFactory
     kind: ethereum/contract
     network: {{network}}
@@ -111,14 +87,14 @@ dataSources:
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - MultipleWinnersProxyFactory # or multiple winners?
+        - MultipleWinnersProxyFactory
       abis:
         - name: MultipleWinnersProxyFactory
           file: ./abis/MultipleWinnersProxyFactory.json
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleMultipleWinnersCreated
-      file: ./src/mappingForSingleRandomWinnerProxyFactory.ts
+      file: ./src/mappingForMultipleWinnersProxyFactory.ts
 
 
 templates:
@@ -126,7 +102,7 @@ templates:
     kind: ethereum/contract
     network: {{network}}
     source:
-      abi: MultipleWinners
+      abi: PeriodicPrizeStrategy
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -136,14 +112,8 @@ templates:
         - PeriodicPrizeStrategy
         - MultipleWinners
       abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: PrizePool
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: MultipleWinners
           file: ./abis/MultipleWinners.json
-        - name: RNGInterface
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/RNGInterface.json
         - name: Comptroller
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
         - name: PeriodicPrizeStrategy
@@ -169,7 +139,8 @@ templates:
           handler: handleExternalErc721AwardAdded
         - event: ExternalErc721AwardRemoved(indexed address)
           handler: handleExternalErc721AwardRemoved
-
+        - event: Initialized(address,uint256,uint256,indexed address,address,address,address)
+          handler: handlePeriodicPrizeInitialized
 
   - name: MultipleWinners
     kind: ethereum/contract

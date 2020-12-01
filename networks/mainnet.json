@@ -8,10 +8,6 @@
     "address": "",
     "startBlock": "1"
   },
-  "singleRandomWinnerProxyFactory": {
-    "address": "",
-    "startBlock": "1"
-  },
   "comptroller": {
     "address": "0x4027dE966127af5F015Ea1cfd6293a3583892668",
     "startBlock": "11100500"

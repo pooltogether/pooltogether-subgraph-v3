@@ -85,7 +85,7 @@ export function handlePrizeStrategySet(event: PrizeStrategySet): void {
   const _prizePoolAddress = event.address
   const _prizeStrategyAddress = event.params.prizeStrategy
 
-  const _prizeStrategy = loadOrCreatePrizeStrategy(_prizeStrategyAddress, _prizePoolAddress)
+  const _prizeStrategy = loadOrCreatePrizeStrategy(_prizeStrategyAddress)
   _prizeStrategy.periodicPrizeStrategy = _prizeStrategyAddress.toHex()
   _prizeStrategy.save()
 

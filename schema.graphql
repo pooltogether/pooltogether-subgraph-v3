@@ -84,10 +84,10 @@ type PrizeStrategy @entity {
 }
 
 
- # ID: `${singleRandomWinner.address}` (will be same address as PrizeStrategy)
+ # ID: `${??.address}`
 type PeriodicPrizeStrategy @entity { 
   id: ID!
-  owner: Bytes
+  owner: Bytes #what is this field
   
   numberOfWinners: BigInt
   
@@ -100,7 +100,7 @@ type PeriodicPrizeStrategy @entity {
   
   prizePeriodSeconds: BigInt! 
   prizePeriodStartedAt: BigInt! 
-  prizePeriodEndAt: BigInt! 
+  prizePeriodEndAt: BigInt! # remove can be calculated above fields?
   
   externalErc20Awards: [ExternalErc20Award!]! @derivedFrom(field: "prizeStrategy") 
   externalErc721Awards: [ExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")

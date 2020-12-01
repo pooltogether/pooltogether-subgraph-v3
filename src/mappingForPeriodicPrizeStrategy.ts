@@ -22,11 +22,13 @@ import {
 
 import { loadOrCreateComptroller } from './helpers/loadOrCreateComptroller'
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
-import { loadOrCreateRandomWinners } from './helpers/loadOrCreateRandomWinners'
+
 import {
   loadOrCreateExternalErc20Award,
   loadOrCreateExternalErc721Award,
 } from './helpers/loadOrCreateExternalAward'
+
+import {Initialized} from "../generated/templates/PeriodicPrizeStrategy/PeriodicPrizeStrategy"
 
 import { ONE } from './helpers/common'
 
@@ -36,16 +38,53 @@ export function handlePrizePoolOpened(event: PrizePoolOpened): void {
   // no-op
 }
 
+
+export function handlePeriodicPrizeInitialized(event: Initialized) : void {
+ const prizePool = event.params._prizePool
+ const rng =event.params._rng
+ const ticket = event.params._ticket
+ const sponsorship = event.params._sponsorship
+ const startTime = event.params._prizePeriodStart
+ const prizePeriod = event.params._prizePeriodSeconds
+ const trustedForwarder = event.params._trustedForwarder // dont need ommit
+
+ log.warning("handlePeriodPrizeStrateegy initialized ",[])
+
+ let periodicPrizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
+ if(periodicPrizeStrategy == null){// create
+    periodicPrizeStrategy = new PeriodicPrizeStrategy(event.address.toHex())
+    periodicPrizeStrategy.prizePool=prizePool.toHex()
+    periodicPrizeStrategy.prizePeriodSeconds = startTime
+    periodicPrizeStrategy.rng = rng
+    periodicPrizeStrategy.ticket = ticket.toHex()
+    periodicPrizeStrategy.sponsorship = sponsorship.toHex()
+    periodicPrizeStrategy.prizePeriodSeconds = prizePeriod
+
+    periodicPrizeStrategy.numberOfWinners = new BigInt(1) //set to 1 initially? 
+
+    periodicPrizeStrategy.save()
+ }
+}
+
+
+
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   
-  const _prizeStrategy = loadOrCreateRandomWinners(event.address)
-  log.warning("PrizeStrategy OwnershipTransferred for prizestrategyId {}",[_prizeStrategy.id])
-  _prizeStrategy.owner = event.params.newOwner
+  
+  let _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
+  log.warning("Periodic Prize Strategy handleOwnershipTransferred for id {} " ,[event.address.toHex()])
+  // is there a way a prize stratgy cannot be initialized?
+
+   _prizeStrategy.owner = event.params.newOwner
   _prizeStrategy.save()
 }
 
 export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
-  const _prizeStrategy = loadOrCreateRandomWinners(event.address)
+ 
+  log.warning("handleTokenListenerUpdated for id {} ",[event.address.toHex()])
+  let _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
+  // is there a way a prize stratgy cannot be initialized?
+
   const _comptroller = loadOrCreateComptroller(event.params.tokenListener)
 
   _prizeStrategy.tokenListener = _comptroller.id
