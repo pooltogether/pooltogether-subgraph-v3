@@ -46,14 +46,10 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
  const sponsorship = event.params._sponsorship
  const startTime = event.params._prizePeriodStart
  const prizePeriod = event.params._prizePeriodSeconds
- const trustedForwarder = event.params._trustedForwarder // dont need ommit
-
- log.warning("handlePeriodPrizeStrateegy initialized ",[])
-
+ 
  let periodicPrizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
- if(periodicPrizeStrategy == null){// create
+ if(periodicPrizeStrategy == null){
     periodicPrizeStrategy = new PeriodicPrizeStrategy(event.address.toHex())
-    log.warning("created a new PPS with id  {}",[event.address.toHex()])
     periodicPrizeStrategy.prizePool=prizePool.toHex()
     periodicPrizeStrategy.prizePeriodSeconds = startTime
     periodicPrizeStrategy.rng = rng
@@ -69,8 +65,7 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
 
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  
-  
+   
   let _perodicPrizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
 
   if(_perodicPrizeStrategy == null){
@@ -78,7 +73,7 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
     _perodicPrizeStrategy = new PeriodicPrizeStrategy(event.address.toHex())
     
     // this event is firing before the initialized
-    // set fields to blank/generic for now
+    // set fields to blank/generic for now - Initialized event called straight after
     _perodicPrizeStrategy.prizePeriodSeconds = new BigInt(0)
     _perodicPrizeStrategy.prizePeriodStartedAt = new BigInt(0)
     _perodicPrizeStrategy.prizePeriodEndAt = new BigInt(0)
@@ -93,7 +88,7 @@ export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
  
   log.warning("handleTokenListenerUpdated for id {} ",[event.address.toHex()])
   let _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
-  // is there a way a prize stratgy cannot be initialized (==null)?
+  // AG: is there a way a prize stratgy cannot be initialized (==null)?
 
   const _comptroller = loadOrCreateComptroller(event.params.tokenListener)
 
@@ -103,18 +98,16 @@ export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
   
-  const _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
+  const _perodicPrizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
   const boundPrizeStrategy = MultipleWinnersContract.bind(event.address)
 
-  log.warning("handlePrizePoolAwardStarted called at PrizeStrategy {} with id {}",[event.address.toHex(), _prizeStrategy.id])
-
-  const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
+  const _prizePool = PrizePool.load(_perodicPrizeStrategy.prizePool)
   _prizePool.currentState = "Started"
   _prizePool.prizesCount = _prizePool.prizesCount.plus(ONE)
   _prizePool.save()
 
   const _prize = loadOrCreatePrize(
-    _prizeStrategy.prizePool,
+    _perodicPrizeStrategy.prizePool,
     _prizePool.currentPrizeId.toString()
   )
 
@@ -126,12 +119,12 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 }
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
-  const _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHexString())
-  const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
+  const _peroidcPrizeStrategy = PeriodicPrizeStrategy.load(event.address.toHexString())
+  const _prizePool = PrizePool.load(_peroidcPrizeStrategy.prizePool)
 
   // Record prize history
   const _prize = loadOrCreatePrize(
-    _prizeStrategy.prizePool,
+    _peroidcPrizeStrategy.prizePool,
     _prizePool.currentPrizeId.toString()
   )
   _prize.awardedOperator = event.params.operator
@@ -147,9 +140,9 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
 }
 
 export function handleRngServiceUpdated(event: RngServiceUpdated): void {
-  const _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHexString())
-  _prizeStrategy.rng = event.params.rngService
-  _prizeStrategy.save()
+  const _perodicPrizeStrategy = PeriodicPrizeStrategy.load(event.address.toHexString())
+  _perodicPrizeStrategy.rng = event.params.rngService
+  _perodicPrizeStrategy.save()
 }
 
 export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): void {
