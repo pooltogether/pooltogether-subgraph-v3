@@ -53,6 +53,7 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
  let periodicPrizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
  if(periodicPrizeStrategy == null){// create
     periodicPrizeStrategy = new PeriodicPrizeStrategy(event.address.toHex())
+    log.warning("created a new PPS with id  {}",[event.address.toHex()])
     periodicPrizeStrategy.prizePool=prizePool.toHex()
     periodicPrizeStrategy.prizePeriodSeconds = startTime
     periodicPrizeStrategy.rng = rng
@@ -67,23 +68,32 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
 }
 
 
-
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   
   
-  let _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
-  log.warning("Periodic Prize Strategy handleOwnershipTransferred for id {} " ,[event.address.toHex()])
-  // is there a way a prize stratgy cannot be initialized?
+  let _perodicPrizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
 
-   _prizeStrategy.owner = event.params.newOwner
-  _prizeStrategy.save()
+  if(_perodicPrizeStrategy == null){
+    log.warning("periodic prize strategy needs to be created for id {}", [event.address.toHex()])
+    _perodicPrizeStrategy = new PeriodicPrizeStrategy(event.address.toHex())
+    
+    // this event is firing before the initialized
+    // set fields to blank/generic for now
+    _perodicPrizeStrategy.prizePeriodSeconds = new BigInt(0)
+    _perodicPrizeStrategy.prizePeriodStartedAt = new BigInt(0)
+    _perodicPrizeStrategy.prizePeriodEndAt = new BigInt(0)
+
+  }
+
+  _perodicPrizeStrategy.owner = event.params.newOwner
+  _perodicPrizeStrategy.save()
 }
 
 export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
  
   log.warning("handleTokenListenerUpdated for id {} ",[event.address.toHex()])
   let _prizeStrategy = PeriodicPrizeStrategy.load(event.address.toHex())
-  // is there a way a prize stratgy cannot be initialized?
+  // is there a way a prize stratgy cannot be initialized (==null)?
 
   const _comptroller = loadOrCreateComptroller(event.params.tokenListener)
 

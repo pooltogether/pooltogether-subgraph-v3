@@ -7,7 +7,7 @@ import { PeriodicPrizeStrategy } from "../generated/templates"
 
 export function handleMultipleWinnersCreated(event: ProxyCreated) : void{
     // listen for CreateProxy events , handler creates template for MultipleWinners AND PeriodPrizeStrategy 
-    log.warning("handleMultipleWinnersCreated at {}", [event.address.toHex()])
-    MultipleWinners.create(event.address)
-    PeriodicPrizeStrategy.create(event.address)
+    log.warning("handleMultipleWinnersCreated at {}", [event.params.proxy.toHex()])
+    MultipleWinners.create(event.params.proxy)
+    PeriodicPrizeStrategy.create(event.params.proxy)
 }
