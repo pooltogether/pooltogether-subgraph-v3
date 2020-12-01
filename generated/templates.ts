@@ -6,14 +6,28 @@ import {
   DataSourceContext
 } from "@graphprotocol/graph-ts";
 
-export class SingleRandomWinner extends DataSourceTemplate {
+export class PeriodicPrizeStrategy extends DataSourceTemplate {
   static create(address: Address): void {
-    DataSourceTemplate.create("SingleRandomWinner", [address.toHex()]);
+    DataSourceTemplate.create("PeriodicPrizeStrategy", [address.toHex()]);
   }
 
   static createWithContext(address: Address, context: DataSourceContext): void {
     DataSourceTemplate.createWithContext(
-      "SingleRandomWinner",
+      "PeriodicPrizeStrategy",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
+export class MultipleWinners extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("MultipleWinners", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "MultipleWinners",
       [address.toHex()],
       context
     );

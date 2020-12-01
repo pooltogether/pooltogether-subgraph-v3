@@ -506,8 +506,8 @@ export class PrizeStrategy extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get prizePool(): string | null {
-    let value = this.get("prizePool");
+  get periodicPrizeStrategy(): string | null {
+    let value = this.get("periodicPrizeStrategy");
     if (value === null) {
       return null;
     } else {
@@ -515,51 +515,16 @@ export class PrizeStrategy extends Entity {
     }
   }
 
-  set prizePool(value: string | null) {
+  set periodicPrizeStrategy(value: string | null) {
     if (value === null) {
-      this.unset("prizePool");
+      this.unset("periodicPrizeStrategy");
     } else {
-      this.set("prizePool", Value.fromString(value as string));
+      this.set("periodicPrizeStrategy", Value.fromString(value as string));
     }
-  }
-
-  get singleRandomWinner(): string | null {
-    let value = this.get("singleRandomWinner");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set singleRandomWinner(value: string | null) {
-    if (value === null) {
-      this.unset("singleRandomWinner");
-    } else {
-      this.set("singleRandomWinner", Value.fromString(value as string));
-    }
-  }
-
-  get externalErc20Awards(): Array<string> {
-    let value = this.get("externalErc20Awards");
-    return value.toStringArray();
-  }
-
-  set externalErc20Awards(value: Array<string>) {
-    this.set("externalErc20Awards", Value.fromStringArray(value));
-  }
-
-  get externalErc721Awards(): Array<string> {
-    let value = this.get("externalErc721Awards");
-    return value.toStringArray();
-  }
-
-  set externalErc721Awards(value: Array<string>) {
-    this.set("externalErc721Awards", Value.fromStringArray(value));
   }
 }
 
-export class SingleRandomWinner extends Entity {
+export class PeriodicPrizeStrategy extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -567,17 +532,23 @@ export class SingleRandomWinner extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save SingleRandomWinner entity without an ID");
+    assert(
+      id !== null,
+      "Cannot save PeriodicPrizeStrategy entity without an ID"
+    );
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save SingleRandomWinner entity with non-string ID. " +
+      "Cannot save PeriodicPrizeStrategy entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("SingleRandomWinner", id.toString(), this);
+    store.set("PeriodicPrizeStrategy", id.toString(), this);
   }
 
-  static load(id: string): SingleRandomWinner | null {
-    return store.get("SingleRandomWinner", id) as SingleRandomWinner | null;
+  static load(id: string): PeriodicPrizeStrategy | null {
+    return store.get(
+      "PeriodicPrizeStrategy",
+      id
+    ) as PeriodicPrizeStrategy | null;
   }
 
   get id(): string {
@@ -603,6 +574,23 @@ export class SingleRandomWinner extends Entity {
       this.unset("owner");
     } else {
       this.set("owner", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get numberOfWinners(): BigInt | null {
+    let value = this.get("numberOfWinners");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set numberOfWinners(value: BigInt | null) {
+    if (value === null) {
+      this.unset("numberOfWinners");
+    } else {
+      this.set("numberOfWinners", Value.fromBigInt(value as BigInt));
     }
   }
 
@@ -716,6 +704,24 @@ export class SingleRandomWinner extends Entity {
 
   set prizePeriodEndAt(value: BigInt) {
     this.set("prizePeriodEndAt", Value.fromBigInt(value));
+  }
+
+  get externalErc20Awards(): Array<string> {
+    let value = this.get("externalErc20Awards");
+    return value.toStringArray();
+  }
+
+  set externalErc20Awards(value: Array<string>) {
+    this.set("externalErc20Awards", Value.fromStringArray(value));
+  }
+
+  get externalErc721Awards(): Array<string> {
+    let value = this.get("externalErc721Awards");
+    return value.toStringArray();
+  }
+
+  set externalErc721Awards(value: Array<string>) {
+    this.set("externalErc721Awards", Value.fromStringArray(value));
   }
 }
 
