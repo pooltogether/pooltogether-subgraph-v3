@@ -105,7 +105,7 @@ type SingleRandomWinner @entity {
   prizePeriodEndAt: BigInt!
 }
 
-# ID: `${prizePool.address}-${prizeId}`
+# ID: `${prizePool.address}-${prizeCount}`
 # dynamically generated type, not mapped to a specific contract
 type Prize @entity {
   id: ID!
@@ -128,7 +128,36 @@ type Prize @entity {
   totalTicketSupply: BigInt # cache of num tickets sold when this prize was awarded
 
   winners: [Bytes!]
+
+  awardedExternalErc20Tokens: [AwardedExternalErc20Token!]! @derivedFrom(field: "prize")
+  awardedExternalErc721Nfts: [AwardedExternalErc721Nft!]! @derivedFrom(field: "prize")
 }
+
+# ID: `${prize.id}-${token.address}`
+# dynamically generated type, not mapped to a specific contract
+type AwardedExternalErc20Token @entity {
+  id: ID!
+
+  address: Bytes!
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+  
+  balanceAwarded: BigInt
+  prize: Prize!
+}
+
+# ID: `${prize.id}-${token.address}`
+# dynamically generated type, not mapped to a specific contract
+type AwardedExternalErc721Nft @entity {
+  id: ID!
+
+  address: Bytes!
+  tokenIds: [BigInt!]
+  prize: Prize
+}
+
+
 
 # ID: `${controlledToken.address}`
 type ControlledToken @entity {
@@ -153,7 +182,6 @@ type ExternalErc20Award @entity {
   symbol: String!
   decimals: BigInt!
   
-  balanceAwarded: BigInt
   prizeStrategy: PrizeStrategy
 }
 

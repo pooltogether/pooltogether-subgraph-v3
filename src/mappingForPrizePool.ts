@@ -42,7 +42,8 @@ import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
 import { loadOrCreatePrizePool } from './helpers/loadOrCreatePrizePool'
 import { loadOrCreatePrizeStrategy } from './helpers/loadOrCreatePrizeStrategy'
 import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePoolCreditRate'
-import { loadOrCreateExternalErc20Award, loadOrCreateExternalErc721Award } from './helpers/loadOrCreateExternalAward'
+import { loadOrCreateAwardedExternalErc20Token, loadOrCreateAwardedExternalErc721Nft } from './helpers/loadOrCreateAwardedExternalErc'
+import { loadOrCreateExternalErc721Award } from './helpers/loadOrCreateExternalAward'
 
 import { ZERO, ZERO_ADDRESS } from './helpers/common'
 
@@ -132,31 +133,46 @@ export function handleAwarded(event: Awarded): void {
 export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
 
-  const _prizeStrategyId = _prizePool.prizeStrategy
-  const _prizeStrategy = PrizeStrategy.load(_prizeStrategyId)
+  const _prize = loadOrCreatePrize(
+    event.address.toHex(),
+    _prizePool.currentPrizeId.toString()
+  )
 
-  const externalAward = loadOrCreateExternalErc20Award(
-    _prizePool.prizeStrategy,
+  const awardedErc20Token = loadOrCreateAwardedExternalErc20Token(
+    _prize,
     event.params.token
   )
 
-  externalAward.prizeStrategy = _prizeStrategy.id
-  externalAward.balanceAwarded = event.params.amount
+  awardedErc20Token.balanceAwarded = event.params.amount
 
-  externalAward.save()
+  awardedErc20Token.save()
 }
 
 // This is emitted when external rewards (nfts, etc) are awarded
 export function handleAwardedExternalERC721(event: AwardedExternalERC721): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
 
-  const externalAward = loadOrCreateExternalErc721Award(
-    _prizePool.prizeStrategy,
+  const _prize = loadOrCreatePrize(
+    event.address.toHex(),
+    _prizePool.currentPrizeId.toString()
+  )
+
+  const _prizeStrategyId = _prizePool.prizeStrategy
+  const _prizeStrategy = PrizeStrategy.load(_prizeStrategyId)
+
+  const awardedExternalErc721Nft = loadOrCreateAwardedExternalErc721Nft(
+    _prize,
+    _prizeStrategy as PrizeStrategy,
     event.params.token
   )
-  externalAward.save()
+  awardedExternalErc721Nft.save()
 
-  store.remove('ExternalErc721Award', externalAward.id)
+
+  const externalErc721 = loadOrCreateExternalErc721Award(
+    _prizeStrategy.id,
+    event.params.token
+  )
+  store.remove('ExternalErc721Award', externalErc721.id)
 }
 
 export function handleDeposited(event: Deposited): void {
