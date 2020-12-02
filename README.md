@@ -84,11 +84,11 @@ $ cp subgraph.yaml subgraph.local.yaml
 // subgraph.local.yaml
 dataSources:
   - kind: ethereum/contract
-    name: CompoundPrizePoolBuilder
+    name: CompoundPrizePoolProxyFactory
     network: mainnet
     source:
       address: "<Your locally deployed address here>"
-      abi: CompoundPrizePoolBuilder
+      abi: CompoundPrizePoolProxyFactory
 ...
 ```
 

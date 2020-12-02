@@ -22,10 +22,6 @@ dataSources:
       eventHandlers:
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-        # - event: DripTokenDripped(indexed address,indexed address,uint256)
-        #   handler: handleDripTokenDripped
-        # - event: DripTokenClaimed(indexed address,indexed address,indexed address,uint256)
-        #   handler: handleDripTokenClaimed
         - event: BalanceDripActivated(indexed address,indexed address,indexed address,uint256)
           handler: handleBalanceDripActivated
         - event: BalanceDripDeactivated(indexed address,indexed address,indexed address)
@@ -46,19 +42,19 @@ dataSources:
           handler: handleVolumeDripPeriodEnded
         - event: VolumeDripDripped(indexed address,indexed address,indexed address,bool,address,uint256)
           handler: handleVolumeDripDripped
-  - name: CompoundPrizePoolBuilder
+  - name: CompoundPrizePoolProxyFactory
     kind: ethereum/contract
     network: {{network}}
     source:
-      address: "{{compoundPrizePoolBuilder.address}}"
-      abi: CompoundPrizePoolBuilder
-      startBlock: {{compoundPrizePoolBuilder.startBlock}}
+      address: "{{compoundPrizePoolProxyFactory.address}}"
+      abi: CompoundPrizePoolProxyFactory
+      startBlock: {{compoundPrizePoolProxyFactory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - CompoundPrizePoolBuilder
+        - CompoundPrizePoolProxyFactory
       abis:
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
@@ -66,40 +62,40 @@ dataSources:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
         - name: SingleRandomWinner
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
-        - name: CompoundPrizePoolBuilder
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolBuilder.json
+        - name: CompoundPrizePoolProxyFactory
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolProxyFactory.json
         - name: ControlledToken
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
-        - event: PrizePoolCreated(indexed address,indexed address)
-          handler: handlePrizePoolCreated
-      file: ./src/mappingForCompoundPrizePoolBuilder.ts
-  - name: SingleRandomWinnerBuilder
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+      file: ./src/mappingForCompoundPrizePoolProxyFactory.ts
+  - name: SingleRandomWinnerProxyFactory
     kind: ethereum/contract
     network: {{network}}
     source:
-      address: "{{singleRandomWinnerBuilder.address}}"
-      abi: SingleRandomWinnerBuilder
-      startBlock: {{singleRandomWinnerBuilder.startBlock}}
+      address: "{{singleRandomWinnerProxyFactory.address}}"
+      abi: SingleRandomWinnerProxyFactory
+      startBlock: {{singleRandomWinnerProxyFactory.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - SingleRandomWinnerBuilder
+        - SingleRandomWinnerProxyFactory
       abis:
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: SingleRandomWinner
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
-        - name: SingleRandomWinnerBuilder
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinnerBuilder.json
+        - name: SingleRandomWinnerProxyFactory
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinnerProxyFactory.json
         - name: ControlledToken
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
-        - event: SingleRandomWinnerCreated(indexed address,indexed address,indexed address)
-          handler: handleSingleRandomWinnerCreated
-      file: ./src/mappingForSingleRandomWinnerBuilder.ts
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+      file: ./src/mappingForSingleRandomWinnerProxyFactory.ts
 templates:
   - name: SingleRandomWinner
     kind: ethereum/contract
