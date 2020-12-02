@@ -5,10 +5,6 @@ import {
 } from '../../generated/schema'
 
 import {
-  SingleRandomWinner as SingleRandomWinnerTemplate,
-} from '../../generated/templates'
-
-import {
   SingleRandomWinner as SingleRandomWinnerContract,
 } from '../../generated/templates/SingleRandomWinner/SingleRandomWinner'
 
@@ -57,7 +53,6 @@ export function loadOrCreateSingleRandomWinner(
     _singleRandomWinner.save()
 
     // Start listening for events from the dynamically generated contract
-    SingleRandomWinnerTemplate.create(singleRandomWinner)
   }
 
   return _singleRandomWinner as SingleRandomWinner

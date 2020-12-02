@@ -120,6 +120,8 @@ templates:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/RNGInterface.json
         - name: Comptroller
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
         - event: TokenListenerUpdated(indexed address)
           handler: handleTokenListenerUpdated
@@ -158,6 +160,8 @@ templates:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: CompoundPrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
         - event: CompoundPrizePoolInitialized(indexed address)
           handler: handleCompoundPrizePoolInitialized

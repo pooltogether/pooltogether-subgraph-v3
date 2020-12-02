@@ -2,14 +2,14 @@
   "network": "rinkeby",
   "compoundPrizePoolProxyFactory": {
     "address": "0x2d22175E01eE6Db5A6512bc8D572a6da13754688",
-    "startBlock": "7623390"
+    "startBlock": "7399763"
   },
   "singleRandomWinnerProxyFactory": {
     "address": "0x380E7De5433b9281251fabbEA72f659B9Fc28786",
-    "startBlock": "7623399"
+    "startBlock": "7399771"
   },
   "comptroller": {
     "address": "0xE70c3669371Be02cdE0809df6D9c514804CAd2F0",
-    "startBlock": "7623390"
+    "startBlock": "7399759"
   }
 }

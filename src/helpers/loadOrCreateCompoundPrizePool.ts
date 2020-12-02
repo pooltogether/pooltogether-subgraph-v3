@@ -5,10 +5,6 @@ import {
 } from '../../generated/schema'
 
 import {
-  CompoundPrizePool as CompoundPrizePoolTemplate,
-} from '../../generated/templates'
-
-import {
   CompoundPrizePool as CompoundPrizePoolContract,
 } from '../../generated/templates/CompoundPrizePool/CompoundPrizePool'
 
@@ -33,8 +29,6 @@ export function loadOrCreateCompoundPrizePool(
     _compoundPrizePool.cToken = _boundCompoundPrizePool.cToken()
     _compoundPrizePool.save()
 
-    // Start listening for events from the dynamically generated contract
-    CompoundPrizePoolTemplate.create(prizePool)
   }
 
   return _compoundPrizePool as CompoundPrizePool

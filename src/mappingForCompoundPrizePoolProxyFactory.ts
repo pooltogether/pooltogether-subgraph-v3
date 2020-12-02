@@ -4,12 +4,13 @@ import {
   ProxyCreated,
 } from '../generated/CompoundPrizePoolProxyFactory/CompoundPrizePoolProxyFactory'
 
-import { loadOrCreateCompoundPrizePool } from './helpers/loadOrCreateCompoundPrizePool'
+import {
+  CompoundPrizePool as CompoundPrizePoolTemplate,
+} from '../generated/templates'
 
 export function handleProxyCreated(event: ProxyCreated): void {
   log.warning('event.params.proxy {}', [event.params.proxy.toHexString()])
 
-  loadOrCreateCompoundPrizePool(
-    event.params.proxy
-  )
+  // Start listening for events from the dynamically generated contract
+  CompoundPrizePoolTemplate.create(event.params.proxy)
 }

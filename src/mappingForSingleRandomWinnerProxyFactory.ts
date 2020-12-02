@@ -2,10 +2,10 @@ import {
   ProxyCreated,
 } from '../generated/SingleRandomWinnerProxyFactory/SingleRandomWinnerProxyFactory'
 
-import { loadOrCreateSingleRandomWinner } from './helpers/loadOrCreateSingleRandomWinner'
+import {
+  SingleRandomWinner as SingleRandomWinnerTemplate,
+} from '../generated/templates'
 
 export function handleProxyCreated(event: ProxyCreated): void {
-  loadOrCreateSingleRandomWinner(
-    event.params.proxy
-  )
+  SingleRandomWinnerTemplate.create(event.params.proxy)
 }
