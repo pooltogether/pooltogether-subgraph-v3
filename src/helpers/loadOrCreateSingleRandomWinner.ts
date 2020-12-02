@@ -1,19 +1,15 @@
-import { Address } from '@graphprotocol/graph-ts'
+import { log, Address } from '@graphprotocol/graph-ts'
 
 import {
   SingleRandomWinner,
 } from '../../generated/schema'
 
 import {
-  SingleRandomWinner as SingleRandomWinnerTemplate,
-} from '../../generated/templates'
-
-import {
   SingleRandomWinner as SingleRandomWinnerContract,
 } from '../../generated/templates/SingleRandomWinner/SingleRandomWinner'
 
 import { ZERO_ADDRESS } from './common'
-
+import { createControlledToken } from '../helpers/createControlledToken'
 
 export function loadOrCreateSingleRandomWinner(
   singleRandomWinner: Address,
@@ -37,10 +33,26 @@ export function loadOrCreateSingleRandomWinner(
     _singleRandomWinner.prizePeriodStartedAt = _boundSingleRandomWinner.prizePeriodStartedAt()
     _singleRandomWinner.prizePeriodEndAt = _singleRandomWinner.prizePeriodStartedAt.plus(_singleRandomWinner.prizePeriodSeconds)
 
+
+
+    const ticket = createControlledToken(
+      'Ticket',
+      _boundSingleRandomWinner.ticket(),
+      Address.fromString(_singleRandomWinner.prizePool)
+    )
+    const sponsorship = createControlledToken(
+      'Sponsorship',
+      _boundSingleRandomWinner.sponsorship(),
+      Address.fromString(_singleRandomWinner.prizePool)
+    )
+
+    _singleRandomWinner.ticket = ticket.id
+    _singleRandomWinner.sponsorship = sponsorship.id
+
+
     _singleRandomWinner.save()
 
     // Start listening for events from the dynamically generated contract
-    SingleRandomWinnerTemplate.create(singleRandomWinner)
   }
 
   return _singleRandomWinner as SingleRandomWinner

@@ -1,4 +1,4 @@
-import { BigInt, log } from '@graphprotocol/graph-ts'
+import { log } from '@graphprotocol/graph-ts'
 import {
   PrizePool,
   SingleRandomWinner,
@@ -30,7 +30,8 @@ import { ONE } from './helpers/common'
 
 
 export function handlePrizePoolOpened(event: PrizePoolOpened): void {
-  // no-op
+  // This is essentially the 'initialization' event for 3.0.1 SingleRandomWinner strats, unfortunately, so we need to set up the object here.
+  loadOrCreateSingleRandomWinner(event.address)
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
@@ -48,19 +49,24 @@ export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
+  log.warning("handlePrizePoolAwardStarted", [])
   const _prizeStrategy = SingleRandomWinner.load(event.address.toHex())
   const boundPrizeStrategy = SingleRandomWinnerContract.bind(event.address)
 
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
+  log.warning("handlePrizePoolAwardStarted: found prize pool:::: ", [_prizeStrategy.prizePool])
   _prizePool.currentState = "Started"
+  log.warning("handlePrizePoolAwardStarted: setting prize count", [])
   _prizePool.prizesCount = _prizePool.prizesCount.plus(ONE)
   _prizePool.save()
 
+  log.warning("handlePrizePoolAwardStarted: loadOrCreatePrize", [])
   const _prize = loadOrCreatePrize(
     _prizeStrategy.prizePool,
     _prizePool.currentPrizeId.toString()
   )
 
+  log.warning("handlePrizePoolAwardStarted: setting fields", [])
   _prize.prizePeriodStartedTimestamp = boundPrizeStrategy.prizePeriodStartedAt()
   _prize.awardStartOperator = event.params.operator
   _prize.lockBlock = event.params.rngLockBlock

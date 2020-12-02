@@ -1,10 +1,10 @@
 {
   "network": "mainnet",
-  "compoundPrizePoolBuilder": {
+  "compoundPrizePoolProxyFactory": {
     "address": "0xCB876f60399897db24058b2d58D0B9f713175eeF",
     "startBlock": "11100500"
   },
-  "singleRandomWinnerBuilder": {
+  "singleRandomWinnerProxyFactory": {
     "address": "0xa6358441F68eD4707E1c4366a0D2E2233bB4841D",
     "startBlock": "11100500"
   },
