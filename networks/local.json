@@ -1,15 +1,15 @@
 {
   "network": "mainnet",
   "compoundPrizePoolProxyFactory": {
-    "address": "",
+    "address": "0x7816Cb82d745A38CF634edBC12ee7BD713f9da54",
     "startBlock": "1"
   },
   "singleRandomWinnerProxyFactory": {
-    "address": "",
+    "address": "0x7816Cb82d745A38CF634edBC12ee7BD713f9da54",
     "startBlock": "1"
   },
   "comptroller": {
-    "address": "",
+    "address": "0x993Dd061129C1fA5955A0Cfb326F210648625981",
     "startBlock": "1"
   }
 }

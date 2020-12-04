@@ -26,23 +26,7 @@ export function loadOrCreateAccount(
 
   if (!_account) {
     _account = new Account(id)
-
-    _account.prizePool = prizePool.toHex()
     _account.address = player
-    _account.balance = ZERO
-
-
-    // how do we now know which accountType to create??
-    // 
-
-
-    _account.accountType = "Player" // is there a way to get this enum here?
-
-
-    _account.timelockedBalance = ZERO
-    _account.unlockTimestamp = ZERO
-    _account.cumulativeWinnings = ZERO
-
     _account.save()
   }
 
