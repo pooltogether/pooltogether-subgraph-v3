@@ -28,7 +28,13 @@ export function loadOrCreateAwardedExternalErc20Token(prize: Prize, tokenAddress
 
     award.name = boundToken.name()
     award.symbol = boundToken.symbol()
-    award.decimals = BigInt.fromI32(boundToken.decimals())
+
+    let tryDecimalsCallResult = boundToken.try_decimals()
+    if (tryDecimalsCallResult.reverted) {
+      log.info('ERC20 try_decimals() call reverted', [])
+    } else {
+      award.decimals = BigInt.fromI32(tryDecimalsCallResult.value)
+    }
 
     award.save()
   }
