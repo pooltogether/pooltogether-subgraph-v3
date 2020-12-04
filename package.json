@@ -16,6 +16,7 @@
     "gen:mainnet": "graph codegen subgraph.yaml",
     "gen:rinkeby": "graph codegen subgraph.rinkeby.yaml",
     "gen:ropsten": "graph codegen subgraph.ropsten.yaml",
+    "gen:local": "graph codegen subgraph.local.yaml",
 
     "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-v3 subgraph.mainnet.yaml",
 

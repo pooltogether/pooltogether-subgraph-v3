@@ -35,7 +35,7 @@ import {
   // loadOrCreateDripTokenPlayer,
   loadOrCreateBalanceDripPlayer,
   loadOrCreateVolumeDripPlayer,
-} from './helpers/loadOrCreatePlayer'
+} from './helpers/loadOrCreateAccount'
 
 import {
   loadOrCreateComptroller,

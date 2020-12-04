@@ -1,7 +1,7 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 
 import {
-  Player,
+  Account,
   DripTokenPlayer,
   BalanceDripPlayer,
   VolumeDripPlayer,
@@ -17,28 +17,36 @@ import {
 import { ZERO } from './common'
 
 
-export function loadOrCreatePlayer(
+export function loadOrCreateAccount(
   prizePool: Address,
   player: Address
-): Player {
-  const id = playerId(prizePool.toHex(), player.toHex())
-  let _player = Player.load(id)
+): Account {
+  const id = playerId(prizePool.toHex(), player.toHex()) // still correct?
+  let _account = Account.load(id)
 
-  if (!_player) {
-    _player = new Player(id)
+  if (!_account) {
+    _account = new Account(id)
 
-    _player.prizePool = prizePool.toHex()
-    _player.address = player
-    _player.balance = ZERO
+    _account.prizePool = prizePool.toHex()
+    _account.address = player
+    _account.balance = ZERO
 
-    _player.timelockedBalance = ZERO
-    _player.unlockTimestamp = ZERO
-    _player.cumulativeWinnings = ZERO
 
-    _player.save()
+    // how do we now know which accountType to create??
+    // 
+
+
+    _account.accountType = "Player" // is there a way to get this enum here?
+
+
+    _account.timelockedBalance = ZERO
+    _account.unlockTimestamp = ZERO
+    _account.cumulativeWinnings = ZERO
+
+    _account.save()
   }
 
-  return _player as Player
+  return _account as Account
 }
 
 
