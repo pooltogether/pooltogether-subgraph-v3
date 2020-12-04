@@ -41,7 +41,7 @@ type PrizePool @entity {
   reserveFeeControlledToken: Bytes!
 
   underlyingCollateralToken: Bytes!
-  underlyingCollateralDecimals: BigInt!
+  underlyingCollateralDecimals: BigInt
   underlyingCollateralName: String!
   underlyingCollateralSymbol: String!
 
@@ -145,7 +145,7 @@ type AwardedExternalErc20Token @entity {
   address: Bytes!
   name: String!
   symbol: String!
-  decimals: BigInt!
+  decimals: BigInt
   
   balanceAwarded: BigInt
   prize: Prize!
@@ -171,7 +171,7 @@ type ControlledToken @entity {
   type: ControlledTokenType!
   name: String!
   symbol: String!
-  decimals: BigInt!
+  decimals: BigInt
 
   controller: PrizePool # rename to owner?
 
@@ -197,7 +197,7 @@ type ExternalErc20Award @entity {
   address: Bytes!
   name: String!
   symbol: String!
-  decimals: BigInt!
+  decimals: BigInt
   
   prizeStrategy: SingleRandomWinner
 }

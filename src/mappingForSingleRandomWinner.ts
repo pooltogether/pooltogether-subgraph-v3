@@ -1,4 +1,4 @@
-import { log } from '@graphprotocol/graph-ts'
+import { log, store } from '@graphprotocol/graph-ts'
 import {
   PrizePool,
   SingleRandomWinner,
@@ -26,6 +26,7 @@ import {
   loadOrCreateExternalErc721Award,
 } from './helpers/loadOrCreateExternalAward'
 
+import { externalAwardId } from './helpers/idTemplates'
 import { ONE } from './helpers/common'
 
 
@@ -109,9 +110,10 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 }
 
 export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved): void {
-  // TODO: implement this
-  // This is emitted when external rewards (other tokens, etc) are added to the prize
-  log.warning('implement handleExternalErc20AwardRemoved', [])
+  const _prizeStrategyAddress = event.address.toHex()
+  const id = externalAwardId(_prizeStrategyAddress, event.params.externalErc20Award.toHex())
+  log.warning("removing 20 award with id {}", [id])
+  store.remove('ExternalErc20Award', id)
 }
 
 export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded): void {
@@ -124,7 +126,8 @@ export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded):
 }
 
 export function handleExternalErc721AwardRemoved(event: ExternalErc721AwardRemoved): void {
-  // TODO: implement this
-  // This is emitted when external rewards (other tokens, etc) are added to the prize
-  log.warning('implement handleExternalErc721AwardRemoved', [])
+  const _prizeStrategyAddress = event.address.toHex()
+  const id = externalAwardId(_prizeStrategyAddress, event.params.externalErc721Award.toHex())
+  log.warning("removing 721 award with id {}", [id])
+  store.remove('ExternalErc721Award', id)
 }
