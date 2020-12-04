@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 
 import {
   ControlledToken,
@@ -27,7 +27,13 @@ export function createControlledToken(
   token.type = tokenType
   token.name = boundToken.name()
   token.symbol = boundToken.symbol()
-  token.decimals = BigInt.fromI32(boundToken.decimals())
+
+  let tryDecimalsCallResult = boundToken.try_decimals()
+  if (tryDecimalsCallResult.reverted) {
+    log.info('ERC20 try_decimals() call reverted', [])
+  } else {
+    token.decimals = BigInt.fromI32(tryDecimalsCallResult.value)
+  }
 
   token.totalSupply = ZERO
 

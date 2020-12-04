@@ -238,13 +238,24 @@ export class PrizePool extends Entity {
     this.set("underlyingCollateralToken", Value.fromBytes(value));
   }
 
-  get underlyingCollateralDecimals(): BigInt {
+  get underlyingCollateralDecimals(): BigInt | null {
     let value = this.get("underlyingCollateralDecimals");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set underlyingCollateralDecimals(value: BigInt) {
-    this.set("underlyingCollateralDecimals", Value.fromBigInt(value));
+  set underlyingCollateralDecimals(value: BigInt | null) {
+    if (value === null) {
+      this.unset("underlyingCollateralDecimals");
+    } else {
+      this.set(
+        "underlyingCollateralDecimals",
+        Value.fromBigInt(value as BigInt)
+      );
+    }
   }
 
   get underlyingCollateralName(): string {
@@ -1030,13 +1041,21 @@ export class AwardedExternalErc20Token extends Entity {
     this.set("symbol", Value.fromString(value));
   }
 
-  get decimals(): BigInt {
+  get decimals(): BigInt | null {
     let value = this.get("decimals");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set decimals(value: BigInt) {
-    this.set("decimals", Value.fromBigInt(value));
+  set decimals(value: BigInt | null) {
+    if (value === null) {
+      this.unset("decimals");
+    } else {
+      this.set("decimals", Value.fromBigInt(value as BigInt));
+    }
   }
 
   get balanceAwarded(): BigInt | null {
@@ -1212,13 +1231,21 @@ export class ControlledToken extends Entity {
     this.set("symbol", Value.fromString(value));
   }
 
-  get decimals(): BigInt {
+  get decimals(): BigInt | null {
     let value = this.get("decimals");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set decimals(value: BigInt) {
-    this.set("decimals", Value.fromBigInt(value));
+  set decimals(value: BigInt | null) {
+    if (value === null) {
+      this.unset("decimals");
+    } else {
+      this.set("decimals", Value.fromBigInt(value as BigInt));
+    }
   }
 
   get totalSupply(): BigInt {
@@ -1288,13 +1315,21 @@ export class ExternalErc20Award extends Entity {
     this.set("symbol", Value.fromString(value));
   }
 
-  get decimals(): BigInt {
+  get decimals(): BigInt | null {
     let value = this.get("decimals");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set decimals(value: BigInt) {
-    this.set("decimals", Value.fromBigInt(value));
+  set decimals(value: BigInt | null) {
+    if (value === null) {
+      this.unset("decimals");
+    } else {
+      this.set("decimals", Value.fromBigInt(value as BigInt));
+    }
   }
 
   get prizeStrategy(): string | null {
