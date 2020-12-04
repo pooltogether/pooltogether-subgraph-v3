@@ -8,3 +8,4 @@ subgraph.ropsten.yaml
 subgraph.rinkeby.yaml
 subgraph.mainnet.yaml
 generated/
+generated/schema.ts
