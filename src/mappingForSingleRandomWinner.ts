@@ -1,5 +1,6 @@
 import { log, store } from '@graphprotocol/graph-ts'
 import {
+  ControlledToken,
   PrizePool,
   SingleRandomWinner,
 } from '../generated/schema'
@@ -84,11 +85,14 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
     _prizeStrategy.prizePool,
     _prizePool.currentPrizeId.toString()
   )
+
+  const controlledToken = ControlledToken.load(_prizeStrategy.ticket)
+  
   _prize.awardedOperator = event.params.operator
   _prize.randomNumber = event.params.randomNumber
   _prize.awardedBlock = event.block.number
   _prize.awardedTimestamp = event.block.timestamp
-  _prize.totalTicketSupply = _prizePool.totalSupply
+  _prize.totalTicketSupply = controlledToken.totalSupply
   _prize.save()
 
   _prizePool.currentState = "Awarded"

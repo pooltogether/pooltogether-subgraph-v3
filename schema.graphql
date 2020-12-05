@@ -4,11 +4,6 @@ enum PrizePoolState {
   Awarded
 }
 
-enum ControlledTokenType {
-  Ticket
-  Sponsorship
-}
-
 enum PrizePoolType {
   Compound
   yVault
@@ -50,10 +45,6 @@ type PrizePool @entity {
   timelockTotalSupply: BigInt!
   liquidityCap: BigInt!
 
-  playerCount: BigInt!
-  totalSupply: BigInt! # for tickets -- ideally this would live in controlledtoken
-  totalSponsorship: BigInt! # for sponsorship
-
   cumulativePrizeGross: BigInt!
   cumulativePrizeReserveFee: BigInt!
   cumulativePrizeNet: BigInt!
@@ -84,9 +75,6 @@ type CompoundPrizePool @entity {
 type PrizeStrategy @entity {
   id: ID!
   singleRandomWinner: SingleRandomWinner
-
-  #   externalErc20Awards: [ExternalErc20Award!]! @derivedFrom(field: "prizeStrategy")
-  # externalErc721Awards: [ExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")
 }
 
 # ID: `${singleRandomWinner.address}`   (will be same address as PrizeStrategy)
@@ -168,23 +156,22 @@ type ControlledToken @entity {
   id: ID!
   prizePool: PrizePool!
 
-  type: ControlledTokenType!
   name: String!
   symbol: String!
   decimals: BigInt
 
-  controller: PrizePool # rename to owner?
+  controller: PrizePool
 
   totalSupply: BigInt!
 
-  numberOfHolders: BigInt! # INCREMENT WHEN MINTED OR TRANSFERRED (BALNCE 0 TO NONZERO), DECREMENT (BALANCE TO ZERO) 
+  numberOfHolders: BigInt!
 
   balances: [ControlledTokenBalance!]! @derivedFrom(field:"controlledToken")
 }
 
 type ControlledTokenBalance @entity {
   id: ID! # composite key of (address, controlledToken)
-  address: Bytes!
+  account: Account!
   controlledToken: ControlledToken!
   balance: BigInt
 }
@@ -216,7 +203,7 @@ type ExternalErc721Award @entity {
 
 # join table 
 type PrizePoolAccount @entity{
-  id: ID! #composite aprizerpool id - accountid
+  id: ID! #composite prizerpool id - accountid
 
   prizePool: PrizePool! 
   account: Account!
@@ -228,12 +215,11 @@ type PrizePoolAccount @entity{
 
 }
 
-## replacing above two entities (Player and Sponsor) 
 type Account @entity {
-  id: ID! #is this still composite or should just be address? will this affect the drips?
-  address: Bytes!
+  id: ID!
+
   prizePoolAccounts: [PrizePoolAccount!]! @derivedFrom(field: "account")
-  controlledTokenBalances: [ControlledTokenBalance!]
+  controlledTokenBalances: [ControlledTokenBalance!] @derivedFrom(field: "account")
 }
 
 

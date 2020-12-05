@@ -15,7 +15,6 @@ import {
 import { ZERO } from './common'
 
 export function createControlledToken(
-  tokenType: string,
   tokenAddress: Address,
   prizePoolAddress: Address,
 ): ControlledToken {
@@ -24,7 +23,6 @@ export function createControlledToken(
 
   token.prizePool = prizePoolAddress.toHex()
 
-  token.type = tokenType
   token.name = boundToken.name()
   token.symbol = boundToken.symbol()
 

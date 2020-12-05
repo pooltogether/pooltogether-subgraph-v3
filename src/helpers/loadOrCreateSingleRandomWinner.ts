@@ -19,6 +19,7 @@ export function loadOrCreateSingleRandomWinner(
 
   if (!_singleRandomWinner) {
     // Create SingleRandomWinner
+    log.warning("creating new singlerandomwinner with id {} ", [_singleRandomWinnerAddress])
     _singleRandomWinner = new SingleRandomWinner(_singleRandomWinnerAddress)
     const _boundSingleRandomWinner = SingleRandomWinnerContract.bind(singleRandomWinner)
 
@@ -36,12 +37,10 @@ export function loadOrCreateSingleRandomWinner(
 
 
     const ticket = createControlledToken(
-      'Ticket',
       _boundSingleRandomWinner.ticket(),
       Address.fromString(_singleRandomWinner.prizePool)
     )
     const sponsorship = createControlledToken(
-      'Sponsorship',
       _boundSingleRandomWinner.sponsorship(),
       Address.fromString(_singleRandomWinner.prizePool)
     )
@@ -51,8 +50,6 @@ export function loadOrCreateSingleRandomWinner(
 
 
     _singleRandomWinner.save()
-
-    // Start listening for events from the dynamically generated contract
   }
 
   return _singleRandomWinner as SingleRandomWinner

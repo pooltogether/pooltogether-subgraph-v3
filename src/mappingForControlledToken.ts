@@ -1,5 +1,5 @@
 import { Address, BigInt, log, store } from '@graphprotocol/graph-ts'
-import {ZERO_ADDRESS} from "./helpers/common"
+import {ONE, ZERO_ADDRESS} from "./helpers/common"
 import {
   Transfer,
 } from '../generated/templates/ControlledToken/ControlledToken'
@@ -25,20 +25,17 @@ export function handleTransfer(event: Transfer): void {
     return
   }
   
+  const controlledToken = ControlledToken.load(event.address.toHex()) 
   
-  const token = ControlledToken.load(event.address.toHex()) 
-  // what if token does not exist? -- logic error it seems
-  // where is the token.type set? -- createControlledToken() called in SingleRandomWinner handler
-  
-
   let controlledTokenBalance = ControlledTokenBalance.load(generateCompositeId (event.params.to, event.address)) // controlledtokenbalance id =  (address, controlledToken)
   let newAccount = false
+  
   if(controlledTokenBalance == null) {// create case 
     newAccount=true
     controlledTokenBalance = new ControlledTokenBalance(generateCompositeId (event.params.to, event.address))
     controlledTokenBalance.balance = event.params.value
-    controlledTokenBalance.controlledToken = token.id // or event.address
-    controlledTokenBalance.address = event.params.to
+    controlledTokenBalance.controlledToken = controlledToken.id // or event.address
+    controlledTokenBalance.account = event.params.to.toHex()
     controlledTokenBalance.save()
   }
   else{ //update case
@@ -47,43 +44,35 @@ export function handleTransfer(event: Transfer): void {
 
   // check if Transfer has depleted someones balance
   let depletedBalance = false
-  if(event.params.from.notEqual(Address.fromString(ZERO_ADDRESS))){
+  if(event.params.from.notEqual(Address.fromString(ZERO_ADDRESS))){// mint event
     const transferredFrom = ControlledTokenBalance.load(generateCompositeId (event.params.from, event.address)) 
-    if(transferredFrom != null){ // redundant logic check
-      if(transferredFrom.balance == new BigInt(0)){
-        depletedBalance = true
-        store.remove("ControlledTokenBalance", transferredFrom.id)
-      }
+    transferredFrom.balance=transferredFrom.balance.minus(event.params.value)
+    
+    if(transferredFrom.balance == new BigInt(0)){
+      depletedBalance = true
+      store.remove("ControlledTokenBalance", transferredFrom.id)
     }
-  }
-  
-  // INCREMENT WHEN MINTED OR TRANSFERRED (BALNCE 0 TO NONZERO), DECREMENT (BALANCE TO ZERO) 
-
-  const existingTotalSupply = token.totalSupply
-  
-  if(event.params.from.equals(Address.fromString(ZERO_ADDRESS))){
-    // increase total supply
-    token.totalSupply = existingTotalSupply.plus(event.params.value) // is this in GWEI??
-  }
-  if(event.params.to.equals(Address.fromString(ZERO_ADDRESS))){
-    token.totalSupply = existingTotalSupply.minus(event.params.value)
-  }
-  
-  const existingNumberOfHolders = token.numberOfHolders
-
-  if (token.type == 'Ticket') {
-    // if token mint
-    if(event.params.from.equals(Address.fromString(ZERO_ADDRESS)) && newAccount){
-      // if transfer is to NEW address then increment number of players
-      token.numberOfHolders = existingNumberOfHolders.plus(new BigInt(1))
+    else{
+      transferredFrom.save()
     }
-    // if token burn
-    if(event.params.to.equals(Address.fromString(ZERO_ADDRESS)) && depletedBalance){
-      // if account balance depleted decrement player count
-      token.numberOfHolders = existingNumberOfHolders.minus(new BigInt(1))
+    
+  }
+  //adjust total supplied and holders
+  const existingTotalSupply = controlledToken.totalSupply
+  const existingNumberOfHolders = controlledToken.numberOfHolders
+  if(event.params.from.equals(Address.fromString(ZERO_ADDRESS))){ // mint -increase total supply   
+    controlledToken.totalSupply = existingTotalSupply.plus(event.params.value)
+    if(newAccount){
+      controlledToken.numberOfHolders = existingNumberOfHolders.plus(ONE)  // if transfer is to NEW address then increment number of players
     } 
   }
-  token.save()
+  if(event.params.to.equals(Address.fromString(ZERO_ADDRESS))){ // burn - decrease total supply
+    controlledToken.totalSupply = existingTotalSupply.minus(event.params.value)
+    if(depletedBalance){
+      controlledToken.numberOfHolders = existingNumberOfHolders.minus(ONE) // if account balance depleted decrement player count
+    }
+  }
+  controlledToken.save()
 }
 
 

@@ -1,38 +1,16 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 
 import {
-  Account,
   DripTokenPlayer,
   BalanceDripPlayer,
   VolumeDripPlayer,
 } from '../../generated/schema'
 
 import {
-  playerId,
   dripTokenPlayerId,
   balanceDripPlayerId,
   volumeDripPlayerId,
 } from './idTemplates'
-
-import { ZERO } from './common'
-
-
-export function loadOrCreateAccount(
-  prizePool: Address,
-  player: Address
-): Account {
-  const id = playerId(prizePool.toHex(), player.toHex()) // still correct?
-  let _account = Account.load(id)
-
-  if (!_account) {
-    _account = new Account(id)
-    _account.address = player
-    _account.save()
-  }
-
-  return _account as Account
-}
-
 
 export function loadOrCreateDripTokenPlayer(
   comptroller: Address,
