@@ -1,4 +1,4 @@
-import { Address, Bytes, log, store } from '@graphprotocol/graph-ts'
+import { Address, log, store } from '@graphprotocol/graph-ts'
 import {
   PrizeStrategy,
   PrizePool,
@@ -30,7 +30,9 @@ import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePool
 import { loadOrCreateAwardedExternalErc20Token, loadOrCreateAwardedExternalErc721Nft } from './helpers/loadOrCreateAwardedExternalErc'
 import { loadOrCreateExternalErc721Award } from './helpers/loadOrCreateExternalAward'
 
-import { ZERO } from './helpers/common'
+import { ZERO, ZERO_ADDRESS } from './helpers/common'
+import { Deposited } from '../generated/templates/CompoundPrizePool/CompoundPrizePool'
+import { loadOrCreatePrizePoolAccount } from './helpers/loadOrCreatePrizePoolAccount'
 
 
 export function handleInitialized(event: Initialized): void {
@@ -96,8 +98,10 @@ export function handleAwarded(event: Awarded): void {
   _prize.amount = event.params.amount
 
   const winner = event.params.winner
-  const existingWinners = _prize.winners
-  _prize.winners = new Array(existingWinners.push(winner))
+  if(winner.notEqual(Address.fromString(ZERO_ADDRESS))){
+    const existingWinners = _prize.winners
+    _prize.winners = new Array(existingWinners.push(winner))
+  }
   _prize.save()
 
   // increment accumulative winnings
@@ -164,10 +168,15 @@ export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
   // load PrizePoolAccount and update unlockedTimestamp and timelockedBalance
   let prizePoolAccount = PrizePoolAccount.load(generateCompositeId(prizePool.id, event.params.from.toHex()))
   prizePoolAccount.unlockTimestamp = event.params.unlockTimestamp
-  prizePoolAccount.timelockedBalance = prizePoolAccount.timelockedBalance.plus(event.params.amount)
+
+  const existingTimeLockedBalance = prizePoolAccount.timelockedBalance
+  const newTimelockedBalance = existingTimeLockedBalance.plus(event.params.amount)
+  prizePoolAccount.timelockedBalance = newTimelockedBalance
   
   // decrement PrizePool timelocked total balance
-  prizePool.timelockTotalSupply = prizePool.timelockTotalSupply.minus(event.params.amount)
+  const existingTimelockedSupply = prizePool.timelockTotalSupply
+  const newTimelockedSupply = existingTimelockedSupply.plus(event.params.amount)
+  prizePool.timelockTotalSupply = newTimelockedSupply
 
   // save touched entities
   prizePoolAccount.save()
@@ -202,6 +211,13 @@ export function handleTimelockDeposited(event: TimelockDeposited): void {
   prizePoolAccount.timelockedBalance = prizePoolAccount.timelockedBalance.minus(event.params.amount)
 
   _prizePool.save()
+}
+
+export function handleDeposited(event: Deposited):void {
+  log.warning("handle deposited called ",[])
+  let prizePoolAccount = loadOrCreatePrizePoolAccount(event.address, event.params.to.toHex())
+  // log.warning("created")
+
 }
 
 

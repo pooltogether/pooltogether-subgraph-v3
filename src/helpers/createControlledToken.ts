@@ -18,26 +18,27 @@ export function createControlledToken(
   tokenAddress: Address,
   prizePoolAddress: Address,
 ): ControlledToken {
-  const token = new ControlledToken(tokenAddress.toHex())
+  log.warning("creating controlled token entity  ",[])
+  const controlledToken = new ControlledToken(tokenAddress.toHex())
   const boundToken = ControlledTokenContract.bind(tokenAddress)
 
-  token.prizePool = prizePoolAddress.toHex()
+  controlledToken.prizePool = prizePoolAddress.toHex()
 
-  token.name = boundToken.name()
-  token.symbol = boundToken.symbol()
+  controlledToken.name = boundToken.name()
+  controlledToken.symbol = boundToken.symbol()
 
   let tryDecimalsCallResult = boundToken.try_decimals()
   if (tryDecimalsCallResult.reverted) {
     log.info('ERC20 try_decimals() call reverted', [])
   } else {
-    token.decimals = BigInt.fromI32(tryDecimalsCallResult.value)
+    controlledToken.decimals = BigInt.fromI32(tryDecimalsCallResult.value)
   }
+  controlledToken.numberOfHolders = ZERO
+  controlledToken.totalSupply = ZERO
 
-  token.totalSupply = ZERO
-
-  token.save()
+  controlledToken.save()
 
   ControlledTokenTemplate.create(tokenAddress)
 
-  return token as ControlledToken
+  return controlledToken as ControlledToken
 }

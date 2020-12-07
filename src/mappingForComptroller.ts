@@ -297,6 +297,8 @@ export function handleVolumeDripDripped(event: VolumeDripDripped): void {
 
   _volumeDripPlayer.periodIndex = BigInt.fromI32(0) // HOW TO GET THIS?
 
+  
+
   _volumeDripPlayer.balance = _volumeDripPlayer.balance.plus(_amount)
   _volumeDripPlayer.save()
 }

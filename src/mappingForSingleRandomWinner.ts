@@ -31,12 +31,15 @@ import { externalAwardId } from './helpers/idTemplates'
 import { ONE } from './helpers/common'
 
 
+//srwInstance.initialize("0x24Ba88feF1A5742bAB304aB68Bfaa2491dE1CDf2", 7000, 900, "0x003fd7caddfb16fb049bf055704e4fb601dfc02b", 
+
 export function handlePrizePoolOpened(event: PrizePoolOpened): void {
   // This is essentially the 'initialization' event for 3.0.1 SingleRandomWinner strats, unfortunately, so we need to set up the object here.
   loadOrCreateSingleRandomWinner(event.address)
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+  log.warning("singlerandomwinner ownership transferred ",[])
   const _prizeStrategy = loadOrCreateSingleRandomWinner(event.address)
   _prizeStrategy.owner = event.params.newOwner
   _prizeStrategy.save()

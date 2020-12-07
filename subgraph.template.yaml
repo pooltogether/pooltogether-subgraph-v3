@@ -201,8 +201,6 @@ templates:
           handler: handleAwardedExternalERC20
         - event: AwardedExternalERC721(indexed address,indexed address,uint256[])
           handler: handleAwardedExternalERC721
-        - event: InstantWithdrawal(indexed address,indexed address,indexed address,uint256,uint256,uint256)
-          handler: handleInstantWithdrawal
         - event: TimelockedWithdrawal(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTimelockedWithdrawal
         - event: TimelockedWithdrawalSwept(indexed address,indexed address,uint256,uint256)
@@ -213,6 +211,8 @@ templates:
           handler: handlePrizeStrategySet
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
+        - event: Deposited(indexed address,indexed address,indexed address,uint256,address)
+          handler: handleDeposited
   - name: ControlledToken
     kind: ethereum/contract
     network: {{network}}
