@@ -1,6 +1,7 @@
 {
   "name": "pooltogether",
   "license": "MIT",
+  "version": "3.0.1-beta.1",
   "scripts": {
     "reinstall": "rm -rf node_modules/ && yarn",
     "clean": "rm -rf build/ generated/",
