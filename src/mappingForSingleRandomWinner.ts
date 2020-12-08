@@ -39,7 +39,6 @@ export function handlePrizePoolOpened(event: PrizePoolOpened): void {
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
-  log.warning("singlerandomwinner ownership transferred ",[])
   const _prizeStrategy = loadOrCreateSingleRandomWinner(event.address)
   _prizeStrategy.owner = event.params.newOwner
   _prizeStrategy.save()
@@ -54,24 +53,19 @@ export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
-  log.warning("handlePrizePoolAwardStarted", [])
   const _prizeStrategy = SingleRandomWinner.load(event.address.toHex())
   const boundPrizeStrategy = SingleRandomWinnerContract.bind(event.address)
 
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
-  log.warning("handlePrizePoolAwardStarted: found prize pool:::: ", [_prizeStrategy.prizePool])
   _prizePool.currentState = "Started"
-  log.warning("handlePrizePoolAwardStarted: setting prize count", [])
   _prizePool.prizesCount = _prizePool.prizesCount.plus(ONE)
   _prizePool.save()
 
-  log.warning("handlePrizePoolAwardStarted: loadOrCreatePrize", [])
   const _prize = loadOrCreatePrize(
     _prizeStrategy.prizePool,
     _prizePool.currentPrizeId.toString()
   )
 
-  log.warning("handlePrizePoolAwardStarted: setting fields", [])
   _prize.prizePeriodStartedTimestamp = boundPrizeStrategy.prizePeriodStartedAt()
   _prize.awardStartOperator = event.params.operator
   _prize.lockBlock = event.params.rngLockBlock
@@ -119,7 +113,6 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved): void {
   const _prizeStrategyAddress = event.address.toHex()
   const id = externalAwardId(_prizeStrategyAddress, event.params.externalErc20Award.toHex())
-  log.warning("removing 20 award with id {}", [id])
   store.remove('ExternalErc20Award', id)
 }
 
@@ -135,6 +128,5 @@ export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded):
 export function handleExternalErc721AwardRemoved(event: ExternalErc721AwardRemoved): void {
   const _prizeStrategyAddress = event.address.toHex()
   const id = externalAwardId(_prizeStrategyAddress, event.params.externalErc721Award.toHex())
-  log.warning("removing 721 award with id {}", [id])
   store.remove('ExternalErc721Award', id)
 }

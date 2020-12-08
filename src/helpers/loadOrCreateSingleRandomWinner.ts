@@ -1,4 +1,4 @@
-import { log, Address } from '@graphprotocol/graph-ts'
+import { Address } from '@graphprotocol/graph-ts'
 
 import {
   SingleRandomWinner,
@@ -14,15 +14,10 @@ import { createControlledToken } from '../helpers/createControlledToken'
 export function loadOrCreateSingleRandomWinner(
   singleRandomWinner: Address,
 ): SingleRandomWinner {
-  log.warning("loadOrCreateSingleRandomWinner for {} ", [singleRandomWinner.toHex()])
   const _singleRandomWinnerAddress = singleRandomWinner.toHex()
   let _singleRandomWinner = SingleRandomWinner.load(_singleRandomWinnerAddress)
-  if(singleRandomWinner){
-    log.warning("found single random winner entity ",[])
-  }
   if (!_singleRandomWinner) {
     // Create SingleRandomWinner
-    log.warning("creating new singlerandomwinner with id {} ", [_singleRandomWinnerAddress])
     _singleRandomWinner = new SingleRandomWinner(_singleRandomWinnerAddress)
     const _boundSingleRandomWinner = SingleRandomWinnerContract.bind(singleRandomWinner)
 

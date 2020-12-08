@@ -18,7 +18,6 @@ export function createControlledToken(
   tokenAddress: Address,
   prizePoolAddress: Address,
 ): ControlledToken {
-  log.warning("creating controlled token entity  ",[])
   const controlledToken = new ControlledToken(tokenAddress.toHex())
   const boundToken = ControlledTokenContract.bind(tokenAddress)
 
