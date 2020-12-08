@@ -7,5 +7,6 @@ subgraph.yaml
 subgraph.ropsten.yaml
 subgraph.rinkeby.yaml
 subgraph.mainnet.yaml
-generated/
+networks/local.json
+generated
 generated/schema.ts
