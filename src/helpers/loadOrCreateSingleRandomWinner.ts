@@ -1,4 +1,4 @@
-import { log, Address } from '@graphprotocol/graph-ts'
+import { Address } from '@graphprotocol/graph-ts'
 
 import {
   SingleRandomWinner,
@@ -16,7 +16,6 @@ export function loadOrCreateSingleRandomWinner(
 ): SingleRandomWinner {
   const _singleRandomWinnerAddress = singleRandomWinner.toHex()
   let _singleRandomWinner = SingleRandomWinner.load(_singleRandomWinnerAddress)
-
   if (!_singleRandomWinner) {
     // Create SingleRandomWinner
     _singleRandomWinner = new SingleRandomWinner(_singleRandomWinnerAddress)
@@ -36,12 +35,10 @@ export function loadOrCreateSingleRandomWinner(
 
 
     const ticket = createControlledToken(
-      'Ticket',
       _boundSingleRandomWinner.ticket(),
       Address.fromString(_singleRandomWinner.prizePool)
     )
     const sponsorship = createControlledToken(
-      'Sponsorship',
       _boundSingleRandomWinner.sponsorship(),
       Address.fromString(_singleRandomWinner.prizePool)
     )
@@ -51,8 +48,6 @@ export function loadOrCreateSingleRandomWinner(
 
 
     _singleRandomWinner.save()
-
-    // Start listening for events from the dynamically generated contract
   }
 
   return _singleRandomWinner as SingleRandomWinner

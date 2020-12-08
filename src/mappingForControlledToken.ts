@@ -1,76 +1,73 @@
-import { Address } from '@graphprotocol/graph-ts'
-
+import { Address, log, store } from '@graphprotocol/graph-ts'
+import {ONE, ZERO, ZERO_ADDRESS} from "./helpers/common"
 import {
   Transfer,
 } from '../generated/templates/ControlledToken/ControlledToken'
 
 import {
-  ControlledToken,
+  ControlledToken, ControlledTokenBalance,
 } from '../generated/schema'
 
-import {
-  decrementPlayerCount,
-  incrementPlayerCount,
-  decrementPlayerBalance,
-  incrementPlayerBalance,
-  decrementSponsorBalance,
-  incrementSponsorBalance,
-} from './helpers/prizePoolHelpers'
-
-import {
-  determineTransferType
-} from './helpers/controlledTokenHelpers'
-
-import { loadOrCreatePlayer } from './helpers/loadOrCreatePlayer'
-import { loadOrCreateSponsor } from './helpers/loadOrCreateSponsor'
-import { loadOrCreatePrizePool } from './helpers/loadOrCreatePrizePool'
 
 
 export function handleTransfer(event: Transfer): void {
-  const transferType = determineTransferType(event.params)
 
-  // Currently only handling user to user transfers here
-  // as depositing handles 'Minted' and withdraw handles 'Burned'
-  if (transferType != 'UserToUser') { return }
+  if(event.params.to.equals(event.params.from)){
+    log.warning("transfer to self! ",[])
+    return
+  }
+  
+  const burning = event.params.to.equals(Address.fromString(ZERO_ADDRESS))
+  const minting = event.params.from.equals(Address.fromString(ZERO_ADDRESS))
 
-  const token = ControlledToken.load(event.address.toHex())
-
-  // Tickets
-  if (token.type == 'Ticket') {
-    const _prizePool = loadOrCreatePrizePool(Address.fromString(token.prizePool))
-
-    const sendingPlayer = loadOrCreatePlayer(
-      Address.fromString(token.prizePool),
-      event.params.from
-    )
-    decrementPlayerBalance(sendingPlayer, event.params.value)
-    decrementPlayerCount(_prizePool, sendingPlayer)
-    sendingPlayer.save()
-
-    const receivingPlayer = loadOrCreatePlayer(
-      Address.fromString(token.prizePool),
-      event.params.to
-    )
-    const receivingPlayersCachedBalance = receivingPlayer.balance
-    incrementPlayerBalance(receivingPlayer, event.params.value)
-    incrementPlayerCount(_prizePool, receivingPlayersCachedBalance)
-    receivingPlayer.save()
+  const controlledToken = ControlledToken.load(event.address.toHex()) 
+  const existingNumberOfHolders = controlledToken.numberOfHolders
+  const existingTotalSupply = controlledToken.totalSupply
+  
+  if(!burning){
+    let toBalance = ControlledTokenBalance.load(generateCompositeId (event.params.to, event.address)) // controlledtokenbalance id =  (address, controlledToken)
+    
+    if(toBalance == null) {// create case 
+      toBalance = new ControlledTokenBalance(generateCompositeId (event.params.to, event.address))
+      controlledToken.numberOfHolders = existingNumberOfHolders.plus(ONE)  // if transfer is to NEW address then increment number of players
+  
+      toBalance.balance = event.params.value
+      toBalance.controlledToken = controlledToken.id // or event.address
+      toBalance.account = event.params.to.toHex()
+      
+    }
+    else{ //update case
+      toBalance.balance = toBalance.balance.plus(event.params.value)
+    }
+    toBalance.save()
+  }
+  else{ // burning decrease total supply
+    controlledToken.totalSupply = existingTotalSupply.minus(event.params.value)
   }
 
-  // Sponsorship
-  if (token.type == 'Sponsorship') {
-    const sendingSponsor = loadOrCreateSponsor(
-      Address.fromString(token.prizePool),
-      event.params.from
-    )
-    decrementSponsorBalance(sendingSponsor, event.params.value)
-    sendingSponsor.save()
-
-    const receivingSponsor = loadOrCreateSponsor(
-      Address.fromString(token.prizePool),
-      event.params.to
-    )
-    incrementSponsorBalance(receivingSponsor, event.params.value)
-    receivingSponsor.save()
+  // check if Transfer has depleted someones balance
+  if(!minting){ // not a mint event
+    let fromBalance = ControlledTokenBalance.load(generateCompositeId (event.params.from, event.address)) // must always exist
+    fromBalance.balance=fromBalance.balance.minus(event.params.value)
+    
+    // if the balance of the sending account is zero then remove it
+    if(fromBalance.balance.equals(ZERO)){
+      controlledToken.numberOfHolders = existingNumberOfHolders.minus(ONE) // if account balance depleted decrement player count
+      store.remove("ControlledTokenBalance", fromBalance.id)
+    }
+    else{
+      fromBalance.save()
+    }
+    
   }
+  else{ // we are minting
+    controlledToken.totalSupply = existingTotalSupply.plus(event.params.value)
+  }
+  controlledToken.save()
+}
+
+
+// helper --Move to helpers
+function generateCompositeId(address: Address, to: Address) : string {
+  return address.toHex() + "-" + to.toHex()
 }

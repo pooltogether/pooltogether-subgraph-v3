@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 
 import {
   PrizePool,
@@ -48,14 +48,9 @@ export function loadOrCreatePrizePool(
     _prizePool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
     _prizePool.liquidityCap = ZERO
 
-    _prizePool.totalSupply = ZERO
-    _prizePool.totalSponsorship = ZERO
-
     _prizePool.currentState = 'Opened'
     _prizePool.currentPrizeId = ONE
     _prizePool.prizesCount = ZERO
-
-    _prizePool.playerCount = ZERO
 
     _prizePool.cumulativePrizeGross = ZERO
     _prizePool.cumulativePrizeReserveFee = ZERO

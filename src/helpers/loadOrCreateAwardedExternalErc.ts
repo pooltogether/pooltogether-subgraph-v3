@@ -8,7 +8,6 @@ import {
   Prize,
   AwardedExternalErc20Token,
   AwardedExternalErc721Nft,
-  ExternalErc721Award,
   PrizeStrategy,
 } from '../../generated/schema'
 

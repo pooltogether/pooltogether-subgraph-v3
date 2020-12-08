@@ -35,7 +35,7 @@ import {
   // loadOrCreateDripTokenPlayer,
   loadOrCreateBalanceDripPlayer,
   loadOrCreateVolumeDripPlayer,
-} from './helpers/loadOrCreatePlayer'
+} from './helpers/loadOrCreateAccount'
 
 import {
   loadOrCreateComptroller,
@@ -52,43 +52,6 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   _comptroller.save()
 }
 
-
-///////////////////////////////////////
-// Drip Token Balances
-///////////////////////////////////////
-
-
-// export function handleDripTokenDripped(event: DripTokenDripped): void {
-//   const _comptrollerAddress:Address = event.address
-//   const _dripTokenAddress:Address = event.params.dripToken
-//   const _playerAddress:Address = event.params.user
-//   const _amount:BigInt = event.params.amount
-
-//   const _player:DripTokenPlayer = loadOrCreateDripTokenPlayer(
-//     _comptrollerAddress,
-//     _dripTokenAddress,
-//     _playerAddress,
-//   )
-
-//   _player.balance = _player.balance.plus(_amount)
-//   _player.save()
-// }
-
-// export function handleDripTokenClaimed(event: DripTokenClaimed): void {
-//   const _comptrollerAddress:Address = event.address
-//   const _dripTokenAddress:Address = event.params.dripToken
-//   const _playerAddress:Address = event.params.user
-//   const _amount:BigInt = event.params.amount
-
-//   const _player:DripTokenPlayer = loadOrCreateDripTokenPlayer(
-//     _comptrollerAddress,
-//     _dripTokenAddress,
-//     _playerAddress,
-//   )
-
-//   _player.balance = _player.balance.minus(_amount)
-//   _player.save()
-// }
 
 
 ///////////////////////////////////////
@@ -333,6 +296,8 @@ export function handleVolumeDripDripped(event: VolumeDripDripped): void {
   )
 
   _volumeDripPlayer.periodIndex = BigInt.fromI32(0) // HOW TO GET THIS?
+
+  
 
   _volumeDripPlayer.balance = _volumeDripPlayer.balance.plus(_amount)
   _volumeDripPlayer.save()

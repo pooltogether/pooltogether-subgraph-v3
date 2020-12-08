@@ -4,15 +4,11 @@ enum PrizePoolState {
   Awarded
 }
 
-enum ControlledTokenType {
-  Ticket
-  Sponsorship
-}
-
 enum PrizePoolType {
   Compound
   yVault
 }
+
 
 # ID: `${comptroller.address}`
 type Comptroller @entity {
@@ -49,10 +45,6 @@ type PrizePool @entity {
   timelockTotalSupply: BigInt!
   liquidityCap: BigInt!
 
-  playerCount: BigInt!
-  totalSupply: BigInt!
-  totalSponsorship: BigInt!
-
   cumulativePrizeGross: BigInt!
   cumulativePrizeReserveFee: BigInt!
   cumulativePrizeNet: BigInt!
@@ -66,8 +58,10 @@ type PrizePool @entity {
   tokenCreditRates: [CreditRate!]! @derivedFrom(field: "prizePool")
   tokenCreditBalances: [CreditBalance!]! @derivedFrom(field: "prizePool")
 
-  players: [Player!]! @derivedFrom(field: "prizePool")
-  sponsors: [Sponsor!]! @derivedFrom(field: "prizePool")
+
+  prizePoolAccounts: [PrizePoolAccount!]! @derivedFrom(field: "prizePool")
+
+  controlledTokens: [ControlledToken!]! @derivedFrom(field: "controller")
 }
 
 # ID: `${compoundPrizePool.address}`
@@ -80,12 +74,7 @@ type CompoundPrizePool @entity {
 # ID: `${prizeStrategy.address}`
 type PrizeStrategy @entity {
   id: ID!
-  prizePool: PrizePool
-
   singleRandomWinner: SingleRandomWinner
-
-  externalErc20Awards: [ExternalErc20Award!]! @derivedFrom(field: "prizeStrategy")
-  externalErc721Awards: [ExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")
 }
 
 # ID: `${singleRandomWinner.address}`   (will be same address as PrizeStrategy)
@@ -103,6 +92,9 @@ type SingleRandomWinner @entity {
   prizePeriodSeconds: BigInt!
   prizePeriodStartedAt: BigInt!
   prizePeriodEndAt: BigInt!
+
+  externalErc20Awards: [ExternalErc20Award!]! @derivedFrom(field: "prizeStrategy")
+  externalErc721Awards: [ExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")
 }
 
 # ID: `${prizePool.address}-${prizeCount}`
@@ -164,12 +156,24 @@ type ControlledToken @entity {
   id: ID!
   prizePool: PrizePool!
 
-  type: ControlledTokenType!
   name: String!
   symbol: String!
   decimals: BigInt
 
+  controller: PrizePool
+
   totalSupply: BigInt!
+
+  numberOfHolders: BigInt!
+
+  balances: [ControlledTokenBalance!]! @derivedFrom(field:"controlledToken")
+}
+
+type ControlledTokenBalance @entity {
+  id: ID! # composite key of (address, controlledToken)
+  account: Account!
+  controlledToken: ControlledToken!
+  balance: BigInt
 }
 
 # ID: `${prizeStrategy.address}-${token.address}`
@@ -182,8 +186,11 @@ type ExternalErc20Award @entity {
   symbol: String!
   decimals: BigInt
   
-  prizeStrategy: PrizeStrategy
+  prizeStrategy: SingleRandomWinner
 }
+
+
+
 
 # ID: `${prizeStrategy.address}-${token.address}`
 # dynamically generated type, not mapped to a specific contract
@@ -191,31 +198,30 @@ type ExternalErc721Award @entity {
   id: ID!
   address: Bytes!
   tokenIds: [BigInt!]
-  prizeStrategy: PrizeStrategy
+  prizeStrategy: SingleRandomWinner
 }
 
-# ID: `${prizePool.address}-${player.address}`
-# dynamically generated type, not mapped to a specific contract
-type Player @entity {
-  id: ID!
-  prizePool: PrizePool!
-  address: Bytes!
+# join table 
+type PrizePoolAccount @entity{
+  id: ID! #composite prizerpool id - accountid
 
-  balance: BigInt!
+  prizePool: PrizePool! 
+  account: Account!
+
+  # address specific fields
   timelockedBalance: BigInt!
   unlockTimestamp: BigInt!
   cumulativeWinnings: BigInt!
+
 }
 
-# ID: `${prizePool.address}-${sponsor.address}`
-# dynamically generated type, not mapped to a specific contract
-type Sponsor @entity {
+type Account @entity {
   id: ID!
-  prizePool: PrizePool!
 
-  address: Bytes!
-  balance: BigInt!
+  prizePoolAccounts: [PrizePoolAccount!]! @derivedFrom(field: "account")
+  controlledTokenBalances: [ControlledTokenBalance!] @derivedFrom(field: "account")
 }
+
 
 
 # ID: `${prizePool.address}-${controlledToken.address}`
@@ -248,7 +254,7 @@ type DripTokenPlayer @entity {
   address: Bytes!
 
   # claimable balance
-  # balance: BigInt!
+   balance: BigInt!
 }
 
 # ID: `${balanceDripId}-${player.address}`

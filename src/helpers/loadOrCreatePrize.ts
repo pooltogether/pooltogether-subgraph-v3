@@ -1,3 +1,4 @@
+import { log } from '@graphprotocol/graph-ts'
 import { Prize } from '../../generated/schema'
 
 import { prizeId } from './idTemplates'

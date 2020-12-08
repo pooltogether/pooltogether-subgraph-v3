@@ -13,7 +13,7 @@ The official PoolTogether v3 subgraph.
 #### Quick-use:
 
 ```sh
-$ yarn clean && yarn prepare:local && graph codegen subgraph.local.yaml && graph build subgraph.local.yaml && yarn create:local && yarn deploy:local
+$ yarn clean && yarn prepare:local && graph gen:local && yarn create:local && yarn deploy:local
 ```
 
 ###### For Kovan:
@@ -53,14 +53,30 @@ $ ./setup.sh
 4. Spin up the node
 
 ```bash
-$ docker-compose up
+$ sudo docker-compose up
 ```
+
+###### Deploying the PoolTogether Contracts Locally
+
+Make sure you've already deployed the PoolTogether contracts.  If you haven't done so, check out the [contracts repo](https://github.com/pooltogether/pooltogether-contracts-v3).  
+
+1. Change the `localhost` target url to 0.0.0.0:8545 in `builder.network.js`
+
+2. Run `yarn` to install the contract repo dependencies.
+
+3. Start a local ganache-cli instance using `ganache-cli -h 0.0.0.0 --chainId 31337`. This facilates the local subgraph docker node to observe the local blockchain instance.
+
+4. In a different terminal window, run `yarn deploy localhost` to compile and deploy the smart contracts to the local ganache-cli blockchain instance.
+
+5. In a different terminal window, run `yarn console localhost` to interact with the contracts.
+
+
 
 ###### Deploying the Subgraph Locally
 
-Make sure you've already deployed the PoolTogether contracts.  If you haven't done so, check out the [mock project](https://github.com/pooltogether/pooltogether-contracts-mock).  Once the contracts are deployed, you can set up the subgraph:
+Once the contracts are deployed, you can now set up the subgraph:
 
-1. Install deps
+1. In this subgraph repo, install deps
 
 ```bash
 $ yarn
@@ -72,34 +88,7 @@ $ yarn
 $ yarn codegen
 ```
 
-3. Create a new local manifest called `subgraph.local.yaml`
+3. Update `networks/local.json` to the correct contract addresses deployed locally
 
-```bash
-$ cp subgraph.yaml subgraph.local.yaml
-```
+4. Run `yarn clean && yarn prepare:local && graph gen:local && yarn create:local && yarn deploy:local`
 
-4. Update `subgraph.local.yaml` to the correct contract address (network doesn't matter)
-
-```yaml
-// subgraph.local.yaml
-dataSources:
-  - kind: ethereum/contract
-    name: CompoundPrizePoolProxyFactory
-    network: mainnet
-    source:
-      address: "<Your locally deployed address here>"
-      abi: CompoundPrizePoolProxyFactory
-...
-```
-
-5. Allocate the subgraph in the local Graph node
-
-```bash
-$ yarn create-local
-```
-
-6. Update the local subgraph
-
-```bash
-$ yarn deploy-local
-```

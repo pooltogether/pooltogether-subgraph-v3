@@ -15,8 +15,6 @@ export function loadOrCreateCompoundPrizePool(
   prizePool: Address
 ): CompoundPrizePool {
   let _compoundPrizePool = CompoundPrizePool.load(prizePool.toHex())
-  log.warning('CPP event.params.proxy {}', [prizePool.toHexString()])
-
   if (!_compoundPrizePool) {
     _compoundPrizePool = new CompoundPrizePool(prizePool.toHex())
 

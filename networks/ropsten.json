@@ -1,10 +1,10 @@
 {
   "network": "ropsten",
-  "compoundPrizePoolProxyFactory": {
+  "compoundPrizePoolBuilder": {
     "address": "0x335d7C74b174Edb2a2aB9717A2f2b42D0EC1b0c3",
     "startBlock": "8911521"
   },
-  "singleRandomWinnerProxyFactory": {
+  "singleRandomWinnerBuilder": {
     "address": "0xc0dA19bB3BC4644399ec85808d1ea52cD9f01bB3",
     "startBlock": "8911520"
   },
