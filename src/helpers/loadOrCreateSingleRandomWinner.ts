@@ -1,4 +1,4 @@
-import { Address } from '@graphprotocol/graph-ts'
+import { Address, log } from '@graphprotocol/graph-ts'
 
 import {
   SingleRandomWinner,
@@ -38,10 +38,12 @@ export function loadOrCreateSingleRandomWinner(
       _boundSingleRandomWinner.ticket(),
       Address.fromString(_singleRandomWinner.prizePool)
     )
+    log.warning("CREATED ticket controlled token at {} with PrizeStrategyId {}", [ticket.id, _singleRandomWinner.id])
     const sponsorship = createControlledToken(
       _boundSingleRandomWinner.sponsorship(),
       Address.fromString(_singleRandomWinner.prizePool)
     )
+    log.warning("CREATED sponsorship controlled token at {} with PrizeStrategyId {}", [sponsorship.id, _singleRandomWinner.id])
 
     _singleRandomWinner.ticket = ticket.id
     _singleRandomWinner.sponsorship = sponsorship.id

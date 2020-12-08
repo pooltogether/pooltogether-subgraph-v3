@@ -160,7 +160,7 @@ type ControlledToken @entity {
   symbol: String!
   decimals: BigInt
 
-  controller: PrizePool
+  controller: PrizePool # should this be ! ??
 
   totalSupply: BigInt!
 

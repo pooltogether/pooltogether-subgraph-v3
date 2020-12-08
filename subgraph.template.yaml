@@ -226,8 +226,6 @@ templates:
       entities:
         - ControlledToken
       abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
         - name: ControlledToken
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:

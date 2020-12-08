@@ -312,33 +312,6 @@ export class PrizePool extends Entity {
     this.set("liquidityCap", Value.fromBigInt(value));
   }
 
-  get playerCount(): BigInt {
-    let value = this.get("playerCount");
-    return value.toBigInt();
-  }
-
-  set playerCount(value: BigInt) {
-    this.set("playerCount", Value.fromBigInt(value));
-  }
-
-  get totalSupply(): BigInt {
-    let value = this.get("totalSupply");
-    return value.toBigInt();
-  }
-
-  set totalSupply(value: BigInt) {
-    this.set("totalSupply", Value.fromBigInt(value));
-  }
-
-  get totalSponsorship(): BigInt {
-    let value = this.get("totalSponsorship");
-    return value.toBigInt();
-  }
-
-  set totalSponsorship(value: BigInt) {
-    this.set("totalSponsorship", Value.fromBigInt(value));
-  }
-
   get cumulativePrizeGross(): BigInt {
     let value = this.get("cumulativePrizeGross");
     return value.toBigInt();
@@ -420,22 +393,22 @@ export class PrizePool extends Entity {
     this.set("tokenCreditBalances", Value.fromStringArray(value));
   }
 
-  get players(): Array<string> {
-    let value = this.get("players");
+  get prizePoolAccounts(): Array<string> {
+    let value = this.get("prizePoolAccounts");
     return value.toStringArray();
   }
 
-  set players(value: Array<string>) {
-    this.set("players", Value.fromStringArray(value));
+  set prizePoolAccounts(value: Array<string>) {
+    this.set("prizePoolAccounts", Value.fromStringArray(value));
   }
 
-  get sponsors(): Array<string> {
-    let value = this.get("sponsors");
+  get controlledTokens(): Array<string> {
+    let value = this.get("controlledTokens");
     return value.toStringArray();
   }
 
-  set sponsors(value: Array<string>) {
-    this.set("sponsors", Value.fromStringArray(value));
+  set controlledTokens(value: Array<string>) {
+    this.set("controlledTokens", Value.fromStringArray(value));
   }
 }
 
@@ -517,23 +490,6 @@ export class PrizeStrategy extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get prizePool(): string | null {
-    let value = this.get("prizePool");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set prizePool(value: string | null) {
-    if (value === null) {
-      this.unset("prizePool");
-    } else {
-      this.set("prizePool", Value.fromString(value as string));
-    }
-  }
-
   get singleRandomWinner(): string | null {
     let value = this.get("singleRandomWinner");
     if (value === null) {
@@ -549,24 +505,6 @@ export class PrizeStrategy extends Entity {
     } else {
       this.set("singleRandomWinner", Value.fromString(value as string));
     }
-  }
-
-  get externalErc20Awards(): Array<string> {
-    let value = this.get("externalErc20Awards");
-    return value.toStringArray();
-  }
-
-  set externalErc20Awards(value: Array<string>) {
-    this.set("externalErc20Awards", Value.fromStringArray(value));
-  }
-
-  get externalErc721Awards(): Array<string> {
-    let value = this.get("externalErc721Awards");
-    return value.toStringArray();
-  }
-
-  set externalErc721Awards(value: Array<string>) {
-    this.set("externalErc721Awards", Value.fromStringArray(value));
   }
 }
 
@@ -727,6 +665,24 @@ export class SingleRandomWinner extends Entity {
 
   set prizePeriodEndAt(value: BigInt) {
     this.set("prizePeriodEndAt", Value.fromBigInt(value));
+  }
+
+  get externalErc20Awards(): Array<string> {
+    let value = this.get("externalErc20Awards");
+    return value.toStringArray();
+  }
+
+  set externalErc20Awards(value: Array<string>) {
+    this.set("externalErc20Awards", Value.fromStringArray(value));
+  }
+
+  get externalErc721Awards(): Array<string> {
+    let value = this.get("externalErc721Awards");
+    return value.toStringArray();
+  }
+
+  set externalErc721Awards(value: Array<string>) {
+    this.set("externalErc721Awards", Value.fromStringArray(value));
   }
 }
 
@@ -1204,15 +1160,6 @@ export class ControlledToken extends Entity {
     this.set("prizePool", Value.fromString(value));
   }
 
-  get type(): string {
-    let value = this.get("type");
-    return value.toString();
-  }
-
-  set type(value: string) {
-    this.set("type", Value.fromString(value));
-  }
-
   get name(): string {
     let value = this.get("name");
     return value.toString();
@@ -1248,6 +1195,23 @@ export class ControlledToken extends Entity {
     }
   }
 
+  get controller(): string | null {
+    let value = this.get("controller");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set controller(value: string | null) {
+    if (value === null) {
+      this.unset("controller");
+    } else {
+      this.set("controller", Value.fromString(value as string));
+    }
+  }
+
   get totalSupply(): BigInt {
     let value = this.get("totalSupply");
     return value.toBigInt();
@@ -1255,6 +1219,96 @@ export class ControlledToken extends Entity {
 
   set totalSupply(value: BigInt) {
     this.set("totalSupply", Value.fromBigInt(value));
+  }
+
+  get numberOfHolders(): BigInt {
+    let value = this.get("numberOfHolders");
+    return value.toBigInt();
+  }
+
+  set numberOfHolders(value: BigInt) {
+    this.set("numberOfHolders", Value.fromBigInt(value));
+  }
+
+  get balances(): Array<string> {
+    let value = this.get("balances");
+    return value.toStringArray();
+  }
+
+  set balances(value: Array<string>) {
+    this.set("balances", Value.fromStringArray(value));
+  }
+}
+
+export class ControlledTokenBalance extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save ControlledTokenBalance entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save ControlledTokenBalance entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("ControlledTokenBalance", id.toString(), this);
+  }
+
+  static load(id: string): ControlledTokenBalance | null {
+    return store.get(
+      "ControlledTokenBalance",
+      id
+    ) as ControlledTokenBalance | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get account(): string {
+    let value = this.get("account");
+    return value.toString();
+  }
+
+  set account(value: string) {
+    this.set("account", Value.fromString(value));
+  }
+
+  get controlledToken(): string {
+    let value = this.get("controlledToken");
+    return value.toString();
+  }
+
+  set controlledToken(value: string) {
+    this.set("controlledToken", Value.fromString(value));
+  }
+
+  get balance(): BigInt | null {
+    let value = this.get("balance");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set balance(value: BigInt | null) {
+    if (value === null) {
+      this.unset("balance");
+    } else {
+      this.set("balance", Value.fromBigInt(value as BigInt));
+    }
   }
 }
 
@@ -1424,7 +1478,7 @@ export class ExternalErc721Award extends Entity {
   }
 }
 
-export class Player extends Entity {
+export class PrizePoolAccount extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -1432,17 +1486,17 @@ export class Player extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Player entity without an ID");
+    assert(id !== null, "Cannot save PrizePoolAccount entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save Player entity with non-string ID. " +
+      "Cannot save PrizePoolAccount entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("Player", id.toString(), this);
+    store.set("PrizePoolAccount", id.toString(), this);
   }
 
-  static load(id: string): Player | null {
-    return store.get("Player", id) as Player | null;
+  static load(id: string): PrizePoolAccount | null {
+    return store.get("PrizePoolAccount", id) as PrizePoolAccount | null;
   }
 
   get id(): string {
@@ -1463,22 +1517,13 @@ export class Player extends Entity {
     this.set("prizePool", Value.fromString(value));
   }
 
-  get address(): Bytes {
-    let value = this.get("address");
-    return value.toBytes();
+  get account(): string {
+    let value = this.get("account");
+    return value.toString();
   }
 
-  set address(value: Bytes) {
-    this.set("address", Value.fromBytes(value));
-  }
-
-  get balance(): BigInt {
-    let value = this.get("balance");
-    return value.toBigInt();
-  }
-
-  set balance(value: BigInt) {
-    this.set("balance", Value.fromBigInt(value));
+  set account(value: string) {
+    this.set("account", Value.fromString(value));
   }
 
   get timelockedBalance(): BigInt {
@@ -1509,7 +1554,7 @@ export class Player extends Entity {
   }
 }
 
-export class Sponsor extends Entity {
+export class Account extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -1517,17 +1562,17 @@ export class Sponsor extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save Sponsor entity without an ID");
+    assert(id !== null, "Cannot save Account entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save Sponsor entity with non-string ID. " +
+      "Cannot save Account entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("Sponsor", id.toString(), this);
+    store.set("Account", id.toString(), this);
   }
 
-  static load(id: string): Sponsor | null {
-    return store.get("Sponsor", id) as Sponsor | null;
+  static load(id: string): Account | null {
+    return store.get("Account", id) as Account | null;
   }
 
   get id(): string {
@@ -1539,31 +1584,33 @@ export class Sponsor extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get prizePool(): string {
-    let value = this.get("prizePool");
-    return value.toString();
+  get prizePoolAccounts(): Array<string> {
+    let value = this.get("prizePoolAccounts");
+    return value.toStringArray();
   }
 
-  set prizePool(value: string) {
-    this.set("prizePool", Value.fromString(value));
+  set prizePoolAccounts(value: Array<string>) {
+    this.set("prizePoolAccounts", Value.fromStringArray(value));
   }
 
-  get address(): Bytes {
-    let value = this.get("address");
-    return value.toBytes();
+  get controlledTokenBalances(): Array<string> | null {
+    let value = this.get("controlledTokenBalances");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set address(value: Bytes) {
-    this.set("address", Value.fromBytes(value));
-  }
-
-  get balance(): BigInt {
-    let value = this.get("balance");
-    return value.toBigInt();
-  }
-
-  set balance(value: BigInt) {
-    this.set("balance", Value.fromBigInt(value));
+  set controlledTokenBalances(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("controlledTokenBalances");
+    } else {
+      this.set(
+        "controlledTokenBalances",
+        Value.fromStringArray(value as Array<string>)
+      );
+    }
   }
 }
 
@@ -1763,6 +1810,15 @@ export class DripTokenPlayer extends Entity {
 
   set address(value: Bytes) {
     this.set("address", Value.fromBytes(value));
+  }
+
+  get balance(): BigInt {
+    let value = this.get("balance");
+    return value.toBigInt();
+  }
+
+  set balance(value: BigInt) {
+    this.set("balance", Value.fromBigInt(value));
   }
 }
 
