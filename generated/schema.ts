@@ -120,7 +120,7 @@ export class PrizePool extends Entity {
 
   get owner(): Bytes | null {
     let value = this.get("owner");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -137,7 +137,7 @@ export class PrizePool extends Entity {
 
   get reserveRegistry(): Bytes | null {
     let value = this.get("reserveRegistry");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -154,7 +154,7 @@ export class PrizePool extends Entity {
 
   get trustedForwarder(): Bytes | null {
     let value = this.get("trustedForwarder");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -171,7 +171,7 @@ export class PrizePool extends Entity {
 
   get prizeStrategy(): string | null {
     let value = this.get("prizeStrategy");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -188,7 +188,7 @@ export class PrizePool extends Entity {
 
   get prizePoolType(): string | null {
     let value = this.get("prizePoolType");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -205,7 +205,7 @@ export class PrizePool extends Entity {
 
   get compoundPrizePool(): string | null {
     let value = this.get("compoundPrizePool");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -240,7 +240,7 @@ export class PrizePool extends Entity {
 
   get underlyingCollateralDecimals(): BigInt | null {
     let value = this.get("underlyingCollateralDecimals");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -444,7 +444,7 @@ export class CompoundPrizePool extends Entity {
 
   get cToken(): Bytes | null {
     let value = this.get("cToken");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -492,7 +492,7 @@ export class PrizeStrategy extends Entity {
 
   get singleRandomWinner(): string | null {
     let value = this.get("singleRandomWinner");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -540,7 +540,7 @@ export class SingleRandomWinner extends Entity {
 
   get owner(): Bytes | null {
     let value = this.get("owner");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -557,7 +557,7 @@ export class SingleRandomWinner extends Entity {
 
   get tokenListener(): string | null {
     let value = this.get("tokenListener");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -574,7 +574,7 @@ export class SingleRandomWinner extends Entity {
 
   get prizePool(): string | null {
     let value = this.get("prizePool");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -591,7 +591,7 @@ export class SingleRandomWinner extends Entity {
 
   get rng(): Bytes | null {
     let value = this.get("rng");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -608,7 +608,7 @@ export class SingleRandomWinner extends Entity {
 
   get ticket(): string | null {
     let value = this.get("ticket");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -625,7 +625,7 @@ export class SingleRandomWinner extends Entity {
 
   get sponsorship(): string | null {
     let value = this.get("sponsorship");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -727,7 +727,7 @@ export class Prize extends Entity {
 
   get awardStartOperator(): Bytes | null {
     let value = this.get("awardStartOperator");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -744,7 +744,7 @@ export class Prize extends Entity {
 
   get awardedOperator(): Bytes | null {
     let value = this.get("awardedOperator");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytes();
@@ -761,7 +761,7 @@ export class Prize extends Entity {
 
   get prizePeriodStartedTimestamp(): BigInt | null {
     let value = this.get("prizePeriodStartedTimestamp");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -781,7 +781,7 @@ export class Prize extends Entity {
 
   get lockBlock(): BigInt | null {
     let value = this.get("lockBlock");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -798,7 +798,7 @@ export class Prize extends Entity {
 
   get awardedBlock(): BigInt | null {
     let value = this.get("awardedBlock");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -815,7 +815,7 @@ export class Prize extends Entity {
 
   get awardedTimestamp(): BigInt | null {
     let value = this.get("awardedTimestamp");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -832,7 +832,7 @@ export class Prize extends Entity {
 
   get rngRequestId(): BigInt | null {
     let value = this.get("rngRequestId");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -849,7 +849,7 @@ export class Prize extends Entity {
 
   get randomNumber(): BigInt | null {
     let value = this.get("randomNumber");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -866,7 +866,7 @@ export class Prize extends Entity {
 
   get amount(): BigInt | null {
     let value = this.get("amount");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -883,7 +883,7 @@ export class Prize extends Entity {
 
   get totalTicketSupply(): BigInt | null {
     let value = this.get("totalTicketSupply");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -900,7 +900,7 @@ export class Prize extends Entity {
 
   get winners(): Array<Bytes> | null {
     let value = this.get("winners");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBytesArray();
@@ -999,7 +999,7 @@ export class AwardedExternalErc20Token extends Entity {
 
   get decimals(): BigInt | null {
     let value = this.get("decimals");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1016,7 +1016,7 @@ export class AwardedExternalErc20Token extends Entity {
 
   get balanceAwarded(): BigInt | null {
     let value = this.get("balanceAwarded");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1088,7 +1088,7 @@ export class AwardedExternalErc721Nft extends Entity {
 
   get tokenIds(): Array<BigInt> | null {
     let value = this.get("tokenIds");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigIntArray();
@@ -1105,7 +1105,7 @@ export class AwardedExternalErc721Nft extends Entity {
 
   get prize(): string | null {
     let value = this.get("prize");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1180,7 +1180,7 @@ export class ControlledToken extends Entity {
 
   get decimals(): BigInt | null {
     let value = this.get("decimals");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1197,7 +1197,7 @@ export class ControlledToken extends Entity {
 
   get controller(): string | null {
     let value = this.get("controller");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1296,7 +1296,7 @@ export class ControlledTokenBalance extends Entity {
 
   get balance(): BigInt | null {
     let value = this.get("balance");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1371,7 +1371,7 @@ export class ExternalErc20Award extends Entity {
 
   get decimals(): BigInt | null {
     let value = this.get("decimals");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1388,7 +1388,7 @@ export class ExternalErc20Award extends Entity {
 
   get prizeStrategy(): string | null {
     let value = this.get("prizeStrategy");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1445,7 +1445,7 @@ export class ExternalErc721Award extends Entity {
 
   get tokenIds(): Array<BigInt> | null {
     let value = this.get("tokenIds");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigIntArray();
@@ -1462,7 +1462,7 @@ export class ExternalErc721Award extends Entity {
 
   get prizeStrategy(): string | null {
     let value = this.get("prizeStrategy");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toString();
@@ -1595,7 +1595,7 @@ export class Account extends Entity {
 
   get controlledTokenBalances(): Array<string> | null {
     let value = this.get("controlledTokenBalances");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toStringArray();
@@ -1713,7 +1713,7 @@ export class CreditBalance extends Entity {
 
   get balance(): BigInt | null {
     let value = this.get("balance");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1730,7 +1730,7 @@ export class CreditBalance extends Entity {
 
   get timestamp(): BigInt | null {
     let value = this.get("timestamp");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1939,7 +1939,7 @@ export class BalanceDrip extends Entity {
 
   get dripRatePerSecond(): BigInt | null {
     let value = this.get("dripRatePerSecond");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1956,7 +1956,7 @@ export class BalanceDrip extends Entity {
 
   get exchangeRateMantissa(): BigInt | null {
     let value = this.get("exchangeRateMantissa");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -1973,7 +1973,7 @@ export class BalanceDrip extends Entity {
 
   get timestamp(): BigInt | null {
     let value = this.get("timestamp");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2124,7 +2124,7 @@ export class VolumeDripPeriod extends Entity {
 
   get totalSupply(): BigInt | null {
     let value = this.get("totalSupply");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2141,7 +2141,7 @@ export class VolumeDripPeriod extends Entity {
 
   get dripAmount(): BigInt | null {
     let value = this.get("dripAmount");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2158,7 +2158,7 @@ export class VolumeDripPeriod extends Entity {
 
   get endTime(): BigInt | null {
     let value = this.get("endTime");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2260,7 +2260,7 @@ export class VolumeDrip extends Entity {
 
   get periodSeconds(): BigInt | null {
     let value = this.get("periodSeconds");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2277,7 +2277,7 @@ export class VolumeDrip extends Entity {
 
   get dripAmount(): BigInt | null {
     let value = this.get("dripAmount");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();
@@ -2294,7 +2294,7 @@ export class VolumeDrip extends Entity {
 
   get periodCount(): BigInt | null {
     let value = this.get("periodCount");
-    if (value === null) {
+    if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
       return value.toBigInt();

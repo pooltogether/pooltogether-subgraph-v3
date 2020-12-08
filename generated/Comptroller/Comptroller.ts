@@ -583,7 +583,7 @@ export class Comptroller extends ethereum.SmartContract {
   ): Array<Comptroller__balanceOfClaimsResultValue0Struct> {
     let result = super.call(
       "balanceOfClaims",
-      "balanceOfClaims(address,address[]):(tuple[])",
+      "balanceOfClaims(address,address[]):((address,uint256)[])",
       [
         ethereum.Value.fromAddress(user),
         ethereum.Value.fromAddressArray(dripTokens)
@@ -603,7 +603,7 @@ export class Comptroller extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "balanceOfClaims",
-      "balanceOfClaims(address,address[]):(tuple[])",
+      "balanceOfClaims(address,address[]):((address,uint256)[])",
       [
         ethereum.Value.fromAddress(user),
         ethereum.Value.fromAddressArray(dripTokens)
@@ -929,6 +929,29 @@ export class Comptroller extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  supportsInterface(interfaceId: Bytes): boolean {
+    let result = super.call(
+      "supportsInterface",
+      "supportsInterface(bytes4):(bool)",
+      [ethereum.Value.fromFixedBytes(interfaceId)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_supportsInterface(interfaceId: Bytes): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "supportsInterface",
+      "supportsInterface(bytes4):(bool)",
+      [ethereum.Value.fromFixedBytes(interfaceId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   updateAndClaimDrips(
     pairs: Array<Comptroller__updateAndClaimDripsInputPairsStruct>,
     user: Address,
@@ -936,7 +959,7 @@ export class Comptroller extends ethereum.SmartContract {
   ): Array<Comptroller__updateAndClaimDripsResultValue0Struct> {
     let result = super.call(
       "updateAndClaimDrips",
-      "updateAndClaimDrips(tuple[],address,address[]):(tuple[])",
+      "updateAndClaimDrips((address,address)[],address,address[]):((address,uint256)[])",
       [
         ethereum.Value.fromTupleArray(pairs),
         ethereum.Value.fromAddress(user),
@@ -958,7 +981,7 @@ export class Comptroller extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "updateAndClaimDrips",
-      "updateAndClaimDrips(tuple[],address,address[]):(tuple[])",
+      "updateAndClaimDrips((address,address)[],address,address[]):((address,uint256)[])",
       [
         ethereum.Value.fromTupleArray(pairs),
         ethereum.Value.fromAddress(user),
@@ -983,7 +1006,7 @@ export class Comptroller extends ethereum.SmartContract {
   ): Array<Comptroller__updateDripsResultValue0Struct> {
     let result = super.call(
       "updateDrips",
-      "updateDrips(tuple[],address,address[]):(tuple[])",
+      "updateDrips((address,address)[],address,address[]):((address,uint256)[])",
       [
         ethereum.Value.fromTupleArray(pairs),
         ethereum.Value.fromAddress(user),
@@ -1001,7 +1024,7 @@ export class Comptroller extends ethereum.SmartContract {
   ): ethereum.CallResult<Array<Comptroller__updateDripsResultValue0Struct>> {
     let result = super.tryCall(
       "updateDrips",
-      "updateDrips(tuple[],address,address[]):(tuple[])",
+      "updateDrips((address,address)[],address,address[]):((address,uint256)[])",
       [
         ethereum.Value.fromTupleArray(pairs),
         ethereum.Value.fromAddress(user),

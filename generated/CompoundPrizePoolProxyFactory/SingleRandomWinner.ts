@@ -86,6 +86,66 @@ export class ExternalErc721AwardRemoved__Params {
   }
 }
 
+export class Initialized extends ethereum.Event {
+  get params(): Initialized__Params {
+    return new Initialized__Params(this);
+  }
+}
+
+export class Initialized__Params {
+  _event: Initialized;
+
+  constructor(event: Initialized) {
+    this._event = event;
+  }
+
+  get trustedForwarder(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get prizePeriodStart(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get prizePeriodSeconds(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get prizePool(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
+
+  get ticket(): Address {
+    return this._event.parameters[4].value.toAddress();
+  }
+
+  get sponsorship(): Address {
+    return this._event.parameters[5].value.toAddress();
+  }
+
+  get rng(): Address {
+    return this._event.parameters[6].value.toAddress();
+  }
+
+  get externalErc20Awards(): Array<Address> {
+    return this._event.parameters[7].value.toAddressArray();
+  }
+}
+
+export class NoWinner extends ethereum.Event {
+  get params(): NoWinner__Params {
+    return new NoWinner__Params(this);
+  }
+}
+
+export class NoWinner__Params {
+  _event: NoWinner;
+
+  constructor(event: NoWinner) {
+    this._event = event;
+  }
+}
+
 export class OwnershipTransferred extends ethereum.Event {
   get params(): OwnershipTransferred__Params {
     return new OwnershipTransferred__Params(this);
@@ -105,6 +165,54 @@ export class OwnershipTransferred__Params {
 
   get newOwner(): Address {
     return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class PeriodicPrizeStrategyListenerSet extends ethereum.Event {
+  get params(): PeriodicPrizeStrategyListenerSet__Params {
+    return new PeriodicPrizeStrategyListenerSet__Params(this);
+  }
+}
+
+export class PeriodicPrizeStrategyListenerSet__Params {
+  _event: PeriodicPrizeStrategyListenerSet;
+
+  constructor(event: PeriodicPrizeStrategyListenerSet) {
+    this._event = event;
+  }
+
+  get periodicPrizeStrategyListener(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class PrizePoolAwardCancelled extends ethereum.Event {
+  get params(): PrizePoolAwardCancelled__Params {
+    return new PrizePoolAwardCancelled__Params(this);
+  }
+}
+
+export class PrizePoolAwardCancelled__Params {
+  _event: PrizePoolAwardCancelled;
+
+  constructor(event: PrizePoolAwardCancelled) {
+    this._event = event;
+  }
+
+  get operator(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get prizePool(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get rngRequestId(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get rngLockBlock(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -581,6 +689,29 @@ export class SingleRandomWinner extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  periodicPrizeStrategyListener(): Address {
+    let result = super.call(
+      "periodicPrizeStrategyListener",
+      "periodicPrizeStrategyListener():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_periodicPrizeStrategyListener(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "periodicPrizeStrategyListener",
+      "periodicPrizeStrategyListener():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   prizePeriodEndAt(): BigInt {
     let result = super.call(
       "prizePeriodEndAt",
@@ -741,6 +872,29 @@ export class SingleRandomWinner extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  supportsInterface(interfaceId: Bytes): boolean {
+    let result = super.call(
+      "supportsInterface",
+      "supportsInterface(bytes4):(bool)",
+      [ethereum.Value.fromFixedBytes(interfaceId)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_supportsInterface(interfaceId: Bytes): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "supportsInterface",
+      "supportsInterface(bytes4):(bool)",
+      [ethereum.Value.fromFixedBytes(interfaceId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   ticket(): Address {
     let result = super.call("ticket", "ticket():(address)", []);
 
@@ -848,6 +1002,36 @@ export class AddExternalErc20AwardCall__Outputs {
   _call: AddExternalErc20AwardCall;
 
   constructor(call: AddExternalErc20AwardCall) {
+    this._call = call;
+  }
+}
+
+export class AddExternalErc20AwardsCall extends ethereum.Call {
+  get inputs(): AddExternalErc20AwardsCall__Inputs {
+    return new AddExternalErc20AwardsCall__Inputs(this);
+  }
+
+  get outputs(): AddExternalErc20AwardsCall__Outputs {
+    return new AddExternalErc20AwardsCall__Outputs(this);
+  }
+}
+
+export class AddExternalErc20AwardsCall__Inputs {
+  _call: AddExternalErc20AwardsCall;
+
+  constructor(call: AddExternalErc20AwardsCall) {
+    this._call = call;
+  }
+
+  get _externalErc20s(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+}
+
+export class AddExternalErc20AwardsCall__Outputs {
+  _call: AddExternalErc20AwardsCall;
+
+  constructor(call: AddExternalErc20AwardsCall) {
     this._call = call;
   }
 }
@@ -970,6 +1154,32 @@ export class BeforeTokenTransferCall__Outputs {
   }
 }
 
+export class CancelAwardCall extends ethereum.Call {
+  get inputs(): CancelAwardCall__Inputs {
+    return new CancelAwardCall__Inputs(this);
+  }
+
+  get outputs(): CancelAwardCall__Outputs {
+    return new CancelAwardCall__Outputs(this);
+  }
+}
+
+export class CancelAwardCall__Inputs {
+  _call: CancelAwardCall;
+
+  constructor(call: CancelAwardCall) {
+    this._call = call;
+  }
+}
+
+export class CancelAwardCall__Outputs {
+  _call: CancelAwardCall;
+
+  constructor(call: CancelAwardCall) {
+    this._call = call;
+  }
+}
+
 export class CompleteAwardCall extends ethereum.Call {
   get inputs(): CompleteAwardCall__Inputs {
     return new CompleteAwardCall__Inputs(this);
@@ -1041,7 +1251,7 @@ export class InitializeCall__Inputs {
     return this._call.inputValues[6].value.toAddress();
   }
 
-  get _externalErc20s(): Array<Address> {
+  get externalErc20Awards(): Array<Address> {
     return this._call.inputValues[7].value.toAddressArray();
   }
 }
@@ -1144,6 +1354,36 @@ export class RenounceOwnershipCall__Outputs {
   _call: RenounceOwnershipCall;
 
   constructor(call: RenounceOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class SetPeriodicPrizeStrategyListenerCall extends ethereum.Call {
+  get inputs(): SetPeriodicPrizeStrategyListenerCall__Inputs {
+    return new SetPeriodicPrizeStrategyListenerCall__Inputs(this);
+  }
+
+  get outputs(): SetPeriodicPrizeStrategyListenerCall__Outputs {
+    return new SetPeriodicPrizeStrategyListenerCall__Outputs(this);
+  }
+}
+
+export class SetPeriodicPrizeStrategyListenerCall__Inputs {
+  _call: SetPeriodicPrizeStrategyListenerCall;
+
+  constructor(call: SetPeriodicPrizeStrategyListenerCall) {
+    this._call = call;
+  }
+
+  get _periodicPrizeStrategyListener(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetPeriodicPrizeStrategyListenerCall__Outputs {
+  _call: SetPeriodicPrizeStrategyListenerCall;
+
+  constructor(call: SetPeriodicPrizeStrategyListenerCall) {
     this._call = call;
   }
 }

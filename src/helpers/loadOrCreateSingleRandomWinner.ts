@@ -9,7 +9,7 @@ import {
 } from '../../generated/templates/SingleRandomWinner/SingleRandomWinner'
 
 import { ZERO_ADDRESS } from './common'
-import { createControlledToken } from '../helpers/createControlledToken'
+import { loadOrCreateControlledToken } from './loadOrCreateControlledToken'
 
 export function loadOrCreateSingleRandomWinner(
   singleRandomWinner: Address,
@@ -32,22 +32,20 @@ export function loadOrCreateSingleRandomWinner(
     _singleRandomWinner.prizePeriodStartedAt = _boundSingleRandomWinner.prizePeriodStartedAt()
     _singleRandomWinner.prizePeriodEndAt = _singleRandomWinner.prizePeriodStartedAt.plus(_singleRandomWinner.prizePeriodSeconds)
 
-
-
-    const ticket = createControlledToken(
+    const ticket = loadOrCreateControlledToken(
       _boundSingleRandomWinner.ticket(),
       Address.fromString(_singleRandomWinner.prizePool)
     )
+    _singleRandomWinner.ticket = ticket.id
     log.warning("CREATED ticket controlled token at {} with PrizeStrategyId {}", [ticket.id, _singleRandomWinner.id])
-    const sponsorship = createControlledToken(
+
+    const sponsorship = loadOrCreateControlledToken(
       _boundSingleRandomWinner.sponsorship(),
       Address.fromString(_singleRandomWinner.prizePool)
-    )
-    log.warning("CREATED sponsorship controlled token at {} with PrizeStrategyId {}", [sponsorship.id, _singleRandomWinner.id])
-
-    _singleRandomWinner.ticket = ticket.id
+    )  
+    log.warning("GOT HERE", [])
     _singleRandomWinner.sponsorship = sponsorship.id
-
+    log.warning("CREATED sponsorship controlled token at {} with PrizeStrategyId {}", [sponsorship.id, _singleRandomWinner.id])
 
     _singleRandomWinner.save()
   }

@@ -220,10 +220,10 @@
     "@ethersproject/rlp" "^5.0.3"
     "@ethersproject/signing-key" "^5.0.4"
 
-"@graphprotocol/graph-cli@^0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.18.0.tgz#c09c6a54cb2da114c499b19de7adb74f0157fbd2"
-  integrity sha512-UsLB2LAwnVfUgkd4D0Rbfqq6ImLlDq9TEL/tBMYmZkB7pgnJZ/gJT5ouC33Gh0yhdXOYqWRk/KUcxSpgsKviPw==
+"@graphprotocol/graph-cli@^0.19.0":
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.19.0.tgz#c5c330f3ef9bb56ee5bec1e9da998638049dc0d3"
+  integrity sha512-rG6udMjMyXtCgX1oYyteM3ohecLV8JZqlQLzc8BSfw/g6+6dAVey6KQkJ04MRYJCv2VxrUVTYXu1AxzhXPJMkQ==
   dependencies:
     assemblyscript "https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3"
     chalk "^3.0.0"
@@ -231,9 +231,9 @@
     debug "^4.1.1"
     docker-compose "^0.23.2"
     dockerode "^2.5.8"
-    fs-extra "^8.1.0"
+    fs-extra "^9.0.0"
     glob "^7.1.2"
-    gluegun "^4.1.2"
+    gluegun "^4.3.1"
     graphql "^14.0.2"
     immutable "^3.8.2"
     ipfs-http-client "^34.0.0"
@@ -248,10 +248,10 @@
   optionalDependencies:
     keytar "^5.0.0"
 
-"@graphprotocol/graph-ts@^0.18.1":
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-ts/-/graph-ts-0.18.1.tgz#6aadeb3e6c01f4373978bd7dd4409305ba64ffce"
-  integrity sha512-vwDZjsnHlRKg8vdR+bfPdHwDixf0ozY6FU9CyVjrGLQpsEEISoNwsSCriUXE4Wv57LhmZEl8Ce3dhiPoqsv9tg==
+"@graphprotocol/graph-ts@^0.19.0":
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-ts/-/graph-ts-0.19.0.tgz#e1ea3abcf94b91b36624a0821c6561d68720397f"
+  integrity sha512-9dRwZF/jMHjIC/4jZDl8uUV3vHbXgHZV2m6728JbYcbjt4Kaw73cIxVqrsXHyDNVkVaIkZ/yorQ37pY2suLddg==
   dependencies:
     assemblyscript "https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3"
 
@@ -348,7 +348,7 @@
     "@types/web3" "^1.2.2"
     web3 "1.2.6"
 
-"@opengsn/gsn@^2.0.1":
+"@opengsn/gsn@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@opengsn/gsn/-/gsn-2.0.1.tgz#bf77894257d8d0015948215a3ba4759d085873e1"
   integrity sha512-AHEU2SOYTxXiTlLtFGpF0p3S6mflPb1ajh4zvQPv890RNsXMqc9U3VsZ5q6HZXpooE7HOkEUHrQtqgT0rJdXGA==
@@ -404,43 +404,43 @@
     web3-eth-contract "1.2.6"
     web3-utils "1.2.6"
 
-"@openzeppelin/contracts-ethereum-package@3.0.0", "@openzeppelin/contracts-ethereum-package@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-ethereum-package/-/contracts-ethereum-package-3.0.0.tgz#d5db971a177c3b37733db2ee4ebdb79c67575d64"
-  integrity sha512-Xg33RtX7FGbSK/YnroLhcGNAvH30/C84NRW8KvbSdXXYiLA8YqM1bOA9sAeLjmQxXqYUn/YL4AUVTgDnG51NOw==
+"@openzeppelin/contracts-upgradeable@3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-3.3.0.tgz#a536c6ff107d21319490e6cb699e555a3edcf6ea"
+  integrity sha512-kJeNuKauR4xH52Yo3GdXXAOW4CWyWdm7VXcJFe63G8TRb45ISSnkt/gXwUa8zzEYqokQrwNZYoH/iGYfUlp6wA==
 
 "@openzeppelin/contracts@^3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-3.2.0.tgz#3e6b3a7662d8ed64271ade96ef42655db983fd9d"
   integrity sha512-bUOmkSoPkjnUyMiKo6RYnb0VHBk5D9KKDAgNLzF41aqAM3TeE0yGdFF5dVRcV60pZdJLlyFT/jjXIZCWyyEzAQ==
 
-"@pooltogether/fixed-point@pooltogether/fixed-point.git#0.1.0-upgradeable.1":
-  version "0.1.0"
-  resolved "https://codeload.github.com/pooltogether/fixed-point/tar.gz/422e81ae8025680b870c7242ea9c01df72d72baf"
-  dependencies:
-    "@openzeppelin/contracts-ethereum-package" "^3.0.0"
+"@pooltogether/fixed-point@1.0.0-beta.2":
+  version "1.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@pooltogether/fixed-point/-/fixed-point-1.0.0-beta.2.tgz#d76a1e77f21833e9b680296d65526b0ffd7415d7"
+  integrity sha512-aUw4R0Z2oM0AK3W4LIXyBaojTOzRRbhLDHX0egeuvxfjy4gBb6X66v81gI7Wngg/7O0y9QL/B8jWkUnAFzhTig==
 
-"@pooltogether/pooltogether-contracts@3.0.0-rc.1b":
-  version "3.0.0-rc.1b"
-  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.0.0-rc.1b.tgz#2038aa521171645d27629615b328d5935e5d56e4"
-  integrity sha512-ZD0AdGHqa0G5fUbIvsvTpjJUK3wx9Yq57ICzt5g75t+G/csqWlbjZVew0/ihHdMooO7e54tOs7+OE3jScqAmIw==
+"@pooltogether/pooltogether-contracts@3.1.0-beta.5":
+  version "3.1.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-contracts/-/pooltogether-contracts-3.1.0-beta.5.tgz#c6fbb2f0608f95bb85490539b42d0c07a1c342d3"
+  integrity sha512-GY3bxtpQ/nx79cK8j12xI4bshVPxP182+QkPUfZWyk8xzEXTVOzSxRN3uf+10WPRTpmwbdpCgsYgYL2HpzlyAg==
   dependencies:
-    "@opengsn/gsn" "^2.0.1"
-    "@openzeppelin/contracts-ethereum-package" "3.0.0"
-    "@pooltogether/fixed-point" pooltogether/fixed-point.git#0.1.0-upgradeable.1
-    "@pooltogether/pooltogether-rng-contracts" "^1.0.0-alpha.7"
-    "@pooltogether/uniform-random-number" pooltogether/uniform-random-number#solidity-0.6
+    "@opengsn/gsn" "2.0.1"
+    "@openzeppelin/contracts-upgradeable" "3.3.0"
+    "@pooltogether/fixed-point" "1.0.0-beta.2"
+    "@pooltogether/pooltogether-rng-contracts" "1.0.0"
+    "@pooltogether/uniform-random-number" "1.0.0-beta.1"
     deploy-eip-1820 "1.0.0"
     sortition-sum-tree-factory "0.1.0"
 
-"@pooltogether/pooltogether-rng-contracts@^1.0.0-alpha.7":
-  version "1.0.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-rng-contracts/-/pooltogether-rng-contracts-1.0.0-alpha.9.tgz#5a12d7191040e2d00111bc4c388e741bae0899c8"
-  integrity sha512-i/vDZ1ILwRSsRxbxW6Bmes/3LDKaZGuO0rvwYwGwbyJApwDNw1NE1Srh9wXdihQp2t7v2OAThc6RkmOwi77Tnw==
+"@pooltogether/pooltogether-rng-contracts@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@pooltogether/pooltogether-rng-contracts/-/pooltogether-rng-contracts-1.0.0.tgz#191d155dc960559cce06b7ec3b0f9ed2caed0f46"
+  integrity sha512-jQub/+qPLQwTFtbBCvvyIEqxJDEBEV/hgLKnuocBg2/GySWtHLz67WCy17bNn1hZw8nWIt8Ih8h+7iT2UJhtmQ==
 
-"@pooltogether/uniform-random-number@pooltogether/uniform-random-number#solidity-0.6":
-  version "0.1.0"
-  resolved "https://codeload.github.com/pooltogether/uniform-random-number/tar.gz/fae15110b26db8494531fec2a787f60afb74e688"
+"@pooltogether/uniform-random-number@1.0.0-beta.1":
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@pooltogether/uniform-random-number/-/uniform-random-number-1.0.0-beta.1.tgz#72257401fe8536e95f9f812f1d249262659084a7"
+  integrity sha512-V4iqLOpNFNhnUqfKRlvqUeRwvKaODdz+qn4Qi65C3iMOnDb0J31tBvyhwKbhP4wauNuUN64WfepqkkxET9U7EQ==
 
 "@protobufjs/utf8@^1.1.0":
   version "1.1.0"
@@ -1227,9 +1227,9 @@ asn1@~0.2.3:
   dependencies:
     safer-buffer "~2.1.0"
 
-"assemblyscript@https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3":
+"assemblyscript@git+https://github.com/AssemblyScript/assemblyscript.git#36040d5b5312f19a025782b5e36663823494c2f3":
   version "0.6.0"
-  resolved "https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3"
+  resolved "git+https://github.com/AssemblyScript/assemblyscript.git#36040d5b5312f19a025782b5e36663823494c2f3"
   dependencies:
     "@protobufjs/utf8" "^1.1.0"
     binaryen "77.0.0-nightly.20190407"
@@ -1300,6 +1300,11 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
+
+at-least-node@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
+  integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
 atob@^2.1.2:
   version "2.1.2"
@@ -4545,14 +4550,15 @@ fs-extra@^7.0.1:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-extra@^8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-8.1.0.tgz#49d43c45a88cd9677668cb7be1b46efdb8d2e1c0"
-  integrity sha512-yhlQgA6mnOJUKOsRUFsgJdQCvkKhcz8tlZG5HBQfReYZy46OwLcY+Zia0mtdHsOo9y/hP+CxMN0TU9QxoOtG4g==
+fs-extra@^9.0.0:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.0.1.tgz#910da0062437ba4c39fedd863f1675ccfefcb9fc"
+  integrity sha512-h2iAoN838FqAFJY2/qVpzFXy+EBxfVE220PalAqQLDVsFOHLJrZvut5puAbCdNv6WJk+B8ihI+k0c7JK5erwqQ==
   dependencies:
+    at-least-node "^1.0.0"
     graceful-fs "^4.2.0"
-    jsonfile "^4.0.0"
-    universalify "^0.1.0"
+    jsonfile "^6.0.1"
+    universalify "^1.0.0"
 
 fs-jetpack@^2.2.2:
   version "2.4.0"
@@ -4752,10 +4758,10 @@ globals@^9.18.0:
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
   integrity sha512-S0nG3CLEQiY/ILxqtztTWH/3iRRdyBLw6KMDxnKMchrtbj2OFmehVh0WUCfW3DUrIgx/qFrJPICrq4Z4sTR9UQ==
 
-gluegun@^4.1.2:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/gluegun/-/gluegun-4.4.0.tgz#d4a746758a27dea81355395fa088f8c57887f948"
-  integrity sha512-O2jer+m1gauvdUOaEjobBX+gNDeYCwk3FAZqG+0B/3IlNHGB6pZ+w49ltuBXUxrKC8nYZjkVKMiMzdASJPbmNg==
+gluegun@^4.3.1:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/gluegun/-/gluegun-4.5.0.tgz#fb9f18b0400bd0f3d02edf7fba8d8a25aaffa5ed"
+  integrity sha512-nZskG9hMePmI/YMmWb58cTGW7X2vCbbEFak8Zs91p8QgMG8ToaZYdW5HKmzLOsy1cnGs2WcjhOvhUFAFH71FAg==
   dependencies:
     apisauce "^1.0.1"
     app-module-path "^2.2.0"
@@ -5885,6 +5891,15 @@ jsonfile@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
   integrity sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=
+  optionalDependencies:
+    graceful-fs "^4.1.6"
+
+jsonfile@^6.0.1:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-6.1.0.tgz#bc55b2634793c679ec6403094eb13698a6ec0aae"
+  integrity sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==
+  dependencies:
+    universalify "^2.0.0"
   optionalDependencies:
     graceful-fs "^4.1.6"
 
@@ -9218,6 +9233,16 @@ universalify@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
   integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
+
+universalify@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/universalify/-/universalify-1.0.0.tgz#b61a1da173e8435b2fe3c67d29b9adf8594bd16d"
+  integrity sha512-rb6X1W158d7pRQBg5gkR8uPaSfiids68LTJQYOtEUhoJUWBdaQHsuT/EUduxXYxcrt4r5PJ4fuHW1MHT6p0qug==
+
+universalify@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/universalify/-/universalify-2.0.0.tgz#75a4984efedc4b08975c5aeb73f530d02df25717"
+  integrity sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==
 
 unorm@^1.3.3:
   version "1.6.0"
