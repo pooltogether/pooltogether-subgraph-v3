@@ -1,3 +1,4 @@
+import { log } from '@graphprotocol/graph-ts'
 import { Prize } from '../../generated/schema'
 
 import { prizeId } from './idTemplates'
@@ -11,6 +12,7 @@ export function loadOrCreatePrize(prizePoolAddress: string, currentPrizeId: stri
 
   if (!prize) {
     prize = new Prize(id)
+    log.warning("debug1707 created prize with id {}", [id])
     prize.prizePool = prizePoolAddress
     prize.save()
   }

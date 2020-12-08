@@ -7,9 +7,6 @@ export function loadOrCreatePrizePoolAccount(
     account: string
   ): PrizePoolAccount {
     let prizePoolAccount = PrizePoolAccount.load(generateCompositeId(prizePool.toHex(),account))
-    if(prizePoolAccount){
-      log.warning("prizepoolaccount already existed for {} ", [prizePoolAccount.id])
-    }
     if(!prizePoolAccount){ // create 
       log.warning("creating PrizePoolAccount with id {} ",[generateCompositeId(prizePool.toHex(),account)])
       prizePoolAccount = new PrizePoolAccount(generateCompositeId(prizePool.toHex(),account))

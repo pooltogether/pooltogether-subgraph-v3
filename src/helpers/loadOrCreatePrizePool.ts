@@ -1,4 +1,4 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 
 import {
   PrizePool,
@@ -25,6 +25,7 @@ export function loadOrCreatePrizePool(
   let _prizePool = PrizePool.load(prizePool.toHex())
 
   if (!_prizePool) {
+    log.warning("creating prizepool {} ", [prizePool.toHex()])
     _prizePool = new PrizePool(prizePool.toHex())
     const boundPrizePool = PrizePoolContract.bind(prizePool)
 

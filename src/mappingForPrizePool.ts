@@ -1,8 +1,7 @@
 import { Address, log, store } from '@graphprotocol/graph-ts'
 import {
   PrizeStrategy,
-  PrizePool,
-  PrizePoolAccount,
+  PrizePool
 } from '../generated/schema'
 
 import {
@@ -89,7 +88,6 @@ export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
 
 export function handleAwarded(event: Awarded): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
-
   // Record prize history
   const _prize = loadOrCreatePrize(
     event.address.toHex(),
@@ -105,7 +103,7 @@ export function handleAwarded(event: Awarded): void {
   _prize.save()
 
   // increment accumulative winnings
-  const prizePoolAccount = PrizePoolAccount.load(generateCompositeId(_prizePool.id, winner.toHex()))
+  const prizePoolAccount = loadOrCreatePrizePoolAccount(event.address, event.params.winner.toHex())
   prizePoolAccount.cumulativeWinnings = prizePoolAccount.cumulativeWinnings.plus(event.params.amount)
   prizePoolAccount.save()
 
@@ -166,7 +164,7 @@ export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
   const prizePool = loadOrCreatePrizePool(_prizePoolAddress)
 
   // load PrizePoolAccount and update unlockedTimestamp and timelockedBalance
-  let prizePoolAccount = PrizePoolAccount.load(generateCompositeId(prizePool.id, event.params.from.toHex()))
+  const prizePoolAccount = loadOrCreatePrizePoolAccount(event.address, event.params.from.toHex())
   prizePoolAccount.unlockTimestamp = event.params.unlockTimestamp
 
   const existingTimeLockedBalance = prizePoolAccount.timelockedBalance
@@ -186,7 +184,7 @@ export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
 
 export function handleTimelockedWithdrawalSwept(event: TimelockedWithdrawalSwept): void {
 
-  let prizePoolAccount = PrizePoolAccount.load(generateCompositeId(event.address.toHex(), event.params.from.toHex()))
+  const prizePoolAccount = loadOrCreatePrizePoolAccount(event.address, event.params.from.toHex())
   prizePoolAccount.timelockedBalance = ZERO
   prizePoolAccount.unlockTimestamp = ZERO
   
@@ -203,24 +201,18 @@ export function handleTimelockDeposited(event: TimelockDeposited): void {
   const _prizePoolAddress = event.address
   const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
 
-  // decrement account.timelockBalance
-  //decrement PrizePool.totalTimelockSuuply
+  //decrement PrizePoolAccount.timelockBalance
+  //decrement PrizePool.totalTimelockSupply
   _prizePool.timelockTotalSupply = _prizePool.timelockTotalSupply.minus(event.params.amount)
   
-  const prizePoolAccount = PrizePoolAccount.load(generateCompositeId(_prizePool.id, event.params.to.toHex()))
+  const prizePoolAccount = loadOrCreatePrizePoolAccount(event.address, event.params.to.toHex())
+  
   prizePoolAccount.timelockedBalance = prizePoolAccount.timelockedBalance.minus(event.params.amount)
-
+  
+  prizePoolAccount.save()
   _prizePool.save()
 }
 
 export function handleDeposited(event: Deposited):void {
-  log.warning("handle deposited called ",[])
-  let prizePoolAccount = loadOrCreatePrizePoolAccount(event.address, event.params.to.toHex())
-  // log.warning("created")
-
-}
-
-
-function generateCompositeId(key1: string, key2: string) : string{
-  return key1+"-"+key2
+  loadOrCreatePrizePoolAccount(event.address, event.params.to.toHex())
 }
