@@ -34,6 +34,7 @@ export function createControlledToken(
   }
   controlledToken.numberOfHolders = ZERO
   controlledToken.totalSupply = ZERO
+  controlledToken.controller = prizePoolAddress.toHex()
 
   controlledToken.save()
 
