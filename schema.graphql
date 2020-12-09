@@ -27,7 +27,6 @@ type PrizePool @entity {
 
   owner: Bytes
   reserveRegistry: Bytes
-  trustedForwarder: Bytes
 
   prizeStrategy: PrizeStrategy
   prizePoolType: PrizePoolType

@@ -91,4 +91,3 @@ $ yarn codegen
 3. Update `networks/local.json` to the correct contract addresses deployed locally
 
 4. Run `yarn clean && yarn prepare:local && graph gen:local && yarn create:local && yarn deploy:local`
-

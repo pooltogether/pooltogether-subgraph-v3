@@ -37,7 +37,6 @@ import { loadOrCreatePrizePoolAccount } from './helpers/loadOrCreatePrizePoolAcc
 export function handleInitialized(event: Initialized): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
   _prizePool.reserveRegistry = event.params.reserveRegistry
-  _prizePool.trustedForwarder = event.params.trustedForwarder
   _prizePool.maxExitFeeMantissa = event.params.maxExitFeeMantissa
   _prizePool.maxTimelockDuration = event.params.maxTimelockDuration
   _prizePool.save()

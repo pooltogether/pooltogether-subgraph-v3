@@ -48,7 +48,6 @@
     id
     deactivated
     owner
-    trustedForwarder
 
     prizePoolType
     compoundPrizePool {

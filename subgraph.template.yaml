@@ -185,7 +185,7 @@ templates:
         - name: CompoundPrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
       eventHandlers:
-        - event: Initialized(address,address,uint256,uint256)
+        - event: Initialized(address,uint256,uint256)
           handler: handleInitialized
         - event: ControlledTokenAdded(indexed address)
           handler: handleControlledTokenAdded
