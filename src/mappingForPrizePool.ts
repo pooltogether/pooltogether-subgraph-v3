@@ -97,8 +97,9 @@ export function handleAwarded(event: Awarded): void {
 
   const winner = event.params.winner
   if(winner.notEqual(Address.fromString(ZERO_ADDRESS))){
-    const existingWinners = _prize.winners
-    _prize.winners = new Array(existingWinners.push(winner))
+    const existingWinners = _prize.winners || []
+    existingWinners.push(winner)
+    _prize.winners = existingWinners
   }
   _prize.save()
 
