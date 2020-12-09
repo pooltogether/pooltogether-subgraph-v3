@@ -96,6 +96,31 @@ dataSources:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
       file: ./src/mappingForSingleRandomWinnerProxyFactory.ts
+
+
+  - name: MultipleWinnersProxyFactory
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{multipleWinnersProxyFactory.address}}"
+      abi: MultipleWinnersProxyFactory
+      startBlock: {{multipleWinnersProxyFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MultipleWinnersProxyFactory
+      abis:
+        - name: MultipleWinnersProxyFactory
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/MultipleWinnersProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleMultipleWinnersCreated
+      file: ./src/mappingForMultipleWinners.ts
+
+
+
 templates:
   - name: SingleRandomWinner
     kind: ethereum/contract
@@ -231,3 +256,43 @@ templates:
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
+  
+  - name: MultipleWinners 
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: MultipleWinners
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForMultipleWinners.ts
+      entities:
+        - PeriodicPrizeStrategy
+        - MultipleWinners
+      abis:
+        - name: MultipleWinners
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/MultipleWinners.json
+        - name: ERC20
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ERC20Upgradeable.json
+      eventHandlers:
+        - event: TokenListenerUpdated(indexed address)
+          handler: handleTokenListenerUpdated
+        - event: PrizePoolOpened(indexed address,indexed uint256)
+          handler: handlePrizePoolOpened
+        - event: RngServiceUpdated(indexed address)
+          handler: handleRngServiceUpdated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: ExternalErc20AwardAdded(indexed address)
+          handler: handleExternalErc20AwardAdded
+        - event: ExternalErc20AwardRemoved(indexed address)
+          handler: handleExternalErc20AwardRemoved
+        - event: ExternalErc721AwardAdded(indexed address,uint256[])
+          handler: handleExternalErc721AwardAdded
+        - event: ExternalErc721AwardRemoved(indexed address)
+          handler: handleExternalErc721AwardRemoved
+        - event: Initialized(uint256,uint256,indexed address,address,address,address,address[])
+          handler: handlePeriodicPrizeInitialized
+        - event: NumberOfWinnersSet(uint256)
+          handler: handleNumberOfWinnersSet

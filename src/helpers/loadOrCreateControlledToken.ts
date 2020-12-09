@@ -24,10 +24,22 @@ export function loadOrCreateControlledToken(
     const boundToken = ControlledTokenContract.bind(tokenAddress)
   
     controlledToken.prizePool = prizePoolAddress.toHex()
-  
-    controlledToken.name = boundToken.name()
-    controlledToken.symbol = boundToken.symbol()
-  
+    
+    let controlledTokenName = boundToken.try_name()
+    if(controlledTokenName.reverted){
+      log.info('ERC20 try_name() call reverted', [])
+    }else{
+      controlledToken.name = controlledTokenName.value
+    }
+
+
+    let controlledTokenSymbol = boundToken.try_symbol()
+    if(controlledTokenSymbol.reverted){
+      log.info('ERC20 try_symbol() call reverted', [])
+    }else{
+      controlledToken.symbol = controlledTokenSymbol.value
+    }
+ 
     let tryDecimalsCallResult = boundToken.try_decimals()
     if (tryDecimalsCallResult.reverted) {
       log.info('ERC20 try_decimals() call reverted', [])

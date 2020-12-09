@@ -61,3 +61,17 @@ export class ControlledToken extends DataSourceTemplate {
     );
   }
 }
+
+export class MultipleWinners extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("MultipleWinners", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "MultipleWinners",
+      [address.toHex()],
+      context
+    );
+  }
+}

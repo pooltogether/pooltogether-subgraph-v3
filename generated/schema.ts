@@ -2319,3 +2319,391 @@ export class VolumeDrip extends Entity {
     this.set("deactivated", Value.fromBoolean(value));
   }
 }
+
+export class MultipleWinnersPrizeStrategy extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save MultipleWinnersPrizeStrategy entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save MultipleWinnersPrizeStrategy entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("MultipleWinnersPrizeStrategy", id.toString(), this);
+  }
+
+  static load(id: string): MultipleWinnersPrizeStrategy | null {
+    return store.get(
+      "MultipleWinnersPrizeStrategy",
+      id
+    ) as MultipleWinnersPrizeStrategy | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get owner(): Bytes | null {
+    let value = this.get("owner");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set owner(value: Bytes | null) {
+    if (value === null) {
+      this.unset("owner");
+    } else {
+      this.set("owner", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get numberOfWinners(): BigInt | null {
+    let value = this.get("numberOfWinners");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set numberOfWinners(value: BigInt | null) {
+    if (value === null) {
+      this.unset("numberOfWinners");
+    } else {
+      this.set("numberOfWinners", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get tokenListener(): Bytes | null {
+    let value = this.get("tokenListener");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set tokenListener(value: Bytes | null) {
+    if (value === null) {
+      this.unset("tokenListener");
+    } else {
+      this.set("tokenListener", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get prizePool(): Bytes | null {
+    let value = this.get("prizePool");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set prizePool(value: Bytes | null) {
+    if (value === null) {
+      this.unset("prizePool");
+    } else {
+      this.set("prizePool", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get rng(): Bytes | null {
+    let value = this.get("rng");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set rng(value: Bytes | null) {
+    if (value === null) {
+      this.unset("rng");
+    } else {
+      this.set("rng", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get ticket(): Bytes | null {
+    let value = this.get("ticket");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set ticket(value: Bytes | null) {
+    if (value === null) {
+      this.unset("ticket");
+    } else {
+      this.set("ticket", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get sponsorship(): Bytes | null {
+    let value = this.get("sponsorship");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set sponsorship(value: Bytes | null) {
+    if (value === null) {
+      this.unset("sponsorship");
+    } else {
+      this.set("sponsorship", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get prizePeriodSeconds(): BigInt {
+    let value = this.get("prizePeriodSeconds");
+    return value.toBigInt();
+  }
+
+  set prizePeriodSeconds(value: BigInt) {
+    this.set("prizePeriodSeconds", Value.fromBigInt(value));
+  }
+
+  get prizePeriodStartedAt(): BigInt {
+    let value = this.get("prizePeriodStartedAt");
+    return value.toBigInt();
+  }
+
+  set prizePeriodStartedAt(value: BigInt) {
+    this.set("prizePeriodStartedAt", Value.fromBigInt(value));
+  }
+
+  get prizePeriodEndAt(): BigInt {
+    let value = this.get("prizePeriodEndAt");
+    return value.toBigInt();
+  }
+
+  set prizePeriodEndAt(value: BigInt) {
+    this.set("prizePeriodEndAt", Value.fromBigInt(value));
+  }
+
+  get externalErc20Awards(): Array<string> {
+    let value = this.get("externalErc20Awards");
+    return value.toStringArray();
+  }
+
+  set externalErc20Awards(value: Array<string>) {
+    this.set("externalErc20Awards", Value.fromStringArray(value));
+  }
+
+  get externalErc721Awards(): Array<string> {
+    let value = this.get("externalErc721Awards");
+    return value.toStringArray();
+  }
+
+  set externalErc721Awards(value: Array<string>) {
+    this.set("externalErc721Awards", Value.fromStringArray(value));
+  }
+}
+
+export class MultipleWinnersExternalErc20Award extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save MultipleWinnersExternalErc20Award entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save MultipleWinnersExternalErc20Award entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("MultipleWinnersExternalErc20Award", id.toString(), this);
+  }
+
+  static load(id: string): MultipleWinnersExternalErc20Award | null {
+    return store.get(
+      "MultipleWinnersExternalErc20Award",
+      id
+    ) as MultipleWinnersExternalErc20Award | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    return value.toString();
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get symbol(): string {
+    let value = this.get("symbol");
+    return value.toString();
+  }
+
+  set symbol(value: string) {
+    this.set("symbol", Value.fromString(value));
+  }
+
+  get decimals(): BigInt {
+    let value = this.get("decimals");
+    return value.toBigInt();
+  }
+
+  set decimals(value: BigInt) {
+    this.set("decimals", Value.fromBigInt(value));
+  }
+
+  get balanceAwarded(): BigInt | null {
+    let value = this.get("balanceAwarded");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set balanceAwarded(value: BigInt | null) {
+    if (value === null) {
+      this.unset("balanceAwarded");
+    } else {
+      this.set("balanceAwarded", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get prizeStrategy(): string | null {
+    let value = this.get("prizeStrategy");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set prizeStrategy(value: string | null) {
+    if (value === null) {
+      this.unset("prizeStrategy");
+    } else {
+      this.set("prizeStrategy", Value.fromString(value as string));
+    }
+  }
+}
+
+export class MultipleWinnersExternalErc721Award extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save MultipleWinnersExternalErc721Award entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save MultipleWinnersExternalErc721Award entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("MultipleWinnersExternalErc721Award", id.toString(), this);
+  }
+
+  static load(id: string): MultipleWinnersExternalErc721Award | null {
+    return store.get(
+      "MultipleWinnersExternalErc721Award",
+      id
+    ) as MultipleWinnersExternalErc721Award | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    return value.toBytes();
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get tokenIds(): Array<BigInt> | null {
+    let value = this.get("tokenIds");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigIntArray();
+    }
+  }
+
+  set tokenIds(value: Array<BigInt> | null) {
+    if (value === null) {
+      this.unset("tokenIds");
+    } else {
+      this.set("tokenIds", Value.fromBigIntArray(value as Array<BigInt>));
+    }
+  }
+
+  get prizeStrategy(): string | null {
+    let value = this.get("prizeStrategy");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set prizeStrategy(value: string | null) {
+    if (value === null) {
+      this.unset("prizeStrategy");
+    } else {
+      this.set("prizeStrategy", Value.fromString(value as string));
+    }
+  }
+}

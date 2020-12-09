@@ -11,5 +11,9 @@
   "comptroller": {
     "address": "0x3Aa2b03Bf8B5744f45F867F55c6A143D6A72A8Cf",
     "startBlock": "1"
+  },
+  "multipleWinnersProxyFactory": {
+    "address": "0xBA42f54497E428b3d41280C39A94ca01830bEA57",
+    "startBlock": "1"
   }
 }
