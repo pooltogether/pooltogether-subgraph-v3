@@ -25,8 +25,20 @@ export function loadOrCreateAwardedExternalErc20Token(prize: Prize, tokenAddress
 
     const boundToken = ERC20Contract.bind(tokenAddress)
 
-    award.name = boundToken.name()
-    award.symbol = boundToken.symbol()
+    
+    let tryNameCallResult = boundToken.try_name()
+    if (tryNameCallResult.reverted) {
+      log.info('ERC20 try_name() call reverted', [])
+    } else {
+      award.name = tryNameCallResult.value
+    }
+
+    let trySymbolCallResult = boundToken.try_symbol()
+    if (trySymbolCallResult.reverted) {
+      log.info('ERC20 try_symbol call reverted', [])
+    } else {
+      award.symbol = trySymbolCallResult.value
+    }
 
     let tryDecimalsCallResult = boundToken.try_decimals()
     if (tryDecimalsCallResult.reverted) {

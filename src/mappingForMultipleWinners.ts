@@ -6,6 +6,8 @@ import {NumberOfWinnersSet} from "../generated/templates/MultipleWinners/Multipl
 
 import { BigInt, log } from '@graphprotocol/graph-ts'
 import {
+MultipleWinnersExternalErc20Award,
+MultipleWinnersExternalErc721Award,
   MultipleWinnersPrizeStrategy,
 } from '../generated/schema'
 
@@ -21,9 +23,9 @@ import {
 } from '../generated/templates/MultipleWinners/MultipleWinners'
 
 import {
-  loadOrCreateExternalErc20Award,
-  loadOrCreateExternalErc721Award,
-} from './helpers/loadOrCreateExternalAward'
+  loadOrCreateMultipleWinnersExternalErc20Award,
+  loadOrCreateMultipleWinnersExternalErc721Award,
+} from './helpers/loadOrCreateMultipleWinnersExternalAward'
 
 import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinners"
 
@@ -46,16 +48,16 @@ export function handlePrizePoolOpened(event: PrizePoolOpened): void {
 
 
 export function handlePeriodicPrizeInitialized(event: Initialized) : void {
- const prizePool = event.params.prizePool
- const rng =event.params.rng
- const ticket = event.params.ticket
- const sponsorship = event.params.sponsorship
- const startTime = event.params.prizePeriodStart
- const prizePeriod = event.params.prizePeriodSeconds
- 
- let multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHex())
- if(multipleWinners == null){
-    multipleWinners = new MultipleWinnersPrizeStrategy(event.address.toHex())
+    const prizePool = event.params.prizePool
+    const rng =event.params.rng
+    const ticket = event.params.ticket
+    const sponsorship = event.params.sponsorship
+    const startTime = event.params.prizePeriodStart
+    const prizePeriod = event.params.prizePeriodSeconds
+
+
+    const multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+
     multipleWinners.prizePool=prizePool
     multipleWinners.prizePeriodStartedAt = startTime
     multipleWinners.rng = rng
@@ -64,21 +66,21 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
     multipleWinners.prizePeriodEndAt = startTime.plus(prizePeriod)
     multipleWinners.prizePeriodSeconds = prizePeriod
 
-    multipleWinners.numberOfWinners = new BigInt(1)
+    multipleWinners.numberOfWinners = new BigInt(1) // mock value until numberOfWinners event fired
 
     multipleWinners.save()
- }
+
 }
 
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
    
   let _perodicPrizeStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+    // this event is firing before the initialized this will always be null
 
   if(_perodicPrizeStrategy == null){
-    log.warning("periodic prize strategy is being created for id {}", [event.address.toHex()])
     _perodicPrizeStrategy = new MultipleWinnersPrizeStrategy(event.address.toHex())
-    // this event is firing before the initialized
+    
     // set fields to blank/generic for now - Initialized event called straight after
     _perodicPrizeStrategy.prizePeriodSeconds = new BigInt(0)
     _perodicPrizeStrategy.prizePeriodStartedAt = new BigInt(0)
@@ -105,8 +107,7 @@ export function handleRngServiceUpdated(event: RngServiceUpdated): void {
 
 export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): void {
   const _prizeStrategyAddress = event.address.toHex()
-  log.warning("external erc20 at txId {} ", [event.transaction.hash.toString()])
-  const externalAward = loadOrCreateExternalErc20Award(_prizeStrategyAddress, event.params.externalErc20)
+  const externalAward : MultipleWinnersExternalErc20Award= loadOrCreateMultipleWinnersExternalErc20Award(_prizeStrategyAddress, event.params.externalErc20)
   externalAward.save()
 }
 
@@ -119,7 +120,7 @@ export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved
 export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded): void {
   const _prizeStrategyAddress = event.address.toHex()
 
-  const externalAward = loadOrCreateExternalErc721Award(_prizeStrategyAddress, event.params.externalErc721)
+  const externalAward : MultipleWinnersExternalErc721Award = loadOrCreateMultipleWinnersExternalErc721Award(_prizeStrategyAddress, event.params.externalErc721)
 
   externalAward.tokenIds = event.params.tokenIds
   externalAward.save()
