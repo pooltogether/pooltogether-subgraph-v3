@@ -33,7 +33,6 @@ export function loadOrCreatePrizePool(
 
     _prizePool.owner = boundPrizePool.owner()
     _prizePool.reserveRegistry = Address.fromString(ZERO_ADDRESS)
-    _prizePool.trustedForwarder = Address.fromString(ZERO_ADDRESS)
     _prizePool.deactivated = false
 
     _prizePool.reserveFeeControlledToken = Address.fromString(ZERO_ADDRESS)

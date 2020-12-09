@@ -99,36 +99,32 @@ export class Initialized__Params {
     this._event = event;
   }
 
-  get trustedForwarder(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
   get prizePeriodStart(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[0].value.toBigInt();
   }
 
   get prizePeriodSeconds(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+    return this._event.parameters[1].value.toBigInt();
   }
 
   get prizePool(): Address {
-    return this._event.parameters[3].value.toAddress();
+    return this._event.parameters[2].value.toAddress();
   }
 
   get ticket(): Address {
-    return this._event.parameters[4].value.toAddress();
+    return this._event.parameters[3].value.toAddress();
   }
 
   get sponsorship(): Address {
-    return this._event.parameters[5].value.toAddress();
+    return this._event.parameters[4].value.toAddress();
   }
 
   get rng(): Address {
-    return this._event.parameters[6].value.toAddress();
+    return this._event.parameters[5].value.toAddress();
   }
 
   get externalErc20Awards(): Array<Address> {
-    return this._event.parameters[7].value.toAddressArray();
+    return this._event.parameters[6].value.toAddressArray();
   }
 }
 
@@ -651,29 +647,6 @@ export class SingleRandomWinner extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  isTrustedForwarder(forwarder: Address): boolean {
-    let result = super.call(
-      "isTrustedForwarder",
-      "isTrustedForwarder(address):(bool)",
-      [ethereum.Value.fromAddress(forwarder)]
-    );
-
-    return result[0].toBoolean();
-  }
-
-  try_isTrustedForwarder(forwarder: Address): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "isTrustedForwarder",
-      "isTrustedForwarder(address):(bool)",
-      [ethereum.Value.fromAddress(forwarder)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
   owner(): Address {
     let result = super.call("owner", "owner():(address)", []);
 
@@ -928,52 +901,6 @@ export class SingleRandomWinner extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
-
-  trustedForwarder(): Address {
-    let result = super.call(
-      "trustedForwarder",
-      "trustedForwarder():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_trustedForwarder(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "trustedForwarder",
-      "trustedForwarder():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  versionRecipient(): string {
-    let result = super.call(
-      "versionRecipient",
-      "versionRecipient():(string)",
-      []
-    );
-
-    return result[0].toString();
-  }
-
-  try_versionRecipient(): ethereum.CallResult<string> {
-    let result = super.tryCall(
-      "versionRecipient",
-      "versionRecipient():(string)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toString());
-  }
 }
 
 export class AddExternalErc20AwardCall extends ethereum.Call {
@@ -1223,36 +1150,32 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get _trustedForwarder(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
   get _prizePeriodStart(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
+    return this._call.inputValues[0].value.toBigInt();
   }
 
   get _prizePeriodSeconds(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
+    return this._call.inputValues[1].value.toBigInt();
   }
 
   get _prizePool(): Address {
-    return this._call.inputValues[3].value.toAddress();
+    return this._call.inputValues[2].value.toAddress();
   }
 
   get _ticket(): Address {
-    return this._call.inputValues[4].value.toAddress();
+    return this._call.inputValues[3].value.toAddress();
   }
 
   get _sponsorship(): Address {
-    return this._call.inputValues[5].value.toAddress();
+    return this._call.inputValues[4].value.toAddress();
   }
 
   get _rng(): Address {
-    return this._call.inputValues[6].value.toAddress();
+    return this._call.inputValues[5].value.toAddress();
   }
 
   get externalErc20Awards(): Array<Address> {
-    return this._call.inputValues[7].value.toAddressArray();
+    return this._call.inputValues[6].value.toAddressArray();
   }
 }
 

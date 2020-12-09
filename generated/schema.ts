@@ -152,23 +152,6 @@ export class PrizePool extends Entity {
     }
   }
 
-  get trustedForwarder(): Bytes | null {
-    let value = this.get("trustedForwarder");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set trustedForwarder(value: Bytes | null) {
-    if (value === null) {
-      this.unset("trustedForwarder");
-    } else {
-      this.set("trustedForwarder", Value.fromBytes(value as Bytes));
-    }
-  }
-
   get prizeStrategy(): string | null {
     let value = this.get("prizeStrategy");
     if (value === null || value.kind == ValueKind.NULL) {
