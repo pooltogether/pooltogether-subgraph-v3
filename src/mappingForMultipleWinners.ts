@@ -57,6 +57,7 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
  
  let multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHex())
  if(multipleWinners == null){
+    log.warning("creating a new MultipleWinner entity at txID {} with prizePool {} ", [event.transaction.hash.toHexString(), prizePool.toHexString()])
     multipleWinners = new MultipleWinnersPrizeStrategy(event.address.toHex())
     multipleWinners.prizePool=prizePool
     multipleWinners.prizePeriodStartedAt = startTime

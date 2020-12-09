@@ -30,7 +30,7 @@ export function loadOrCreateAwardedExternalErc20Token(prize: Prize, tokenAddress
     if (tryNameCallResult.reverted) {
       log.info('ERC20 try_name() call reverted', [])
     } else {
-      award.decimals = BigInt.fromI32(tryNameCallResult.value)
+      award.name = tryNameCallResult.value
     }
 
     let trySymbolCallResult = boundToken.try_symbol()
