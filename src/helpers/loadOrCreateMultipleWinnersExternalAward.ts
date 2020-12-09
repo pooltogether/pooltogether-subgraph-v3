@@ -5,20 +5,20 @@ import {
 } from '../../generated/templates/PrizePool/ERC20'
 
 import {
-  ExternalErc20Award,
-  ExternalErc721Award,
+  MultipleWinnersExternalErc20Award,
+  MultipleWinnersExternalErc721Award,
 } from '../../generated/schema'
 
 import { externalAwardId } from './idTemplates'
 
 
-export function loadOrCreateExternalErc20Award(prizeStrategyAddress: string, tokenAddress: Address): ExternalErc20Award {
+export function loadOrCreateMultipleWinnersExternalErc20Award(prizeStrategyAddress: string, tokenAddress: Address): MultipleWinnersExternalErc20Award {
   const awardId = externalAwardId(prizeStrategyAddress, tokenAddress.toHex())
 
-  let award = ExternalErc20Award.load(awardId)
+  let award = MultipleWinnersExternalErc20Award.load(awardId)
   if (!award) {
-    log.warning("creating an externalErc20 entity ",[])
-    award = new ExternalErc20Award(awardId)
+    log.warning("creating an multiple winners externalErc20 entity ",[])
+    award = new MultipleWinnersExternalErc20Award(awardId)
     award.prizeStrategy = prizeStrategyAddress
     award.address = tokenAddress
 
@@ -48,22 +48,26 @@ export function loadOrCreateExternalErc20Award(prizeStrategyAddress: string, tok
     award.save()
   }
   else{
-    log.warning("external erc20 already existed ",[])
+    log.warning("external multiple winners external erc20 already existed ",[])
   }
 
-  return award as ExternalErc20Award
+  return award as MultipleWinnersExternalErc20Award
 }
 
-export function loadOrCreateExternalErc721Award(prizeStrategyAddress: string, tokenAddress: Address): ExternalErc721Award {
+export function loadOrCreateMultipleWinnersExternalErc721Award(prizeStrategyAddress: string, tokenAddress: Address): MultipleWinnersExternalErc721Award {
   const awardId = externalAwardId(prizeStrategyAddress, tokenAddress.toHex())
 
-  let award = ExternalErc721Award.load(awardId)
+  let award = MultipleWinnersExternalErc721Award.load(awardId)
   if (!award) {
-    award = new ExternalErc721Award(awardId)
+    log.warning("creating an multiple winners externalErc721 entity ",[])
+    award = new MultipleWinnersExternalErc721Award(awardId)
     award.prizeStrategy = prizeStrategyAddress
     award.address = tokenAddress
     award.save()
   }
+  else{
+    log.warning("external multiple winners external erc721 already existed ",[])
+  }
 
-  return award as ExternalErc721Award
+  return award as MultipleWinnersExternalErc721Award
 }
