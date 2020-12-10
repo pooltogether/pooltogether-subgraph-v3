@@ -1,6 +1,6 @@
 import {
     ProxyCreated,
-  } from '../generated/ControlledTokenProxyFactory_v3_1_0/ControlledTokenProxyFactory'
+  } from '../generated/ControlledTokenProxyFactory_v3_1_0/ControlledTokenProxyFactory_v3_1_0'
   
 import {
     ControlledToken as ControlledTokenTemplate,
@@ -9,4 +9,3 @@ import {
 export function handleProxyCreated(event: ProxyCreated): void {
     ControlledTokenTemplate.create(event.params.proxy)
 }
-  

@@ -2508,37 +2508,37 @@ export class MultipleWinnersPrizeStrategy extends Entity {
     }
   }
 
-  get ticket(): Bytes | null {
+  get ticket(): string | null {
     let value = this.get("ticket");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set ticket(value: Bytes | null) {
+  set ticket(value: string | null) {
     if (value === null) {
       this.unset("ticket");
     } else {
-      this.set("ticket", Value.fromBytes(value as Bytes));
+      this.set("ticket", Value.fromString(value as string));
     }
   }
 
-  get sponsorship(): Bytes | null {
+  get sponsorship(): string | null {
     let value = this.get("sponsorship");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set sponsorship(value: Bytes | null) {
+  set sponsorship(value: string | null) {
     if (value === null) {
       this.unset("sponsorship");
     } else {
-      this.set("sponsorship", Value.fromBytes(value as Bytes));
+      this.set("sponsorship", Value.fromString(value as string));
     }
   }
 

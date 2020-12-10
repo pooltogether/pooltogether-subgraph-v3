@@ -341,8 +341,8 @@ type MultipleWinnersPrizeStrategy @entity {
   prizePool: Bytes 
   rng: Bytes
   
-  ticket: Bytes  
-  sponsorship: Bytes 
+  ticket: ControlledToken  
+  sponsorship: ControlledToken
   
   prizePeriodSeconds: BigInt! 
   prizePeriodStartedAt: BigInt! 

@@ -48,8 +48,8 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
     multipleWinners.prizePool=prizePool
     multipleWinners.prizePeriodStartedAt = startTime
     multipleWinners.rng = rng
-    multipleWinners.ticket = ticket
-    multipleWinners.sponsorship = sponsorship
+    multipleWinners.ticket = ticket.toHexString()
+    multipleWinners.sponsorship = sponsorship.toHexString()
     multipleWinners.prizePeriodEndAt = startTime.plus(prizePeriod)
     multipleWinners.prizePeriodSeconds = prizePeriod
 

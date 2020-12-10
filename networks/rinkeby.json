@@ -31,5 +31,13 @@
   "controlledTokenProxyFactory_v3_1_0": {
     "address": "0xF8D06e34Df36fB32Bb69D575AF4d17f83FE4B884",
     "startBlock": "7687005"
+  },
+  "ticketProxyFactory_v3_1_0": {
+    "address": "0xccad64BB6Bb69c7D31458D8e10e246bA3cC8FED4",
+    "startBlock": "7687005"
+  },
+  "ticketProxyFactory_v3_0_1": {
+    "address": "0x1E15De9d0b3f3a6B17FA54f8a16C631Ed4e14DD8",
+    "startBlock": "7399766"
   }
 }
