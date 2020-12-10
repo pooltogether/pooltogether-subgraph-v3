@@ -15,5 +15,9 @@
   "multipleWinnersProxyFactory": {
     "address": "0x836C94Dcb8776C679b480b38A66524f34712981a",
     "startBlock": "7687010"
+  },
+  "controlledTokenProxyFactory": {
+    "address": "0xF8D06e34Df36fB32Bb69D575AF4d17f83FE4B884",
+    "startBlock": "7687005"
   }
 }

@@ -62,7 +62,7 @@ dataSources:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
         - name: SingleRandomWinner
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
-        - name: CompoundPrizePoolProxyFactory
+        - name: CompoundPrizePoolProxyFactory  # dont think it needs any of these apart from this one
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolProxyFactory.json
         - name: ControlledToken
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
@@ -119,6 +119,27 @@ dataSources:
           handler: handleMultipleWinnersCreated
       file: ./src/mappingForMultipleWinners.ts
 
+
+  - name: ControlledTokenProxyFactory
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{controlledTokenProxyFactory.address}}"
+      abi: ControlledTokenProxyFactory
+      startBlock: {{controlledTokenProxyFactory.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - ControlledTokenProxyFactory
+      abis:
+        - name: ControlledTokenProxyFactory
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledTokenProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+      file: ./src/mappingForControlledTokenProxyFactory.ts
 
 
 templates:
