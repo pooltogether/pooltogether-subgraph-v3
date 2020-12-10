@@ -28,6 +28,8 @@ export function loadOrCreatePrizePool(
     _prizePool = new PrizePool(prizePool.toHex())
     const boundPrizePool = PrizePoolContract.bind(prizePool)
 
+
+
     const poolTokenAddress = boundPrizePool.token()
     const boundToken = ControlledTokenContract.bind(poolTokenAddress)
 
@@ -38,13 +40,46 @@ export function loadOrCreatePrizePool(
     _prizePool.reserveFeeControlledToken = Address.fromString(ZERO_ADDRESS)
 
     _prizePool.underlyingCollateralToken = poolTokenAddress
-    _prizePool.underlyingCollateralDecimals = BigInt.fromI32(boundToken.decimals())
-    _prizePool.underlyingCollateralName = boundToken.name()
-    _prizePool.underlyingCollateralSymbol = boundToken.symbol()
+
+    const tryNameCall = boundToken.try_name()
+    if(tryNameCall.reverted){
+      log.warning("try_name for {} reverted ", [prizePool.toHexString()])
+      _prizePool.underlyingCollateralName = null
+    }
+    else{
+      _prizePool.underlyingCollateralName = tryNameCall.value
+    }
+
+    const trySymbolCall = boundToken.try_symbol()
+    if(trySymbolCall.reverted){
+      log.warning("try_symbol for {} reverted ", [prizePool.toHexString()])
+      _prizePool.underlyingCollateralSymbol = null
+    }
+    else{
+      _prizePool.underlyingCollateralSymbol = trySymbolCall.value
+    }
+
+    const tryDecimalsCall = boundToken.try_decimals()
+    if(tryDecimalsCall.reverted){
+      log.warning("try_symbol for {} reverted ", [prizePool.toHexString()])
+      _prizePool.underlyingCollateralDecimals = null
+    }
+    else{
+      _prizePool.underlyingCollateralDecimals = tryDecimalsCall.value
+    }
 
     _prizePool.maxExitFeeMantissa = ZERO
     _prizePool.maxTimelockDuration = ZERO
-    _prizePool.timelockTotalSupply = boundPrizePool.timelockTotalSupply()
+
+    const try_timelockTotalSupplyCall = boundPrizePool.try_timelockTotalSupply()
+    if(try_timelockTotalSupplyCall.reverted){
+      log.warning("try_timelockSupply for {} reverted ", [prizePool.toHexString()])
+      _prizePool.timelockTotalSupply = null
+    }
+    else{
+      _prizePool.timelockTotalSupply = try_timelockTotalSupplyCall.value
+    }
+    
     _prizePool.liquidityCap = ZERO
 
     _prizePool.currentState = 'Opened'

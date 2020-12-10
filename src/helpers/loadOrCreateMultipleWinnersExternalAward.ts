@@ -42,7 +42,7 @@ export function loadOrCreateMultipleWinnersExternalErc20Award(prizeStrategyAddre
     if (tryDecimalsCallResult.reverted) {
       log.info('ERC20 try_decimals() call reverted', [])
     } else {
-      award.decimals = BigInt.fromI32(tryDecimalsCallResult.value)
+      award.decimals = tryDecimalsCallResult.value
     }
 
     award.save()
