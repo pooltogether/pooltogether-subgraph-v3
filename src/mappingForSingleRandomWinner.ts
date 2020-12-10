@@ -2,7 +2,7 @@ import { store } from '@graphprotocol/graph-ts'
 import {
   ControlledToken,
   PrizePool,
-  SingleRandomWinner,
+  SingleRandomWinnerPrizeStrategy,
 } from '../generated/schema'
 
 import {
@@ -51,7 +51,7 @@ export function handleTokenListenerUpdated(event: TokenListenerUpdated): void {
 }
 
 export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
-  const _prizeStrategy = SingleRandomWinner.load(event.address.toHex())
+  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(event.address.toHex())
   const boundPrizeStrategy = SingleRandomWinnerContract.bind(event.address)
 
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
@@ -72,7 +72,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 }
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
-  const _prizeStrategy = SingleRandomWinner.load(event.address.toHexString())
+  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(event.address.toHexString())
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
 
   // Record prize history
@@ -96,7 +96,7 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
 }
 
 export function handleRngServiceUpdated(event: RngServiceUpdated): void {
-  const _prizeStrategy = SingleRandomWinner.load(event.address.toHexString())
+  const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(event.address.toHexString())
   _prizeStrategy.rng = event.params.rngService
   _prizeStrategy.save()
 }
@@ -111,7 +111,7 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved): void {
   const _prizeStrategyAddress = event.address.toHex()
   const id = externalAwardId(_prizeStrategyAddress, event.params.externalErc20Award.toHex())
-  store.remove('ExternalErc20Award', id)
+  store.remove('SingleRandomWinnerExternalErc20Award', id)
 }
 
 export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded): void {
@@ -126,5 +126,5 @@ export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded):
 export function handleExternalErc721AwardRemoved(event: ExternalErc721AwardRemoved): void {
   const _prizeStrategyAddress = event.address.toHex()
   const id = externalAwardId(_prizeStrategyAddress, event.params.externalErc721Award.toHex())
-  store.remove('ExternalErc721Award', id)
+  store.remove('SingleRandomWinnerExternalErc721Award', id)
 }

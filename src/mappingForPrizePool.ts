@@ -5,7 +5,6 @@ import {
 } from '../generated/schema'
 
 import {
-  Initialized,
   ControlledTokenAdded,
   ReserveFeeCaptured,
   LiquidityCapSet,
@@ -18,7 +17,7 @@ import {
   CreditPlanSet,
   PrizeStrategySet,
   OwnershipTransferred,
-} from '../generated/templates/PrizePool/PrizePool'
+} from '../generated/templates/PrizePool_v3/PrizePool_v3'
 
 
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
@@ -32,15 +31,6 @@ import { loadOrCreateExternalErc721Award } from './helpers/loadOrCreateExternalA
 import { ZERO, ZERO_ADDRESS } from './helpers/common'
 import { Deposited } from '../generated/templates/CompoundPrizePool/CompoundPrizePool'
 import { loadOrCreatePrizePoolAccount } from './helpers/loadOrCreatePrizePoolAccount'
-
-
-export function handleInitialized(event: Initialized): void {
-  const _prizePool = loadOrCreatePrizePool(event.address)
-  _prizePool.reserveRegistry = event.params.reserveRegistry
-  _prizePool.maxExitFeeMantissa = event.params.maxExitFeeMantissa
-  _prizePool.maxTimelockDuration = event.params.maxTimelockDuration
-  _prizePool.save()
-}
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
@@ -69,12 +59,8 @@ export function handlePrizeStrategySet(event: PrizeStrategySet): void {
   const _prizePoolAddress = event.address
   const _prizeStrategyAddress = event.params.prizeStrategy
 
-  const _prizeStrategy = loadOrCreatePrizeStrategy(_prizeStrategyAddress)
-  _prizeStrategy.singleRandomWinner = _prizeStrategyAddress.toHex()
-  _prizeStrategy.save()
-
   const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
-  _prizePool.prizeStrategy = _prizeStrategy.id
+  _prizePool.prizeStrategy = loadOrCreatePrizeStrategy(_prizeStrategyAddress).id
   _prizePool.save()
 }
 
@@ -149,13 +135,6 @@ export function handleAwardedExternalERC721(event: AwardedExternalERC721): void 
     event.params.token
   )
   awardedExternalErc721Nft.save()
-
-
-  const externalErc721 = loadOrCreateExternalErc721Award(
-    _prizeStrategy.id,
-    event.params.token
-  )
-  store.remove('ExternalErc721Award', externalErc721.id)
 }
 
 

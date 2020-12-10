@@ -42,47 +42,69 @@ dataSources:
           handler: handleVolumeDripPeriodEnded
         - event: VolumeDripDripped(indexed address,indexed address,indexed address,bool,address,uint256)
           handler: handleVolumeDripDripped
-  - name: CompoundPrizePoolProxyFactory
+
+  {{#compoundPrizePoolProxyFactory_v3_0_1}}
+  - name: CompoundPrizePoolProxyFactory_v3_0_1
     kind: ethereum/contract
     network: {{network}}
     source:
-      address: "{{compoundPrizePoolProxyFactory.address}}"
-      abi: CompoundPrizePoolProxyFactory
-      startBlock: {{compoundPrizePoolProxyFactory.startBlock}}
+      address: "{{address}}"
+      abi: CompoundPrizePoolProxyFactory_v3_0_1
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - CompoundPrizePoolProxyFactory
+        - CompoundPrizePool
       abis:
-        - name: PrizePool
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
-        - name: CompoundPrizePool
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
-        - name: SingleRandomWinner
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
-        - name: CompoundPrizePoolProxyFactory  # dont think it needs any of these apart from this one
+        - name: CompoundPrizePoolProxyFactory_v3_0_1  # dont think it needs any of these apart from this one
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolProxyFactory.json
-        - name: ControlledToken
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForCompoundPrizePoolProxyFactory.ts
-  - name: SingleRandomWinnerProxyFactory
+      file: ./src/mappingForCompoundPrizePoolProxyFactoryV3_0_1.ts
+
+  {{/compoundPrizePoolProxyFactory_v3_0_1}}
+
+  {{#compoundPrizePoolProxyFactory_v3_1_0}}
+  - name: CompoundPrizePoolProxyFactory_v3_1_0
     kind: ethereum/contract
     network: {{network}}
     source:
-      address: "{{singleRandomWinnerProxyFactory.address}}"
-      abi: SingleRandomWinnerProxyFactory
-      startBlock: {{singleRandomWinnerProxyFactory.startBlock}}
+      address: "{{address}}"
+      abi: CompoundPrizePoolProxyFactory_v3_1_0
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - SingleRandomWinnerProxyFactory
+        - CompoundPrizePool
+      abis:
+        - name: CompoundPrizePoolProxyFactory_v3_1_0
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3_1_0.ts
+
+  {{/compoundPrizePoolProxyFactory_v3_1_0}}
+
+  {{#singleRandomWinnerProxyFactory_v3_1_0}}
+  - name: SingleRandomWinnerProxyFactory_v3_1_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: SingleRandomWinnerProxyFactory
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - SingleRandomWinnerPrizeStrategy
       abis:
         - name: PrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
@@ -96,51 +118,151 @@ dataSources:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
       file: ./src/mappingForSingleRandomWinnerProxyFactory.ts
+  {{/singleRandomWinnerProxyFactory_v3_1_0}}
 
-
-  - name: MultipleWinnersProxyFactory
+  {{#singleRandomWinnerProxyFactory_v3_0_1}}
+  - name: SingleRandomWinnerProxyFactory_v3_0_1
     kind: ethereum/contract
     network: {{network}}
     source:
-      address: "{{multipleWinnersProxyFactory.address}}"
-      abi: MultipleWinnersProxyFactory
-      startBlock: {{multipleWinnersProxyFactory.startBlock}}
+      address: "{{address}}"
+      abi: SingleRandomWinnerProxyFactory
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - MultipleWinnersProxyFactory
+        - SingleRandomWinnerPrizeStrategy
       abis:
-        - name: MultipleWinnersProxyFactory
+        - name: PrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        - name: SingleRandomWinner
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
+        - name: SingleRandomWinnerProxyFactory
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinnerProxyFactory.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+      file: ./src/mappingForSingleRandomWinnerProxyFactory.ts
+  {{/singleRandomWinnerProxyFactory_v3_0_1}}
+
+  {{#multipleWinnersProxyFactory_v3_1_0}}
+  - name: MultipleWinnersProxyFactory_v3_1_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: MultipleWinnersProxyFactory_v3_1_0
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MultipleWinnersPrizeStrategy
+      abis:
+        - name: MultipleWinnersProxyFactory_v3_1_0
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/MultipleWinnersProxyFactory.json
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleMultipleWinnersCreated
-      file: ./src/mappingForMultipleWinners.ts
+      file: ./src/mappingForMultipleWinnersProxyFactory_v3_1_0.ts
+  {{/multipleWinnersProxyFactory_v3_1_0}}
 
-
-  - name: ControlledTokenProxyFactory
+  {{#controlledTokenProxyFactory_v3_0_1}}
+  - name: ControlledTokenProxyFactory_v3_0_1
     kind: ethereum/contract
     network: {{network}}
     source:
-      address: "{{controlledTokenProxyFactory.address}}"
-      abi: ControlledTokenProxyFactory
-      startBlock: {{controlledTokenProxyFactory.startBlock}}
+      address: "{{address}}"
+      abi: ControlledTokenProxyFactory_v3_0_1
+      startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        - ControlledTokenProxyFactory
+        - ControlledToken
       abis:
-        - name: ControlledTokenProxyFactory
+        - name: ControlledTokenProxyFactory_v3_0_1
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledTokenProxyFactory.json
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForControlledTokenProxyFactory.ts
+      file: ./src/mappingForControlledTokenProxyFactory_v3_0_1.ts
+  {{/controlledTokenProxyFactory_v3_0_1}}
 
+  {{#controlledTokenProxyFactory_v3_1_0}}
+  - name: ControlledTokenProxyFactory_v3_1_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: ControlledTokenProxyFactory_v3_1_0
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - ControlledToken
+      abis:
+        - name: ControlledTokenProxyFactory_v3_1_0
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledTokenProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+      file: ./src/mappingForControlledTokenProxyFactory_v3_1_0.ts
+  {{/controlledTokenProxyFactory_v3_1_0}}
+
+  {{#ticketProxyFactory_v3_0_1}}
+  - name: TicketProxyFactory_v3_0_1
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: TicketProxyFactory_v3_0_1
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - ControlledToken
+      abis:
+        - name: TicketProxyFactory_v3_0_1
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/TicketProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+      file: ./src/mappingForTicketProxyFactory_v3_0_1.ts
+  {{/ticketProxyFactory_v3_0_1}}
+
+  {{#ticketProxyFactory_v3_1_0}}
+  - name: TicketProxyFactory_v3_1_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: TicketProxyFactory_v3_1_0
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - ControlledToken
+      abis:
+        - name: TicketProxyFactory_v3_1_0
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/TicketProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+      file: ./src/mappingForTicketProxyFactory_v3_1_0.ts
+  {{/ticketProxyFactory_v3_1_0}}
 
 templates:
   - name: SingleRandomWinner
@@ -154,7 +276,7 @@ templates:
       language: wasm/assemblyscript
       file: ./src/mappingForSingleRandomWinner.ts
       entities:
-        - SingleRandomWinner
+        - SingleRandomWinnerPrizeStrategy
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
@@ -189,6 +311,7 @@ templates:
           handler: handleExternalErc721AwardAdded
         - event: ExternalErc721AwardRemoved(indexed address)
           handler: handleExternalErc721AwardRemoved
+
   - name: CompoundPrizePool
     kind: ethereum/contract
     network: {{network}}
@@ -211,11 +334,12 @@ templates:
       eventHandlers:
         - event: CompoundPrizePoolInitialized(indexed address)
           handler: handleCompoundPrizePoolInitialized
-  - name: PrizePool
+  
+  - name: PrizePool_v3
     kind: ethereum/contract
     network: {{network}}
     source:
-      abi: PrizePool
+      abi: PrizePool_v3
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -226,13 +350,13 @@ templates:
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: PrizePool
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
         - name: CompoundPrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
-        - event: Initialized(address,uint256,uint256)
-          handler: handleInitialized
         - event: ControlledTokenAdded(indexed address)
           handler: handleControlledTokenAdded
         - event: ReserveFeeCaptured(uint256)
@@ -259,6 +383,57 @@ templates:
           handler: handleOwnershipTransferred
         - event: Deposited(indexed address,indexed address,indexed address,uint256,address)
           handler: handleDeposited
+
+  - name: PrizePool_v3_1_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: PrizePool_v3_1_0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForPrizePool_v3_1_0.ts
+      entities:
+        - PrizePool
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3_1_0
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        - name: CompoundPrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
+      eventHandlers:
+        - event: Initialized(address,uint256,uint256)
+          handler: handleInitialized
+
+  - name: PrizePool_v3_0_1
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: PrizePool_v3_0_1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForPrizePool_v3_0_1.ts
+      entities:
+        - PrizePool
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3_0_1
+          file: ./abis/PrizePool_v3_0_1.json
+        - name: CompoundPrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
+      eventHandlers:
+        - event: Initialized(address,address,uint256,uint256)
+          handler: handleInitialized
+
   - name: ControlledToken
     kind: ethereum/contract
     network: {{network}}
@@ -278,7 +453,7 @@ templates:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
   
-  - name: MultipleWinners 
+  - name: MultipleWinners
     kind: ethereum/contract
     network: {{network}}
     source:
@@ -287,7 +462,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappingForMultipleWinners.ts
+      file: ./src/mappingForMultipleWinners_v3_1_0.ts
       entities:
         - PeriodicPrizeStrategy
         - MultipleWinners

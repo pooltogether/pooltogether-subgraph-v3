@@ -1,8 +1,10 @@
 import { Address, log } from '@graphprotocol/graph-ts'
 
 import {
-  SingleRandomWinner,
+  SingleRandomWinnerPrizeStrategy,
 } from '../../generated/schema'
+
+import { loadOrCreatePrizeStrategy } from './loadOrCreatePrizeStrategy'
 
 import {
   SingleRandomWinner as SingleRandomWinnerContract,
@@ -13,12 +15,13 @@ import { loadOrCreateControlledToken } from './loadOrCreateControlledToken'
 
 export function loadOrCreateSingleRandomWinner(
   singleRandomWinner: Address,
-): SingleRandomWinner {
+): SingleRandomWinnerPrizeStrategy {
   const _singleRandomWinnerAddress = singleRandomWinner.toHex()
-  let _singleRandomWinner = SingleRandomWinner.load(_singleRandomWinnerAddress)
+  let _singleRandomWinner = SingleRandomWinnerPrizeStrategy.load(_singleRandomWinnerAddress)
   if (!_singleRandomWinner) {
-    // Create SingleRandomWinner
-    _singleRandomWinner = new SingleRandomWinner(_singleRandomWinnerAddress)
+
+    // Create SingleRandomWinnerPrizeStrategy
+    _singleRandomWinner = new SingleRandomWinnerPrizeStrategy(_singleRandomWinnerAddress)
     const _boundSingleRandomWinner = SingleRandomWinnerContract.bind(singleRandomWinner)
 
     _singleRandomWinner.owner = _boundSingleRandomWinner.owner()
@@ -48,7 +51,11 @@ export function loadOrCreateSingleRandomWinner(
     log.warning("CREATED sponsorship controlled token at {} with PrizeStrategyId {}", [sponsorship.id, _singleRandomWinner.id])
 
     _singleRandomWinner.save()
+
+    let prizeStrategy = loadOrCreatePrizeStrategy(singleRandomWinner)
+    prizeStrategy.singleRandomWinner = _singleRandomWinner.id
+    prizeStrategy.save()
   }
 
-  return _singleRandomWinner as SingleRandomWinner
+  return _singleRandomWinner as SingleRandomWinnerPrizeStrategy
 }

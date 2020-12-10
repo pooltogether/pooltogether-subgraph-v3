@@ -34,14 +34,42 @@ export class CompoundPrizePool extends DataSourceTemplate {
   }
 }
 
-export class PrizePool extends DataSourceTemplate {
+export class PrizePool_v3 extends DataSourceTemplate {
   static create(address: Address): void {
-    DataSourceTemplate.create("PrizePool", [address.toHex()]);
+    DataSourceTemplate.create("PrizePool_v3", [address.toHex()]);
   }
 
   static createWithContext(address: Address, context: DataSourceContext): void {
     DataSourceTemplate.createWithContext(
-      "PrizePool",
+      "PrizePool_v3",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
+export class PrizePool_v3_1_0 extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("PrizePool_v3_1_0", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "PrizePool_v3_1_0",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
+export class PrizePool_v3_0_1 extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("PrizePool_v3_0_1", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "PrizePool_v3_0_1",
       [address.toHex()],
       context
     );
