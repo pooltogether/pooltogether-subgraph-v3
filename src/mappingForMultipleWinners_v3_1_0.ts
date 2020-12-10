@@ -1,8 +1,8 @@
-import {NumberOfWinnersSet} from "../generated/templates/MultipleWinners/MultipleWinners"
+import {NumberOfWinnersSet, PrizePoolAwarded} from "../generated/templates/MultipleWinners/MultipleWinners"
 
 import { store, BigInt, log } from '@graphprotocol/graph-ts'
 import {
-  MultipleWinnersPrizeStrategy
+  MultipleWinnersPrizeStrategy, PrizePool
 } from '../generated/schema'
 
 import {
@@ -22,6 +22,7 @@ import {
 } from './helpers/loadOrCreateMultipleWinnersExternalAward'
 
 import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinners"
+import { ONE } from "./helpers/common"
 
 
 export function handleNumberOfWinnersSet(event: NumberOfWinnersSet) : void {
@@ -82,6 +83,14 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
   const _prizeStrategyAddress = event.address.toHex()
   const externalAward = loadOrCreateMultipleWinnersExternalErc20Award(_prizeStrategyAddress, event.params.externalErc20)
   externalAward.save()
+}
+
+export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
+
+  const _prizePool = PrizePool.load(event.address.toHex())
+  _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
+  _prizePool.save()
+
 }
 
 export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved): void {

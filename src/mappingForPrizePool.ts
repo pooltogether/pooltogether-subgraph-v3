@@ -75,8 +75,6 @@ export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
 
 export function handleAwarded(event: Awarded): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
-  
-  _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE) // before or after the record prize history??
 
   // Record prize history
   const _prize = loadOrCreatePrize(
@@ -102,6 +100,8 @@ export function handleAwarded(event: Awarded): void {
   // Update Pool (Reserve Fee updated in handleReserveFeeCaptured)
   _prizePool.cumulativePrizeNet = _prizePool.cumulativePrizeNet.plus(event.params.amount)
   _prizePool.cumulativePrizeGross = _prizePool.cumulativePrizeNet.plus(_prizePool.cumulativePrizeReserveFee)
+
+  
   _prizePool.save()
 }
 
