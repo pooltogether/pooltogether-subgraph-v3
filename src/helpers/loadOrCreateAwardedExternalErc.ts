@@ -44,7 +44,7 @@ export function loadOrCreateAwardedExternalErc20Token(prize: Prize, tokenAddress
     if (tryDecimalsCallResult.reverted) {
       log.info('ERC20 try_decimals() call reverted', [])
     } else {
-      award.decimals = tryDecimalsCallResult.value
+      award.decimals = BigInt.fromI32(tryDecimalsCallResult.value)
     }
 
     award.save()

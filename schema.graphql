@@ -34,14 +34,14 @@ type PrizePool @entity {
 
   reserveFeeControlledToken: Bytes!
 
-  underlyingCollateralToken: Bytes!
+  underlyingCollateralToken: Bytes
   underlyingCollateralDecimals: BigInt
-  underlyingCollateralName: String!
-  underlyingCollateralSymbol: String!
+  underlyingCollateralName: String
+  underlyingCollateralSymbol: String
 
   maxExitFeeMantissa: BigInt!
   maxTimelockDuration: BigInt!
-  timelockTotalSupply: BigInt!
+  timelockTotalSupply: BigInt
   liquidityCap: BigInt!
 
   cumulativePrizeGross: BigInt!

@@ -212,13 +212,21 @@ export class PrizePool extends Entity {
     this.set("reserveFeeControlledToken", Value.fromBytes(value));
   }
 
-  get underlyingCollateralToken(): Bytes {
+  get underlyingCollateralToken(): Bytes | null {
     let value = this.get("underlyingCollateralToken");
-    return value.toBytes();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
   }
 
-  set underlyingCollateralToken(value: Bytes) {
-    this.set("underlyingCollateralToken", Value.fromBytes(value));
+  set underlyingCollateralToken(value: Bytes | null) {
+    if (value === null) {
+      this.unset("underlyingCollateralToken");
+    } else {
+      this.set("underlyingCollateralToken", Value.fromBytes(value as Bytes));
+    }
   }
 
   get underlyingCollateralDecimals(): BigInt | null {
@@ -241,22 +249,38 @@ export class PrizePool extends Entity {
     }
   }
 
-  get underlyingCollateralName(): string {
+  get underlyingCollateralName(): string | null {
     let value = this.get("underlyingCollateralName");
-    return value.toString();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set underlyingCollateralName(value: string) {
-    this.set("underlyingCollateralName", Value.fromString(value));
+  set underlyingCollateralName(value: string | null) {
+    if (value === null) {
+      this.unset("underlyingCollateralName");
+    } else {
+      this.set("underlyingCollateralName", Value.fromString(value as string));
+    }
   }
 
-  get underlyingCollateralSymbol(): string {
+  get underlyingCollateralSymbol(): string | null {
     let value = this.get("underlyingCollateralSymbol");
-    return value.toString();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set underlyingCollateralSymbol(value: string) {
-    this.set("underlyingCollateralSymbol", Value.fromString(value));
+  set underlyingCollateralSymbol(value: string | null) {
+    if (value === null) {
+      this.unset("underlyingCollateralSymbol");
+    } else {
+      this.set("underlyingCollateralSymbol", Value.fromString(value as string));
+    }
   }
 
   get maxExitFeeMantissa(): BigInt {
@@ -277,13 +301,21 @@ export class PrizePool extends Entity {
     this.set("maxTimelockDuration", Value.fromBigInt(value));
   }
 
-  get timelockTotalSupply(): BigInt {
+  get timelockTotalSupply(): BigInt | null {
     let value = this.get("timelockTotalSupply");
-    return value.toBigInt();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set timelockTotalSupply(value: BigInt) {
-    this.set("timelockTotalSupply", Value.fromBigInt(value));
+  set timelockTotalSupply(value: BigInt | null) {
+    if (value === null) {
+      this.unset("timelockTotalSupply");
+    } else {
+      this.set("timelockTotalSupply", Value.fromBigInt(value as BigInt));
+    }
   }
 
   get liquidityCap(): BigInt {
