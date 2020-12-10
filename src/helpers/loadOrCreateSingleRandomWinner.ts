@@ -36,15 +36,13 @@ export function loadOrCreateSingleRandomWinner(
     _singleRandomWinner.prizePeriodEndAt = _singleRandomWinner.prizePeriodStartedAt.plus(_singleRandomWinner.prizePeriodSeconds)
 
     const ticket = loadOrCreateControlledToken(
-      _boundSingleRandomWinner.ticket(),
-      Address.fromString(_singleRandomWinner.prizePool)
+      _boundSingleRandomWinner.ticket()
     )
     _singleRandomWinner.ticket = ticket.id
     log.warning("CREATED ticket controlled token at {} with PrizeStrategyId {}", [ticket.id, _singleRandomWinner.id])
 
     const sponsorship = loadOrCreateControlledToken(
-      _boundSingleRandomWinner.sponsorship(),
-      Address.fromString(_singleRandomWinner.prizePool)
+      _boundSingleRandomWinner.sponsorship()
     )  
     log.warning("GOT HERE", [])
     _singleRandomWinner.sponsorship = sponsorship.id

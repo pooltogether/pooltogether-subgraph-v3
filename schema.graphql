@@ -154,13 +154,12 @@ type AwardedExternalErc721Nft @entity {
 # ID: `${controlledToken.address}`
 type ControlledToken @entity {
   id: ID!
-  prizePool: PrizePool!
 
   name: String!
   symbol: String!
   decimals: BigInt
 
-  controller: PrizePool # should this be ! ??
+  controller: PrizePool 
 
   totalSupply: BigInt!
 

@@ -5,9 +5,10 @@ import {
 } from '../generated/templates/ControlledToken/ControlledToken'
 
 import {
-  ControlledToken, ControlledTokenBalance,
+   ControlledTokenBalance,
 } from '../generated/schema'
 import { loadOrCreateAccount } from './helpers/loadOrCreateAccount'
+import { loadOrCreateControlledToken } from './helpers/loadOrCreateControlledToken'
 
 export function handleTransfer(event: Transfer): void {
 
@@ -16,12 +17,13 @@ export function handleTransfer(event: Transfer): void {
     return
   }
 
-  const controlledToken = ControlledToken.load(event.address.toHex())
-  
+  const controlledToken = loadOrCreateControlledToken(event.address)
+
   const isBurning = event.params.to.equals(Address.fromString(ZERO_ADDRESS))
-  if (isBurning) {
+  if(isBurning) {
     controlledToken.totalSupply = controlledToken.totalSupply.minus(event.params.value) // decrease total supply
-  } else {
+  }
+  else{
     let toBalance = ControlledTokenBalance.load(generateCompositeId (event.params.to, event.address)) // controlledtokenbalance id =  (address, controlledToken)
     
     if(toBalance == null) {// create case 
@@ -32,7 +34,7 @@ export function handleTransfer(event: Transfer): void {
       toBalance.controlledToken = controlledToken.id // or event.address
       toBalance.account = loadOrCreateAccount(event.params.to).id
     }
-    else {
+    else{
       toBalance.balance = toBalance.balance.plus(event.params.value)
     }
     toBalance.save()
@@ -41,7 +43,8 @@ export function handleTransfer(event: Transfer): void {
   const isMinting = event.params.from.equals(Address.fromString(ZERO_ADDRESS))
   if (isMinting) {
     controlledToken.totalSupply = controlledToken.totalSupply.plus(event.params.value)
-  } else {
+  } 
+  else{
     const fromBalance = ControlledTokenBalance.load(generateCompositeId (event.params.from, event.address)) // must always exist
     fromBalance.balance = fromBalance.balance.minus(event.params.value)
   

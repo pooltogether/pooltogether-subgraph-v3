@@ -22,6 +22,7 @@ import {
 } from './helpers/loadOrCreateMultipleWinnersExternalAward'
 
 import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinners"
+import { externalAwardId } from './helpers/idTemplates'
 
 export function handleNumberOfWinnersSet(event: NumberOfWinnersSet) : void {
     let multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHex())
