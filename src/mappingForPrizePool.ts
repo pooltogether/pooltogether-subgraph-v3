@@ -29,7 +29,7 @@ import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePool
 import { loadOrCreateAwardedExternalErc20Token, loadOrCreateAwardedExternalErc721Nft } from './helpers/loadOrCreateAwardedExternalErc'
 import { loadOrCreateExternalErc721Award } from './helpers/loadOrCreateExternalAward'
 
-import { ZERO, ZERO_ADDRESS } from './helpers/common'
+import { ONE, ZERO, ZERO_ADDRESS } from './helpers/common'
 import { Deposited } from '../generated/templates/CompoundPrizePool/CompoundPrizePool'
 import { loadOrCreatePrizePoolAccount } from './helpers/loadOrCreatePrizePoolAccount'
 import { awardedExternalErc721NftId } from './helpers/idTemplates'
@@ -75,6 +75,9 @@ export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
 
 export function handleAwarded(event: Awarded): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
+  
+  _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE) // before or after the record prize history??
+
   // Record prize history
   const _prize = loadOrCreatePrize(
     event.address.toHex(),
@@ -82,6 +85,7 @@ export function handleAwarded(event: Awarded): void {
   )
   _prize.amount = event.params.amount
 
+  
   const winner = event.params.winner
   if(winner.notEqual(Address.fromString(ZERO_ADDRESS))){
     const existingWinners = _prize.winners || []
