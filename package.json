@@ -29,7 +29,9 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "build:rinkeby": "graph build subgraph.rinkeby.yaml",
-    "auth": "graph auth https://api.thegraph.com/deploy/"
+    "auth": "graph auth https://api.thegraph.com/deploy/",
+
+    "tag-release": "PACKAGE_VERSION=$(./scripts/package-version.sh) && git tag -ae v$PACKAGE_VERSION && git push --tags"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.19.0",
