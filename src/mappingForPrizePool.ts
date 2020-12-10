@@ -19,6 +19,7 @@ import {
   OwnershipTransferred,
 } from '../generated/templates/PrizePool_v3/PrizePool_v3'
 
+import {externalAwardId} from "./helpers/idTemplates"
 
 import { loadOrCreatePrize } from './helpers/loadOrCreatePrize'
 
@@ -28,9 +29,10 @@ import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePool
 import { loadOrCreateAwardedExternalErc20Token, loadOrCreateAwardedExternalErc721Nft } from './helpers/loadOrCreateAwardedExternalErc'
 import { loadOrCreateExternalErc721Award } from './helpers/loadOrCreateExternalAward'
 
-import { ZERO, ZERO_ADDRESS } from './helpers/common'
+import { ONE, ZERO, ZERO_ADDRESS } from './helpers/common'
 import { Deposited } from '../generated/templates/CompoundPrizePool/CompoundPrizePool'
 import { loadOrCreatePrizePoolAccount } from './helpers/loadOrCreatePrizePoolAccount'
+import { awardedExternalErc721NftId } from './helpers/idTemplates'
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
@@ -73,6 +75,7 @@ export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
 
 export function handleAwarded(event: Awarded): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
+
   // Record prize history
   const _prize = loadOrCreatePrize(
     event.address.toHex(),
@@ -80,6 +83,7 @@ export function handleAwarded(event: Awarded): void {
   )
   _prize.amount = event.params.amount
 
+  
   const winner = event.params.winner
   if(winner.notEqual(Address.fromString(ZERO_ADDRESS))){
     const existingWinners = _prize.winners || []
@@ -96,12 +100,14 @@ export function handleAwarded(event: Awarded): void {
   // Update Pool (Reserve Fee updated in handleReserveFeeCaptured)
   _prizePool.cumulativePrizeNet = _prizePool.cumulativePrizeNet.plus(event.params.amount)
   _prizePool.cumulativePrizeGross = _prizePool.cumulativePrizeNet.plus(_prizePool.cumulativePrizeReserveFee)
+
+  
   _prizePool.save()
 }
 
 export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
-
+  const _prizeStrategyId = _prizePool.prizeStrategy
   const _prize = loadOrCreatePrize(
     event.address.toHex(),
     _prizePool.currentPrizeId.toString()
@@ -113,8 +119,14 @@ export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
   )
 
   awardedErc20Token.balanceAwarded = event.params.amount
-
+  
   awardedErc20Token.save()
+
+  // delete ID: `${prizeStrategy.address}-${token.address}`
+  const deleteId = externalAwardId(_prizeStrategyId, event.params.token.toHex())
+  store.remove("MultipleWinnersExternalErc20Award", deleteId) // is this a noop if doesnt exist??
+  store.remove("SingleRandomWinnerExternalErc20Award", deleteId )
+
 }
 
 // This is emitted when external rewards (nfts, etc) are awarded
@@ -135,6 +147,11 @@ export function handleAwardedExternalERC721(event: AwardedExternalERC721): void 
     event.params.token
   )
   awardedExternalErc721Nft.save()
+  // delete ID: `${prizeStrategy.address}-${token.address}`
+  const deleteId = externalAwardId(_prizeStrategy.id, event.params.token.toHex())
+  store.remove("MultipleWinnersExternalErc721Award", deleteId) // is this a noop if doesnt exist??
+  store.remove("SingleRandomWinnerExternalErc721Award", deleteId )
+ 
 }
 
 

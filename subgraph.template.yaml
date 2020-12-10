@@ -492,3 +492,5 @@ templates:
           handler: handlePeriodicPrizeInitialized
         - event: NumberOfWinnersSet(uint256)
           handler: handleNumberOfWinnersSet
+        - event: PrizePoolAwarded(indexed address,uint256)
+          handler: handlePrizePoolAwarded
