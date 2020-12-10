@@ -5,10 +5,6 @@ import {
 } from '../../generated/schema'
 
 import {
-  ControlledToken as ControlledTokenTemplate,
-} from '../../generated/templates'
-
-import {
   ControlledToken as ControlledTokenContract
 } from '../../generated/templates/ControlledToken/ControlledToken'
 
@@ -51,8 +47,6 @@ export function loadOrCreateControlledToken(
     controlledToken.controller = prizePoolAddress.toHex()
   
     controlledToken.save()
-  
-    ControlledTokenTemplate.create(tokenAddress)
   }
 
   return controlledToken as ControlledToken

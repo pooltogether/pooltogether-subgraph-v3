@@ -2,7 +2,7 @@ import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 
 import {
   ERC20 as ERC20Contract,
-} from '../../generated/templates/PrizePool/ERC20'
+} from '../../generated/templates/PrizePool_v3_1_0/ERC20'
 
 import {
   MultipleWinnersExternalErc20Award,

@@ -521,9 +521,26 @@ export class PrizeStrategy extends Entity {
       this.set("singleRandomWinner", Value.fromString(value as string));
     }
   }
+
+  get multipleWinners(): string | null {
+    let value = this.get("multipleWinners");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set multipleWinners(value: string | null) {
+    if (value === null) {
+      this.unset("multipleWinners");
+    } else {
+      this.set("multipleWinners", Value.fromString(value as string));
+    }
+  }
 }
 
-export class SingleRandomWinner extends Entity {
+export class SingleRandomWinnerPrizeStrategy extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -531,17 +548,23 @@ export class SingleRandomWinner extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save SingleRandomWinner entity without an ID");
+    assert(
+      id !== null,
+      "Cannot save SingleRandomWinnerPrizeStrategy entity without an ID"
+    );
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save SingleRandomWinner entity with non-string ID. " +
+      "Cannot save SingleRandomWinnerPrizeStrategy entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("SingleRandomWinner", id.toString(), this);
+    store.set("SingleRandomWinnerPrizeStrategy", id.toString(), this);
   }
 
-  static load(id: string): SingleRandomWinner | null {
-    return store.get("SingleRandomWinner", id) as SingleRandomWinner | null;
+  static load(id: string): SingleRandomWinnerPrizeStrategy | null {
+    return store.get(
+      "SingleRandomWinnerPrizeStrategy",
+      id
+    ) as SingleRandomWinnerPrizeStrategy | null;
   }
 
   get id(): string {
@@ -1327,7 +1350,7 @@ export class ControlledTokenBalance extends Entity {
   }
 }
 
-export class ExternalErc20Award extends Entity {
+export class SingleRandomWinnerExternalErc20Award extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -1335,17 +1358,23 @@ export class ExternalErc20Award extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save ExternalErc20Award entity without an ID");
+    assert(
+      id !== null,
+      "Cannot save SingleRandomWinnerExternalErc20Award entity without an ID"
+    );
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save ExternalErc20Award entity with non-string ID. " +
+      "Cannot save SingleRandomWinnerExternalErc20Award entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("ExternalErc20Award", id.toString(), this);
+    store.set("SingleRandomWinnerExternalErc20Award", id.toString(), this);
   }
 
-  static load(id: string): ExternalErc20Award | null {
-    return store.get("ExternalErc20Award", id) as ExternalErc20Award | null;
+  static load(id: string): SingleRandomWinnerExternalErc20Award | null {
+    return store.get(
+      "SingleRandomWinnerExternalErc20Award",
+      id
+    ) as SingleRandomWinnerExternalErc20Award | null;
   }
 
   get id(): string {
@@ -1419,7 +1448,7 @@ export class ExternalErc20Award extends Entity {
   }
 }
 
-export class ExternalErc721Award extends Entity {
+export class SingleRandomWinnerExternalErc721Award extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -1427,17 +1456,23 @@ export class ExternalErc721Award extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save ExternalErc721Award entity without an ID");
+    assert(
+      id !== null,
+      "Cannot save SingleRandomWinnerExternalErc721Award entity without an ID"
+    );
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save ExternalErc721Award entity with non-string ID. " +
+      "Cannot save SingleRandomWinnerExternalErc721Award entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("ExternalErc721Award", id.toString(), this);
+    store.set("SingleRandomWinnerExternalErc721Award", id.toString(), this);
   }
 
-  static load(id: string): ExternalErc721Award | null {
-    return store.get("ExternalErc721Award", id) as ExternalErc721Award | null;
+  static load(id: string): SingleRandomWinnerExternalErc721Award | null {
+    return store.get(
+      "SingleRandomWinnerExternalErc721Award",
+      id
+    ) as SingleRandomWinnerExternalErc721Award | null;
   }
 
   get id(): string {

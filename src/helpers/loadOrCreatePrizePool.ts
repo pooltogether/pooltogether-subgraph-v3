@@ -5,12 +5,8 @@ import {
 } from '../../generated/schema'
 
 import {
-  PrizePool as PrizePoolTemplate,
-} from '../../generated/templates'
-
-import {
-  PrizePool as PrizePoolContract,
-} from '../../generated/templates/PrizePool/PrizePool'
+  PrizePool_v3 as PrizePoolContract,
+} from '../../generated/templates/PrizePool_v3/PrizePool_v3'
 
 import {
   ControlledToken as ControlledTokenContract,
@@ -97,9 +93,6 @@ export function loadOrCreatePrizePool(
     _prizePool.cumulativePrizeNet = ZERO
 
     _prizePool.save()
-
-    // Start listening for events from the dynamically generated contract
-    PrizePoolTemplate.create(prizePool)
   }
 
   return _prizePool as PrizePool
