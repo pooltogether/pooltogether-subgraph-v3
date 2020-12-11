@@ -121,12 +121,6 @@ export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
   awardedErc20Token.balanceAwarded = event.params.amount
   
   awardedErc20Token.save()
-
-  // delete ID: `${prizeStrategy.address}-${token.address}`
-  const deleteId = externalAwardId(_prizeStrategyId, event.params.token.toHex())
-  store.remove("MultipleWinnersExternalErc20Award", deleteId) // is this a noop if doesnt exist??
-  store.remove("SingleRandomWinnerExternalErc20Award", deleteId )
-
 }
 
 // This is emitted when external rewards (nfts, etc) are awarded
