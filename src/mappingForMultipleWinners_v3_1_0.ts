@@ -23,6 +23,7 @@ import {
 
 import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinners"
 import { ONE } from "./helpers/common"
+import { loadOrCreatePrizePool } from "./helpers/loadOrCreatePrizePool"
 
 
 export function handleNumberOfWinnersSet(event: NumberOfWinnersSet) : void {
@@ -86,11 +87,11 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 }
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
-
-  const _prizePool = PrizePool.load(event.address.toHex())
+  log.warning("debug909 txId to {} on incrementing {} ", [event.transaction.hash.toHexString(), event.address.toHexString()])
+  const _prizePool = loadOrCreatePrizePool(event.address)
+  log.warning("prize pool is {} ", [_prizePool.id])
   _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
   _prizePool.save()
-
 }
 
 export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved): void {
