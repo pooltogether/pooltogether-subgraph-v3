@@ -23,7 +23,7 @@ import {
 
 import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinners"
 import { ONE } from "./helpers/common"
-import { loadOrCreatePrizePool } from "./helpers/loadOrCreatePrizePool"
+
 
 
 export function handleNumberOfWinnersSet(event: NumberOfWinnersSet) : void {
@@ -45,10 +45,20 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
     const startTime = event.params.prizePeriodStart
     const prizePeriod = event.params.prizePeriodSeconds
 
+    log.warning("creating MultipleWinnersPrizeStrategy", [])
 
     const multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHex())
 
-    multipleWinners.prizePool=prizePool
+    const _checkPrizePool = PrizePool.load(prizePool.toHex())
+    if(!_checkPrizePool){
+      log.warning("setting mw prizePool to null!",[])
+      multipleWinners.prizePool = null
+    }
+    else{
+      multipleWinners.prizePool = _checkPrizePool.id
+    }
+
+    
     multipleWinners.prizePeriodStartedAt = startTime
     multipleWinners.rng = rng
     multipleWinners.ticket = ticket.toHexString()
@@ -89,10 +99,12 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
   log.warning("debug909 txId to {} on incrementing {} ", [event.transaction.hash.toHexString(), event.address.toHexString()])
   const mwStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
-  const prizePoolId = mwStrategy.prizePool
-  const _prizePool = PrizePool.load(prizePoolId.toHex())
-  _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
-  _prizePool.save()
+
+  if(mwStrategy.prizePool){   // if prizePool is empty just skip (temp)
+    const _prizePool = PrizePool.load(mwStrategy.prizePool)
+    _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
+    _prizePool.save()
+  }
 }
 
 export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved): void {
