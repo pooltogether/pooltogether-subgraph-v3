@@ -88,8 +88,9 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
   log.warning("debug909 txId to {} on incrementing {} ", [event.transaction.hash.toHexString(), event.address.toHexString()])
-  const _prizePool = loadOrCreatePrizePool(event.address)
-  log.warning("prize pool is {} ", [_prizePool.id])
+  const mwStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+  const prizePoolId = mwStrategy.prizePool
+  const _prizePool = PrizePool.load(prizePoolId.toHex())
   _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
   _prizePool.save()
 }
