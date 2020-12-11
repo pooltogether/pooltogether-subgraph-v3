@@ -469,6 +469,12 @@ templates:
       abis:
         - name: MultipleWinners
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/MultipleWinners.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3_0_1
+          file: ./abis/PrizePool_v3_0_1.json
+        - name: CompoundPrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
         - name: ERC20
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ERC20Upgradeable.json
       eventHandlers:

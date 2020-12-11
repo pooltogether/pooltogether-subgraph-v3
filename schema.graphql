@@ -131,8 +131,8 @@ type AwardedExternalErc20Token @entity {
   id: ID!
 
   address: Bytes!
-  name: String!
-  symbol: String!
+  name: String
+  symbol: String
   decimals: BigInt
   
   balanceAwarded: BigInt
@@ -181,8 +181,8 @@ type SingleRandomWinnerExternalErc20Award @entity {
   id: ID!
 
   address: Bytes!
-  name: String!
-  symbol: String!
+  name: String
+  symbol: String
   decimals: BigInt
   
   prizeStrategy: SingleRandomWinnerPrizeStrategy
@@ -357,9 +357,9 @@ type MultipleWinnersExternalErc20Award @entity {
   id: ID!
 
   address: Bytes!
-  name: String!
-  symbol: String!
-  decimals: BigInt!
+  name: String
+  symbol: String
+  decimals: BigInt
   
   balanceAwarded: BigInt
   prizeStrategy: MultipleWinnersPrizeStrategy

@@ -2624,31 +2624,55 @@ export class MultipleWinnersExternalErc20Award extends Entity {
     this.set("address", Value.fromBytes(value));
   }
 
-  get name(): string {
+  get name(): string | null {
     let value = this.get("name");
-    return value.toString();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set name(value: string) {
-    this.set("name", Value.fromString(value));
+  set name(value: string | null) {
+    if (value === null) {
+      this.unset("name");
+    } else {
+      this.set("name", Value.fromString(value as string));
+    }
   }
 
-  get symbol(): string {
+  get symbol(): string | null {
     let value = this.get("symbol");
-    return value.toString();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set symbol(value: string) {
-    this.set("symbol", Value.fromString(value));
+  set symbol(value: string | null) {
+    if (value === null) {
+      this.unset("symbol");
+    } else {
+      this.set("symbol", Value.fromString(value as string));
+    }
   }
 
-  get decimals(): BigInt {
+  get decimals(): BigInt | null {
     let value = this.get("decimals");
-    return value.toBigInt();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set decimals(value: BigInt) {
-    this.set("decimals", Value.fromBigInt(value));
+  set decimals(value: BigInt | null) {
+    if (value === null) {
+      this.unset("decimals");
+    } else {
+      this.set("decimals", Value.fromBigInt(value as BigInt));
+    }
   }
 
   get balanceAwarded(): BigInt | null {
