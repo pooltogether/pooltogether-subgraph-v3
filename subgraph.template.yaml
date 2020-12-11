@@ -471,8 +471,8 @@ templates:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/MultipleWinners.json
         - name: PrizePool_v3
           file: ./abis/PrizePool_v3.json
-        - name: PrizePool_v3_0_1
-          file: ./abis/PrizePool_v3_0_1.json
+        - name: PrizePool_v3_1_0
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: CompoundPrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
         - name: ERC20
