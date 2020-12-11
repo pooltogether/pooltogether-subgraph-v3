@@ -60,7 +60,7 @@ export function loadOrCreateBalanceDripPlayer(
   if (!_player) {
     _player = new BalanceDripPlayer(_playerId)
 
-    log.warning('BalanceDripPlayer {}', [player.toHex()])
+    // log.warning('BalanceDripPlayer {}', [player.toHex()])
     _player.balanceDrip = balanceDripId
     _player.address = player
     _player.save()
@@ -80,7 +80,7 @@ export function loadOrCreateVolumeDripPlayer(
   if (!_player) {
     _player = new VolumeDripPlayer(_playerId)
 
-    log.warning('VolumeDripPlayer {}', [player.toHex()])
+    // log.warning('VolumeDripPlayer {}', [player.toHex()])
     _player.volumeDrip = volumeDripId
     _player.address = player
     _player.periodIndex = BigInt.fromI32(0)
