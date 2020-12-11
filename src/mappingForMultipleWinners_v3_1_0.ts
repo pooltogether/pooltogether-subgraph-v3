@@ -1,7 +1,8 @@
-import {NumberOfWinnersSet, PrizePoolAwarded} from "../generated/templates/MultipleWinners/MultipleWinners"
+import {NumberOfWinnersSet, PrizePoolAwarded, PrizePoolAwardStarted} from "../generated/templates/MultipleWinners/MultipleWinners"
 
 import { store, BigInt, log } from '@graphprotocol/graph-ts'
 import {
+  ControlledToken,
   MultipleWinnersPrizeStrategy, PrizePool
 } from '../generated/schema'
 
@@ -14,6 +15,7 @@ import {
   ExternalErc20AwardRemoved,
   ExternalErc721AwardAdded,
   ExternalErc721AwardRemoved,
+  MultipleWinners as MultipleWinnersContract
 } from '../generated/templates/MultipleWinners/MultipleWinners'
 
 import {
@@ -23,6 +25,7 @@ import {
 
 import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinners"
 import { ONE } from "./helpers/common"
+import { loadOrCreatePrize } from "./helpers/loadOrCreatePrize"
 
 
 
@@ -99,13 +102,61 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
   log.warning("debug909 txId to {} on incrementing {} ", [event.transaction.hash.toHexString(), event.address.toHexString()])
   const mwStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
-
-  if(mwStrategy.prizePool){   // if prizePool is empty just skip (temp)
-    const _prizePool = PrizePool.load(mwStrategy.prizePool)
-    _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
-    _prizePool.save()
+  log.warning("debug909 strategyId {} prizepool {}",[mwStrategy.id, mwStrategy.prizePool + "999" ])
+ 
+  if(!mwStrategy.prizePool){   // if prizePool is empty just skip (temp)
+    log.warning("prizepool not linked to strategy",[])
+    return
   }
+
+  const _prizePool = PrizePool.load(mwStrategy.prizePool)
+
+  // Record prize history
+  const _prize = loadOrCreatePrize(
+    mwStrategy.prizePool,
+    _prizePool.currentPrizeId.toString()
+  )
+
+  const controlledToken = ControlledToken.load(mwStrategy.ticket)
+  
+  _prize.awardedOperator = event.params.operator
+  _prize.randomNumber = event.params.randomNumber
+  _prize.awardedBlock = event.block.number
+  _prize.awardedTimestamp = event.block.timestamp
+  _prize.totalTicketSupply = controlledToken.totalSupply
+  _prize.save()
+
+  _prizePool.currentState = "Awarded"
+  _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
+  _prizePool.save()
 }
+
+
+export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void {
+  const _prizeStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+  const boundPrizeStrategy = MultipleWinnersContract.bind(event.address)
+
+  const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
+  if(!_prizePool){
+    log.warning("prize pool does not exist {}",[_prizeStrategy.id])
+    return
+  }
+  _prizePool.currentState = "Started"
+  _prizePool.prizesCount = _prizePool.prizesCount.plus(ONE)
+  _prizePool.save()
+
+  const _prize = loadOrCreatePrize(
+    _prizeStrategy.prizePool,
+    _prizePool.currentPrizeId.toString()
+  )
+
+  _prize.prizePeriodStartedTimestamp = boundPrizeStrategy.prizePeriodStartedAt()
+  _prize.awardStartOperator = event.params.operator
+  _prize.lockBlock = event.params.rngLockBlock
+  _prize.rngRequestId = event.params.rngRequestId
+  _prize.save()
+}
+
 
 export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved): void {
   const _prizeStrategyAddress = event.address.toHex()

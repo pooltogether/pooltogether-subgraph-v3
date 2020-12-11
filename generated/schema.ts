@@ -2497,20 +2497,20 @@ export class MultipleWinnersPrizeStrategy extends Entity {
     }
   }
 
-  get prizePool(): Bytes | null {
+  get prizePool(): string | null {
     let value = this.get("prizePool");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set prizePool(value: Bytes | null) {
+  set prizePool(value: string | null) {
     if (value === null) {
       this.unset("prizePool");
     } else {
-      this.set("prizePool", Value.fromBytes(value as Bytes));
+      this.set("prizePool", Value.fromString(value as string));
     }
   }
 

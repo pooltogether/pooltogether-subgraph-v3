@@ -500,3 +500,6 @@ templates:
           handler: handleNumberOfWinnersSet
         - event: PrizePoolAwarded(indexed address,uint256)
           handler: handlePrizePoolAwarded
+        - event: PrizePoolAwardStarted(indexed address,indexed address,indexed uint32,uint32)
+          handler: handlePrizePoolAwardStarted
+
