@@ -29,6 +29,7 @@
     
     "all-local" : "yarn clean && yarn prepare:local && yarn gen:local && yarn deploy:local",
     "all-rinkeby-stg" : "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby-stg",
+    "all-rinkeby" : "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby",
     "all-mainnet-stg" : "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet-stg",
     
     "codegen": "graph codegen",
