@@ -902,23 +902,6 @@ export class Prize extends Entity {
     }
   }
 
-  get amount(): BigInt | null {
-    let value = this.get("amount");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set amount(value: BigInt | null) {
-    if (value === null) {
-      this.unset("amount");
-    } else {
-      this.set("amount", Value.fromBigInt(value as BigInt));
-    }
-  }
-
   get totalTicketSupply(): BigInt | null {
     let value = this.get("totalTicketSupply");
     if (value === null || value.kind == ValueKind.NULL) {
@@ -936,21 +919,13 @@ export class Prize extends Entity {
     }
   }
 
-  get winners(): Array<Bytes> | null {
-    let value = this.get("winners");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytesArray();
-    }
+  get awardedControlledTokens(): Array<string> {
+    let value = this.get("awardedControlledTokens");
+    return value.toStringArray();
   }
 
-  set winners(value: Array<Bytes> | null) {
-    if (value === null) {
-      this.unset("winners");
-    } else {
-      this.set("winners", Value.fromBytesArray(value as Array<Bytes>));
-    }
+  set awardedControlledTokens(value: Array<string>) {
+    this.set("awardedControlledTokens", Value.fromStringArray(value));
   }
 
   get awardedExternalErc20Tokens(): Array<string> {
@@ -969,6 +944,79 @@ export class Prize extends Entity {
 
   set awardedExternalErc721Nfts(value: Array<string>) {
     this.set("awardedExternalErc721Nfts", Value.fromStringArray(value));
+  }
+}
+
+export class AwardedControlledToken extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save AwardedControlledToken entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save AwardedControlledToken entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("AwardedControlledToken", id.toString(), this);
+  }
+
+  static load(id: string): AwardedControlledToken | null {
+    return store.get(
+      "AwardedControlledToken",
+      id
+    ) as AwardedControlledToken | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get winner(): Bytes {
+    let value = this.get("winner");
+    return value.toBytes();
+  }
+
+  set winner(value: Bytes) {
+    this.set("winner", Value.fromBytes(value));
+  }
+
+  get amount(): BigInt {
+    let value = this.get("amount");
+    return value.toBigInt();
+  }
+
+  set amount(value: BigInt) {
+    this.set("amount", Value.fromBigInt(value));
+  }
+
+  get token(): string {
+    let value = this.get("token");
+    return value.toString();
+  }
+
+  set token(value: string) {
+    this.set("token", Value.fromString(value));
+  }
+
+  get prize(): string {
+    let value = this.get("prize");
+    return value.toString();
+  }
+
+  set prize(value: string) {
+    this.set("prize", Value.fromString(value));
   }
 }
 
@@ -1093,6 +1141,23 @@ export class AwardedExternalErc20Token extends Entity {
   set prize(value: string) {
     this.set("prize", Value.fromString(value));
   }
+
+  get winner(): Bytes | null {
+    let value = this.get("winner");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set winner(value: Bytes | null) {
+    if (value === null) {
+      this.unset("winner");
+    } else {
+      this.set("winner", Value.fromBytes(value as Bytes));
+    }
+  }
 }
 
 export class AwardedExternalErc721Nft extends Entity {
@@ -1171,6 +1236,23 @@ export class AwardedExternalErc721Nft extends Entity {
       this.unset("prize");
     } else {
       this.set("prize", Value.fromString(value as string));
+    }
+  }
+
+  get winner(): Bytes | null {
+    let value = this.get("winner");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set winner(value: Bytes | null) {
+    if (value === null) {
+      this.unset("winner");
+    } else {
+      this.set("winner", Value.fromBytes(value as Bytes));
     }
   }
 }
@@ -1615,15 +1697,6 @@ export class PrizePoolAccount extends Entity {
 
   set unlockTimestamp(value: BigInt) {
     this.set("unlockTimestamp", Value.fromBigInt(value));
-  }
-
-  get cumulativeWinnings(): BigInt {
-    let value = this.get("cumulativeWinnings");
-    return value.toBigInt();
-  }
-
-  set cumulativeWinnings(value: BigInt) {
-    this.set("cumulativeWinnings", Value.fromBigInt(value));
   }
 }
 

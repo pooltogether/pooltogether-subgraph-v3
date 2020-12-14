@@ -12,8 +12,8 @@ export function loadOrCreatePrizePoolAccount(
       prizePoolAccount.prizePool = prizePool.toHex()
       prizePoolAccount.account = account
       
+      // mock values
       prizePoolAccount.timelockedBalance = ZERO
-      prizePoolAccount.cumulativeWinnings = ZERO
       prizePoolAccount.unlockTimestamp = ZERO
       
       prizePoolAccount.save()
