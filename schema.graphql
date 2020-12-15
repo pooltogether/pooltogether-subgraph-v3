@@ -7,7 +7,7 @@ enum PrizePoolState {
 enum PrizePoolType {
   Compound
   yVault
-  Skate
+  Stake
 }
 
 
