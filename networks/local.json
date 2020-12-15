@@ -19,5 +19,9 @@
   "controlledTokenProxyFactory": {
     "address": "",
     "startBlock": "1"
+  },
+  "stakePrizePoolProxyFactory_v3_1_0": {
+    "address": "",
+    "startBlock": ""
   }
 }
