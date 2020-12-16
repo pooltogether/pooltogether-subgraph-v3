@@ -1,5 +1,5 @@
 import { Address, log, store } from '@graphprotocol/graph-ts'
-import {ONE, ZERO, ZERO_ADDRESS} from "./helpers/common"
+import {generateCompositeId, ONE, ZERO, ZERO_ADDRESS} from "./helpers/common"
 import {
   Transfer,
 } from '../generated/templates/ControlledToken/ControlledToken'
@@ -24,10 +24,10 @@ export function handleTransfer(event: Transfer): void {
     controlledToken.totalSupply = controlledToken.totalSupply.minus(event.params.value) // decrease total supply
   }
   else{
-    let toBalance = ControlledTokenBalance.load(generateCompositeId (event.params.to, event.address)) // controlledtokenbalance id =  (address, controlledToken)
+    let toBalance = ControlledTokenBalance.load(generateCompositeId (event.params.to.toHexString(), event.address.toHexString())) // controlledtokenbalance id =  (address, controlledToken)
     
     if(toBalance == null) {// create case 
-      toBalance = new ControlledTokenBalance(generateCompositeId (event.params.to, event.address))
+      toBalance = new ControlledTokenBalance(generateCompositeId (event.params.to.toHexString(), event.address.toHexString()))
       controlledToken.numberOfHolders = controlledToken.numberOfHolders.plus(ONE)  // if transfer is to NEW address then increment number of players
 
       toBalance.balance = event.params.value
@@ -45,7 +45,7 @@ export function handleTransfer(event: Transfer): void {
     controlledToken.totalSupply = controlledToken.totalSupply.plus(event.params.value)
   } 
   else{
-    const fromBalance = ControlledTokenBalance.load(generateCompositeId (event.params.from, event.address)) // must always exist
+    const fromBalance = ControlledTokenBalance.load(generateCompositeId (event.params.from.toHexString(), event.address.toHexString())) // must always exist
     fromBalance.balance = fromBalance.balance.minus(event.params.value)
   
     // if the balance of the sending account is zero then remove it
@@ -59,9 +59,4 @@ export function handleTransfer(event: Transfer): void {
   }
 
   controlledToken.save()
-}
-
-// helper --Move to helpers
-function generateCompositeId(address1: Address, address2: Address) : string {
-  return address1.toHex() + "-" + address2.toHex()
 }

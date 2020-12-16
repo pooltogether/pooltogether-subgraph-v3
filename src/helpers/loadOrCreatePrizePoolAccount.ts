@@ -1,6 +1,6 @@
 import { log, Address } from '@graphprotocol/graph-ts'
 import {PrizePoolAccount} from "../../generated/schema"
-import {ZERO} from "./common"
+import {generateCompositeId, ZERO} from "./common"
 
 export function loadOrCreatePrizePoolAccount(
     prizePool: Address,
@@ -19,9 +19,5 @@ export function loadOrCreatePrizePoolAccount(
       prizePoolAccount.save()
     }
     return prizePoolAccount as PrizePoolAccount
-  }
-
-  function generateCompositeId(accountId : string, controlledTokenId: string) :string{
-    return accountId + "-" + controlledTokenId
-  }
+}
 

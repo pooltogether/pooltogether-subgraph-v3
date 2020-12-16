@@ -1,9 +1,7 @@
 import { Address, log, store } from '@graphprotocol/graph-ts'
 import {
   PrizeStrategy,
-  PrizePool,
-  MultipleWinnersPrizeStrategy,
-  SingleRandomWinnerPrizeStrategy
+  PrizePool
 } from '../generated/schema'
 
 import {
@@ -31,12 +29,9 @@ import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePool
 import { loadOrCreateAwardedExternalErc20Token, loadOrCreateAwardedExternalErc721Nft } from './helpers/loadOrCreateAwardedExternalErc'
 
 
-import { ONE, ZERO, ZERO_ADDRESS } from './helpers/common'
+import { ZERO } from './helpers/common'
 import { Deposited } from '../generated/templates/CompoundPrizePool/CompoundPrizePool'
 import { loadOrCreatePrizePoolAccount } from './helpers/loadOrCreatePrizePoolAccount'
-import { awardedExternalErc721NftId } from './helpers/idTemplates'
-import { PrizePoolAwardStarted, SingleRandomWinner } from '../generated/templates/SingleRandomWinner/SingleRandomWinner'
-import { MultipleWinners } from '../generated/templates/MultipleWinners/MultipleWinners'
 import { loadOrCreateAwardedControlledToken } from './helpers/loadOrCreateAwardedControlledToken'
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
@@ -81,8 +76,6 @@ export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
 export function handleAwarded(event: Awarded): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
 
-  log.warning("prizePool id {} currentPrizeId {} ",[_prizePool.id, _prizePool.currentPrizeId.toHexString()])
-
   // Record prize history
   const _prize = loadOrCreatePrize(
     event.address.toHex(),
@@ -94,31 +87,8 @@ export function handleAwarded(event: Awarded): void {
 
   const awardedControlledToken = loadOrCreateAwardedControlledToken(event.address.toHexString(), winner)
   awardedControlledToken.amount = event.params.amount
-  
-  
-  // load ticket from prize strategy
-  let ticket : string 
-  if(_prizePool.prizeStrategy){
-    const prizeStrategy = PrizeStrategy.load(_prizePool.prizeStrategy)
-    if(prizeStrategy){
-      // multiple winners case first
-      const multipleWinnersId = prizeStrategy.multipleWinners // can be null
-      if(multipleWinnersId){
-        const multipleWinners = MultipleWinnersPrizeStrategy.load(multipleWinnersId)
-        ticket = multipleWinners.ticket
-      }
-      else{
-        const singleRandomWinnerId = prizeStrategy.singleRandomWinner 
-        const singleRandomWinner = SingleRandomWinnerPrizeStrategy.load(singleRandomWinnerId)
-        ticket = singleRandomWinner.ticket 
-      }  
-    }
-  }
-  else{
-    ticket = null
-  }
   awardedControlledToken.prize = _prize.id
-  awardedControlledToken.token = ticket
+  awardedControlledToken.token = event.params.token.toHexString()
   awardedControlledToken.save()
 
   // Update Pool (Reserve Fee updated in handleReserveFeeCaptured)
@@ -135,7 +105,6 @@ export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
     event.address.toHex(),
     _prizePool.currentPrizeId.toString()
   )
-  // log.warning("handleAwardedExternalERC20 prizePool id {} prize {} ",[_prizePool.id, _prize.id])
 
   const awardedErc20Token = loadOrCreateAwardedExternalErc20Token(
     _prize,

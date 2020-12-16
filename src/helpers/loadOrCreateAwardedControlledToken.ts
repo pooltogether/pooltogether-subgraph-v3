@@ -1,6 +1,6 @@
 import { Address, log } from '@graphprotocol/graph-ts'
 import { AwardedControlledToken } from '../../generated/schema'
-import { ZERO } from './common'
+import { generateCompositeId, ZERO } from './common'
 
 
 export function loadOrCreateAwardedControlledToken(prizePoolAddress: string, winner: Address): AwardedControlledToken {
@@ -17,6 +17,3 @@ export function loadOrCreateAwardedControlledToken(prizePoolAddress: string, win
     return awardedControlledToken as AwardedControlledToken
 }
 
-function generateCompositeId(key1: string , key2: string) : string {
-    return key1 + key2
-}
