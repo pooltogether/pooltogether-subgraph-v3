@@ -63,7 +63,7 @@ type PrizePool @entity {
 
   prizePoolAccounts: [PrizePoolAccount!]! @derivedFrom(field: "prizePool")
 
-  controlledTokens: [ControlledToken!]! @derivedFrom(field: "controller")
+  controlledTokens: [ControlledToken!]! @derivedFrom(field: "controller") # controlled tokens may not exist until transfer is called
 }
 
 

@@ -4,7 +4,6 @@ import { generateCompositeId, ZERO } from './common'
 
 
 export function loadOrCreateAwardedControlledToken(prizePoolAddress: string, winner: Address): AwardedControlledToken {
-    log.warning("LOADORCREATE AWARDED CONTROLLED TOKEN ",[])
     let awardedControlledToken = AwardedControlledToken.load(generateCompositeId(prizePoolAddress, winner.toHexString()))
     if(!awardedControlledToken){ // create new
         awardedControlledToken = new AwardedControlledToken(generateCompositeId(prizePoolAddress, winner.toHexString()))

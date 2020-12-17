@@ -10,11 +10,14 @@ import {
 
 import { ZERO } from './common'
 
+
 export function loadOrCreateControlledToken(
   tokenAddress: Address
 ): ControlledToken {
   let controlledToken = ControlledToken.load(tokenAddress.toHexString())
   if (!controlledToken) {
+    log.warning("debug001 creating controleld token for {} ",[tokenAddress.toHex()])
+    
     controlledToken = new ControlledToken(tokenAddress.toHex())
     const boundToken = ControlledTokenContract.bind(tokenAddress)
   
@@ -25,11 +28,10 @@ export function loadOrCreateControlledToken(
     else{
       controlledToken.controller = tryControllerCall.value.toHexString()
     }
-  
-    
+     
     let controlledTokenName = boundToken.try_name()
     if(controlledTokenName.reverted){
-      log.info('ERC20 try_name() call reverted', [])
+      log.info('ControlledToken ERC20 try_name() call reverted', [])
     }
     else{
       controlledToken.name = controlledTokenName.value
@@ -38,7 +40,7 @@ export function loadOrCreateControlledToken(
 
     let controlledTokenSymbol = boundToken.try_symbol()
     if(controlledTokenSymbol.reverted){
-      log.info('ERC20 try_symbol() call reverted', [])
+      log.info('ControlledToken ERC20 try_symbol() call reverted', [])
     }
     else{
       controlledToken.symbol = controlledTokenSymbol.value
@@ -46,7 +48,7 @@ export function loadOrCreateControlledToken(
  
     let tryDecimalsCallResult = boundToken.try_decimals()
     if(tryDecimalsCallResult.reverted) {
-      log.info('ERC20 try_decimals() call reverted', [])
+      log.info('ControlledToken ERC20 try_decimals() call reverted', [])
     }
     else{
       controlledToken.decimals = BigInt.fromI32(tryDecimalsCallResult.value)

@@ -39,15 +39,11 @@ export function loadOrCreateSingleRandomWinner(
       _boundSingleRandomWinner.ticket()
     )
     _singleRandomWinner.ticket = ticket.id
-    log.warning("CREATED ticket controlled token at {} with PrizeStrategyId {}", [ticket.id, _singleRandomWinner.id])
 
     const sponsorship = loadOrCreateControlledToken(
       _boundSingleRandomWinner.sponsorship()
     )  
-    log.warning("GOT HERE", [])
     _singleRandomWinner.sponsorship = sponsorship.id
-    log.warning("CREATED sponsorship controlled token at {} with PrizeStrategyId {}", [sponsorship.id, _singleRandomWinner.id])
-
     _singleRandomWinner.save()
 
     let prizeStrategy = loadOrCreatePrizeStrategy(singleRandomWinner)

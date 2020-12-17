@@ -22,6 +22,7 @@ export function loadOrCreatePrizePool(
 
   if (!_prizePool) {
     _prizePool = new PrizePool(prizePool.toHex())
+
     const boundPrizePool = PrizePoolContract.bind(prizePool)
 
     const tryTokenCall = boundPrizePool.try_token()
@@ -35,7 +36,16 @@ export function loadOrCreatePrizePool(
 
     if(poolTokenAddress){
       const boundToken = ControlledTokenContract.bind(poolTokenAddress)
-      _prizePool.owner = boundPrizePool.owner()
+      
+      const tryOwnerCall = boundPrizePool.try_owner()
+      if(tryOwnerCall.reverted){
+        log.warning("try_owner for {} reverted ", [prizePool.toHexString()])
+        _prizePool.owner = null
+      }
+      else{
+        _prizePool.owner = tryOwnerCall.value
+      }
+
       _prizePool.underlyingCollateralToken = poolTokenAddress
   
       const tryNameCall = boundToken.try_name()
@@ -73,6 +83,9 @@ export function loadOrCreatePrizePool(
       else{
         _prizePool.timelockTotalSupply = try_timelockTotalSupplyCall.value
       }
+    }
+    else{
+      log.error("PrizePool {} does not have a token ", [prizePool.toHex()])
     }
 
     _prizePool.reserveRegistry = Address.fromString(ZERO_ADDRESS)
