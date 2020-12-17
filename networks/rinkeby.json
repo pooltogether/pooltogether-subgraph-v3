@@ -39,5 +39,9 @@
   "ticketProxyFactory_v3_0_1": {
     "address": "0x1E15De9d0b3f3a6B17FA54f8a16C631Ed4e14DD8",
     "startBlock": "7399766"
+  },
+  "stakePrizePoolProxyFactory_v3_1_0": {
+    "address": "0x69193dcD04366860CB96315335e815359D6caED4",
+    "startBlock": "7687009"
   }
 }

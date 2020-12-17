@@ -7,6 +7,7 @@ enum PrizePoolState {
 enum PrizePoolType {
   Compound
   yVault
+  Stake
 }
 
 
@@ -30,7 +31,9 @@ type PrizePool @entity {
 
   prizeStrategy: PrizeStrategy
   prizePoolType: PrizePoolType
+
   compoundPrizePool: CompoundPrizePool
+  stakePrizePool: StakePrizePool
 
   reserveFeeControlledToken: Bytes!
 
@@ -66,8 +69,14 @@ type PrizePool @entity {
 # ID: `${compoundPrizePool.address}`
 type CompoundPrizePool @entity {
   id: ID!
-
   cToken: Bytes
+}
+
+
+# ID: `${stakePrizePool.address}`
+type StakePrizePool @entity {
+  id: ID!
+  stakeToken: Bytes # ! ?
 }
 
 # ID: `${prizeStrategy.address}`

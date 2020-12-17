@@ -58,7 +58,7 @@ dataSources:
       entities:
         - CompoundPrizePool
       abis:
-        - name: CompoundPrizePoolProxyFactory_v3_0_1  # dont think it needs any of these apart from this one
+        - name: CompoundPrizePoolProxyFactory_v3_0_1 
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePoolProxyFactory.json
       eventHandlers:
         - event: ProxyCreated(address)
@@ -171,6 +171,30 @@ dataSources:
           handler: handleMultipleWinnersCreated
       file: ./src/mappingForMultipleWinnersProxyFactory_v3_1_0.ts
   {{/multipleWinnersProxyFactory_v3_1_0}}
+
+
+  {{#stakePrizePoolProxyFactory_v3_1_0}}
+  - name: StakePrizePoolProxyFactory_v3_1_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: StakePoolProxyFactory
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - StakePrizePool
+      abis:
+        - name: StakedPrizePoolProxyFactory
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/StakedPrizePoolProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleStakePrizePoolCreated
+      file: ./src/mappingForStakePrizePoolProxyFactory_v3_1_0.ts
+  {{/stakePrizePoolProxyFactory_v3_1_0}}
 
   {{#controlledTokenProxyFactory_v3_0_1}}
   - name: ControlledTokenProxyFactory_v3_0_1
@@ -311,6 +335,30 @@ templates:
           handler: handleExternalErc721AwardAdded
         - event: ExternalErc721AwardRemoved(indexed address)
           handler: handleExternalErc721AwardRemoved
+
+  - name: StakePrizePool
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: StakePrizePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForStakePrizePool.ts
+      entities:
+        - StakePrizePool
+      abis:
+        - name: PrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        - name: StakePrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/StakePrizePool.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
+      eventHandlers:
+        - event: StakePrizePoolInitialized(indexed address)
+          handler: handleStakePrizePoolInitialized
+
 
   - name: CompoundPrizePool
     kind: ethereum/contract

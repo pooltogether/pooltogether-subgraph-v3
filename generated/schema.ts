@@ -203,6 +203,23 @@ export class PrizePool extends Entity {
     }
   }
 
+  get stakePrizePool(): string | null {
+    let value = this.get("stakePrizePool");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set stakePrizePool(value: string | null) {
+    if (value === null) {
+      this.unset("stakePrizePool");
+    } else {
+      this.set("stakePrizePool", Value.fromString(value as string));
+    }
+  }
+
   get reserveFeeControlledToken(): Bytes {
     let value = this.get("reserveFeeControlledToken");
     return value.toBytes();
@@ -471,6 +488,54 @@ export class CompoundPrizePool extends Entity {
       this.unset("cToken");
     } else {
       this.set("cToken", Value.fromBytes(value as Bytes));
+    }
+  }
+}
+
+export class StakePrizePool extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save StakePrizePool entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save StakePrizePool entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("StakePrizePool", id.toString(), this);
+  }
+
+  static load(id: string): StakePrizePool | null {
+    return store.get("StakePrizePool", id) as StakePrizePool | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get stakeToken(): Bytes | null {
+    let value = this.get("stakeToken");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set stakeToken(value: Bytes | null) {
+    if (value === null) {
+      this.unset("stakeToken");
+    } else {
+      this.set("stakeToken", Value.fromBytes(value as Bytes));
     }
   }
 }
