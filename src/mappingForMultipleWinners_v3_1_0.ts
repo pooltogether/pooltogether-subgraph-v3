@@ -104,43 +104,36 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 }
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
-  log.warning("debug909 txId to {} on incrementing {} ", [event.transaction.hash.toHexString(), event.address.toHexString()])
+  
   const mwStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
-  log.warning("debug919 strategyId {} prizepool {}",[mwStrategy.id, mwStrategy.prizePool + "999" ])
- 
   if(!mwStrategy.prizePool){   // if prizePool is empty just skip (temp)
     log.warning("prizepool not linked to strategy",[])
     return
   }
 
   const _prizePool = PrizePool.load(mwStrategy.prizePool)
-  log.warning("debug737 getting here prizepool is {}",[_prizePool.id+"yurt"])
+
   // Record prize history
   const _prize = loadOrCreatePrize(
     mwStrategy.prizePool,
     _prizePool.currentPrizeId.toString()
   )
-
-    log.warning("debug88 setting event params ",[])
+  _prizePool.currentState = "Awarded"
+  _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
+  _prizePool.save()
+  
   _prize.awardedOperator = event.params.operator
   _prize.randomNumber = event.params.randomNumber
   
   _prize.awardedBlock = event.block.number
   _prize.awardedTimestamp = event.block.timestamp
   
-  log.warning("about to load controlled token with {} ",[mwStrategy.ticket])
-  //const controlledToken = ControlledToken.load(mwStrategy.ticket)
   const controlledToken = loadOrCreateControlledToken(Address.fromString(mwStrategy.ticket))
   
-  log.warning("debug757 controlledToken is {}",[controlledToken.id+"yurt"])
-
   _prize.totalTicketSupply = controlledToken.totalSupply
-  log.warning("debug777 set totalTicketSupply to : {} ",[_prize.totalTicketSupply.toHexString()+"yurt"])
   _prize.save()
-  log.warning("now modififying prize pool {}",[_prizePool.currentPrizeId.plus(ONE).toString()])
-  _prizePool.currentState = "Awarded"
-  _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
-  _prizePool.save()
+
+
 }
 
 
