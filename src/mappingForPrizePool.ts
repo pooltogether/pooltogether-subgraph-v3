@@ -27,13 +27,12 @@ import { loadOrCreatePrizePool } from './helpers/loadOrCreatePrizePool'
 import { loadOrCreatePrizeStrategy } from './helpers/loadOrCreatePrizeStrategy'
 import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePoolCreditRate'
 import { loadOrCreateAwardedExternalErc20Token, loadOrCreateAwardedExternalErc721Nft } from './helpers/loadOrCreateAwardedExternalErc'
-import { loadOrCreateExternalErc721Award } from './helpers/loadOrCreateExternalAward'
 
-import { ONE, ZERO, ZERO_ADDRESS } from './helpers/common'
+
+import { ZERO } from './helpers/common'
 import { Deposited } from '../generated/templates/CompoundPrizePool/CompoundPrizePool'
 import { loadOrCreatePrizePoolAccount } from './helpers/loadOrCreatePrizePoolAccount'
-import { awardedExternalErc721NftId } from './helpers/idTemplates'
-import { PrizePoolAwardStarted } from '../generated/templates/SingleRandomWinner/SingleRandomWinner'
+import { loadOrCreateAwardedControlledToken } from './helpers/loadOrCreateAwardedControlledToken'
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
@@ -77,52 +76,41 @@ export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
 export function handleAwarded(event: Awarded): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
 
-  log.warning("prizePool id {} currentPrizeId {} ",[_prizePool.id, _prizePool.currentPrizeId.toHexString()])
-
   // Record prize history
   const _prize = loadOrCreatePrize(
     event.address.toHex(),
     _prizePool.currentPrizeId.toString()
   )
-  _prize.amount = event.params.amount
-
-  
-  const winner = event.params.winner
-  if(winner.notEqual(Address.fromString(ZERO_ADDRESS))){
-    const existingWinners = _prize.winners || []
-    existingWinners.push(winner)
-    _prize.winners = existingWinners
-  }
   _prize.save()
 
-  // increment accumulative winnings
-  const prizePoolAccount = loadOrCreatePrizePoolAccount(event.address, event.params.winner.toHex())
-  prizePoolAccount.cumulativeWinnings = prizePoolAccount.cumulativeWinnings.plus(event.params.amount)
-  prizePoolAccount.save()
+  const winner : Address = event.params.winner
+
+  const awardedControlledToken = loadOrCreateAwardedControlledToken(event.address.toHexString(), winner)
+  awardedControlledToken.amount = event.params.amount
+  awardedControlledToken.prize = _prize.id
+  awardedControlledToken.token = event.params.token.toHexString()
+  awardedControlledToken.save()
 
   // Update Pool (Reserve Fee updated in handleReserveFeeCaptured)
   _prizePool.cumulativePrizeNet = _prizePool.cumulativePrizeNet.plus(event.params.amount)
   _prizePool.cumulativePrizeGross = _prizePool.cumulativePrizeNet.plus(_prizePool.cumulativePrizeReserveFee)
-
-  
   _prizePool.save()
+
 }
 
 export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
-  
-  const _prizeStrategyId = _prizePool.prizeStrategy
+
   const _prize = loadOrCreatePrize(
     event.address.toHex(),
     _prizePool.currentPrizeId.toString()
   )
-  log.warning("handleAwardedExternalERC20 prizePool id {} prize {} ",[_prizePool.id, _prize.id])
 
   const awardedErc20Token = loadOrCreateAwardedExternalErc20Token(
     _prize,
     event.params.token
   )
-
+  awardedErc20Token.winner = event.params.winner
   awardedErc20Token.balanceAwarded = event.params.amount
   
   awardedErc20Token.save()
@@ -146,7 +134,9 @@ export function handleAwardedExternalERC721(event: AwardedExternalERC721): void 
     _prizeStrategy as PrizeStrategy,
     event.params.token
   )
+  awardedExternalErc721Nft.winner = event.params.winner
   awardedExternalErc721Nft.save()
+  
   // delete ID: `${prizeStrategy.address}-${token.address}`
   const deleteId = externalAwardId(_prizeStrategy.id, event.params.token.toHex())
   store.remove("MultipleWinnersExternalErc721Award", deleteId) // is this a noop if doesnt exist??

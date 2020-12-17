@@ -26,6 +26,12 @@
     "deploy:rinkeby-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3_1_0 subgraph.rinkeby.yaml",
 
     "deploy:local": "graph deploy --node http://127.0.0.1:8020 --ipfs http://localhost:5001 pooltogether/ptv3-subgraph subgraph.local.yaml",
+    
+    "all-local" : "yarn clean && yarn prepare:local && yarn gen:local && yarn deploy:local",
+    "all-rinkeby-stg" : "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby-stg",
+    "all-rinkeby" : "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby",
+    "all-mainnet-stg" : "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet-stg",
+    
     "codegen": "graph codegen",
     "build": "graph build",
     "build:rinkeby": "graph build subgraph.rinkeby.yaml",

@@ -1,6 +1,6 @@
 import { log, Address } from '@graphprotocol/graph-ts'
 import {PrizePoolAccount} from "../../generated/schema"
-import {ZERO} from "./common"
+import {generateCompositeId, ZERO} from "./common"
 
 export function loadOrCreatePrizePoolAccount(
     prizePool: Address,
@@ -12,16 +12,12 @@ export function loadOrCreatePrizePoolAccount(
       prizePoolAccount.prizePool = prizePool.toHex()
       prizePoolAccount.account = account
       
+      // mock values
       prizePoolAccount.timelockedBalance = ZERO
-      prizePoolAccount.cumulativeWinnings = ZERO
       prizePoolAccount.unlockTimestamp = ZERO
       
       prizePoolAccount.save()
     }
     return prizePoolAccount as PrizePoolAccount
-  }
-
-  function generateCompositeId(accountId : string, controlledTokenId: string) :string{
-    return accountId + "-" + controlledTokenId
-  }
+}
 

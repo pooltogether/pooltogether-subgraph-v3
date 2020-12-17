@@ -66,6 +66,8 @@ type PrizePool @entity {
   controlledTokens: [ControlledToken!]! @derivedFrom(field: "controller")
 }
 
+
+
 # ID: `${compoundPrizePool.address}`
 type CompoundPrizePool @entity {
   id: ID!
@@ -124,15 +126,22 @@ type Prize @entity {
   rngRequestId: BigInt
   randomNumber: BigInt
 
-  amount: BigInt
-
   totalTicketSupply: BigInt # cache of num tickets sold when this prize was awarded
 
-  winners: [Bytes!]
-
+  awardedControlledTokens: [AwardedControlledToken!]! @derivedFrom(field: "prize")
   awardedExternalErc20Tokens: [AwardedExternalErc20Token!]! @derivedFrom(field: "prize")
   awardedExternalErc721Nfts: [AwardedExternalErc721Nft!]! @derivedFrom(field: "prize")
 }
+
+# ID: `${prizePool.id}-${winner}`
+type AwardedControlledToken @entity {
+  id: ID!
+  winner: Bytes!
+  amount: BigInt!
+  token: ControlledToken!
+  prize: Prize!
+}
+
 
 # ID: `${prize.id}-${token.address}`
 # dynamically generated type, not mapped to a specific contract
@@ -140,12 +149,14 @@ type AwardedExternalErc20Token @entity {
   id: ID!
 
   address: Bytes!
+  
   name: String
   symbol: String
   decimals: BigInt
   
   balanceAwarded: BigInt
   prize: Prize!
+  winner: Bytes
 }
 
 # ID: `${prize.id}-${token.address}`
@@ -156,6 +167,8 @@ type AwardedExternalErc721Nft @entity {
   address: Bytes!
   tokenIds: [BigInt!]
   prize: Prize
+  
+  winner: Bytes
 }
 
 
@@ -216,10 +229,9 @@ type PrizePoolAccount @entity{
   # address specific fields
   timelockedBalance: BigInt!
   unlockTimestamp: BigInt!
-  cumulativeWinnings: BigInt!
-
 }
 
+# id address
 type Account @entity {
   id: ID!
 
@@ -259,7 +271,7 @@ type DripTokenPlayer @entity {
   address: Bytes!
 
   # claimable balance
-   balance: BigInt!
+  balance: BigInt!
 }
 
 # ID: `${balanceDripId}-${player.address}`
