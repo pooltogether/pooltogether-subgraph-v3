@@ -49,8 +49,6 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
     const startTime = event.params.prizePeriodStart
     const prizePeriod = event.params.prizePeriodSeconds
 
-    log.warning("initializing MultipleWinnersPrizeStrategy for prizePool {} ", [prizePool.toHexString()])
-
     const multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHex())
     if(!multipleWinners){
       log.error("multiple winners does not exist for {} ",[event.address.toHexString()])
@@ -121,7 +119,7 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
   _prizePool.currentState = "Awarded"
   _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
   _prizePool.save()
-  
+
   _prize.awardedOperator = event.params.operator
   _prize.randomNumber = event.params.randomNumber
   
