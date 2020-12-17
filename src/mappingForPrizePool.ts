@@ -33,6 +33,7 @@ import { ZERO } from './helpers/common'
 import { Deposited } from '../generated/templates/CompoundPrizePool/CompoundPrizePool'
 import { loadOrCreatePrizePoolAccount } from './helpers/loadOrCreatePrizePoolAccount'
 import { loadOrCreateAwardedControlledToken } from './helpers/loadOrCreateAwardedControlledToken'
+import { loadOrCreateControlledToken } from './helpers/loadOrCreateControlledToken'
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
@@ -41,7 +42,7 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 }
 
 export function handleControlledTokenAdded(event: ControlledTokenAdded): void {
-  log.warning('implement handleControlledTokenAdded!', [])
+  const controlledToken = loadOrCreateControlledToken(event.params.token)
 }
 
 export function handleLiquidityCapSet(event: LiquidityCapSet): void {
