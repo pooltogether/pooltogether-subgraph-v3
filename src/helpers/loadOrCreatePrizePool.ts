@@ -22,6 +22,7 @@ export function loadOrCreatePrizePool(
 
   if (!_prizePool) {
     _prizePool = new PrizePool(prizePool.toHex())
+    log.warning("debug121 creating new prizepool {} ", [prizePool.toHex()])
     const boundPrizePool = PrizePoolContract.bind(prizePool)
 
     const tryTokenCall = boundPrizePool.try_token()

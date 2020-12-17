@@ -179,7 +179,7 @@ dataSources:
     network: {{network}}
     source:
       address: "{{address}}"
-      abi: StakePoolProxyFactory
+      abi: StakePrizePoolProxyFactory
       startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
@@ -188,8 +188,8 @@ dataSources:
       entities:
         - StakePrizePool
       abis:
-        - name: StakedPrizePoolProxyFactory
-          file: ./node_modules/@pooltogether/pooltogether-contracts/build/StakedPrizePoolProxyFactory.json
+        - name: StakePrizePoolProxyFactory
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/StakePrizePoolProxyFactory.json
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleStakePrizePoolCreated
@@ -453,6 +453,8 @@ templates:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
         - name: CompoundPrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
         - event: Initialized(address,uint256,uint256)
           handler: handleInitialized
@@ -478,6 +480,8 @@ templates:
           file: ./abis/PrizePool_v3_0_1.json
         - name: CompoundPrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
       eventHandlers:
         - event: Initialized(address,address,uint256,uint256)
           handler: handleInitialized
@@ -525,6 +529,8 @@ templates:
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/CompoundPrizePool.json
         - name: ERC20
           file: ./node_modules/@pooltogether/pooltogether-contracts/build/ERC20Upgradeable.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json 
       eventHandlers:
         - event: TokenListenerUpdated(indexed address)
           handler: handleTokenListenerUpdated

@@ -1,6 +1,6 @@
 import {NumberOfWinnersSet, PrizePoolAwarded, PrizePoolAwardStarted} from "../generated/templates/MultipleWinners/MultipleWinners"
 
-import { store, BigInt, log } from '@graphprotocol/graph-ts'
+import { store, BigInt, log, Address } from '@graphprotocol/graph-ts'
 import {
   ControlledToken,
   MultipleWinnersPrizeStrategy, PrizePool
@@ -26,6 +26,7 @@ import {
 import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinners"
 import { ONE } from "./helpers/common"
 import { loadOrCreatePrize } from "./helpers/loadOrCreatePrize"
+import { loadOrCreateControlledToken } from "./helpers/loadOrCreateControlledToken"
 
 
 
@@ -48,13 +49,16 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
     const startTime = event.params.prizePeriodStart
     const prizePeriod = event.params.prizePeriodSeconds
 
-    log.warning("creating MultipleWinnersPrizeStrategy", [])
+    log.warning("initializing MultipleWinnersPrizeStrategy for prizePool {} ", [prizePool.toHexString()])
 
     const multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+    if(!multipleWinners){
+      log.error("multiple winners does not exist for {} ",[event.address.toHexString()])
+    }
 
     const _checkPrizePool = PrizePool.load(prizePool.toHex())
     if(!_checkPrizePool){
-      log.warning("setting mw prizePool to null!",[])
+      log.warning("checkprizepool setting mw prizePool to null!",[])
       multipleWinners.prizePool = null
     }
     else{
@@ -69,7 +73,7 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
     multipleWinners.prizePeriodEndAt = startTime.plus(prizePeriod)
     multipleWinners.prizePeriodSeconds = prizePeriod
 
-    multipleWinners.numberOfWinners = new BigInt(1) // mock value until numberOfWinners event fired
+    multipleWinners.numberOfWinners = ONE// mock value until numberOfWinners event fired
 
     multipleWinners.save()
 
@@ -102,7 +106,7 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
   log.warning("debug909 txId to {} on incrementing {} ", [event.transaction.hash.toHexString(), event.address.toHexString()])
   const mwStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
-  log.warning("debug909 strategyId {} prizepool {}",[mwStrategy.id, mwStrategy.prizePool + "999" ])
+  log.warning("debug919 strategyId {} prizepool {}",[mwStrategy.id, mwStrategy.prizePool + "999" ])
  
   if(!mwStrategy.prizePool){   // if prizePool is empty just skip (temp)
     log.warning("prizepool not linked to strategy",[])
@@ -110,22 +114,30 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
   }
 
   const _prizePool = PrizePool.load(mwStrategy.prizePool)
-
+  log.warning("debug737 getting here prizepool is {}",[_prizePool.id+"yurt"])
   // Record prize history
   const _prize = loadOrCreatePrize(
     mwStrategy.prizePool,
     _prizePool.currentPrizeId.toString()
   )
 
-  const controlledToken = ControlledToken.load(mwStrategy.ticket)
-  
+    log.warning("debug88 setting event params ",[])
   _prize.awardedOperator = event.params.operator
   _prize.randomNumber = event.params.randomNumber
+  
   _prize.awardedBlock = event.block.number
   _prize.awardedTimestamp = event.block.timestamp
-  _prize.totalTicketSupply = controlledToken.totalSupply
-  _prize.save()
+  
+  log.warning("about to load controlled token with {} ",[mwStrategy.ticket])
+  //const controlledToken = ControlledToken.load(mwStrategy.ticket)
+  const controlledToken = loadOrCreateControlledToken(Address.fromString(mwStrategy.ticket))
+  
+  log.warning("debug757 controlledToken is {}",[controlledToken.id+"yurt"])
 
+  _prize.totalTicketSupply = controlledToken.totalSupply
+  log.warning("debug777 set totalTicketSupply to : {} ",[_prize.totalTicketSupply.toHexString()+"yurt"])
+  _prize.save()
+  log.warning("now modififying prize pool {}",[_prizePool.currentPrizeId.plus(ONE).toString()])
   _prizePool.currentState = "Awarded"
   _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
   _prizePool.save()

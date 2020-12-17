@@ -15,6 +15,7 @@ export function loadOrCreateControlledToken(
 ): ControlledToken {
   let controlledToken = ControlledToken.load(tokenAddress.toHexString())
   if (!controlledToken) {
+    log.warning("debug001 creating controleld token for {} ",[tokenAddress.toHex()])
     controlledToken = new ControlledToken(tokenAddress.toHex())
     const boundToken = ControlledTokenContract.bind(tokenAddress)
   

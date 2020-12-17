@@ -15,6 +15,5 @@ export function loadOrCreatePrize(prizePoolAddress: string, currentPrizeId: stri
     prize.prizePool = prizePoolAddress
     prize.save()
   }
-
   return prize as Prize
 }
