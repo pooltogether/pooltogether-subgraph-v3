@@ -118,6 +118,7 @@ export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
   )
   _prizePool.currentState = "Awarded"
   _prizePool.currentPrizeId = _prizePool.currentPrizeId.plus(ONE)
+  _prizePool.prizesCount = _prizePool.prizesCount.plus(ONE)
   _prizePool.save()
 
   _prize.awardedOperator = event.params.operator
@@ -145,7 +146,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
     return
   }
   _prizePool.currentState = "Started"
-  _prizePool.prizesCount = _prizePool.prizesCount.plus(ONE)
+  //_prizePool.prizesCount = _prizePool.prizesCount.plus(ONE)
   _prizePool.save()
 
   const _prize = loadOrCreatePrize(
