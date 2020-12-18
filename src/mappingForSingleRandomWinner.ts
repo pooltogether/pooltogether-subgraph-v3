@@ -56,7 +56,6 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
   _prizePool.currentState = "Started"
-  _prizePool.prizesCount = _prizePool.prizesCount.plus(ONE)
   _prizePool.save()
 
   const _prize = loadOrCreatePrize(

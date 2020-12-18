@@ -82,12 +82,20 @@ export function handleAwarded(event: Awarded): void {
     event.address.toHex(),
     _prizePool.currentPrizeId.toString()
   )
-  _prize.save()
 
   const winner : Address = event.params.winner
-  const length = _prize.awardedControlledTokens.length + 1
+    
+  let length = _prize.numberOfSubWinners
+  _prize.numberOfSubWinners = _prize.numberOfSubWinners.plus(ONE)
+  _prize.save()
+  
+  log.warning("awardedControlled length is {} ",[length.toString()])
+
   const winnerIndex = length.toString()
   const awardedControlledToken = loadOrCreateAwardedControlledToken(event.address.toHexString(), winner, _prizePool.currentPrizeId.toString(), winnerIndex)
+  
+  
+
   awardedControlledToken.amount = event.params.amount
   awardedControlledToken.prize = _prize.id
   awardedControlledToken.token = event.params.token.toHexString()

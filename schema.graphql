@@ -124,6 +124,8 @@ type Prize @entity {
   rngRequestId: BigInt
   randomNumber: BigInt
 
+  numberOfSubWinners: BigInt
+
   totalTicketSupply: BigInt # cache of num tickets sold when this prize was awarded
 
   awardedControlledTokens: [AwardedControlledToken!]! @derivedFrom(field: "prize")
