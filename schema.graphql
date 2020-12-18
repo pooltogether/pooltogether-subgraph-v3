@@ -53,10 +53,8 @@ type PrizePool @entity {
 
   currentPrizeId: BigInt!
   currentState: PrizePoolState!
-
-  prizesCount: BigInt!
+  
   prizes: [Prize!]! @derivedFrom(field: "prizePool")
-
   tokenCreditRates: [CreditRate!]! @derivedFrom(field: "prizePool")
   tokenCreditBalances: [CreditBalance!]! @derivedFrom(field: "prizePool")
 

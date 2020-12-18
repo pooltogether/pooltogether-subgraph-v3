@@ -71,6 +71,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
   _prize.save()
 }
 
+// this event is fired after PrizePool.Awarded
 export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(event.address.toHexString())
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)

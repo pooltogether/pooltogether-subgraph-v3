@@ -29,7 +29,7 @@ import { loadOrCreatePrizePoolCreditRate } from './helpers/loadOrCreatePrizePool
 import { loadOrCreateAwardedExternalErc20Token, loadOrCreateAwardedExternalErc721Nft } from './helpers/loadOrCreateAwardedExternalErc'
 
 
-import { ZERO } from './helpers/common'
+import { ONE, ZERO } from './helpers/common'
 import { Deposited } from '../generated/templates/CompoundPrizePool/CompoundPrizePool'
 import { loadOrCreatePrizePoolAccount } from './helpers/loadOrCreatePrizePoolAccount'
 import { loadOrCreateAwardedControlledToken } from './helpers/loadOrCreateAwardedControlledToken'
@@ -74,9 +74,9 @@ export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
 
 }
 
+// this is called BEFORE PrizePoolAwarded - MW strat and SRW 
 export function handleAwarded(event: Awarded): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
-
   // Record prize history
   const _prize = loadOrCreatePrize(
     event.address.toHex(),
@@ -85,8 +85,9 @@ export function handleAwarded(event: Awarded): void {
   _prize.save()
 
   const winner : Address = event.params.winner
-
-  const awardedControlledToken = loadOrCreateAwardedControlledToken(event.address.toHexString(), winner)
+  const length = _prize.awardedControlledTokens.length + 1
+  const winnerIndex = length.toString()
+  const awardedControlledToken = loadOrCreateAwardedControlledToken(event.address.toHexString(), winner, _prizePool.currentPrizeId.toString(), winnerIndex)
   awardedControlledToken.amount = event.params.amount
   awardedControlledToken.prize = _prize.id
   awardedControlledToken.token = event.params.token.toHexString()
