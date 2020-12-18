@@ -99,8 +99,7 @@ export function loadOrCreatePrizePool(
 
     _prizePool.currentState = 'Opened'
     _prizePool.currentPrizeId = ONE
-    _prizePool.prizesCount = ZERO
-
+    
     _prizePool.cumulativePrizeGross = ZERO
     _prizePool.cumulativePrizeReserveFee = ZERO
     _prizePool.cumulativePrizeNet = ZERO

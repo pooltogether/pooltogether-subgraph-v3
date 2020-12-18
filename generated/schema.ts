@@ -389,15 +389,6 @@ export class PrizePool extends Entity {
     this.set("currentState", Value.fromString(value));
   }
 
-  get prizesCount(): BigInt {
-    let value = this.get("prizesCount");
-    return value.toBigInt();
-  }
-
-  set prizesCount(value: BigInt) {
-    this.set("prizesCount", Value.fromBigInt(value));
-  }
-
   get prizes(): Array<string> {
     let value = this.get("prizes");
     return value.toStringArray();
@@ -964,6 +955,23 @@ export class Prize extends Entity {
       this.unset("randomNumber");
     } else {
       this.set("randomNumber", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get numberOfSubWinners(): BigInt | null {
+    let value = this.get("numberOfSubWinners");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set numberOfSubWinners(value: BigInt | null) {
+    if (value === null) {
+      this.unset("numberOfSubWinners");
+    } else {
+      this.set("numberOfSubWinners", Value.fromBigInt(value as BigInt));
     }
   }
 

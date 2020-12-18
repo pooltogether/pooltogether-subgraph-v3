@@ -56,7 +56,6 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
   _prizePool.currentState = "Started"
-  _prizePool.prizesCount = _prizePool.prizesCount.plus(ONE)
   _prizePool.save()
 
   const _prize = loadOrCreatePrize(
@@ -71,6 +70,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
   _prize.save()
 }
 
+// this event is fired after PrizePool.Awarded
 export function handlePrizePoolAwarded(event: PrizePoolAwarded): void {
   const _prizeStrategy = SingleRandomWinnerPrizeStrategy.load(event.address.toHexString())
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)

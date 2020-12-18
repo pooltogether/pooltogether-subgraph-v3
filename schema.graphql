@@ -53,10 +53,8 @@ type PrizePool @entity {
 
   currentPrizeId: BigInt!
   currentState: PrizePoolState!
-
-  prizesCount: BigInt!
+  
   prizes: [Prize!]! @derivedFrom(field: "prizePool")
-
   tokenCreditRates: [CreditRate!]! @derivedFrom(field: "prizePool")
   tokenCreditBalances: [CreditBalance!]! @derivedFrom(field: "prizePool")
 
@@ -125,6 +123,8 @@ type Prize @entity {
 
   rngRequestId: BigInt
   randomNumber: BigInt
+
+  numberOfSubWinners: BigInt
 
   totalTicketSupply: BigInt # cache of num tickets sold when this prize was awarded
 

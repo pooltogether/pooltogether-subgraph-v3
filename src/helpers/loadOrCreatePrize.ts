@@ -1,5 +1,5 @@
-import { log } from '@graphprotocol/graph-ts'
 import { Prize } from '../../generated/schema'
+import { ZERO } from './common'
 
 import { prizeId } from './idTemplates'
 
@@ -13,6 +13,7 @@ export function loadOrCreatePrize(prizePoolAddress: string, currentPrizeId: stri
   if (!prize) {
     prize = new Prize(id)
     prize.prizePool = prizePoolAddress
+    prize.numberOfSubWinners = ZERO
     prize.save()
   }
   return prize as Prize
