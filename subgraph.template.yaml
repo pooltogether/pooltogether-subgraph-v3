@@ -19,6 +19,9 @@ dataSources:
       abis:
         - name: Comptroller
           file: ./abis/v3_1_0/abis/Comptroller.json
+      callHandlers:
+        - function: beforeTokenMint(address,uint256,address,address)
+          handler: handleBeforeTokenMint
       eventHandlers:
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred

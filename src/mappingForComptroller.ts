@@ -35,6 +35,7 @@ import {
 } from '../generated/Comptroller/Comptroller'
 
 import {
+  loadOrCreateAccount,
   // loadOrCreateDripTokenPlayer,
   loadOrCreateBalanceDripPlayer,
   loadOrCreateVolumeDripPlayer,
@@ -46,6 +47,7 @@ import {
   loadOrCreateVolumeDrip,
   loadOrCreateVolumeDripPeriod,
 } from './helpers/loadOrCreateComptroller'
+import { loadOrCreateControlledToken } from './helpers/loadOrCreateControlledToken'
 
 
 
@@ -307,10 +309,20 @@ export function handleVolumeDripDripped(event: VolumeDripDripped): void {
 }
 
 export function handleBeforeTokenMint(call: BeforeTokenMintCall): void {
-  if (call.inputs.referrer === null) {
+  if (call.inputs.referrer === null || call.inputs.referrer.toHexString() === ZERO_ADDRESS) {
     return
   }
-  const _controlledTokenBalance = ControlledTokenBalance.load(generateCompositeId(call.inputs.to.toHexString(), call.inputs.measure.toHexString()))
-  _controlledTokenBalance.referrer = call.inputs.referrer
-  _controlledTokenBalance.save()
+
+  const id = generateCompositeId(call.inputs.to.toHexString(), call.inputs.measure.toHexString())
+
+  let tokenBalance = ControlledTokenBalance.load(id)
+
+  if (!tokenBalance) {
+    tokenBalance = new ControlledTokenBalance(id)
+    tokenBalance.account = loadOrCreateAccount(call.inputs.to).id
+    tokenBalance.controlledToken = loadOrCreateControlledToken(call.inputs.measure).id
+  }
+
+  tokenBalance.referrer = call.inputs.referrer  
+  tokenBalance.save()
 }
