@@ -1,4 +1,5 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts'
+import { generateCompositeId, ONE, ZERO, ZERO_ADDRESS } from "./helpers/common"
 
 import {
   Comptroller,
@@ -8,6 +9,7 @@ import {
   BalanceDripPlayer,
   VolumeDripPlayer,
   VolumeDripPeriod,
+  ControlledTokenBalance,
 } from '../generated/schema'
 
 import {
@@ -29,6 +31,7 @@ import {
   VolumeDripPeriodStarted,
   VolumeDripPeriodEnded,
   VolumeDripDripped,
+  BeforeTokenMintCall,
 } from '../generated/Comptroller/Comptroller'
 
 import {
@@ -301,4 +304,13 @@ export function handleVolumeDripDripped(event: VolumeDripDripped): void {
 
   _volumeDripPlayer.balance = _volumeDripPlayer.balance.plus(_amount)
   _volumeDripPlayer.save()
+}
+
+export function handleBeforeTokenMint(call: BeforeTokenMintCall): void {
+  if (call.inputs.referrer === null) {
+    return
+  }
+  const _controlledTokenBalance = ControlledTokenBalance.load(generateCompositeId(call.inputs.to.toHexString(), call.inputs.measure.toHexString()))
+  _controlledTokenBalance.referrer = call.inputs.referrer
+  _controlledTokenBalance.save()
 }

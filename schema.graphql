@@ -211,6 +211,7 @@ type ControlledTokenBalance @entity {
   account: Account!
   controlledToken: ControlledToken!
   balance: BigInt
+  referrer: Bytes
 }
 
 # ID: `${prizeStrategy.address}-${token.address}`
