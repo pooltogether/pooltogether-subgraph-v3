@@ -309,7 +309,7 @@ export function handleVolumeDripDripped(event: VolumeDripDripped): void {
 }
 
 export function handleBeforeTokenMint(call: BeforeTokenMintCall): void {
-  if (call.inputs.referrer === null || call.inputs.referrer.toHexString() === ZERO_ADDRESS) {
+  if (call.inputs.referrer.equals(null) || call.inputs.referrer.toHexString() === ZERO_ADDRESS) {
     return
   }
 

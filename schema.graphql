@@ -214,6 +214,20 @@ type ControlledTokenBalance @entity {
   referrer: Bytes
 }
 
+type EnteredPool @entity {
+  id: ID! # transaction hash
+  controlledToken: ControlledToken!
+  account: Account!
+  timestamp: BigInt!
+}
+
+type ExitedPool @entity {
+  id: ID! # transaction hash
+  controlledToken: ControlledToken!
+  account: Account!
+  timestamp: BigInt!
+}
+
 # ID: `${prizeStrategy.address}-${token.address}`
 # dynamically generated type, not mapped to a specific contract
 type SingleRandomWinnerExternalErc20Award @entity {

@@ -5,7 +5,7 @@ import {
 } from '../generated/templates/ControlledToken/ControlledToken'
 
 import {
-   ControlledTokenBalance,
+   ControlledTokenBalance, EnteredPool, ExitedPool,
 } from '../generated/schema'
 import { loadOrCreateAccount } from './helpers/loadOrCreateAccount'
 import { loadOrCreateControlledToken } from './helpers/loadOrCreateControlledToken'
@@ -26,13 +26,20 @@ export function handleTransfer(event: Transfer): void {
   else{
     let toBalance = ControlledTokenBalance.load(generateCompositeId (event.params.to.toHexString(), event.address.toHexString())) // controlledtokenbalance id =  (address, controlledToken)
     
-    if(toBalance == null) {// create case 
+    if(toBalance == null || toBalance.balance.equals(ZERO)) {// create case 
       toBalance = new ControlledTokenBalance(generateCompositeId (event.params.to.toHexString(), event.address.toHexString()))
       controlledToken.numberOfHolders = controlledToken.numberOfHolders.plus(ONE)  // if transfer is to NEW address then increment number of players
 
       toBalance.balance = event.params.value
       toBalance.controlledToken = controlledToken.id // or event.address
       toBalance.account = loadOrCreateAccount(event.params.to).id
+      
+      // Log when user as entered the pool
+      const enteredPool = new EnteredPool(event.transaction.hash.toHexString())
+      enteredPool.controlledToken = controlledToken.id
+      enteredPool.account = toBalance.account
+      enteredPool.timestamp = event.block.timestamp
+      enteredPool.save()
     }
     else{
       toBalance.balance = toBalance.balance.plus(event.params.value)
@@ -49,9 +56,16 @@ export function handleTransfer(event: Transfer): void {
     fromBalance.balance = fromBalance.balance.minus(event.params.value)
   
     // if the balance of the sending account is zero then remove it
-    if(fromBalance.balance.equals(ZERO)){
+    if (fromBalance.balance.equals(ZERO)) {
+      // Log when user has exited the pool
+      const exitedPool = new ExitedPool(event.transaction.hash.toHexString())
+      exitedPool.controlledToken = controlledToken.id
+      exitedPool.account = fromBalance.account
+      exitedPool.timestamp = event.block.timestamp
+      exitedPool.save()
+
       controlledToken.numberOfHolders = controlledToken.numberOfHolders.minus(ONE) // if account balance depleted decrement player count
-      store.remove("ControlledTokenBalance", fromBalance.id)
+      store.remove("ControlledTokenBalance", fromBalance.id)      
     }
     else{
       fromBalance.save()
