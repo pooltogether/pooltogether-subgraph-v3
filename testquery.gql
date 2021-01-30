@@ -1,5 +1,5 @@
 {
-  controlledTokenBalances {
+  mintedControlledTokens {
     id
     referrer
 	  account {
@@ -8,6 +8,6 @@
     controlledToken {
       id
     }
-    balance
+    amount
   }
 }

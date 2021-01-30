@@ -5,7 +5,8 @@ import {
 } from '../generated/templates/ControlledToken/ControlledToken'
 
 import {
-   ControlledTokenBalance, EnteredPool, ExitedPool,
+  BurnedControlledToken,
+  ControlledTokenBalance,
 } from '../generated/schema'
 import { loadOrCreateAccount } from './helpers/loadOrCreateAccount'
 import { loadOrCreateControlledToken } from './helpers/loadOrCreateControlledToken'
@@ -33,13 +34,6 @@ export function handleTransfer(event: Transfer): void {
       toBalance.balance = event.params.value
       toBalance.controlledToken = controlledToken.id // or event.address
       toBalance.account = loadOrCreateAccount(event.params.to).id
-      
-      // Log when user as entered the pool
-      const enteredPool = new EnteredPool(event.transaction.hash.toHexString())
-      enteredPool.controlledToken = controlledToken.id
-      enteredPool.account = toBalance.account
-      enteredPool.timestamp = event.block.timestamp
-      enteredPool.save()
     }
     else{
       toBalance.balance = toBalance.balance.plus(event.params.value)
@@ -54,16 +48,17 @@ export function handleTransfer(event: Transfer): void {
   else{
     const fromBalance = ControlledTokenBalance.load(generateCompositeId (event.params.from.toHexString(), event.address.toHexString())) // must always exist
     fromBalance.balance = fromBalance.balance.minus(event.params.value)
-  
+ 
+    // Log burn event
+    const burn = new BurnedControlledToken(event.transaction.hash.toHexString())
+    burn.account = fromBalance.account
+    burn.controlledToken = fromBalance.controlledToken
+    burn.amount = event.params.value
+    burn.timestamp = event.block.timestamp
+    burn.save()
+
     // if the balance of the sending account is zero then remove it
     if (fromBalance.balance.equals(ZERO)) {
-      // Log when user has exited the pool
-      const exitedPool = new ExitedPool(event.transaction.hash.toHexString())
-      exitedPool.controlledToken = controlledToken.id
-      exitedPool.account = fromBalance.account
-      exitedPool.timestamp = event.block.timestamp
-      exitedPool.save()
-
       controlledToken.numberOfHolders = controlledToken.numberOfHolders.minus(ONE) // if account balance depleted decrement player count
       store.remove("ControlledTokenBalance", fromBalance.id)      
     }

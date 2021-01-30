@@ -211,20 +211,22 @@ type ControlledTokenBalance @entity {
   account: Account!
   controlledToken: ControlledToken!
   balance: BigInt
-  referrer: Bytes
 }
 
-type EnteredPool @entity {
+type MintedControlledToken @entity {
   id: ID! # transaction hash
-  controlledToken: ControlledToken!
   account: Account!
+  controlledToken: ControlledToken!
+  amount: BigInt!
+  referrer: Bytes
   timestamp: BigInt!
 }
 
-type ExitedPool @entity {
+type BurnedControlledToken @entity {
   id: ID! # transaction hash
-  controlledToken: ControlledToken!
   account: Account!
+  controlledToken: ControlledToken!
+  amount: BigInt!
   timestamp: BigInt!
 }
 

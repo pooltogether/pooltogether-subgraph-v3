@@ -10,6 +10,7 @@ import {
   VolumeDripPlayer,
   VolumeDripPeriod,
   ControlledTokenBalance,
+  MintedControlledToken,
 } from '../generated/schema'
 
 import {
@@ -309,20 +310,11 @@ export function handleVolumeDripDripped(event: VolumeDripDripped): void {
 }
 
 export function handleBeforeTokenMint(call: BeforeTokenMintCall): void {
-  if (call.inputs.referrer.equals(null) || call.inputs.referrer.toHexString() === ZERO_ADDRESS) {
-    return
-  }
-
-  const id = generateCompositeId(call.inputs.to.toHexString(), call.inputs.measure.toHexString())
-
-  let tokenBalance = ControlledTokenBalance.load(id)
-
-  if (!tokenBalance) {
-    tokenBalance = new ControlledTokenBalance(id)
-    tokenBalance.account = loadOrCreateAccount(call.inputs.to).id
-    tokenBalance.controlledToken = loadOrCreateControlledToken(call.inputs.measure).id
-  }
-
-  tokenBalance.referrer = call.inputs.referrer  
-  tokenBalance.save()
+  const mint = new MintedControlledToken(call.transaction.hash.toHexString())
+  mint.account = loadOrCreateAccount(call.inputs.to).id
+  mint.controlledToken = loadOrCreateControlledToken(call.inputs.measure).id
+  mint.amount = call.inputs.amount
+  mint.referrer = call.inputs.referrer
+  mint.timestamp = call.block.timestamp
+  mint.save()
 }
