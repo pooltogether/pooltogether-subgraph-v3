@@ -2626,6 +2626,15 @@ export class MultipleWinnersPrizeStrategy extends Entity {
     }
   }
 
+  get splitExternalERC20Awards(): boolean {
+    let value = this.get("splitExternalERC20Awards");
+    return value.toBoolean();
+  }
+
+  set splitExternalERC20Awards(value: boolean) {
+    this.set("splitExternalERC20Awards", Value.fromBoolean(value));
+  }
+
   get tokenListener(): Bytes | null {
     let value = this.get("tokenListener");
     if (value === null || value.kind == ValueKind.NULL) {

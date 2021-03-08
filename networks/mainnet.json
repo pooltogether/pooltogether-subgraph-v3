@@ -43,5 +43,13 @@
   "stakePrizePoolProxyFactory_v3_1_0": {
     "address": "0x3b694ce9d12F0bF032bF002b3b0473Cb58bbe3F0",
     "startBlock": "11429013"
+  },
+  "poolWithMultipleWinnersBuilder_v3_3_2":{
+    "address": "0xdA64816F76BEA59cde1ecbe5A094F6c56A7F9770",
+    "startBlock": "11968276"
+  },
+  "multipleWinnersBuilder_v3_3_2":{
+    "address": "0xF438bC6C3250BE17B361042cCa708A743a3FC5e5",
+    "startBlock": "11968273"
   }
 }

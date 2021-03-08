@@ -356,7 +356,9 @@ type MultipleWinnersPrizeStrategy @entity {
   owner: Bytes
   
   numberOfWinners: BigInt
-  
+  splitExternalERC20Awards: Boolean 
+
+
   tokenListener: Bytes 
   prizePool: PrizePool 
   rng: Bytes

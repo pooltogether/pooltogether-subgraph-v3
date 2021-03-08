@@ -10,6 +10,24 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class BeforeAwardListenerSet extends ethereum.Event {
+  get params(): BeforeAwardListenerSet__Params {
+    return new BeforeAwardListenerSet__Params(this);
+  }
+}
+
+export class BeforeAwardListenerSet__Params {
+  _event: BeforeAwardListenerSet;
+
+  constructor(event: BeforeAwardListenerSet) {
+    this._event = event;
+  }
+
+  get beforeAwardListener(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
 export class ExternalErc20AwardAdded extends ethereum.Event {
   get params(): ExternalErc20AwardAdded__Params {
     return new ExternalErc20AwardAdded__Params(this);
@@ -179,6 +197,24 @@ export class PeriodicPrizeStrategyListenerSet__Params {
 
   get periodicPrizeStrategyListener(): Address {
     return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class PrizePeriodSecondsUpdated extends ethereum.Event {
+  get params(): PrizePeriodSecondsUpdated__Params {
+    return new PrizePeriodSecondsUpdated__Params(this);
+  }
+}
+
+export class PrizePeriodSecondsUpdated__Params {
+  _event: PrizePeriodSecondsUpdated;
+
+  constructor(event: PrizePeriodSecondsUpdated) {
+    this._event = event;
+  }
+
+  get prizePeriodSeconds(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -357,6 +393,29 @@ export class TokenListenerUpdated__Params {
 export class SingleRandomWinner extends ethereum.SmartContract {
   static bind(address: Address): SingleRandomWinner {
     return new SingleRandomWinner("SingleRandomWinner", address);
+  }
+
+  beforeAwardListener(): Address {
+    let result = super.call(
+      "beforeAwardListener",
+      "beforeAwardListener():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_beforeAwardListener(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "beforeAwardListener",
+      "beforeAwardListener():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   calculateNextPrizePeriodStartTime(currentTime: BigInt): BigInt {
@@ -1281,6 +1340,36 @@ export class RenounceOwnershipCall__Outputs {
   }
 }
 
+export class SetBeforeAwardListenerCall extends ethereum.Call {
+  get inputs(): SetBeforeAwardListenerCall__Inputs {
+    return new SetBeforeAwardListenerCall__Inputs(this);
+  }
+
+  get outputs(): SetBeforeAwardListenerCall__Outputs {
+    return new SetBeforeAwardListenerCall__Outputs(this);
+  }
+}
+
+export class SetBeforeAwardListenerCall__Inputs {
+  _call: SetBeforeAwardListenerCall;
+
+  constructor(call: SetBeforeAwardListenerCall) {
+    this._call = call;
+  }
+
+  get _beforeAwardListener(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetBeforeAwardListenerCall__Outputs {
+  _call: SetBeforeAwardListenerCall;
+
+  constructor(call: SetBeforeAwardListenerCall) {
+    this._call = call;
+  }
+}
+
 export class SetPeriodicPrizeStrategyListenerCall extends ethereum.Call {
   get inputs(): SetPeriodicPrizeStrategyListenerCall__Inputs {
     return new SetPeriodicPrizeStrategyListenerCall__Inputs(this);
@@ -1307,6 +1396,36 @@ export class SetPeriodicPrizeStrategyListenerCall__Outputs {
   _call: SetPeriodicPrizeStrategyListenerCall;
 
   constructor(call: SetPeriodicPrizeStrategyListenerCall) {
+    this._call = call;
+  }
+}
+
+export class SetPrizePeriodSecondsCall extends ethereum.Call {
+  get inputs(): SetPrizePeriodSecondsCall__Inputs {
+    return new SetPrizePeriodSecondsCall__Inputs(this);
+  }
+
+  get outputs(): SetPrizePeriodSecondsCall__Outputs {
+    return new SetPrizePeriodSecondsCall__Outputs(this);
+  }
+}
+
+export class SetPrizePeriodSecondsCall__Inputs {
+  _call: SetPrizePeriodSecondsCall;
+
+  constructor(call: SetPrizePeriodSecondsCall) {
+    this._call = call;
+  }
+
+  get _prizePeriodSeconds(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class SetPrizePeriodSecondsCall__Outputs {
+  _call: SetPrizePeriodSecondsCall;
+
+  constructor(call: SetPrizePeriodSecondsCall) {
     this._call = call;
   }
 }
@@ -1423,44 +1542,6 @@ export class StartAwardCall__Outputs {
   _call: StartAwardCall;
 
   constructor(call: StartAwardCall) {
-    this._call = call;
-  }
-}
-
-export class TransferExternalERC20Call extends ethereum.Call {
-  get inputs(): TransferExternalERC20Call__Inputs {
-    return new TransferExternalERC20Call__Inputs(this);
-  }
-
-  get outputs(): TransferExternalERC20Call__Outputs {
-    return new TransferExternalERC20Call__Outputs(this);
-  }
-}
-
-export class TransferExternalERC20Call__Inputs {
-  _call: TransferExternalERC20Call;
-
-  constructor(call: TransferExternalERC20Call) {
-    this._call = call;
-  }
-
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get externalToken(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-}
-
-export class TransferExternalERC20Call__Outputs {
-  _call: TransferExternalERC20Call;
-
-  constructor(call: TransferExternalERC20Call) {
     this._call = call;
   }
 }
