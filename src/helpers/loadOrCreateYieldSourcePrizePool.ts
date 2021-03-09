@@ -23,6 +23,7 @@ export function loadOrCreateYieldSourcePrizePool(
     _prizePool.yieldSourcePrizePool = _yieldSourcePrizePool.id
     _prizePool.save()
 
+
     const _boundYieldSourcePrizePool = YieldSourcePrizePoolContract.bind(prizePool)
     _yieldSourcePrizePool.yieldSource = _boundYieldSourcePrizePool.yieldSource()
     _yieldSourcePrizePool.save()

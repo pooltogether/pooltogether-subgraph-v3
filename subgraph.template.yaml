@@ -229,6 +229,30 @@ dataSources:
       file: ./src/mappingForMultipleWinnersProxyFactory_v3_1_0.ts
   {{/multipleWinnersProxyFactory_v3_1_0}}
 
+  {{#multipleWinnersProxyFactory_v3_2_0}}
+  - name: MultipleWinnersProxyFactory_v3_2_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: MultipleWinnersProxyFactory_v3_1_0
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MultipleWinnersPrizeStrategy
+      abis:
+        - name: MultipleWinnersProxyFactory_v3_1_0
+          file: ./abis/v3_1_0/abis/MultipleWinnersProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleMultipleWinnersCreated
+      file: ./src/mappingForMultipleWinnersProxyFactory_v3_1_0.ts
+  {{/multipleWinnersProxyFactory_v3_2_0}}
+
+
     {{#multipleWinnersProxyFactory_v3_3_2}}
   - name: MultipleWinnersProxyFactory_v3_3_2
     kind: ethereum/contract
@@ -276,6 +300,29 @@ dataSources:
           handler: handleStakePrizePoolCreated
       file: ./src/mappingForStakePrizePoolProxyFactory_v3.ts
   {{/stakePrizePoolProxyFactory_v3_1_0}}
+
+    {{#stakePrizePoolProxyFactory_v3_2_0}}
+  - name: StakePrizePoolProxyFactory_v3_2_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: StakePrizePoolProxyFactory
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - StakePrizePool
+      abis:
+        - name: StakePrizePoolProxyFactory
+          file: ./abis/v3_1_0/abis/StakePrizePoolProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleStakePrizePoolCreated
+      file: ./src/mappingForStakePrizePoolProxyFactory_v3.ts
+  {{/stakePrizePoolProxyFactory_v3_2_0}}
 
 
   {{#stakePrizePoolProxyFactory_v3_3_2}}

@@ -32,6 +32,10 @@
     "address": "0x836C94Dcb8776C679b480b38A66524f34712981a",
     "startBlock": "7687010"
   },
+  "multipleWinnersProxyFactory_v3_2_0": {
+    "address": "0x3efa7793735330a882a33ae029fa30101ef138cd",
+    "startBlock": "8062646"
+  },
   "multipleWinnersProxyFactory_v3_3_2": {
     "address": "0x86C6A7De658Bd339Bd29843De5286D2B57FE3304",
     "startBlock": "8172253"
@@ -67,6 +71,10 @@
   "stakePrizePoolProxyFactory_v3_1_0": {
     "address": "0x69193dcD04366860CB96315335e815359D6caED4",
     "startBlock": "7687009"
+  },
+  "stakePrizePoolProxyFactory_v3_2_0": {
+    "address": "0x96fa8c550b5f5233cb5bd384b033edd10c8c90bb",
+    "startBlock": "8062644"
   },
   "stakePrizePoolProxyFactory_v3_3_2": {
     "address": "0x594C2b2cAf96e259d9ED8bd0c4dCB19C12e4aA0a",
