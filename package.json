@@ -25,7 +25,7 @@
     "all-mainnet": "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet",
     "all-mainnet-stg": "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet-stg",
     "codegen": "graph codegen",
-    "build": "graph build",
+    "build:mainnet": "graph build subgraph.mainnet.yaml",
     "build:rinkeby": "graph build subgraph.rinkeby.yaml",
     "auth": "graph auth https://api.thegraph.com/deploy/",
     "tag-release": "PACKAGE_VERSION=$(./scripts/package-version.sh) && git tag -ae v$PACKAGE_VERSION && git push --tags"

@@ -1,0 +1,168 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "measure",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "dripToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "dripRatePerSecond",
+        "type": "uint256"
+      }
+    ],
+    "name": "activateDrip",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "measure",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "prevDripToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "dripToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint32",
+        "name": "currentTime",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxNewTokens",
+        "type": "uint256"
+      }
+    ],
+    "name": "deactivateDrip",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "measure",
+        "type": "address"
+      }
+    ],
+    "name": "getActiveBalanceDrips",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "measure",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "dripToken",
+        "type": "address"
+      }
+    ],
+    "name": "getDrip",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "dripRatePerSecond",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint128",
+        "name": "exchangeRateMantissa",
+        "type": "uint128"
+      },
+      {
+        "internalType": "uint32",
+        "name": "timestamp",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "measure",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "dripToken",
+        "type": "address"
+      }
+    ],
+    "name": "isDripActive",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "measure",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "dripToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "dripRatePerSecond",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint32",
+        "name": "currentTime",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "maxNewTokens",
+        "type": "uint256"
+      }
+    ],
+    "name": "setDripRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

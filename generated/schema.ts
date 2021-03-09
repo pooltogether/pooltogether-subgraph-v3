@@ -220,6 +220,23 @@ export class PrizePool extends Entity {
     }
   }
 
+  get yieldSourcePrizePool(): string | null {
+    let value = this.get("yieldSourcePrizePool");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set yieldSourcePrizePool(value: string | null) {
+    if (value === null) {
+      this.unset("yieldSourcePrizePool");
+    } else {
+      this.set("yieldSourcePrizePool", Value.fromString(value as string));
+    }
+  }
+
   get reserveFeeControlledToken(): Bytes {
     let value = this.get("reserveFeeControlledToken");
     return value.toBytes();
@@ -527,6 +544,57 @@ export class StakePrizePool extends Entity {
       this.unset("stakeToken");
     } else {
       this.set("stakeToken", Value.fromBytes(value as Bytes));
+    }
+  }
+}
+
+export class YieldSourcePrizePool extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id !== null,
+      "Cannot save YieldSourcePrizePool entity without an ID"
+    );
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save YieldSourcePrizePool entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("YieldSourcePrizePool", id.toString(), this);
+  }
+
+  static load(id: string): YieldSourcePrizePool | null {
+    return store.get("YieldSourcePrizePool", id) as YieldSourcePrizePool | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get yieldSource(): Bytes | null {
+    let value = this.get("yieldSource");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set yieldSource(value: Bytes | null) {
+    if (value === null) {
+      this.unset("yieldSource");
+    } else {
+      this.set("yieldSource", Value.fromBytes(value as Bytes));
     }
   }
 }

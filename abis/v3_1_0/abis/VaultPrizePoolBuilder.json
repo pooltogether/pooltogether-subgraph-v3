@@ -1,0 +1,104 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract RegistryInterface",
+        "name": "_reserveRegistry",
+        "type": "address"
+      },
+      {
+        "internalType": "contract yVaultPrizePoolProxyFactory",
+        "name": "_vaultPrizePoolProxyFactory",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "prizePool",
+        "type": "address"
+      }
+    ],
+    "name": "PrizePoolCreated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "contract yVaultInterface",
+            "name": "vault",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "reserveRateMantissa",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxExitFeeMantissa",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxTimelockDuration",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct VaultPrizePoolBuilder.VaultPrizePoolConfig",
+        "name": "config",
+        "type": "tuple"
+      }
+    ],
+    "name": "createVaultPrizePool",
+    "outputs": [
+      {
+        "internalType": "contract yVaultPrizePool",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "reserveRegistry",
+    "outputs": [
+      {
+        "internalType": "contract RegistryInterface",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "vaultPrizePoolProxyFactory",
+    "outputs": [
+      {
+        "internalType": "contract yVaultPrizePoolProxyFactory",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

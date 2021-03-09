@@ -1300,6 +1300,36 @@ export class CompoundPrizePool extends ethereum.SmartContract {
   }
 }
 
+export class AddControlledTokenCall extends ethereum.Call {
+  get inputs(): AddControlledTokenCall__Inputs {
+    return new AddControlledTokenCall__Inputs(this);
+  }
+
+  get outputs(): AddControlledTokenCall__Outputs {
+    return new AddControlledTokenCall__Outputs(this);
+  }
+}
+
+export class AddControlledTokenCall__Inputs {
+  _call: AddControlledTokenCall;
+
+  constructor(call: AddControlledTokenCall) {
+    this._call = call;
+  }
+
+  get _controlledToken(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class AddControlledTokenCall__Outputs {
+  _call: AddControlledTokenCall;
+
+  constructor(call: AddControlledTokenCall) {
+    this._call = call;
+  }
+}
+
 export class AwardCall extends ethereum.Call {
   get inputs(): AwardCall__Inputs {
     return new AwardCall__Inputs(this);
@@ -1639,40 +1669,6 @@ export class CaptureAwardBalanceCall__Outputs {
 
   get value0(): BigInt {
     return this._call.outputValues[0].value.toBigInt();
-  }
-}
-
-export class CompLikeDelegateCall extends ethereum.Call {
-  get inputs(): CompLikeDelegateCall__Inputs {
-    return new CompLikeDelegateCall__Inputs(this);
-  }
-
-  get outputs(): CompLikeDelegateCall__Outputs {
-    return new CompLikeDelegateCall__Outputs(this);
-  }
-}
-
-export class CompLikeDelegateCall__Inputs {
-  _call: CompLikeDelegateCall;
-
-  constructor(call: CompLikeDelegateCall) {
-    this._call = call;
-  }
-
-  get compLike(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get to(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-}
-
-export class CompLikeDelegateCall__Outputs {
-  _call: CompLikeDelegateCall;
-
-  constructor(call: CompLikeDelegateCall) {
-    this._call = call;
   }
 }
 
