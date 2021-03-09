@@ -143,8 +143,7 @@ dataSources:
           handler: handleProxyCreated
         # - event: CompoundPrizePoolWithMultipleWinnersCreated(address indexed, address indexed)
         #   handler: handleCompoundPrizePoolWithMultipleWinnersCreated
-      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3_1_0.ts #using existing ProxyCreated event
-
+      file: ./src/mappingForYieldSourcePrizePoolProxyFactory.ts #using existing ProxyCreated event
   {{/yieldSourcePrizePoolProxyFactory_v3_3_2}}
 
 
@@ -419,6 +418,29 @@ dataSources:
           handler: handleProxyCreated
       file: ./src/mappingForTicketProxyFactory_v3_1_0.ts
   {{/ticketProxyFactory_v3_1_0}}
+
+    {{#ticketProxyFactory_v3_3_2}}
+  - name: TicketProxyFactory_v3_3_2
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: TicketProxyFactory_v3_3_2
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - ControlledToken
+      abis:
+        - name: TicketProxyFactory_v3_3_2
+          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/TicketProxyFactory.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+      file: ./src/mappingForTicketProxyFactory_v3_1_0.ts # same handler ok?
+  {{/ticketProxyFactory_v3_3_2}}
 
 templates:
   - name: SingleRandomWinner

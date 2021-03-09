@@ -1,6 +1,6 @@
 import {
   ProxyCreated,
-} from './generated/YieldSourcePrizePoolProxyFactory_v3_3_2/YieldSourcePrizePoolProxyFactory_v3_3_2.ts"
+} from "../generated/YieldSourcePrizePoolProxyFactory_v3_3_2/YieldSourcePrizePoolProxyFactory_v3_3_2"
 
 import {
   PrizePool_v3 as PrizePoolV3Template,

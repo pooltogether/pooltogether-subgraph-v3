@@ -8,6 +8,10 @@
     "address": "0x4e972abb057495635718F416E5836ac516bD2618",
     "startBlock": "11428997"
   },
+  "compoundPrizePoolProxyFactory_v3_2_0": {
+    "address": "0x4e972abb057495635718f416e5836ac516bd2618",
+    "startBlock": "11428997"
+  },
   "compoundPrizePoolProxyFactory_v3_3_2": {
     "address": "0x454f5AcbBE96162C0B56c74a37ACf79C65D883AC",
     "startBlock": "11968248"
@@ -32,6 +36,10 @@
     "address": "0xfB932b0BcFA5208D536600ab23C13Ac55CD69Ba1",
     "startBlock": "11429010"
   },
+  "controlledTokenProxyFactory_v3_2_0": {
+    "address": "0xf5FF8c8d23b70Dcaa8EEA48C9D1A6E0d64aD59Cc",
+    "startBlock": "11429020"
+  },
   "controlledTokenProxyFactory_v3_3_2": {
     "address": "0xA743f8A9d7c2d7e56e6983d0b60FF19EBc0cE727",
     "startBlock": "11968253"
@@ -51,6 +59,10 @@
   "ticketProxyFactory_v3_0_1": {
     "address": "0x59b34c5BC94e2d5b9DcB97Ec935c94C353E5Eb94",
     "startBlock": "11101030"
+  },
+  "ticketProxyFactory_v3_3_2": {
+    "address": "0x8Bb5Af6F10391CdbFb4C6f141a8B31a55b3411b5",
+    "startBlock": "11968255"
   },
   "stakePrizePoolProxyFactory_v3_1_0": {
     "address": "0x3b694ce9d12F0bF032bF002b3b0473Cb58bbe3F0",
