@@ -300,6 +300,11 @@
     safe-buffer "^5.1.1"
     util.promisify "^1.0.0"
 
+"@openzeppelin/contracts-upgradeable@3.3.0":
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-3.3.0.tgz#a536c6ff107d21319490e6cb699e555a3edcf6ea"
+  integrity sha512-kJeNuKauR4xH52Yo3GdXXAOW4CWyWdm7VXcJFe63G8TRb45ISSnkt/gXwUa8zzEYqokQrwNZYoH/iGYfUlp6wA==
+
 "@openzeppelin/contracts-upgradeable@3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-3.4.0.tgz#7674c73c643a509f1b90c509e3e72fe9aae02aeb"
@@ -6752,6 +6757,17 @@ psl@^1.1.28:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.8.0.tgz#9326f8bcfb013adcc005fdff056acce020e51c24"
   integrity sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ==
+
+ptv3.1.0@pooltogether/pooltogether-pool-contracts#e7aaad778093fdb48f740576bf8affa3ca31636f:
+  version "3.1.0"
+  resolved "https://codeload.github.com/pooltogether/pooltogether-pool-contracts/tar.gz/e7aaad778093fdb48f740576bf8affa3ca31636f"
+  dependencies:
+    "@openzeppelin/contracts-upgradeable" "3.3.0"
+    "@pooltogether/fixed-point" "1.0.0-beta.2"
+    "@pooltogether/pooltogether-rng-contracts" "1.0.0"
+    "@pooltogether/uniform-random-number" "1.0.0-beta.1"
+    deploy-eip-1820 "1.0.0"
+    sortition-sum-tree-factory "0.1.0"
 
 public-encrypt@^4.0.0:
   version "4.0.3"

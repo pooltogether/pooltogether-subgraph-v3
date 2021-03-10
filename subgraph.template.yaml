@@ -63,7 +63,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForCompoundPrizePoolProxyFactoryV3_0_1.ts
+      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3.ts
 
   {{/compoundPrizePoolProxyFactory_v3_0_1}}
 
@@ -87,7 +87,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3_1_0.ts
+      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3.ts
 
   {{/compoundPrizePoolProxyFactory_v3_1_0}}
 
@@ -106,16 +106,12 @@ dataSources:
       entities:
         - CompoundPrizePool
       abis:
-        # - name: CompoundPrizePoolProxyFactory_v3_1_0
-        #   file: ./abis/v3_1_0/abis/CompoundPrizePoolProxyFactory.json
         - name: CompoundPrizePoolProxyFactory_v3_3_2
           file: ./node_modules/@pooltogether/pooltogether-contracts/abis/CompoundPrizePoolProxyFactory.json
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-        # - event: CompoundPrizePoolWithMultipleWinnersCreated(address indexed, address indexed)
-        #   handler: handleCompoundPrizePoolWithMultipleWinnersCreated
-      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3_1_0.ts #using existing ProxyCreated event since the ProxyCreated event is the same -- can we join mappingForCompoundPrizePoolFactories together for all versions?
+      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3.ts #using existing ProxyCreated event since the ProxyCreated event is the same -- can we join mappingForCompoundPrizePoolFactories together for all versions?
 
   {{/compoundPrizePoolProxyFactory_v3_3_2}}
 
@@ -134,16 +130,12 @@ dataSources:
       entities:
         - YieldSourcePrizePool
       abis:
-        # - name: CompoundPrizePoolProxyFactory_v3_1_0
-        #   file: ./abis/v3_1_0/abis/CompoundPrizePoolProxyFactory.json
         - name: YieldSourcePrizePoolProxyFactory_v3_3_2
           file: ./node_modules/@pooltogether/pooltogether-contracts/abis/YieldSourcePrizePoolProxyFactory.json
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-        # - event: CompoundPrizePoolWithMultipleWinnersCreated(address indexed, address indexed)
-        #   handler: handleCompoundPrizePoolWithMultipleWinnersCreated
-      file: ./src/mappingForYieldSourcePrizePoolProxyFactory.ts #using existing ProxyCreated event
+      file: ./src/mappingForYieldSourcePrizePoolProxyFactory_v3.ts #using existing ProxyCreated event
   {{/yieldSourcePrizePoolProxyFactory_v3_3_2}}
 
 
@@ -226,7 +218,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleMultipleWinnersCreated
-      file: ./src/mappingForMultipleWinnersProxyFactory_v3_1_0.ts
+      file: ./src/mappingForMultipleWinnersProxyFactory_v3.ts
   {{/multipleWinnersProxyFactory_v3_1_0}}
 
   {{#multipleWinnersProxyFactory_v3_2_0}}
@@ -249,7 +241,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleMultipleWinnersCreated
-      file: ./src/mappingForMultipleWinnersProxyFactory_v3_1_0.ts
+      file: ./src/mappingForMultipleWinnersProxyFactory_v3.ts
   {{/multipleWinnersProxyFactory_v3_2_0}}
 
 
@@ -273,7 +265,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleMultipleWinnersCreated
-      file: ./src/mappingForMultipleWinnersProxyFactory_v3_1_0.ts
+      file: ./src/mappingForMultipleWinnersProxyFactory_v3.ts
   {{/multipleWinnersProxyFactory_v3_3_2}}
 
 
@@ -370,7 +362,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForControlledTokenProxyFactory_v3_0_1.ts
+      file: ./src/mappingForControlledTokenProxyFactory_v3.ts
   {{/controlledTokenProxyFactory_v3_0_1}}
 
   {{#controlledTokenProxyFactory_v3_1_0}}
@@ -393,7 +385,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForControlledTokenProxyFactory_v3_1_0.ts
+      file: ./src/mappingForControlledTokenProxyFactory_v3.ts
   {{/controlledTokenProxyFactory_v3_1_0}}
 
 
@@ -417,7 +409,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForControlledTokenProxyFactory_v3_1_0.ts
+      file: ./src/mappingForControlledTokenProxyFactory_v3.ts
   {{/controlledTokenProxyFactory_v3_3_2}}
 
   {{#ticketProxyFactory_v3_0_1}}
@@ -440,7 +432,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForTicketProxyFactory_v3_0_1.ts
+      file: ./src/mappingForTicketProxyFactory_v3.ts
   {{/ticketProxyFactory_v3_0_1}}
 
   {{#ticketProxyFactory_v3_1_0}}
@@ -463,7 +455,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForTicketProxyFactory_v3_1_0.ts
+      file: ./src/mappingForTicketProxyFactory_v3.ts
   {{/ticketProxyFactory_v3_1_0}}
 
     {{#ticketProxyFactory_v3_3_2}}
@@ -486,7 +478,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForTicketProxyFactory_v3_1_0.ts # same handler ok?
+      file: ./src/mappingForTicketProxyFactory_v3.ts
   {{/ticketProxyFactory_v3_3_2}}
 
 templates:
@@ -606,8 +598,6 @@ templates:
       eventHandlers:
         - event: YieldSourcePrizePoolInitialized(indexed address)
           handler: handleYieldSourcePrizePoolInitialized
-
-
 
   
   - name: PrizePool_v3
