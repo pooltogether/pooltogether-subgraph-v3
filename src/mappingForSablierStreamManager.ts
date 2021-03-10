@@ -6,9 +6,6 @@ export function handleSablierStreamCreated(event: SablierStreamCreated): void {
     const stream = loadOrCreateSablierStream(event.params.streamId.toHexString())
     stream.prizePool = event.params.prizePool.toHexString()
     stream.save()
-    // const prizePool = loadOrCreatePrizePool(event.params.prizePool)
-    // prizePool.sablierStreamId = streamId
-    // prizePool.save()
 }
 
 export function handleSablierStreamCancelled(event: SablierStreamCancelled): void {
