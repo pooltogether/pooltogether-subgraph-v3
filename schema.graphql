@@ -22,6 +22,12 @@ type Comptroller @entity {
   volumeDrips: [VolumeDrip!]! @derivedFrom(field: "comptroller")
 }
 
+# id `streamId`
+type SablierStream @entity {
+  id: ID!
+  prizePool: PrizePool!
+}
+
 # ID: `${prizePool.address}`
 type PrizePool @entity {
   id: ID!
@@ -38,6 +44,8 @@ type PrizePool @entity {
   yieldSourcePrizePool: YieldSourcePrizePool
 
   reserveFeeControlledToken: Bytes!
+
+  sablierStream: SablierStream @derivedFrom(field: "prizePool")
 
   underlyingCollateralToken: Bytes
   underlyingCollateralDecimals: BigInt

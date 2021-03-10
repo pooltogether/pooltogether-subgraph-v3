@@ -83,5 +83,9 @@
   "yieldSourcePrizePoolProxyFactory_v3_3_2": {
     "address": "0xF25E689a66A3f4dC572fA5ec59227b3225b84c15",
     "startBlock": "8172248"
+  },
+  "sablierManager":{
+    "address": "0x24FB66cef99B12c4088c9297528f7f13829936D3",
+    "startBlock": "8172246"
   }
 }
