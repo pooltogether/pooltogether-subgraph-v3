@@ -43,6 +43,34 @@ dataSources:
         - event: VolumeDripDripped(indexed address,indexed address,indexed address,bool,address,uint256)
           handler: handleVolumeDripDripped
 
+
+  {{#sablierManager}}
+  - name: SablierManager
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: SablierManager
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - PrizePool
+      abis:
+        - name: SablierManager 
+          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/SablierManager.json
+      eventHandlers:
+        - event: SablierStreamCreated(indexed uint256,indexed address)
+          handler: handleSablierStreamCreated
+        - event: SablierStreamCancelled(indexed uint256)
+          handler: handleSablierStreamCancelled
+      file: ./src/mappingForSablierStreamManager.ts
+
+  {{/sablierManager}}
+
+
   {{#compoundPrizePoolProxyFactory_v3_0_1}}
   - name: CompoundPrizePoolProxyFactory_v3_0_1
     kind: ethereum/contract

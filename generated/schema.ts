@@ -79,6 +79,46 @@ export class Comptroller extends Entity {
   }
 }
 
+export class SablierStream extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save SablierStream entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save SablierStream entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("SablierStream", id.toString(), this);
+  }
+
+  static load(id: string): SablierStream | null {
+    return store.get("SablierStream", id) as SablierStream | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get prizePool(): string {
+    let value = this.get("prizePool");
+    return value.toString();
+  }
+
+  set prizePool(value: string) {
+    this.set("prizePool", Value.fromString(value));
+  }
+}
+
 export class PrizePool extends Entity {
   constructor(id: string) {
     super();
@@ -244,6 +284,23 @@ export class PrizePool extends Entity {
 
   set reserveFeeControlledToken(value: Bytes) {
     this.set("reserveFeeControlledToken", Value.fromBytes(value));
+  }
+
+  get sablierStreamId(): string | null {
+    let value = this.get("sablierStreamId");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set sablierStreamId(value: string | null) {
+    if (value === null) {
+      this.unset("sablierStreamId");
+    } else {
+      this.set("sablierStreamId", Value.fromString(value as string));
+    }
   }
 
   get underlyingCollateralToken(): Bytes | null {
