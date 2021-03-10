@@ -8,6 +8,7 @@ enum PrizePoolType {
   Compound
   yVault
   Stake
+  YieldSource
 }
 
 
@@ -19,6 +20,12 @@ type Comptroller @entity {
   players: [DripTokenPlayer!]! @derivedFrom(field: "comptroller")
   balanceDrips: [BalanceDrip!]! @derivedFrom(field: "comptroller")
   volumeDrips: [VolumeDrip!]! @derivedFrom(field: "comptroller")
+}
+
+# id `streamId`
+type SablierStream @entity {
+  id: ID!
+  prizePool: PrizePool!
 }
 
 # ID: `${prizePool.address}`
@@ -34,8 +41,11 @@ type PrizePool @entity {
 
   compoundPrizePool: CompoundPrizePool
   stakePrizePool: StakePrizePool
+  yieldSourcePrizePool: YieldSourcePrizePool
 
   reserveFeeControlledToken: Bytes!
+
+  sablierStream: SablierStream @derivedFrom(field: "prizePool")
 
   underlyingCollateralToken: Bytes
   underlyingCollateralDecimals: BigInt
@@ -77,6 +87,12 @@ type CompoundPrizePool @entity {
 type StakePrizePool @entity {
   id: ID!
   stakeToken: Bytes # ! ?
+}
+
+# ID: `${yieldSourcePrizePool.address}`
+type YieldSourcePrizePool @entity {
+  id: ID!
+  yieldSource: Bytes # ! ?
 }
 
 # ID: `${prizeStrategy.address}`
@@ -356,7 +372,9 @@ type MultipleWinnersPrizeStrategy @entity {
   owner: Bytes
   
   numberOfWinners: BigInt
-  
+  splitExternalERC20Awards: Boolean 
+
+
   tokenListener: Bytes 
   prizePool: PrizePool 
   rng: Bytes

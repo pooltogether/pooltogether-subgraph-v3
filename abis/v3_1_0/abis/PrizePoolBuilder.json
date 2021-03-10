@@ -1,0 +1,21 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "prizePool",
+        "type": "address"
+      }
+    ],
+    "name": "PrizePoolCreated",
+    "type": "event"
+  }
+]

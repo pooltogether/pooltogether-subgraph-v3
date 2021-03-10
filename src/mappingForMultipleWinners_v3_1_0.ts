@@ -1,4 +1,4 @@
-import {NumberOfWinnersSet, PrizePoolAwarded, PrizePoolAwardStarted} from "../generated/templates/MultipleWinners/MultipleWinners"
+import {NumberOfWinnersSet, PrizePoolAwarded, PrizePoolAwardStarted, SplitExternalErc20AwardsSet} from "../generated/templates/MultipleWinners/MultipleWinners"
 
 import { store, BigInt, log, Address } from '@graphprotocol/graph-ts'
 import {
@@ -39,6 +39,12 @@ export function handleNumberOfWinnersSet(event: NumberOfWinnersSet) : void {
 export function handlePrizePoolOpened(event: PrizePoolOpened): void {
   log.warning("Prize Pool Opened!",[])
   // no-op
+}
+
+export function handleSplitExternalErc20AwardsSet(event: SplitExternalErc20AwardsSet): void {
+  let _prizeStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+  _prizeStrategy.splitExternalERC20Awards = event.params.splitExternalErc20Awards;
+  _prizeStrategy.save()
 }
 
 export function handlePeriodicPrizeInitialized(event: Initialized) : void {

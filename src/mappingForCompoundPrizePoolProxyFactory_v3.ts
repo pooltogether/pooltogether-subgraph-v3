@@ -1,10 +1,10 @@
 import {
   ProxyCreated,
-} from '../generated/CompoundPrizePoolProxyFactory_v3_0_1/CompoundPrizePoolProxyFactory_v3_0_1'
+} from '../generated/CompoundPrizePoolProxyFactory_v3_1_0/CompoundPrizePoolProxyFactory_v3_1_0'
 
 import {
   PrizePool_v3 as PrizePoolV3Template,
-  PrizePool_v3_0_1 as PrizePoolTemplate,
+  PrizePool_v3_1_0 as PrizePoolTemplate,
   CompoundPrizePool as CompoundPrizePoolTemplate,
 } from '../generated/templates'
 
