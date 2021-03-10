@@ -1,5 +1,5 @@
 import { store } from "@graphprotocol/graph-ts"
-import { SablierStreamCreated, SablierStreamCancelled, SablierManager } from "../generated/SablierManager/SablierManager"
+import { SablierStreamCreated, SablierStreamCancelled } from "../generated/SablierManager/SablierManager"
 import { loadOrCreateSablierStream } from "./helpers/loadOrCreateSablierStream"
 
 export function handleSablierStreamCreated(event: SablierStreamCreated): void {

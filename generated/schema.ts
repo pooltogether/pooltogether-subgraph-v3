@@ -286,8 +286,8 @@ export class PrizePool extends Entity {
     this.set("reserveFeeControlledToken", Value.fromBytes(value));
   }
 
-  get sablierStreamId(): string | null {
-    let value = this.get("sablierStreamId");
+  get sablierStream(): string | null {
+    let value = this.get("sablierStream");
     if (value === null || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -295,11 +295,11 @@ export class PrizePool extends Entity {
     }
   }
 
-  set sablierStreamId(value: string | null) {
+  set sablierStream(value: string | null) {
     if (value === null) {
-      this.unset("sablierStreamId");
+      this.unset("sablierStream");
     } else {
-      this.set("sablierStreamId", Value.fromString(value as string));
+      this.set("sablierStream", Value.fromString(value as string));
     }
   }
 

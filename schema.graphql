@@ -45,7 +45,7 @@ type PrizePool @entity {
 
   reserveFeeControlledToken: Bytes!
 
-  sablierStreamId: SablierStream @derivedFrom(field: "prizePool")
+  sablierStream: SablierStream @derivedFrom(field: "prizePool")
 
   underlyingCollateralToken: Bytes
   underlyingCollateralDecimals: BigInt
