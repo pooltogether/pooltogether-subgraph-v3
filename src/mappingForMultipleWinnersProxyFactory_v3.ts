@@ -8,7 +8,7 @@ import {
   MultipleWinnersPrizeStrategy,
 } from '../generated/schema'
 
-import { MultipleWinners as MultipleWinnersTemplate } from "../generated/templates"
+import { MultipleWinners_v3_3_2 as MultipleWinnersTemplate } from "../generated/templates"
 
 export function handleMultipleWinnersCreated(event: ProxyCreated) : void{
   const address = event.params.proxy.toHexString()
