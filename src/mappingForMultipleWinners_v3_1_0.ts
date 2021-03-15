@@ -1,4 +1,4 @@
-import {NumberOfWinnersSet, PrizePoolAwarded, PrizePoolAwardStarted, SplitExternalErc20AwardsSet} from "../generated/templates/MultipleWinners/MultipleWinners"
+import {NumberOfWinnersSet, PrizePoolAwarded, PrizePoolAwardStarted, SplitExternalErc20AwardsSet} from "../generated/templates/MultipleWinners_v3_3_2/MultipleWinners"
 
 import { store, BigInt, log, Address } from '@graphprotocol/graph-ts'
 import {
@@ -16,14 +16,14 @@ import {
   ExternalErc721AwardAdded,
   ExternalErc721AwardRemoved,
   MultipleWinners as MultipleWinnersContract
-} from '../generated/templates/MultipleWinners/MultipleWinners'
+} from '../generated/templates/MultipleWinners_v3_3_2/MultipleWinners'
 
 import {
   loadOrCreateMultipleWinnersExternalErc20Award,
   loadOrCreateMultipleWinnersExternalErc721Award,
 } from './helpers/loadOrCreateMultipleWinnersExternalAward'
 
-import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinners"
+import {Initialized} from "../generated/templates/MultipleWinners_v3_3_2/MultipleWinners"
 import { ONE } from "./helpers/common"
 import { loadOrCreatePrize } from "./helpers/loadOrCreatePrize"
 import { loadOrCreateControlledToken } from "./helpers/loadOrCreateControlledToken"

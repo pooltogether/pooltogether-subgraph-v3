@@ -118,14 +118,42 @@ export class ControlledToken extends DataSourceTemplate {
   }
 }
 
-export class MultipleWinners extends DataSourceTemplate {
+export class MultipleWinners_v3_1_0 extends DataSourceTemplate {
   static create(address: Address): void {
-    DataSourceTemplate.create("MultipleWinners", [address.toHex()]);
+    DataSourceTemplate.create("MultipleWinners_v3_1_0", [address.toHex()]);
   }
 
   static createWithContext(address: Address, context: DataSourceContext): void {
     DataSourceTemplate.createWithContext(
-      "MultipleWinners",
+      "MultipleWinners_v3_1_0",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
+export class MultipleWinners_v3_2_0 extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("MultipleWinners_v3_2_0", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "MultipleWinners_v3_2_0",
+      [address.toHex()],
+      context
+    );
+  }
+}
+
+export class MultipleWinners_v3_3_2 extends DataSourceTemplate {
+  static create(address: Address): void {
+    DataSourceTemplate.create("MultipleWinners_v3_3_2", [address.toHex()]);
+  }
+
+  static createWithContext(address: Address, context: DataSourceContext): void {
+    DataSourceTemplate.createWithContext(
+      "MultipleWinners_v3_3_2",
       [address.toHex()],
       context
     );
