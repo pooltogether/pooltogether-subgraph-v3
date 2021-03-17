@@ -1,6 +1,6 @@
 import {
   Initialized
-} from '../generated/templates/PrizePool_v3_3_0/PrizePool_v3_3_0'
+} from '../generated/templates/PrizePool_v3_3_2/PrizePool_v3_3_2'
 
 import { loadOrCreatePrizePool } from './helpers/loadOrCreatePrizePool'
 

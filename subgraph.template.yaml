@@ -246,7 +246,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleMultipleWinnersCreated
-      file: ./src/mappingForMultipleWinnersProxyFactory_v3.ts
+      file: ./src/mappingForMultipleWinnersProxyFactory_v3_1_0.ts
   {{/multipleWinnersProxyFactory_v3_1_0}}
 
   {{#multipleWinnersProxyFactory_v3_2_0}}
@@ -269,7 +269,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleMultipleWinnersCreated
-      file: ./src/mappingForMultipleWinnersProxyFactory_v3.ts
+      file: ./src/mappingForMultipleWinnersProxyFactory_v3_2_0.ts
   {{/multipleWinnersProxyFactory_v3_2_0}}
 
 
@@ -293,7 +293,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleMultipleWinnersCreated
-      file: ./src/mappingForMultipleWinnersProxyFactory_v3.ts
+      file: ./src/mappingForMultipleWinnersProxyFactory_v3_3_2.ts
   {{/multipleWinnersProxyFactory_v3_3_2}}
 
 
@@ -693,8 +693,8 @@ templates:
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
-        # - name: PrizePool_v3
-        #   file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
         - name: PrizePool_v3_0_1
           file: ./abis/PrizePool_v3_0_1.json
         - name: CompoundPrizePool
@@ -721,8 +721,8 @@ templates:
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
-        # - name: PrizePool_v3
-        #   file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
         - name: PrizePool_v3_1_0
           file: ./abis/v3_1_0/abis/PrizePool.json
         - name: CompoundPrizePool
@@ -733,25 +733,25 @@ templates:
         - event: Initialized(address,uint256,uint256)
           handler: handleInitialized
 
-  - name: PrizePool_v3_3_0
+  - name: PrizePool_v3_3_2
     kind: ethereum/contract
     network: {{network}}
     source:
-      abi: PrizePool_v3_3_0
+      abi: PrizePool_v3_3_2
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappingForPrizePool_v3_3_0.ts
+      file: ./src/mappingForPrizePool_v3_3_2.ts
       entities:
         - PrizePool
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
-        # - name: PrizePool_v3
-        #   file: ./abis/PrizePool_v3.json
-        - name: PrizePool_v3_3_0
-        - file: ./node_modules/@pooltogether/pooltogether-contracts/abis/CompoundPrizePoolProxyFactory.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3_3_2
+          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/CompoundPrizePool.json
         - name: CompoundPrizePool
           file: ./abis/v3_1_0/abis/CompoundPrizePool.json
         - name: ControlledToken
@@ -760,7 +760,7 @@ templates:
         - event: Initialized(address,uint256,uint256)
           handler: handleInitialized
 
-  - name: ControlledToken
+  - name: ControlledToken # will one controlled token do all versions?
     kind: ethereum/contract
     network: {{network}}
     source:
