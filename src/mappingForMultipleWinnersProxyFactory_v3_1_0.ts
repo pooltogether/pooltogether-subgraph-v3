@@ -5,10 +5,10 @@ import { ProxyCreated } from "../generated/MultipleWinnersProxyFactory_v3_1_0/Mu
 import { loadOrCreatePrizeStrategy } from './helpers/loadOrCreatePrizeStrategy'
 
 import {
-  MultipleWinnersPrizeStrategy,
+  MultipleWinnersPrizeStrategy
 } from '../generated/schema'
 
-import { MultipleWinners_v3_3_2 as MultipleWinnersTemplate } from "../generated/templates"
+import { MultipleWinners_v3_1_0, MultipleWinners_v3_2_0, MultipleWinners_v3_3_2 } from "../generated/templates"
 
 export function handleMultipleWinnersCreated(event: ProxyCreated) : void{
   const address = event.params.proxy.toHexString()
@@ -26,5 +26,10 @@ export function handleMultipleWinnersCreated(event: ProxyCreated) : void{
   prizeStrategy.multipleWinners = multipleWinners.id
   prizeStrategy.save()
 
-  MultipleWinnersTemplate.create(event.params.proxy)
+
+  // creating multiple templates
+  MultipleWinners_v3_1_0.create(event.params.proxy)
+
+
+
 }
