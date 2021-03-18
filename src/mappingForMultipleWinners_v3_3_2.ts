@@ -109,6 +109,8 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
   
+  log.warning("PrizePoolAwarded called for  ", [event.address.toHexString()])
+
   const mwStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
   if(!mwStrategy.prizePool){   // if prizePool is empty just skip (temp)
     log.warning("prizepool not linked to strategy",[])

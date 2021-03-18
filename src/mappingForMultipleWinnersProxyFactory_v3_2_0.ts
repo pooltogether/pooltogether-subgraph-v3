@@ -1,4 +1,4 @@
-import { BigInt } from '@graphprotocol/graph-ts'
+import { BigInt, log } from '@graphprotocol/graph-ts'
 
 import { ProxyCreated } from "../generated/MultipleWinnersProxyFactory_v3_1_0/MultipleWinnersProxyFactory_v3_1_0"
 
@@ -12,7 +12,7 @@ import { MultipleWinners_v3_1_0, MultipleWinners_v3_2_0, MultipleWinners_v3_3_2 
 
 export function handleMultipleWinnersCreated(event: ProxyCreated) : void{
   const address = event.params.proxy.toHexString()
-
+  log.warning("v3_2_0 creating a MWPrizeStrategy for ", [address])
   const multipleWinners = new MultipleWinnersPrizeStrategy(address)
 
   // set fields to blank/generic for now - Initialized event called straight after
