@@ -509,8 +509,7 @@ dataSources:
       file: ./src/mappingForTicketProxyFactory_v3.ts
   {{/ticketProxyFactory_v3_3_2}}
 
-
-templates:  
+templates:
   - name: SingleRandomWinner
     kind: ethereum/contract
     network: {{network}}
@@ -597,6 +596,8 @@ templates:
       abis:
         - name: PrizePool
           file: ./abis/v3_1_0/abis/PrizePool.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
         - name: CompoundPrizePool
           file: ./node_modules/@pooltogether/pooltogether-contracts/abis/CompoundPrizePool.json
         - name: CompoundPrizePool_v3_1_0
