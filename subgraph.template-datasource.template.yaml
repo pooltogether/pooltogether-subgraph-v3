@@ -1,0 +1,436 @@
+templates:  
+  - name: SingleRandomWinner
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: SingleRandomWinner
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForSingleRandomWinner.ts
+      entities:
+        - SingleRandomWinnerPrizeStrategy
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PrizePool
+          file: ./abis/v3_1_0/abis/PrizePool.json
+        - name: SingleRandomWinner
+          file: ./abis/v3_1_0/abis/SingleRandomWinner.json
+        - name: RNGInterface
+          file: ./abis/v3_1_0/abis/RNGInterface.json
+        - name: Comptroller
+          file: ./abis/v3_1_0/abis/Comptroller.json
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json
+      eventHandlers:
+        - event: TokenListenerUpdated(indexed address)
+          handler: handleTokenListenerUpdated
+        - event: PrizePoolOpened(indexed address,indexed uint256)
+          handler: handlePrizePoolOpened
+        - event: PrizePoolAwardStarted(indexed address,indexed address,indexed uint32,uint32)
+          handler: handlePrizePoolAwardStarted
+        - event: PrizePoolAwarded(indexed address,uint256)
+          handler: handlePrizePoolAwarded
+        - event: RngServiceUpdated(indexed address)
+          handler: handleRngServiceUpdated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: ExternalErc20AwardAdded(indexed address)
+          handler: handleExternalErc20AwardAdded
+        - event: ExternalErc20AwardRemoved(indexed address)
+          handler: handleExternalErc20AwardRemoved
+        - event: ExternalErc721AwardAdded(indexed address,uint256[])
+          handler: handleExternalErc721AwardAdded
+        - event: ExternalErc721AwardRemoved(indexed address)
+          handler: handleExternalErc721AwardRemoved
+
+  - name: StakePrizePool
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: StakePrizePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForStakePrizePool.ts
+      entities:
+        - StakePrizePool
+      abis:
+        - name: PrizePool
+          file: ./abis/v3_1_0/abis/PrizePool.json
+        - name: StakePrizePool
+          file: ./abis/v3_1_0/abis/StakePrizePool.json
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json
+      eventHandlers:
+        - event: StakePrizePoolInitialized(indexed address)
+          handler: handleStakePrizePoolInitialized
+
+
+  - name: CompoundPrizePool
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: CompoundPrizePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForCompoundPrizePool.ts
+      entities:
+        - CompoundPrizePool
+      abis:
+        - name: PrizePool
+          file: ./abis/v3_1_0/abis/PrizePool.json
+        - name: CompoundPrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/CompoundPrizePool.json
+        - name: CompoundPrizePool_v3_1_0
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json    
+        - name: CompoundPrizePool_v3_0_1
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json     
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json
+      eventHandlers:
+        - event: CompoundPrizePoolInitialized(indexed address)
+          handler: handleCompoundPrizePoolInitialized
+
+  - name: YieldSourcePrizePool
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: YieldSourcePrizePool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForYieldSourcePrizePool.ts
+      entities:
+        - YieldSourcePrizePool
+      abis:
+        - name: PrizePool
+          file: ./abis/v3_1_0/abis/PrizePool.json
+        - name: YieldSourcePrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/YieldSourcePrizePool.json
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json
+      eventHandlers:
+        - event: YieldSourcePrizePoolInitialized(indexed address)
+          handler: handleYieldSourcePrizePoolInitialized
+
+  
+  - name: PrizePool_v3
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: PrizePool_v3
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForPrizePool.ts
+      entities:
+        - PrizePool
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: CompoundPrizePool
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json
+      eventHandlers:
+        - event: ControlledTokenAdded(indexed address)
+          handler: handleControlledTokenAdded
+        - event: ReserveFeeCaptured(uint256)
+          handler: handleReserveFeeCaptured
+        - event: LiquidityCapSet(uint256)
+          handler: handleLiquidityCapSet
+        - event: TimelockDeposited(indexed address,indexed address,indexed address,uint256)
+          handler: handleTimelockDeposited
+        - event: Awarded(indexed address,indexed address,uint256)
+          handler: handleAwarded
+        - event: AwardedExternalERC20(indexed address,indexed address,uint256)
+          handler: handleAwardedExternalERC20
+        - event: AwardedExternalERC721(indexed address,indexed address,uint256[])
+          handler: handleAwardedExternalERC721
+        - event: TimelockedWithdrawal(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTimelockedWithdrawal
+        - event: TimelockedWithdrawalSwept(indexed address,indexed address,uint256,uint256)
+          handler: handleTimelockedWithdrawalSwept
+        - event: CreditPlanSet(address,uint128,uint128)
+          handler: handleCreditPlanSet
+        - event: PrizeStrategySet(indexed address)
+          handler: handlePrizeStrategySet
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Deposited(indexed address,indexed address,indexed address,uint256,address)
+          handler: handleDeposited
+
+
+  - name: PrizePool_v3_0_1
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: PrizePool_v3_0_1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForPrizePool_v3_0_1.ts
+      entities:
+        - PrizePool
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3_0_1
+          file: ./abis/PrizePool_v3_0_1.json
+        - name: CompoundPrizePool
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json
+      eventHandlers:
+        - event: Initialized(address,address,uint256,uint256)
+          handler: handleInitialized
+
+
+  - name: PrizePool_v3_1_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: PrizePool_v3_1_0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForPrizePool_v3_1_0.ts
+      entities:
+        - PrizePool
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3_1_0
+          file: ./abis/v3_1_0/abis/PrizePool.json
+        - name: CompoundPrizePool
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json
+      eventHandlers:
+        - event: Initialized(address,uint256,uint256)
+          handler: handleInitialized
+
+  - name: PrizePool_v3_3_2
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: PrizePool_v3_3_2
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForPrizePool_v3_3_2.ts
+      entities:
+        - PrizePool
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3_3_2
+          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/CompoundPrizePool.json
+        - name: CompoundPrizePool
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json
+      eventHandlers:
+        - event: Initialized(address,uint256,uint256)
+          handler: handleInitialized
+
+  - name: ControlledToken # will one controlled token do all versions?
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: ControlledToken
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForControlledToken.ts
+      entities:
+        - ControlledToken
+      abis:
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+  
+  - name: MultipleWinners_v3_1_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: MultipleWinners
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForMultipleWinners_v3_3_2.ts
+      entities:
+        - PeriodicPrizeStrategy
+        - MultipleWinners
+      abis:
+        - name: MultipleWinners
+          file: ./abis/v3_1_0/abis/MultipleWinners.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3_1_0
+          file: ./abis/v3_1_0/abis/PrizePool.json
+        - name: CompoundPrizePool
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json
+        - name: ERC20
+          file: ./abis/v3_1_0/abis/ERC20Upgradeable.json
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json 
+      eventHandlers:
+        - event: TokenListenerUpdated(indexed address)
+          handler: handleTokenListenerUpdated
+        - event: PrizePoolOpened(indexed address,indexed uint256)
+          handler: handlePrizePoolOpened
+        - event: RngServiceUpdated(indexed address)
+          handler: handleRngServiceUpdated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: ExternalErc20AwardAdded(indexed address)
+          handler: handleExternalErc20AwardAdded
+        - event: ExternalErc20AwardRemoved(indexed address)
+          handler: handleExternalErc20AwardRemoved
+        - event: ExternalErc721AwardAdded(indexed address,uint256[])
+          handler: handleExternalErc721AwardAdded
+        - event: ExternalErc721AwardRemoved(indexed address)
+          handler: handleExternalErc721AwardRemoved
+        - event: Initialized(uint256,uint256,indexed address,address,address,address,address[])
+          handler: handlePeriodicPrizeInitialized
+        - event: NumberOfWinnersSet(uint256)
+          handler: handleNumberOfWinnersSet
+        - event: PrizePoolAwarded(indexed address,uint256)
+          handler: handlePrizePoolAwarded
+        - event: PrizePoolAwardStarted(indexed address,indexed address,indexed uint32,uint32)
+          handler: handlePrizePoolAwardStarted
+        - event: SplitExternalErc20AwardsSet(bool)
+          handler: handleSplitExternalErc20AwardsSet
+
+  - name: MultipleWinners_v3_2_0
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: MultipleWinners
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForMultipleWinners_v3_3_2.ts
+      entities:
+        - PeriodicPrizeStrategy
+        - MultipleWinners
+      abis:
+        - name: MultipleWinners
+          file: ./abis/v3_2_0/abis/MultipleWinners.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3_1_0
+          file: ./abis/v3_1_0/abis/PrizePool.json
+        - name: CompoundPrizePool
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json
+        - name: ERC20
+          file: ./abis/v3_1_0/abis/ERC20Upgradeable.json
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json 
+      eventHandlers:
+        - event: TokenListenerUpdated(indexed address)
+          handler: handleTokenListenerUpdated
+        - event: PrizePoolOpened(indexed address,indexed uint256)
+          handler: handlePrizePoolOpened
+        - event: RngServiceUpdated(indexed address)
+          handler: handleRngServiceUpdated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: ExternalErc20AwardAdded(indexed address)
+          handler: handleExternalErc20AwardAdded
+        - event: ExternalErc20AwardRemoved(indexed address)
+          handler: handleExternalErc20AwardRemoved
+        - event: ExternalErc721AwardAdded(indexed address,uint256[])
+          handler: handleExternalErc721AwardAdded
+        - event: ExternalErc721AwardRemoved(indexed address)
+          handler: handleExternalErc721AwardRemoved
+        - event: Initialized(uint256,uint256,indexed address,address,address,address,address[])
+          handler: handlePeriodicPrizeInitialized
+        - event: NumberOfWinnersSet(uint256)
+          handler: handleNumberOfWinnersSet
+        - event: PrizePoolAwarded(indexed address,uint256)
+          handler: handlePrizePoolAwarded
+        - event: PrizePoolAwardStarted(indexed address,indexed address,indexed uint32,uint32)
+          handler: handlePrizePoolAwardStarted
+        - event: SplitExternalErc20AwardsSet(bool)
+          handler: handleSplitExternalErc20AwardsSet
+
+
+  - name: MultipleWinners_v3_3_2
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: MultipleWinners
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForMultipleWinners_v3_3_2.ts
+      entities:
+        - PeriodicPrizeStrategy
+        - MultipleWinners
+      abis:
+        - name: MultipleWinners
+          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/MultipleWinners.json
+        - name: PrizePool_v3
+          file: ./abis/PrizePool_v3.json
+        - name: PrizePool_v3_1_0
+          file: ./abis/v3_1_0/abis/PrizePool.json
+        - name: CompoundPrizePool
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json
+        - name: ERC20
+          file: ./abis/v3_1_0/abis/ERC20Upgradeable.json
+        - name: ControlledToken
+          file: ./abis/v3_1_0/abis/ControlledToken.json 
+      eventHandlers:
+        - event: TokenListenerUpdated(indexed address)
+          handler: handleTokenListenerUpdated
+        - event: PrizePoolOpened(indexed address,indexed uint256)
+          handler: handlePrizePoolOpened
+        - event: RngServiceUpdated(indexed address)
+          handler: handleRngServiceUpdated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: ExternalErc20AwardAdded(indexed address)
+          handler: handleExternalErc20AwardAdded
+        - event: ExternalErc20AwardRemoved(indexed address)
+          handler: handleExternalErc20AwardRemoved
+        - event: ExternalErc721AwardAdded(indexed address,uint256[])
+          handler: handleExternalErc721AwardAdded
+        - event: ExternalErc721AwardRemoved(indexed address)
+          handler: handleExternalErc721AwardRemoved
+        - event: Initialized(uint256,uint256,indexed address,address,address,address,address[])
+          handler: handlePeriodicPrizeInitialized
+        - event: NumberOfWinnersSet(uint256)
+          handler: handleNumberOfWinnersSet
+        - event: PrizePoolAwarded(indexed address,uint256)
+          handler: handlePrizePoolAwarded
+        - event: PrizePoolAwardStarted(indexed address,indexed address,indexed uint32,uint32)
+          handler: handlePrizePoolAwardStarted
+        - event: SplitExternalErc20AwardsSet(bool)
+          handler: handleSplitExternalErc20AwardsSet

@@ -11,6 +11,7 @@
     "create:rinkeby-stg": "graph create --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3 subgraph.local.yaml",
     "prepare:mainnet": "mustache networks/mainnet.json subgraph.template.yaml subgraph.mainnet.yaml",
     "prepare:rinkeby": "mustache networks/rinkeby.json subgraph.template.yaml subgraph.rinkeby.yaml",
+    "prepare-yaml": "cat subgraph.datasources.template.yaml subgraph.template-datasource.template.yaml > subgraph.template.yaml",
     "gen:mainnet": "graph codegen subgraph.mainnet.yaml",
     "gen:rinkeby": "graph codegen subgraph.rinkeby.yaml",
     "gen:local": "graph codegen subgraph.local.yaml",
@@ -19,11 +20,11 @@
     "deploy:rinkeby": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-v3_1_0 subgraph.rinkeby.yaml",
     "deploy:rinkeby-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3_1_0 subgraph.rinkeby.yaml",
     "deploy:local": "graph deploy --node http://127.0.0.1:8020 --ipfs http://localhost:5001 pooltogether/ptv3-subgraph subgraph.local.yaml",
-    "all-local": "yarn clean && yarn prepare:local && yarn gen:local && yarn deploy:local",
-    "all-rinkeby-stg": "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby-stg",
-    "all-rinkeby": "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby",
-    "all-mainnet": "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet",
-    "all-mainnet-stg": "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet-stg",
+    "all-local": "yarn clean &&  yarn prepare-yaml && yarn prepare:local && yarn gen:local && yarn deploy:local",
+    "all-rinkeby-stg": "yarn clean && yarn prepare-yaml && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby-stg",
+    "all-rinkeby": "yarn clean && yarn prepare-yaml && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby",
+    "all-mainnet": "yarn clean && yarn prepare-yaml && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet",
+    "all-mainnet-stg": "yarn clean && yarn prepare-yaml && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet-stg",
     "codegen": "graph codegen",
     "build:mainnet": "graph build subgraph.mainnet.yaml",
     "build:rinkeby": "graph build subgraph.rinkeby.yaml",
@@ -34,7 +35,9 @@
     "@graphprotocol/graph-cli": "^0.19.0",
     "@graphprotocol/graph-ts": "^0.19.0",
     "@pooltogether/pooltogether-contracts": "^3.3.2",
-    "ptv3.1.0": "pooltogether/pooltogether-pool-contracts#e7aaad778093fdb48f740576bf8affa3ca31636f",
-    "mustache": "^4.0.1"
+    "mustache": "^4.0.1",
+    "ptv3.1.0": "pooltogether/pooltogether-pool-contracts#e7aaad778093fdb48f740576bf8affa3ca31636f"
+  },
+  "devDependencies": {
   }
 }
