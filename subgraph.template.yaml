@@ -91,7 +91,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3.ts
+      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3_0_1.ts
 
   {{/compoundPrizePoolProxyFactory_v3_0_1}}
 
@@ -101,7 +101,7 @@ dataSources:
     network: {{network}}
     source:
       address: "{{address}}"
-      abi: CompoundPrizePoolProxyFactory_v3_1_0
+      abi: CompoundPrizePoolProxyFactory_v3_2_0
       startBlock: {{startBlock}}
     mapping:
       kind: ethereum/events
@@ -110,12 +110,12 @@ dataSources:
       entities:
         - CompoundPrizePool
       abis:
-        - name: CompoundPrizePoolProxyFactory_v3_1_0
-          file: ./abis/v3_1_0/abis/CompoundPrizePoolProxyFactory.json
+        - name: CompoundPrizePoolProxyFactory_v3_2_0
+          file: ./abis/v3_2_0/abis/CompoundPrizePoolProxyFactory.json
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3.ts
+      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3_1_0.ts
 
   {{/compoundPrizePoolProxyFactory_v3_1_0}}
 
@@ -139,7 +139,7 @@ dataSources:
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
-      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3.ts #using existing ProxyCreated event since the ProxyCreated event is the same -- can we join mappingForCompoundPrizePoolFactories together for all versions?
+      file: ./src/mappingForCompoundPrizePoolProxyFactory_v3_3_2.ts #using existing ProxyCreated event since the ProxyCreated event is the same -- can we join mappingForCompoundPrizePoolFactories together for all versions?
 
   {{/compoundPrizePoolProxyFactory_v3_3_2}}
 
@@ -597,7 +597,11 @@ templates:
         - name: PrizePool
           file: ./abis/v3_1_0/abis/PrizePool.json
         - name: CompoundPrizePool
-          file: ./abis/v3_1_0/abis/CompoundPrizePool.json
+          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/CompoundPrizePool.json
+        - name: CompoundPrizePool_v3_1_0
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json    
+        - name: CompoundPrizePool_v3_0_1
+          file: ./abis/v3_1_0/abis/CompoundPrizePool.json     
         - name: ControlledToken
           file: ./abis/v3_1_0/abis/ControlledToken.json
       eventHandlers:
@@ -788,7 +792,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappingForMultipleWinners_v3_1_0.ts
+      file: ./src/mappingForMultipleWinners_v3_3_2.ts
       entities:
         - PeriodicPrizeStrategy
         - MultipleWinners
@@ -842,7 +846,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappingForMultipleWinners_v3_1_0.ts
+      file: ./src/mappingForMultipleWinners_v3_3_2.ts
       entities:
         - PeriodicPrizeStrategy
         - MultipleWinners
@@ -897,7 +901,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/mappingForMultipleWinners_v3_1_0.ts
+      file: ./src/mappingForMultipleWinners_v3_3_2.ts
       entities:
         - PeriodicPrizeStrategy
         - MultipleWinners
