@@ -48,20 +48,6 @@ export class CompoundPrizePool extends DataSourceTemplate {
   }
 }
 
-export class YieldSourcePrizePool extends DataSourceTemplate {
-  static create(address: Address): void {
-    DataSourceTemplate.create("YieldSourcePrizePool", [address.toHex()]);
-  }
-
-  static createWithContext(address: Address, context: DataSourceContext): void {
-    DataSourceTemplate.createWithContext(
-      "YieldSourcePrizePool",
-      [address.toHex()],
-      context
-    );
-  }
-}
-
 export class PrizePool_v3 extends DataSourceTemplate {
   static create(address: Address): void {
     DataSourceTemplate.create("PrizePool_v3", [address.toHex()]);

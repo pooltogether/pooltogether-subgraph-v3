@@ -12,10 +12,6 @@
     "address": "0x4e972abb057495635718f416e5836ac516bd2618",
     "startBlock": "11428997"
   },
-  "compoundPrizePoolProxyFactory_v3_3_2": {
-    "address": "0x454f5AcbBE96162C0B56c74a37ACf79C65D883AC",
-    "startBlock": "11968248"
-  },
   "singleRandomWinnerProxyFactory_v3_0_1": {
     "address": "0xc79B5D46f010c88f738A00B3bed7757d04dd2a37",
     "startBlock": "11101039"
@@ -40,10 +36,6 @@
     "address": "0xf5FF8c8d23b70Dcaa8EEA48C9D1A6E0d64aD59Cc",
     "startBlock": "11429020"
   },
-  "controlledTokenProxyFactory_v3_3_2": {
-    "address": "0xA743f8A9d7c2d7e56e6983d0b60FF19EBc0cE727",
-    "startBlock": "11968253"
-  },
   "multipleWinnersProxyFactory_v3_1_0": {
     "address": "0x734E677AC3699f63f47c2bAE7a8F3c16aFf5aE70",
     "startBlock": "11429015"
@@ -51,10 +43,6 @@
   "multipleWinnersProxyFactory_v3_2_0": {
     "address": "0x734E677AC3699f63f47c2bAE7a8F3c16aFf5aE70",
     "startBlock": "11429015"
-  },
-  "multipleWinnersProxyFactory_v3_3_2": {
-    "address": "0xF273EfaED59fED4F41cb9E693EefD9B1191f1522",
-    "startBlock": "11968262"
   },
   "ticketProxyFactory_v3_0_1": {
     "address": "0x59b34c5BC94e2d5b9DcB97Ec935c94C353E5Eb94",
@@ -64,10 +52,6 @@
     "address": "0xa7d0d3C4f96BB896e0878ef4b83e5cA79700aCB9",
     "startBlock": "11429012"
   },
-  "ticketProxyFactory_v3_3_2": {
-    "address": "0x8Bb5Af6F10391CdbFb4C6f141a8B31a55b3411b5",
-    "startBlock": "11968255"
-  },
   "stakePrizePoolProxyFactory_v3_1_0": {
     "address": "0x3b694ce9d12F0bF032bF002b3b0473Cb58bbe3F0",
     "startBlock": "11429013"
@@ -75,14 +59,6 @@
   "stakePrizePoolProxyFactory_v3_2_0": {
     "address": "0x3b694ce9d12F0bF032bF002b3b0473Cb58bbe3F0",
     "startBlock": "11429013"
-  },
-  "stakePrizePoolProxyFactory_v3_3_2": {
-    "address": "0x5Ae75894EFcC1f8340b58d0efb3d59Bf366b6A4E",
-    "startBlock": "11968258"
-  },
-  "yieldSourcePrizePoolProxyFactory_v3_3_2": {
-    "address": "0x692F55051Dc060d94227467EE4fbDE72d370728C",
-    "startBlock": "11968252"
   },
   "sablierManager":{
     "address": "0x17CBf69d3dE5c7221AE07CFF6296F661Bb44122b",
