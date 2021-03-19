@@ -17,7 +17,8 @@ import {
   CreditPlanSet,
   PrizeStrategySet,
   OwnershipTransferred,
-} from '../generated/templates/PrizePool_v3/PrizePool_v3'
+  Initialized
+} from '../generated/templates/PrizePool/PrizePool'
 
 import {externalAwardId} from "./helpers/idTemplates"
 
@@ -211,4 +212,15 @@ export function handleTimelockDeposited(event: TimelockDeposited): void {
 
 export function handleDeposited(event: Deposited):void {
   loadOrCreatePrizePoolAccount(event.address, event.params.to.toHex())
+}
+
+
+
+// inserted from 3_3_2
+export function handleInitialized(event: Initialized): void {
+  const _prizePool = loadOrCreatePrizePool(event.address)
+  _prizePool.reserveRegistry = event.params.reserveRegistry
+  _prizePool.maxExitFeeMantissa = event.params.maxExitFeeMantissa
+  _prizePool.maxTimelockDuration = event.params.maxTimelockDuration
+  _prizePool.save()
 }
