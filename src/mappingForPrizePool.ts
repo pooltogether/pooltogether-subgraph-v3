@@ -218,6 +218,9 @@ export function handleDeposited(event: Deposited):void {
 
 // inserted from 3_3_2
 export function handleInitialized(event: Initialized): void {
+
+  log.warning("PrizePool Initialized called for {} ",[event.address.toHexString()])
+
   const _prizePool = loadOrCreatePrizePool(event.address)
   _prizePool.reserveRegistry = event.params.reserveRegistry
   _prizePool.maxExitFeeMantissa = event.params.maxExitFeeMantissa

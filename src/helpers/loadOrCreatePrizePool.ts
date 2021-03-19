@@ -18,9 +18,13 @@ import { ZERO, ONE, ZERO_ADDRESS } from './common'
 export function loadOrCreatePrizePool(
   prizePool: Address
 ): PrizePool {
+
+  log.warning("loadOrCreatePrizePool called for {} ",[prizePool.toHexString()])
+
   let _prizePool = PrizePool.load(prizePool.toHex())
 
   if (!_prizePool) {
+    log.warning("loadOrCreatePrizePool creating a prizePool {} ", [prizePool.toHexString()])
     _prizePool = new PrizePool(prizePool.toHex())
 
     const boundPrizePool = PrizePoolContract.bind(prizePool)
@@ -106,6 +110,5 @@ export function loadOrCreatePrizePool(
 
     _prizePool.save()
   }
-
   return _prizePool as PrizePool
 }
