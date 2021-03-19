@@ -14,7 +14,7 @@ export function handleMultipleWinnersCreated(event: ProxyCreated) : void{
   const address = event.params.proxy.toHexString()
 
 
-  log.warning("v3_3_2creating a MWPrizeStrategy for ", [address])
+  log.info("creating a MWPrizeStrategy for {}", [address])
 
   const multipleWinners = new MultipleWinnersPrizeStrategy(address)
 

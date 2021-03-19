@@ -4,6 +4,10 @@
     "address": "0x454f5AcbBE96162C0B56c74a37ACf79C65D883AC",
     "startBlock": "11968248"
   },
+  "comptroller": {
+    "address": "0x4027dE966127af5F015Ea1cfd6293a3583892668",
+    "startBlock": "11968248"
+  },
   "controlledTokenProxyFactory": {
     "address": "0xA743f8A9d7c2d7e56e6983d0b60FF19EBc0cE727",
     "startBlock": "11968253"
