@@ -366,7 +366,7 @@ type VolumeDrip @entity {
   deactivated: Boolean!
 }
 
-
+# id address of prizeStrategy
 type MultipleWinnersPrizeStrategy @entity {
   id: ID!
   owner: Bytes

@@ -55,14 +55,18 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
     const startTime = event.params.prizePeriodStart
     const prizePeriod = event.params.prizePeriodSeconds
 
-    const multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+    log.info("MultipleWinners being intialized for {} ",[event.address.toHexString()])
+
+
+    let multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHex())
     if(!multipleWinners){
       log.error("multiple winners does not exist for {} ",[event.address.toHexString()])
+      multipleWinners = new MultipleWinnersPrizeStrategy(event.address.toHexString())
     }
 
     const _checkPrizePool = PrizePool.load(prizePool.toHex())
     if(!_checkPrizePool){
-      log.warning("checkprizepool setting mw prizePool to null!",[])
+      log.info("checkprizepool setting mw prizePool to null! for {}",[event.address.toHexString()])
       multipleWinners.prizePool = null
     }
     else{
@@ -109,11 +113,11 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
   
-  log.warning("PrizePoolAwarded called for  ", [event.address.toHexString()])
+  log.info("PrizePoolAwarded called for  {}", [event.address.toHexString()])
 
   const mwStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
   if(!mwStrategy.prizePool){   // if prizePool is empty just skip (temp)
-    log.warning("prizepool not linked to strategy",[])
+    log.info("prizepool not linked to strategy for prize strategy {}",[event.address.toHexString()])
     return
   }
 
@@ -149,7 +153,7 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
 
   const _prizePool = PrizePool.load(_prizeStrategy.prizePool)
   if(!_prizePool){
-    log.warning("prize pool does not exist {}",[_prizeStrategy.id])
+    log.info("prize pool does not exist {}",[_prizeStrategy.id])
     return
   }
   _prizePool.currentState = "Started"
