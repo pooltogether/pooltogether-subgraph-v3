@@ -60,6 +60,9 @@ export function handleCreditPlanSet(event: CreditPlanSet): void {
 }
 
 export function handlePrizeStrategySet(event: PrizeStrategySet): void {
+
+  log.warning("debugps handlePrizeStrategySet for {} as {} ",[event.address.toHexString(), event.params.prizeStrategy.toHexString()])
+
   const _prizePoolAddress = event.address
   const _prizeStrategyAddress = event.params.prizeStrategy
 
