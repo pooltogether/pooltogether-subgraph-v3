@@ -1,5 +1,5 @@
 {
-  "network": "mainnet",
+  "network": "rinkeby",
   "compoundPrizePoolProxyFactory": {
     "address": "0x4bc27Ce56A98cbA03F6dd374f7a50eA993B69381",
     "startBlock": "8172247"
@@ -9,7 +9,7 @@
     "startBlock": "8172241"
   },
   "controlledTokenProxyFactory": {
-    "address": "0xE0F4217390221aF47855E094F6e112D43C8698fE",
+    "address": "0xe16e1a7Ae85F1E4d0F63E855a17Fb1665603c54B",
     "startBlock": "8172249"
   },
   "multipleWinnersProxyFactory": {
