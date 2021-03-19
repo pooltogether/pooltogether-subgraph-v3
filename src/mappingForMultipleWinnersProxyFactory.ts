@@ -1,6 +1,6 @@
 import { BigInt, log } from '@graphprotocol/graph-ts'
 
-import { ProxyCreated } from "../generated/MultipleWinnersProxyFactory_v3_1_0/MultipleWinnersProxyFactory_v3_1_0"
+import { ProxyCreated } from "../generated/MultipleWinnersProxyFactory/MultipleWinnersProxyFactory"
 
 import { loadOrCreatePrizeStrategy } from './helpers/loadOrCreatePrizeStrategy'
 
@@ -8,13 +8,16 @@ import {
   MultipleWinnersPrizeStrategy
 } from '../generated/schema'
 
-import { MultipleWinners_v3_1_0, MultipleWinners_v3_2_0, MultipleWinners_v3_3_2 } from "../generated/templates"
+import { MultipleWinners } from "../generated/templates"
 
 export function handleMultipleWinnersCreated(event: ProxyCreated) : void{
   const address = event.params.proxy.toHexString()
 
+
+  log.warning("v3_3_2creating a MWPrizeStrategy for ", [address])
+
   const multipleWinners = new MultipleWinnersPrizeStrategy(address)
-  log.warning("v3_1_0 creating a MWPrizeStrategy for ", [address])
+
   // set fields to blank/generic for now - Initialized event called straight after
   multipleWinners.prizePeriodSeconds = new BigInt(0)
   multipleWinners.prizePeriodStartedAt = new BigInt(0)
@@ -28,7 +31,8 @@ export function handleMultipleWinnersCreated(event: ProxyCreated) : void{
 
 
   // creating multiple templates
-  MultipleWinners_v3_1_0.create(event.params.proxy)
+  MultipleWinners.create(event.params.proxy)
+
 
 
 

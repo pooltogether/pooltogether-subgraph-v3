@@ -5,8 +5,8 @@ import {
 } from '../../generated/schema'
 
 import {
-  PrizePool_v3 as PrizePoolContract,
-} from '../../generated/templates/PrizePool_v3/PrizePool_v3'
+  PrizePool as PrizePoolContract,
+} from '../../generated/templates/PrizePool/PrizePool'
 
 import {
   ControlledToken as ControlledTokenContract,
