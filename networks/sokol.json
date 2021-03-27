@@ -1,5 +1,5 @@
 {
-  "network": "sokol",
+  "network": "poa-sokol",
   "compoundPrizePoolProxyFactory": {
     "address": "0xaFcEa072BcBad91029A2bA0b37bAC8269dd4f5E6",
     "startBlock": "19671869"
