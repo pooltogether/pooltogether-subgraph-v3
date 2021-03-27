@@ -5,36 +5,29 @@
   "scripts": {
     "reinstall": "rm -rf node_modules/ && yarn",
     "clean": "rm -rf build/ generated/",
-    "prepare:local": "mustache networks/local.json subgraph.template.yaml subgraph.local.yaml",
-    "create:local": "graph create --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
-    "remove:local": "graph remove --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
-    "create:rinkeby-stg": "graph create --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3 subgraph.local.yaml",
-    "prepare:mainnet": "mustache networks/mainnet.json subgraph.template.yaml subgraph.mainnet.yaml",
-    "prepare:rinkeby": "mustache networks/rinkeby.json subgraph.template.yaml subgraph.rinkeby.yaml",
-    "gen:mainnet": "graph codegen subgraph.mainnet.yaml",
-    "gen:rinkeby": "graph codegen subgraph.rinkeby.yaml",
-    "gen:local": "graph codegen subgraph.local.yaml",
-    "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-v3_1_0 subgraph.mainnet.yaml",
-    "deploy:mainnet-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-staging-v3_1_0 subgraph.mainnet.yaml",
-    "deploy:rinkeby": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-v3_1_0 subgraph.rinkeby.yaml",
-    "deploy:rinkeby-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3_1_0 subgraph.rinkeby.yaml",
-    "deploy:local": "graph deploy --node http://127.0.0.1:8020 --ipfs http://localhost:5001 pooltogether/ptv3-subgraph subgraph.local.yaml",
-    "all-local": "yarn clean && yarn prepare:local && yarn gen:local && yarn deploy:local",
-    "all-rinkeby-stg": "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby-stg",
-    "all-rinkeby": "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby",
-    "all-mainnet": "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet",
-    "all-mainnet-stg": "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet-stg",
+    "prepare:polygon": "mustache networks/polygon.json subgraph.template.yaml subgraph.polygon.yaml",
+    "prepare:mumbai": "mustache networks/mumbai.json subgraph.template.yaml subgraph.mumbai.yaml",
+   
+    "gen:polygon": "graph codegen subgraph.polygon.yaml",
+    "gen:mumbai": "graph codegen subgraph.mumbai.yaml",
+   
+    "deploy:polygon": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-polygon-v3_3 subgraph.polygon.yaml",
+    "deploy:mumbai": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-mumbai-v3_3 subgraph.mumbai.yaml",
+      
+    "all-mumbai": "yarn clean && yarn prepare:mumbai && yarn gen:mumbai && yarn deploy:mumbai",
+   
+    "all-polygon": "yarn clean && yarn prepare:polygon && yarn gen:polygon && yarn deploy:polygon",
+   
     "codegen": "graph codegen",
-    "build:mainnet": "graph build subgraph.mainnet.yaml",
-    "build:rinkeby": "graph build subgraph.rinkeby.yaml",
+    "build:polygon": "graph build subgraph.polygon.yaml",
+    "build:mumbai": "graph build subgraph.mumbai.yaml",
     "auth": "graph auth https://api.thegraph.com/deploy/",
     "tag-release": "PACKAGE_VERSION=$(./scripts/package-version.sh) && git tag -ae v$PACKAGE_VERSION && git push --tags"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.19.0",
-    "@graphprotocol/graph-ts": "^0.19.0",
-    "@pooltogether/pooltogether-contracts": "^3.3.2",
-    "ptv3.1.0": "pooltogether/pooltogether-pool-contracts#e7aaad778093fdb48f740576bf8affa3ca31636f",
+    "@graphprotocol/graph-cli": "^0.20.0",
+    "@graphprotocol/graph-ts": "^0.20.0",
+    "@pooltogether/pooltogether-contracts": "^3.3.5",
     "mustache": "^4.0.1"
   }
 }

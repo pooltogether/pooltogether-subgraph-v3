@@ -1,6 +1,6 @@
 import {
     ProxyCreated,
-  } from '../generated/ControlledTokenProxyFactory_v3_1_0/ControlledTokenProxyFactory_v3_1_0'
+  } from '../generated/ControlledTokenProxyFactory/ControlledTokenProxyFactory'
   
 import {
     ControlledToken as ControlledTokenTemplate,

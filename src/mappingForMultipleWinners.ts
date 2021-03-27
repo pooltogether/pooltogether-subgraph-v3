@@ -27,6 +27,7 @@ import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinner
 import { ONE } from "./helpers/common"
 import { loadOrCreatePrize } from "./helpers/loadOrCreatePrize"
 import { loadOrCreateControlledToken } from "./helpers/loadOrCreateControlledToken"
+import { loadOrCreatePrizePool } from "./helpers/loadOrCreatePrizePool"
 
 
 
@@ -37,7 +38,7 @@ export function handleNumberOfWinnersSet(event: NumberOfWinnersSet) : void {
 }
 
 export function handlePrizePoolOpened(event: PrizePoolOpened): void {
-  log.warning("Prize Pool Opened!",[])
+  log.warning("Prize Pool Opened! {} ",[event.address.toHexString()])
   // no-op
 }
 
@@ -47,6 +48,8 @@ export function handleSplitExternalErc20AwardsSet(event: SplitExternalErc20Award
   _prizeStrategy.save()
 }
 
+
+// this is called before the prizepool initializer
 export function handlePeriodicPrizeInitialized(event: Initialized) : void {
     const prizePool = event.params.prizePool
     const rng =event.params.rng
@@ -55,19 +58,27 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
     const startTime = event.params.prizePeriodStart
     const prizePeriod = event.params.prizePeriodSeconds
 
-    const multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+    log.warning("MultipleWinners being intialized for {} ",[event.address.toHexString()])
+
+
+    let multipleWinners = MultipleWinnersPrizeStrategy.load(event.address.toHexString())
     if(!multipleWinners){
-      log.error("multiple winners does not exist for {} ",[event.address.toHexString()])
+      log.error("debu multiple winners does not exist for {} ",[event.address.toHexString()])
+      // multipleWinners = new MultipleWinnersPrizeStrategy(event.address.toHexString())
     }
 
-    const _checkPrizePool = PrizePool.load(prizePool.toHex())
-    if(!_checkPrizePool){
-      log.warning("checkprizepool setting mw prizePool to null!",[])
-      multipleWinners.prizePool = null
-    }
-    else{
-      multipleWinners.prizePool = _checkPrizePool.id
-    }
+    // const _checkPrizePool = PrizePool.load(prizePool.toHexString())
+    // if(!_checkPrizePool){
+    //   log.info("debug556 checkprizepool setting mw prizePool to null! for {}",[event.address.toHexString()])
+    //   multipleWinners.prizePool = null
+    // }
+    // else{
+    //   multipleWinners.prizePool = _checkPrizePool.id
+    // }
+
+    const _prizePool = loadOrCreatePrizePool(prizePool)
+    multipleWinners.prizePool = prizePool.toHexString()
+
 
     
     multipleWinners.prizePeriodStartedAt = startTime
@@ -109,9 +120,11 @@ export function handleExternalErc20AwardAdded(event: ExternalErc20AwardAdded): v
 
 export function handlePrizePoolAwarded(event: PrizePoolAwarded) : void {
   
+  log.warning("PrizePoolAwarded called for  {}", [event.address.toHexString()])
+
   const mwStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
   if(!mwStrategy.prizePool){   // if prizePool is empty just skip (temp)
-    log.warning("prizepool not linked to strategy",[])
+    log.warning("prizepool not linked to strategy for prize strategy {}",[event.address.toHexString()])
     return
   }
 
