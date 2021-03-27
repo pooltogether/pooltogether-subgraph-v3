@@ -1,5 +1,5 @@
 {
-  "network": "Matic",
+  "network": "matic",
   "compoundPrizePoolProxyFactory": {
     "address": "0x44C585E76A5DA580f59B0a3ADd7ca0C96bF4fE2a",
     "startBlock": "11606870"
