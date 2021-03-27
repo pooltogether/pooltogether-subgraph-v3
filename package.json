@@ -5,22 +5,22 @@
   "scripts": {
     "reinstall": "rm -rf node_modules/ && yarn",
     "clean": "rm -rf build/ generated/",
-    "prepare:polygon": "mustache networks/polygon.json subgraph.template.yaml subgraph.polygon.yaml",
-    "prepare:mumbai": "mustache networks/mumbai.json subgraph.template.yaml subgraph.mumbai.yaml",
+    "prepare:xdai": "mustache networks/xdai.json subgraph.template.yaml subgraph.xdai.yaml",
+    "prepare:sokol": "mustache networks/sokol.json subgraph.template.yaml subgraph.sokol.yaml",
    
-    "gen:polygon": "graph codegen subgraph.polygon.yaml",
-    "gen:mumbai": "graph codegen subgraph.mumbai.yaml",
+    "gen:xdai": "graph codegen subgraph.xdai.yaml",
+    "gen:sokol": "graph codegen subgraph.sokol.yaml",
    
-    "deploy:polygon": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-polygon-v3_3 subgraph.polygon.yaml",
-    "deploy:mumbai": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-mumbai-v3_3 subgraph.mumbai.yaml",
+    "deploy:xdai": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-xdai-v3_3 subgraph.xdai.yaml",
+    "deploy:sokol": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-sokol-v3_3 subgraph.sokol.yaml",
       
-    "all-mumbai": "yarn clean && yarn prepare:mumbai && yarn gen:mumbai && yarn deploy:mumbai",
+    "all-sokol": "yarn clean && yarn prepare:sokol && yarn gen:sokol && yarn deploy:sokol",
    
-    "all-polygon": "yarn clean && yarn prepare:polygon && yarn gen:polygon && yarn deploy:polygon",
+    "all-xdai": "yarn clean && yarn prepare:xdai && yarn gen:xdai && yarn deploy:xdai",
    
     "codegen": "graph codegen",
-    "build:polygon": "graph build subgraph.polygon.yaml",
-    "build:mumbai": "graph build subgraph.mumbai.yaml",
+    "build:xdai": "graph build subgraph.xdai.yaml",
+    "build:sokol": "graph build subgraph.sokol.yaml",
     "auth": "graph auth https://api.thegraph.com/deploy/",
     "tag-release": "PACKAGE_VERSION=$(./scripts/package-version.sh) && git tag -ae v$PACKAGE_VERSION && git push --tags"
   },
