@@ -1,0 +1,31 @@
+{
+  "network": "poa-sokol",
+  "compoundPrizePoolProxyFactory": {
+    "address": "0xaFcEa072BcBad91029A2bA0b37bAC8269dd4f5E6",
+    "startBlock": "19671869"
+  },
+  "comptroller": {
+    "address": "0x14e194Cf5E1dd73BB46256495aEa8ff36A7Aa454",
+    "startBlock": "19671848"
+  },
+  "controlledTokenProxyFactory": {
+    "address": "0x317625b28Acb3C0540DB00b179D84D9b804277f7",
+    "startBlock": "19671873"
+  },
+  "multipleWinnersProxyFactory": {
+    "address": "0x6aeBE10a4607B1002ea56D825Ee18Ce751fD9592",
+    "startBlock": "19671880"
+  },
+  "ticketProxyFactory": {
+    "address": "0x72Edd573E230C7d68274Bf718A4C6aD82b5d5f90",
+    "startBlock": "19671875"
+  },
+  "stakePrizePoolProxyFactory": {
+    "address": "0x5effa0823e486A5ED1D49d88A1374Fc337e1f9F4",
+    "startBlock": "19671877"
+  },
+  "yieldSourcePrizePoolProxyFactory": {
+    "address": "0xCE7Ff1E49E16f3AD30b23a04eDA62F18D8F6d186",
+    "startBlock": "19942116"
+  }
+}

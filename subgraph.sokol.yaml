@@ -4,11 +4,11 @@ schema:
 dataSources:
   - name: Comptroller
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
-      address: "{{comptroller.address}}"
+      address: "0x14e194Cf5E1dd73BB46256495aEa8ff36A7Aa454"
       abi: Comptroller
-      startBlock: {{comptroller.startBlock}}
+      startBlock: 19671848
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -44,42 +44,17 @@ dataSources:
           handler: handleVolumeDripDripped
 
 
-  {{#sablierManager}}
-  - name: SablierManager
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      address: "{{address}}"
-      abi: SablierManager
-      startBlock: {{startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - PrizePool
-      abis:
-        - name: SablierManager 
-          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/SablierManager.json
-      eventHandlers:
-        - event: SablierStreamCreated(indexed uint256,indexed address)
-          handler: handleSablierStreamCreated
-        - event: SablierStreamCancelled(indexed uint256)
-          handler: handleSablierStreamCancelled
-      file: ./src/mappingForSablierStreamManager.ts
-
-  {{/sablierManager}}
 
 
 
-    {{#compoundPrizePoolProxyFactory}} # doesnt seem to be a way to add to the above
+     # doesnt seem to be a way to add to the above
   - name: CompoundPrizePoolProxyFactory
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
-      address: "{{address}}"
+      address: "0xaFcEa072BcBad91029A2bA0b37bAC8269dd4f5E6"
       abi: CompoundPrizePoolProxyFactory
-      startBlock: {{startBlock}}
+      startBlock: 19671869
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -93,16 +68,15 @@ dataSources:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
       file: ./src/mappingForCompoundPrizePoolProxyFactory.ts #using existing ProxyCreated event since the ProxyCreated event is the same -- can we join mappingForCompoundPrizePoolFactories together for all versions?
-  {{/compoundPrizePoolProxyFactory}}
 
-    {{#yieldSourcePrizePoolProxyFactory}} # doesnt seem to be a way to add to the above
+     # doesnt seem to be a way to add to the above
   - name: YieldSourcePrizePoolProxyFactory
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
-      address: "{{address}}"
+      address: "0xCE7Ff1E49E16f3AD30b23a04eDA62F18D8F6d186"
       abi: YieldSourcePrizePoolProxyFactory
-      startBlock: {{startBlock}}
+      startBlock: 19942116
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -116,49 +90,19 @@ dataSources:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
       file: ./src/mappingForYieldSourcePrizePoolProxyFactory.ts #using existing ProxyCreated event
-  {{/yieldSourcePrizePoolProxyFactory}}
 
 
 
-  {{#singleRandomWinnerProxyFactory}}
-  - name: SingleRandomWinnerProxyFactory
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      address: "{{address}}"
-      abi: SingleRandomWinnerProxyFactory
-      startBlock: {{startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - SingleRandomWinnerPrizeStrategy
-      abis:
-        - name: PrizePool
-          file: ./abis/v3_1_0/abis/PrizePool.json
-        - name: SingleRandomWinner
-          file: ./abis/v3_1_0/abis/SingleRandomWinner.json
-        - name: SingleRandomWinnerProxyFactory
-          file: ./abis/v3_1_0/abis/SingleRandomWinnerProxyFactory.json
-        - name: ControlledToken
-          file: ./abis/v3_1_0/abis/ControlledToken.json
-      eventHandlers:
-        - event: ProxyCreated(address)
-          handler: handleProxyCreated
-      file: ./src/mappingForSingleRandomWinnerProxyFactory.ts
-  {{/singleRandomWinnerProxyFactory}}
 
 
 
-    {{#multipleWinnersProxyFactory}}
   - name: MultipleWinnersProxyFactory
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
-      address: "{{address}}"
+      address: "0x6aeBE10a4607B1002ea56D825Ee18Ce751fD9592"
       abi: MultipleWinnersProxyFactory
-      startBlock: {{startBlock}}
+      startBlock: 19671880
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -172,17 +116,15 @@ dataSources:
         - event: ProxyCreated(address)
           handler: handleMultipleWinnersCreated
       file: ./src/mappingForMultipleWinnersProxyFactory.ts
-  {{/multipleWinnersProxyFactory}}
 
 
-  {{#stakePrizePoolProxyFactory}}
   - name: StakePrizePoolProxyFactory
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
-      address: "{{address}}"
+      address: "0x5effa0823e486A5ED1D49d88A1374Fc337e1f9F4"
       abi: StakePrizePoolProxyFactory
-      startBlock: {{startBlock}}
+      startBlock: 19671877
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -196,17 +138,15 @@ dataSources:
         - event: ProxyCreated(address)
           handler: handleStakePrizePoolCreated
       file: ./src/mappingForStakePrizePoolProxyFactory.ts
-  {{/stakePrizePoolProxyFactory}}
 
 
-    {{#controlledTokenProxyFactory}}
   - name: ControlledTokenProxyFactory
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
-      address: "{{address}}"
+      address: "0x317625b28Acb3C0540DB00b179D84D9b804277f7"
       abi: ControlledTokenProxyFactory
-      startBlock: {{startBlock}}
+      startBlock: 19671873
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -220,16 +160,14 @@ dataSources:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
       file: ./src/mappingForControlledTokenProxyFactory.ts
-  {{/controlledTokenProxyFactory}}
 
-    {{#ticketProxyFactory}}
   - name: TicketProxyFactory
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
-      address: "{{address}}"
+      address: "0x72Edd573E230C7d68274Bf718A4C6aD82b5d5f90"
       abi: TicketProxyFactory
-      startBlock: {{startBlock}}
+      startBlock: 19671875
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -243,12 +181,11 @@ dataSources:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
       file: ./src/mappingForTicketProxyFactory.ts
-  {{/ticketProxyFactory}}
 
 templates:
   - name: SingleRandomWinner
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
       abi: SingleRandomWinner
     mapping:
@@ -295,7 +232,7 @@ templates:
 
   - name: StakePrizePool
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
       abi: StakePrizePool
     mapping:
@@ -319,7 +256,7 @@ templates:
 
   - name: CompoundPrizePool
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
       abi: CompoundPrizePool
     mapping:
@@ -342,7 +279,7 @@ templates:
 
   - name: YieldSourcePrizePool
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
       abi: YieldSourcePrizePool
     mapping:
@@ -366,7 +303,7 @@ templates:
   
   - name: PrizePool
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
       abi: PrizePool
     mapping:
@@ -417,7 +354,7 @@ templates:
 
   - name: ControlledToken # will one controlled token do all versions?
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
       abi: ControlledToken
     mapping:
@@ -437,7 +374,7 @@ templates:
 
   - name: MultipleWinners
     kind: ethereum/contract
-    network: {{network}}
+    network: poa-sokol
     source:
       abi: MultipleWinners
     mapping:
