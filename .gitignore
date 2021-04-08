@@ -8,5 +8,4 @@ subgraph.ropsten.yaml
 subgraph.rinkeby.yaml
 subgraph.mainnet.yaml
 networks/local.json
-generated
-generated/schema.ts
+generated/

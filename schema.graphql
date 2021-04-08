@@ -213,6 +213,23 @@ type ControlledTokenBalance @entity {
   balance: BigInt
 }
 
+type MintedControlledToken @entity {
+  id: ID! # transaction hash
+  account: Account!
+  controlledToken: ControlledToken!
+  amount: BigInt!
+  referrer: Bytes
+  timestamp: BigInt!
+}
+
+type BurnedControlledToken @entity {
+  id: ID! # transaction hash
+  account: Account!
+  controlledToken: ControlledToken!
+  amount: BigInt!
+  timestamp: BigInt!
+}
+
 # ID: `${prizeStrategy.address}-${token.address}`
 # dynamically generated type, not mapped to a specific contract
 type SingleRandomWinnerExternalErc20Award @entity {

@@ -5,7 +5,8 @@ import {
 } from '../generated/templates/ControlledToken/ControlledToken'
 
 import {
-   ControlledTokenBalance,
+  BurnedControlledToken,
+  ControlledTokenBalance,
 } from '../generated/schema'
 import { loadOrCreateAccount } from './helpers/loadOrCreateAccount'
 import { loadOrCreateControlledToken } from './helpers/loadOrCreateControlledToken'
@@ -26,7 +27,7 @@ export function handleTransfer(event: Transfer): void {
   else{
     let toBalance = ControlledTokenBalance.load(generateCompositeId (event.params.to.toHexString(), event.address.toHexString())) // controlledtokenbalance id =  (address, controlledToken)
     
-    if(toBalance == null) {// create case 
+    if(toBalance == null || toBalance.balance.equals(ZERO)) {// create case 
       toBalance = new ControlledTokenBalance(generateCompositeId (event.params.to.toHexString(), event.address.toHexString()))
       controlledToken.numberOfHolders = controlledToken.numberOfHolders.plus(ONE)  // if transfer is to NEW address then increment number of players
 
@@ -47,11 +48,19 @@ export function handleTransfer(event: Transfer): void {
   else{
     const fromBalance = ControlledTokenBalance.load(generateCompositeId (event.params.from.toHexString(), event.address.toHexString())) // must always exist
     fromBalance.balance = fromBalance.balance.minus(event.params.value)
-  
+ 
+    // Log burn event
+    const burn = new BurnedControlledToken(event.transaction.hash.toHexString())
+    burn.account = fromBalance.account
+    burn.controlledToken = fromBalance.controlledToken
+    burn.amount = event.params.value
+    burn.timestamp = event.block.timestamp
+    burn.save()
+
     // if the balance of the sending account is zero then remove it
-    if(fromBalance.balance.equals(ZERO)){
+    if (fromBalance.balance.equals(ZERO)) {
       controlledToken.numberOfHolders = controlledToken.numberOfHolders.minus(ONE) // if account balance depleted decrement player count
-      store.remove("ControlledTokenBalance", fromBalance.id)
+      store.remove("ControlledTokenBalance", fromBalance.id)      
     }
     else{
       fromBalance.save()

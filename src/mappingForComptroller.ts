@@ -1,4 +1,5 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts'
+import { generateCompositeId, ONE, ZERO, ZERO_ADDRESS } from "./helpers/common"
 
 import {
   Comptroller,
@@ -8,6 +9,8 @@ import {
   BalanceDripPlayer,
   VolumeDripPlayer,
   VolumeDripPeriod,
+  ControlledTokenBalance,
+  MintedControlledToken,
 } from '../generated/schema'
 
 import {
@@ -29,9 +32,11 @@ import {
   VolumeDripPeriodStarted,
   VolumeDripPeriodEnded,
   VolumeDripDripped,
+  BeforeTokenMintCall,
 } from '../generated/Comptroller/Comptroller'
 
 import {
+  loadOrCreateAccount,
   // loadOrCreateDripTokenPlayer,
   loadOrCreateBalanceDripPlayer,
   loadOrCreateVolumeDripPlayer,
@@ -43,6 +48,7 @@ import {
   loadOrCreateVolumeDrip,
   loadOrCreateVolumeDripPeriod,
 } from './helpers/loadOrCreateComptroller'
+import { loadOrCreateControlledToken } from './helpers/loadOrCreateControlledToken'
 
 
 
@@ -301,4 +307,14 @@ export function handleVolumeDripDripped(event: VolumeDripDripped): void {
 
   _volumeDripPlayer.balance = _volumeDripPlayer.balance.plus(_amount)
   _volumeDripPlayer.save()
+}
+
+export function handleBeforeTokenMint(call: BeforeTokenMintCall): void {
+  const mint = new MintedControlledToken(call.transaction.hash.toHexString())
+  mint.account = loadOrCreateAccount(call.inputs.to).id
+  mint.controlledToken = loadOrCreateControlledToken(call.inputs.measure).id
+  mint.amount = call.inputs.amount
+  mint.referrer = call.inputs.referrer
+  mint.timestamp = call.block.timestamp
+  mint.save()
 }
