@@ -406,6 +406,7 @@ type MultipleWinnersExternalErc20Award @entity {
 
 # ID: `${prizeStrategy.address}-${token.address}`
 # dynamically generated type, not mapped to a specific contract
+# 721's BEFORE they are awarded, associated with a Prize Strategy
 type MultipleWinnersExternalErc721Award @entity {
   id: ID!
   address: Bytes!

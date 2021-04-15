@@ -57,7 +57,7 @@ export function loadOrCreateAwardedExternalErc721Nft(prize: Prize, prizeStrategy
   const awardId = awardedExternalErc721NftId(prize.id, tokenAddress.toHex())
 
   let award = AwardedExternalErc721Nft.load(awardId)
-  if (!award) {
+  if (!award) { 
     award = new AwardedExternalErc721Nft(awardId)
 
     let externalErc721Award = loadOrCreateExternalErc721Award(
@@ -65,6 +65,8 @@ export function loadOrCreateAwardedExternalErc721Nft(prize: Prize, prizeStrategy
       tokenAddress
     )
     
+    // these are single random winner external awards, if it is a MRW they wont exist
+
     award.address = externalErc721Award.address
     award.prize = prize.id
     award.tokenIds = externalErc721Award.tokenIds

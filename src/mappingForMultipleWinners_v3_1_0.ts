@@ -3,6 +3,7 @@ import {NumberOfWinnersSet, PrizePoolAwarded, PrizePoolAwardStarted, SplitExtern
 import { store, BigInt, log, Address } from '@graphprotocol/graph-ts'
 import {
   ControlledToken,
+  MultipleWinnersExternalErc721Award,
   MultipleWinnersPrizeStrategy, PrizePool
 } from '../generated/schema'
 
@@ -174,7 +175,8 @@ export function handleExternalErc20AwardRemoved(event: ExternalErc20AwardRemoved
 
 export function handleExternalErc721AwardAdded(event: ExternalErc721AwardAdded): void {
   const _prizeStrategyAddress = event.address.toHex()
-  const externalAward = loadOrCreateMultipleWinnersExternalErc721Award(_prizeStrategyAddress, event.params.externalErc721)
+  const externalAward: MultipleWinnersExternalErc721Award = loadOrCreateMultipleWinnersExternalErc721Award(_prizeStrategyAddress, event.params.externalErc721)
+  // where the nft is added to the entities
   externalAward.tokenIds = event.params.tokenIds
   externalAward.save()
 }
