@@ -5,8 +5,8 @@ import {
 } from '../../generated/schema'
 
 import {
-  PrizePool_v3 as PrizePoolContract,
-} from '../../generated/templates/PrizePool_v3/PrizePool_v3'
+  PrizePool as PrizePoolContract,
+} from '../../generated/templates/PrizePool/PrizePool'
 
 import {
   ControlledToken as ControlledTokenContract,
@@ -18,9 +18,13 @@ import { ZERO, ONE, ZERO_ADDRESS } from './common'
 export function loadOrCreatePrizePool(
   prizePool: Address
 ): PrizePool {
+
+  log.warning("loadOrCreatePrizePool called for {} ",[prizePool.toHexString()])
+
   let _prizePool = PrizePool.load(prizePool.toHex())
 
   if (!_prizePool) {
+    log.warning("loadOrCreatePrizePool creating a prizePool {} ", [prizePool.toHexString()])
     _prizePool = new PrizePool(prizePool.toHex())
 
     const boundPrizePool = PrizePoolContract.bind(prizePool)
@@ -106,6 +110,5 @@ export function loadOrCreatePrizePool(
 
     _prizePool.save()
   }
-
   return _prizePool as PrizePool
 }

@@ -1,91 +1,27 @@
 {
   "network": "mainnet",
-  "compoundPrizePoolProxyFactory_v3_0_1": {
-    "address": "0x17CfE08818E8260FAe3a19761668EBc27B24d72A",
-    "startBlock": "11101023"
+  "compoundPrizePoolProxyFactory": {
+    "address": "0x5a5f724CAb4478f849504C255FC1244E8E626FA9",
+    "startBlock": "12247765"
   },
-  "compoundPrizePoolProxyFactory_v3_1_0": {
-    "address": "0x4e972abb057495635718F416E5836ac516bD2618",
-    "startBlock": "11428997"
-  },
-  "compoundPrizePoolProxyFactory_v3_2_0": {
-    "address": "0x4e972abb057495635718f416e5836ac516bd2618",
-    "startBlock": "11428997"
-  },
-  "compoundPrizePoolProxyFactory_v3_3_2": {
-    "address": "0x454f5AcbBE96162C0B56c74a37ACf79C65D883AC",
-    "startBlock": "11968248"
-  },
-  "singleRandomWinnerProxyFactory_v3_0_1": {
-    "address": "0xc79B5D46f010c88f738A00B3bed7757d04dd2a37",
-    "startBlock": "11101039"
-  },
-  "singleRandomWinnerProxyFactory_v3_1_0": {
-    "address": "0xBa49B45Bc5f7e3F23B5d994082038c836895AdfD",
-    "startBlock": "11429018"
-  },
-  "comptroller": {
-    "address": "0x4027dE966127af5F015Ea1cfd6293a3583892668",
-    "startBlock": "11101017"
-  },
-  "controlledTokenProxyFactory_v3_0_1": {
-    "address": "0xdd8f31f7B9C6026311464bc07aE5DB2F99F3892e",
-    "startBlock": "11101028"
-  },
-  "controlledTokenProxyFactory_v3_1_0": {
-    "address": "0xfB932b0BcFA5208D536600ab23C13Ac55CD69Ba1",
-    "startBlock": "11429010"
-  },
-  "controlledTokenProxyFactory_v3_2_0": {
-    "address": "0xf5FF8c8d23b70Dcaa8EEA48C9D1A6E0d64aD59Cc",
-    "startBlock": "11429020"
-  },
-  "controlledTokenProxyFactory_v3_3_2": {
+  "controlledTokenProxyFactory": {
     "address": "0xA743f8A9d7c2d7e56e6983d0b60FF19EBc0cE727",
     "startBlock": "11968253"
   },
-  "multipleWinnersProxyFactory_v3_1_0": {
-    "address": "0x734E677AC3699f63f47c2bAE7a8F3c16aFf5aE70",
-    "startBlock": "11429015"
+  "multipleWinnersProxyFactory": {
+    "address": "0x53A2E4F8BFe581bC28e0d1d30808ffB163E53A46",
+    "startBlock": "12763583"
   },
-  "multipleWinnersProxyFactory_v3_2_0": {
-    "address": "0x734E677AC3699f63f47c2bAE7a8F3c16aFf5aE70",
-    "startBlock": "11429015"
+  "ticketProxyFactory": {
+    "address": "0x72Edd573E230C7d68274Bf718A4C6aD82b5d5f90",
+    "startBlock": "12763575"
   },
-  "multipleWinnersProxyFactory_v3_3_2": {
-    "address": "0xF273EfaED59fED4F41cb9E693EefD9B1191f1522",
-    "startBlock": "11968262"
+  "stakePrizePoolProxyFactory": {
+    "address": "0x5effa0823e486A5ED1D49d88A1374Fc337e1f9F4",
+    "startBlock": "12763579"
   },
-  "ticketProxyFactory_v3_0_1": {
-    "address": "0x59b34c5BC94e2d5b9DcB97Ec935c94C353E5Eb94",
-    "startBlock": "11101030"
-  },
-  "ticketProxyFactory_v3_1_0": {
-    "address": "0xa7d0d3C4f96BB896e0878ef4b83e5cA79700aCB9",
-    "startBlock": "11429012"
-  },
-  "ticketProxyFactory_v3_3_2": {
-    "address": "0x8Bb5Af6F10391CdbFb4C6f141a8B31a55b3411b5",
-    "startBlock": "11968255"
-  },
-  "stakePrizePoolProxyFactory_v3_1_0": {
-    "address": "0x3b694ce9d12F0bF032bF002b3b0473Cb58bbe3F0",
-    "startBlock": "11429013"
-  },
-  "stakePrizePoolProxyFactory_v3_2_0": {
-    "address": "0x3b694ce9d12F0bF032bF002b3b0473Cb58bbe3F0",
-    "startBlock": "11429013"
-  },
-  "stakePrizePoolProxyFactory_v3_3_2": {
-    "address": "0x5Ae75894EFcC1f8340b58d0efb3d59Bf366b6A4E",
-    "startBlock": "11968258"
-  },
-  "yieldSourcePrizePoolProxyFactory_v3_3_2": {
-    "address": "0x692F55051Dc060d94227467EE4fbDE72d370728C",
-    "startBlock": "11968252"
-  },
-  "sablierManager":{
-    "address": "0x17CBf69d3dE5c7221AE07CFF6296F661Bb44122b",
-    "startBlock": "11968246"
+  "yieldSourcePrizePoolProxyFactory": {
+    "address": "0xdc488E6e8c55a11d20032997cd1fF7c4951401df",
+    "startBlock": "12763568"
   }
 }

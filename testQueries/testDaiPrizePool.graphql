@@ -1,0 +1,11 @@
+{
+  prizePool(id:"0xebfb47a7ad0fd6e57323c8a42b2e5a6a4f68fc1a"){
+    id
+    reserveRegistry
+    prizes(first: 5){
+      id
+      awardedBlock
+      lockBlock
+    }
+  }
+}
