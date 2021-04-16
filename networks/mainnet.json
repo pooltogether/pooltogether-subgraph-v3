@@ -9,19 +9,19 @@
     "startBlock": "11968253"
   },
   "multipleWinnersProxyFactory": {
-    "address": "0x53A2E4F8BFe581bC28e0d1d30808ffB163E53A46",
-    "startBlock": "12763583"
+    "address": "0x4cb2F953f85b3Ffdc97269F5Cef6a4FcC0CA4d73",
+    "startBlock": "12247792"
   },
   "ticketProxyFactory": {
-    "address": "0x72Edd573E230C7d68274Bf718A4C6aD82b5d5f90",
-    "startBlock": "12763575"
+    "address": "0x8Bb5Af6F10391CdbFb4C6f141a8B31a55b3411b5",
+    "startBlock": "11968255"
   },
   "stakePrizePoolProxyFactory": {
-    "address": "0x5effa0823e486A5ED1D49d88A1374Fc337e1f9F4",
-    "startBlock": "12763579"
+    "address": "0x91817512578E22D4aB2a70683280BFbE11C504B4",
+    "startBlock": "12247791"
   },
   "yieldSourcePrizePoolProxyFactory": {
-    "address": "0xdc488E6e8c55a11d20032997cd1fF7c4951401df",
-    "startBlock": "12763568"
+    "address": "0xe3325f8C5e88a57D787214eA8C001763c1ce99DA",
+    "startBlock": "12247787"
   }
 }
