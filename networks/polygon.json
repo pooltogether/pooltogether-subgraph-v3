@@ -1,0 +1,28 @@
+{
+    "network": "mainnet",
+    "compoundPrizePoolProxyFactory": {
+      "address": "0x41122Ca50202d13c809dfE88F60Da212A1525Ed7",
+      "startBlock": "13326151"
+    },
+    "controlledTokenProxyFactory": {
+      "address": "0x08411ADd0b5AA8ee47563b146743C13b3556c9Cc",
+      "startBlock": "13326158"
+    },
+    "multipleWinnersProxyFactory": {
+      "address": "0xdc488E6e8c55a11d20032997cd1fF7c4951401df",
+      "startBlock": "13326169"
+    },
+    "ticketProxyFactory": {
+      "address": "0x58aF4554c0DB496EFdf93bB344eC513C5627Efb9",
+      "startBlock": "13326162"
+    },
+    "stakePrizePoolProxyFactory": {
+      "address": "0xaFcEa072BcBad91029A2bA0b37bAC8269dd4f5E6",
+      "startBlock": "13326165"
+    },
+    "yieldSourcePrizePoolProxyFactory": {
+      "address": "0x4d1639e4b237BCab6F908A1CEb0995716D5ebE36",
+      "startBlock": "13326154"
+    }
+  }
+  
