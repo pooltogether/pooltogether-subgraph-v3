@@ -380,3 +380,5 @@ templates:
           handler: handlePrizePoolAwardStarted
         - event: SplitExternalErc20AwardsSet(bool)
           handler: handleSplitExternalErc20AwardsSet
+        - event: PrizePeriodSecondsUpdated(uint256)
+          handler: handlePrizePeriodSecondsUpdated
