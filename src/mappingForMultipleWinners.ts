@@ -1,4 +1,4 @@
-import {NumberOfWinnersSet, PrizePoolAwarded, PrizePoolAwardStarted, SplitExternalErc20AwardsSet} from "../generated/templates/MultipleWinners/MultipleWinners"
+import {NumberOfWinnersSet, PrizePeriodSecondsUpdated, PrizePoolAwarded, PrizePoolAwardStarted, SplitExternalErc20AwardsSet} from "../generated/templates/MultipleWinners/MultipleWinners"
 
 import { store, BigInt, log, Address } from '@graphprotocol/graph-ts'
 import {
@@ -48,6 +48,12 @@ export function handleSplitExternalErc20AwardsSet(event: SplitExternalErc20Award
   _prizeStrategy.save()
 }
 
+export function handlePrizePeriodSecondsUpdated(event: PrizePeriodSecondsUpdated): void {
+  let _prizeStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+  _prizeStrategy.prizePeriodSeconds = event.params.prizePeriodSeconds;
+  _prizeStrategy.save()
+  log.info("debug511 Updated PrizePeriod for {} ", [event.params.prizePeriodSeconds.toHexString()])
+}
 
 // this is called before the prizepool initializer
 export function handlePeriodicPrizeInitialized(event: Initialized) : void {
