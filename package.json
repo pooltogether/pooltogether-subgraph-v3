@@ -40,7 +40,7 @@
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.19.0",
     "@graphprotocol/graph-ts": "^0.19.0",
-    "@pooltogether/pooltogether-contracts": "^3.3.5",
+    "@pooltogether/pooltogether-contracts": "^3.3.9",
     "mustache": "^4.0.1"
   }
 }
