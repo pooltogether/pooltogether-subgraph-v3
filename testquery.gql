@@ -55,7 +55,6 @@
       cToken
     }
 
-    reserveFeeControlledToken
 
     underlyingCollateralToken
     underlyingCollateralName
