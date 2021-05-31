@@ -310,7 +310,7 @@ templates:
           handler: handleInitialized
         # - event: ReserveFeeCaptured(uint256)
         #   handler: handleReserveFeeCaptured
-        - event: ReserveWithdrawal(indexed address, uint256)
+        - event: ReserveWithdrawal(indexed address,uint256)
           handler: handleReserveWithdrawal
 
   - name: ControlledToken # will one controlled token do all versions?

@@ -5,20 +5,20 @@ import {
 } from '../../generated/templates/PrizePool/ERC20'
 
 import {
-  SingleRandomWinnerExternalErc20Award,
-  SingleRandomWinnerExternalErc721Award,
+  MultipleWinnersExternalErc20Award,
+  MultipleWinnersExternalErc721Award,
 } from '../../generated/schema'
 
 import { externalAwardId } from './idTemplates'
 
 
-export function loadOrCreateExternalErc20Award(prizeStrategyAddress: string, tokenAddress: Address): SingleRandomWinnerExternalErc20Award {
+export function loadOrCreateExternalErc20Award(prizeStrategyAddress: string, tokenAddress: Address): MultipleWinnersExternalErc20Award {
   const awardId = externalAwardId(prizeStrategyAddress, tokenAddress.toHex())
 
-  let award = SingleRandomWinnerExternalErc20Award.load(awardId)
+  let award = MultipleWinnersExternalErc20Award.load(awardId)
   if (!award) {
     log.warning("creating an externalErc20 entity ",[])
-    award = new SingleRandomWinnerExternalErc20Award(awardId)
+    award = new MultipleWinnersExternalErc20Award(awardId)
     award.prizeStrategy = prizeStrategyAddress
     award.address = tokenAddress
 
@@ -51,19 +51,19 @@ export function loadOrCreateExternalErc20Award(prizeStrategyAddress: string, tok
     log.warning("external erc20 already existed ",[])
   }
 
-  return award as SingleRandomWinnerExternalErc20Award
+  return award as MultipleWinnersExternalErc20Award
 }
 
-export function loadOrCreateExternalErc721Award(prizeStrategyAddress: string, tokenAddress: Address): SingleRandomWinnerExternalErc721Award {
+export function loadOrCreateExternalErc721Award(prizeStrategyAddress: string, tokenAddress: Address): MultipleWinnersExternalErc721Award {
   const awardId = externalAwardId(prizeStrategyAddress, tokenAddress.toHex())
 
-  let award = SingleRandomWinnerExternalErc721Award.load(awardId)
+  let award = MultipleWinnersExternalErc721Award.load(awardId)
   if (!award) {
-    award = new SingleRandomWinnerExternalErc721Award(awardId)
+    award = new MultipleWinnersExternalErc721Award(awardId)
     award.prizeStrategy = prizeStrategyAddress
     award.address = tokenAddress
     award.save()
   }
 
-  return award as SingleRandomWinnerExternalErc721Award
+  return award as MultipleWinnersExternalErc721Award
 }
