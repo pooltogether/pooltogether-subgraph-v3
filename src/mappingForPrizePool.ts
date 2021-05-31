@@ -139,6 +139,7 @@ export function handleAwardedExternalERC721(event: AwardedExternalERC721): void 
   const _prizeStrategyId = _prizePool.prizeStrategy
   const _prizeStrategy = PrizeStrategy.load(_prizeStrategyId)
 
+    // if its being awarded it wont have been created yet
   const awardedExternalErc721Nft = loadOrCreateAwardedExternalErc721Nft(
     _prize,
     _prizeStrategy as PrizeStrategy,
