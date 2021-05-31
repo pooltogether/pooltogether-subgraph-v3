@@ -17,7 +17,8 @@ import {
   CreditPlanSet,
   PrizeStrategySet,
   OwnershipTransferred,
-  Initialized
+  Initialized,
+  ReserveWithdrawal
 } from '../generated/templates/PrizePool/PrizePool'
 
 import {externalAwardId} from "./helpers/idTemplates"
@@ -73,9 +74,18 @@ export function handlePrizeStrategySet(event: PrizeStrategySet): void {
 
 export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
+  log.warning("handleReserveFeeCaptured debugiinfo8 cummumative reserve at ", [_prizePool.cumulativePrizeReserveFee.toHexString()])
   _prizePool.cumulativePrizeReserveFee = _prizePool.cumulativePrizeReserveFee.plus(event.params.amount)
+  log.warning("handleReserveFeeCaptured debugiinfo8 cummumative updated to ", [(_prizePool.cumulativePrizeReserveFee.plus(event.params.amount)).toHexString()])
   _prizePool.save()
+}
 
+export function handleReserveWithdrawal(event: ReserveWithdrawal): void {
+  const _prizePool = loadOrCreatePrizePool(event.address)
+  log.warning("handleReserveWithdrawal debugiinfo9 cummumative reserve at ", [_prizePool.cumulativePrizeReserveFee.toHexString()])
+  _prizePool.cumulativePrizeReserveFee = _prizePool.cumulativePrizeReserveFee.minus(event.params.amount)
+  log.warning("handleReserveWithdrawal debugiinfo0 cummumative updated to ", [(_prizePool.cumulativePrizeReserveFee.minus(event.params.amount)).toHexString()])
+  _prizePool.save()
 }
 
 // this is called BEFORE PrizePoolAwarded - MW strat and SRW 

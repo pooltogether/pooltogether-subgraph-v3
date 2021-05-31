@@ -43,8 +43,6 @@ type PrizePool @entity {
   stakePrizePool: StakePrizePool
   yieldSourcePrizePool: YieldSourcePrizePool
 
-  reserveFeeControlledToken: Bytes!
-
   sablierStream: SablierStream @derivedFrom(field: "prizePool")
 
   underlyingCollateralToken: Bytes
