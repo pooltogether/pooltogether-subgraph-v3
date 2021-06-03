@@ -74,10 +74,15 @@ export function handlePrizeStrategySet(event: PrizeStrategySet): void {
 
 export function handleReserveFeeCaptured(event: ReserveFeeCaptured): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
-  log.warning("handleReserveFeeCaptured debugiinfo8 cummumative reserve at ", [_prizePool.cumulativePrizeReserveFee.toHexString()])
   _prizePool.cumulativePrizeReserveFee = _prizePool.cumulativePrizeReserveFee.plus(event.params.amount)
-  log.warning("handleReserveFeeCaptured debugiinfo8 cummumative updated to ", [(_prizePool.cumulativePrizeReserveFee.plus(event.params.amount)).toHexString()])
   _prizePool.save()
+
+  const _prize = loadOrCreatePrize(_prizePool.id, _prizePool.currentPrizeId.plus(ONE).toHexString()) // ReserveFeeCaptured is fired BEFORE Awarded event so we need to increment currentPrizeId here
+  log.warning("handleReserveFeeCaptured debug9a9 setting reserveFeeCaptured {} on prize {}",[event.params.amount.toHexString(), _prize.id])
+  
+  _prize.reserveFeeCaptured = event.params.amount;
+  _prize.save()
+  
 }
 
 export function handleReserveWithdrawal(event: ReserveWithdrawal): void {

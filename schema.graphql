@@ -138,6 +138,8 @@ type Prize @entity {
   rngRequestId: BigInt
   randomNumber: BigInt
 
+  reserveFeeCaptured: BigInt
+
   numberOfSubWinners: BigInt
 
   totalTicketSupply: BigInt # cache of num tickets sold when this prize was awarded
