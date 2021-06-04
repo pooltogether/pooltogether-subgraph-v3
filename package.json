@@ -30,6 +30,8 @@
     "all-mainnet": "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet",
     "all-mainnet-stg": "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet-stg",
     "all-polygon-stg": "yarn clean && yarn prepare:polygon && yarn gen:polygon && yarn deploy:polygon-stg",
+    "update-all" : "yarn all-rinkeby && yarn all-mainnet && yarn all-polygon",
+    "update-all-stg" : "yarn all-rinkeby-stg && yarn all-mainnet-stg && yarn all-polygon-stg",
     "codegen": "graph codegen",
     "build:mainnet": "graph build subgraph.mainnet.yaml",
     "build:rinkeby": "graph build subgraph.rinkeby.yaml",
