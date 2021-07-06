@@ -141,6 +141,7 @@ type Prize @entity {
   randomNumber: BigInt
 
   numberOfSubWinners: BigInt
+  numberOfExternalAwardedErc20Winners: BigInt
 
   totalTicketSupply: BigInt # cache of num tickets sold when this prize was awarded
 
@@ -159,7 +160,7 @@ type AwardedControlledToken @entity {
 }
 
 
-# ID: `${prize.id}-${token.address} -${winnerAddress}`
+# ID: `${prize.id}-${token.address} -${winnerAddress} -{Prize::winnerIndex}`
 # dynamically generated type, not mapped to a specific contract
 type AwardedExternalErc20Token @entity {
   id: ID!

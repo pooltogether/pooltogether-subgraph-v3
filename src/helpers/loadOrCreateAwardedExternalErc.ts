@@ -14,8 +14,8 @@ import {
 import { awardedExternalErc20TokenId, awardedExternalErc721NftId } from './idTemplates'
 import { loadOrCreateExternalErc721Award } from './loadOrCreateExternalAward'
 
-export function loadOrCreateAwardedExternalErc20Token(prize: Prize, tokenAddress: Address, winnerAddress: Address): AwardedExternalErc20Token {
-  const awardId = awardedExternalErc20TokenId(prize.id, tokenAddress.toHex(), winnerAddress.toHex())
+export function loadOrCreateAwardedExternalErc20Token(prize: Prize, tokenAddress: Address, winnerAddress: Address, winnerIndex: string): AwardedExternalErc20Token {
+  const awardId = awardedExternalErc20TokenId(prize.id, tokenAddress.toHex(), winnerAddress.toHex(), winnerIndex)
 
   let award = AwardedExternalErc20Token.load(awardId)
   if (!award) {

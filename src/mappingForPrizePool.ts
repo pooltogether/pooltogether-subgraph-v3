@@ -121,8 +121,13 @@ export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
   const awardedErc20Token = loadOrCreateAwardedExternalErc20Token(
     _prize,
     event.params.token,
-    event.params.winner
+    event.params.winner,
+    _prize.numberOfExternalAwardedErc20Winners.toHexString()
   )
+
+  _prize.numberOfExternalAwardedErc20Winners = _prize.numberOfExternalAwardedErc20Winners.plus(ONE)
+  _prize.save()
+
   awardedErc20Token.winner = event.params.winner
   awardedErc20Token.balanceAwarded = awardedErc20Token.balanceAwarded.plus(event.params.amount)
   
