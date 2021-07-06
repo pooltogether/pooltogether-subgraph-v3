@@ -108,6 +108,7 @@ export function handleAwarded(event: Awarded): void {
 
 }
 
+// called after all the Tickets have been awarded
 export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
   const _prizePool = loadOrCreatePrizePool(event.address)
 
@@ -116,12 +117,14 @@ export function handleAwardedExternalERC20(event: AwardedExternalERC20): void {
     _prizePool.currentPrizeId.toString()
   )
 
+
   const awardedErc20Token = loadOrCreateAwardedExternalErc20Token(
     _prize,
-    event.params.token
+    event.params.token,
+    event.params.winner
   )
   awardedErc20Token.winner = event.params.winner
-  awardedErc20Token.balanceAwarded = event.params.amount
+  awardedErc20Token.balanceAwarded = awardedErc20Token.balanceAwarded.plus(event.params.amount)
   
   awardedErc20Token.save()
 }

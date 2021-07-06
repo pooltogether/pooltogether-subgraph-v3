@@ -159,7 +159,7 @@ type AwardedControlledToken @entity {
 }
 
 
-# ID: `${prize.id}-${token.address}`
+# ID: `${prize.id}-${token.address} -${winnerAddress}`
 # dynamically generated type, not mapped to a specific contract
 type AwardedExternalErc20Token @entity {
   id: ID!

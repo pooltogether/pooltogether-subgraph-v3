@@ -10,8 +10,8 @@ export function externalAwardId(prizeStrategyAddress: string, tokenAddress: stri
   return prizeStrategyAddress + '-' + tokenAddress
 }
 
-export function awardedExternalErc20TokenId(prizeId: string, tokenAddress: string): string {
-  return prizeId + '-' + tokenAddress
+export function awardedExternalErc20TokenId(prizeId: string, tokenAddress: string, winnerAddress: string): string {
+  return prizeId + '-' + tokenAddress + '-' + winnerAddress
 }
 
 export function awardedExternalErc721NftId(prizeId: string, tokenAddress: string): string {
