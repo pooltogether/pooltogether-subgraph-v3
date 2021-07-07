@@ -1100,6 +1100,26 @@ export class Prize extends Entity {
     }
   }
 
+  get numberOfExternalAwardedErc20Winners(): BigInt | null {
+    let value = this.get("numberOfExternalAwardedErc20Winners");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set numberOfExternalAwardedErc20Winners(value: BigInt | null) {
+    if (value === null) {
+      this.unset("numberOfExternalAwardedErc20Winners");
+    } else {
+      this.set(
+        "numberOfExternalAwardedErc20Winners",
+        Value.fromBigInt(value as BigInt)
+      );
+    }
+  }
+
   get totalTicketSupply(): BigInt | null {
     let value = this.get("totalTicketSupply");
     if (value === null || value.kind == ValueKind.NULL) {
