@@ -14,6 +14,7 @@ export function loadOrCreatePrize(prizePoolAddress: string, currentPrizeId: stri
     prize = new Prize(id)
     prize.prizePool = prizePoolAddress
     prize.numberOfSubWinners = ZERO
+    prize.numberOfExternalAwardedErc20Winners = ZERO
     prize.save()
   }
   return prize as Prize
