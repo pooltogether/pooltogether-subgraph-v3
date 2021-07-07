@@ -10,3 +10,4 @@ subgraph.mainnet.yaml
 networks/local.json
 generated
 generated/schema.ts
+build
