@@ -308,6 +308,8 @@ templates:
           handler: handleDeposited
         - event: Initialized(address,uint256,uint256) # added together
           handler: handleInitialized
+        - event: BlockListSet(indexed address,bool)
+          handler: handleBlockListAddressSet
 
   - name: ControlledToken # will one controlled token do all versions?
     kind: ethereum/contract

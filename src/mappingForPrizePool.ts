@@ -238,3 +238,19 @@ export function handleInitialized(event: Initialized): void {
   _prizePool.maxTimelockDuration = event.params.maxTimelockDuration
   _prizePool.save()
 }
+
+export function handleBlockListAddressSet(event: BlockListSet){
+  const _prizePool = loadOrCreatePrizePool(event.address)
+  let existingBlockListedAddresses = _prizePool.blockListedAddresses
+  const user = event.params.user
+  if(!event.params.blockListed){ // removed from list
+    const index = existingBlockListedAddresses.indexOf(user)
+    if(index > 1){
+      _prizePool.blockListedAddresses = existingBlockListedAddresses.splice(index,1) //remove the element
+    }
+  } else{
+    _prizePool.blockListedAddresses = existingBlockListedAddresses.push(user)
+  }
+
+  _prizePool.save()
+}
