@@ -1,5 +1,3 @@
-import {NumberOfWinnersSet, PrizePeriodSecondsUpdated, PrizePoolAwarded, PrizePoolAwardStarted, SplitExternalErc20AwardsSet} from "../generated/templates/MultipleWinners/MultipleWinners"
-
 import { store, BigInt, log, Address } from '@graphprotocol/graph-ts'
 import {
   ControlledToken,
@@ -15,7 +13,14 @@ import {
   ExternalErc20AwardRemoved,
   ExternalErc721AwardAdded,
   ExternalErc721AwardRemoved,
-  MultipleWinners as MultipleWinnersContract
+  MultipleWinners as MultipleWinnersContract,
+  NumberOfWinnersSet,
+  PrizePeriodSecondsUpdated,
+  PrizePoolAwarded,
+  PrizePoolAwardStarted,
+  PrizeSplitRemoved,
+  PrizeSplitSet,
+  SplitExternalErc20AwardsSet
 } from '../generated/templates/MultipleWinners/MultipleWinners'
 
 import {
@@ -23,11 +28,12 @@ import {
   loadOrCreateMultipleWinnersExternalErc721Award,
 } from './helpers/loadOrCreateMultipleWinnersExternalAward'
 
-import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinners"
+import { Initialized } from "../generated/templates/MultipleWinners/MultipleWinners"
 import { ONE } from "./helpers/common"
 import { loadOrCreatePrize } from "./helpers/loadOrCreatePrize"
 import { loadOrCreateControlledToken } from "./helpers/loadOrCreateControlledToken"
 import { loadOrCreatePrizePool } from "./helpers/loadOrCreatePrizePool"
+import { loadOrCreatePrizeSplit } from "./helpers/loadOrCreatePrizeSplit"
 
 
 
@@ -202,4 +208,20 @@ export function handleExternalErc721AwardRemoved(event: ExternalErc721AwardRemov
   const _prizeStrategyAddress = event.address.toHex()
   const externalAward = loadOrCreateMultipleWinnersExternalErc20Award(_prizeStrategyAddress, event.params.externalErc721Award)
   store.remove('MultipleWinnersExternalErc721Award', externalAward.id)
+}
+
+export function handlePrizeSplitSet(event: PrizeSplitSet): void {
+  const _prizeStrategyAddress = event.address.toHex()
+  // load or create prize split
+  const prizeSplit = loadOrCreatePrizeSplit(_prizeStrategyAddress, event.params.index.toHexString())
+    prizeSplit.target = event.params.target
+    prizeSplit.percentage = BigInt.fromI32(event.params.percentage)
+    prizeSplit.tokenType = BigInt.fromI32(event.params.token)
+    prizeSplit.save()
+}
+
+export function handlePrizeSplitRemoved(event: PrizeSplitRemoved): void {
+  const _prizeStrategyAddress = event.address.toHex()
+  const prizeSplit = loadOrCreatePrizeSplit(_prizeStrategyAddress, event.params.index.toHexString())
+  store.remove('PrizeSplit', prizeSplit.id)
 }

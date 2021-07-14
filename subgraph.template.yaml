@@ -382,3 +382,7 @@ templates:
           handler: handleSplitExternalErc20AwardsSet
         - event: PrizePeriodSecondsUpdated(uint256)
           handler: handlePrizePeriodSecondsUpdated
+        - event: PrizeSplitSet(indexed address,uint16,uint8,uint256)
+          handler: handlePrizeSplitSet
+        - event: PrizeSplitRemoved(indexed address)
+          handler: handlePrizeSplitRemoved

@@ -386,9 +386,20 @@ type MultipleWinnersPrizeStrategy @entity {
   prizePeriodSeconds: BigInt! 
   prizePeriodStartedAt: BigInt! 
   prizePeriodEndAt: BigInt! 
+
+  prizeSplits: [PrizeSplit!] @derivedFrom(field: "prizeStrategy")
   
   externalErc20Awards: [MultipleWinnersExternalErc20Award!]! @derivedFrom(field: "prizeStrategy") 
   externalErc721Awards: [MultipleWinnersExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")
+}
+
+# ID: prizeStrategy.address-index
+type PrizeSplit @entity{
+  id: ID!
+  percentage: BigInt!
+  target: Bytes!
+  tokenType: BigInt! # 0 or 1 (sponsorship or ticket)
+  prizeStrategy: MultipleWinnersPrizeStrategy
 }
 
 # ID: `${prizeStrategy.address}-${token.address}`
