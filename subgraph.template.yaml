@@ -286,18 +286,12 @@ templates:
           handler: handleReserveFeeCaptured
         - event: LiquidityCapSet(uint256)
           handler: handleLiquidityCapSet
-        - event: TimelockDeposited(indexed address,indexed address,indexed address,uint256)
-          handler: handleTimelockDeposited
         - event: Awarded(indexed address,indexed address,uint256)
           handler: handleAwarded
         - event: AwardedExternalERC20(indexed address,indexed address,uint256)
           handler: handleAwardedExternalERC20
         - event: AwardedExternalERC721(indexed address,indexed address,uint256[])
           handler: handleAwardedExternalERC721
-        - event: TimelockedWithdrawal(indexed address,indexed address,indexed address,uint256,uint256)
-          handler: handleTimelockedWithdrawal
-        - event: TimelockedWithdrawalSwept(indexed address,indexed address,uint256,uint256)
-          handler: handleTimelockedWithdrawalSwept
         - event: CreditPlanSet(address,uint128,uint128)
           handler: handleCreditPlanSet
         - event: PrizeStrategySet(indexed address)
@@ -306,10 +300,8 @@ templates:
           handler: handleOwnershipTransferred
         - event: Deposited(indexed address,indexed address,indexed address,uint256,address)
           handler: handleDeposited
-        - event: Initialized(address,uint256,uint256) # added together
+        - event: Initialized(address,uint256)
           handler: handleInitialized
-        - event: BlockListSet(indexed address,bool)
-          handler: handleBlockListAddressSet
 
   - name: ControlledToken # will one controlled token do all versions?
     kind: ethereum/contract
@@ -386,5 +378,7 @@ templates:
           handler: handlePrizePeriodSecondsUpdated
         - event: PrizeSplitSet(indexed address,uint16,uint8,uint256)
           handler: handlePrizeSplitSet
-        - event: PrizeSplitRemoved(indexed address)
+        - event: PrizeSplitRemoved(indexed uint256)
           handler: handlePrizeSplitRemoved
+        - event: BlocklistSet(indexed address,bool)
+          handler: handleBlockListAddressSet

@@ -20,7 +20,8 @@ import {
   PrizePoolAwardStarted,
   PrizeSplitRemoved,
   PrizeSplitSet,
-  SplitExternalErc20AwardsSet
+  SplitExternalErc20AwardsSet,
+  BlocklistSet
 } from '../generated/templates/MultipleWinners/MultipleWinners'
 
 import {
@@ -222,6 +223,24 @@ export function handlePrizeSplitSet(event: PrizeSplitSet): void {
 
 export function handlePrizeSplitRemoved(event: PrizeSplitRemoved): void {
   const _prizeStrategyAddress = event.address.toHex()
-  const prizeSplit = loadOrCreatePrizeSplit(_prizeStrategyAddress, event.params.index.toHexString())
+  const prizeSplit = loadOrCreatePrizeSplit(_prizeStrategyAddress, event.params.target.toHexString())
   store.remove('PrizeSplit', prizeSplit.id)
+}
+
+export function handleBlockListAddressSet(event: BlocklistSet) : void {
+  const _perodicPrizeStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHexString())
+  let existingBlockListedAddresses = _perodicPrizeStrategy.blockListedAddresses
+  const userAddress = event.params.user
+  if(!event.params.blocklisted){ // removed from list
+    const index = existingBlockListedAddresses.indexOf(userAddress)
+    if(index > 1){
+      _perodicPrizeStrategy.blockListedAddresses = existingBlockListedAddresses.splice(index,1) //remove the element
+    }
+  } else{
+    let result = existingBlockListedAddresses
+    result.push(userAddress)
+    _perodicPrizeStrategy.blockListedAddresses = result
+  }
+
+  _perodicPrizeStrategy.save()
 }

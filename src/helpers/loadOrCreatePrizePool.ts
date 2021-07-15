@@ -78,15 +78,6 @@ export function loadOrCreatePrizePool(
       else{
         _prizePool.underlyingCollateralDecimals = BigInt.fromI32(tryDecimalsCall.value)
       }
-  
-      const try_timelockTotalSupplyCall = boundPrizePool.try_timelockTotalSupply()
-      if(try_timelockTotalSupplyCall.reverted){
-        log.warning("try_timelockSupply for {} reverted ", [prizePool.toHexString()])
-        _prizePool.timelockTotalSupply = null
-      }
-      else{
-        _prizePool.timelockTotalSupply = try_timelockTotalSupplyCall.value
-      }
     }
     else{
       log.error("PrizePool {} does not have a token ", [prizePool.toHex()])
@@ -98,7 +89,6 @@ export function loadOrCreatePrizePool(
 
 
     _prizePool.maxExitFeeMantissa = ZERO
-    _prizePool.maxTimelockDuration = ZERO
     _prizePool.liquidityCap = ZERO
 
     _prizePool.currentState = 'Opened'

@@ -11,11 +11,7 @@ export function loadOrCreatePrizePoolAccount(
       prizePoolAccount = new PrizePoolAccount(generateCompositeId(prizePool.toHex(),account))
       prizePoolAccount.prizePool = prizePool.toHex()
       prizePoolAccount.account = account
-      
-      // mock values
-      prizePoolAccount.timelockedBalance = ZERO
-      prizePoolAccount.unlockTimestamp = ZERO
-      
+
       prizePoolAccount.save()
     }
     return prizePoolAccount as PrizePoolAccount
