@@ -8,16 +8,14 @@ import {
   ControlledTokenAdded,
   ReserveFeeCaptured,
   LiquidityCapSet,
-  TimelockDeposited,
   Awarded,
   AwardedExternalERC20,
   AwardedExternalERC721,
-  TimelockedWithdrawal,
-  TimelockedWithdrawalSwept,
   CreditPlanSet,
   PrizeStrategySet,
   OwnershipTransferred,
-} from '../generated/templates/PrizePool_v3/PrizePool_v3'
+  Initialized
+} from '../generated/templates/PrizePool/PrizePool'
 
 import {externalAwardId} from "./helpers/idTemplates"
 
@@ -59,6 +57,9 @@ export function handleCreditPlanSet(event: CreditPlanSet): void {
 }
 
 export function handlePrizeStrategySet(event: PrizeStrategySet): void {
+
+  log.warning("debugps handlePrizeStrategySet for {} as {} ",[event.address.toHexString(), event.params.prizeStrategy.toHexString()])
+
   const _prizePoolAddress = event.address
   const _prizeStrategyAddress = event.params.prizeStrategy
 
@@ -162,61 +163,17 @@ export function handleAwardedExternalERC721(event: AwardedExternalERC721): void 
  
 }
 
-
-export function handleTimelockedWithdrawal(event: TimelockedWithdrawal): void {
-  const _prizePoolAddress = event.address
-  const prizePool = loadOrCreatePrizePool(_prizePoolAddress)
-
-  // load PrizePoolAccount and update unlockedTimestamp and timelockedBalance
-  const prizePoolAccount = loadOrCreatePrizePoolAccount(event.address, event.params.from.toHex())
-  prizePoolAccount.unlockTimestamp = event.params.unlockTimestamp
-
-  const existingTimeLockedBalance = prizePoolAccount.timelockedBalance
-  const newTimelockedBalance = existingTimeLockedBalance.plus(event.params.amount)
-  prizePoolAccount.timelockedBalance = newTimelockedBalance
-  
-  // decrement PrizePool timelocked total balance
-  const existingTimelockedSupply = prizePool.timelockTotalSupply
-  const newTimelockedSupply = existingTimelockedSupply.plus(event.params.amount)
-  prizePool.timelockTotalSupply = newTimelockedSupply
-
-  // save touched entities
-  prizePoolAccount.save()
-  prizePool.save()
-  
-}
-
-export function handleTimelockedWithdrawalSwept(event: TimelockedWithdrawalSwept): void {
-
-  const prizePoolAccount = loadOrCreatePrizePoolAccount(event.address, event.params.from.toHex())
-  prizePoolAccount.timelockedBalance = ZERO
-  prizePoolAccount.unlockTimestamp = ZERO
-  
-  let prizePool = PrizePool.load(event.address.toHex())
-  prizePool.timelockTotalSupply = prizePool.timelockTotalSupply.minus(event.params.amount)
-
-  prizePool.save()
-  prizePoolAccount.save()
-}
-
-// This happens when a player deposits some of their timelocked funds
-// back into the pool
-export function handleTimelockDeposited(event: TimelockDeposited): void {
-  const _prizePoolAddress = event.address
-  const _prizePool = loadOrCreatePrizePool(_prizePoolAddress)
-
-  //decrement PrizePoolAccount.timelockBalance
-  //decrement PrizePool.totalTimelockSupply
-  _prizePool.timelockTotalSupply = _prizePool.timelockTotalSupply.minus(event.params.amount)
-  
-  const prizePoolAccount = loadOrCreatePrizePoolAccount(event.address, event.params.to.toHex())
-  
-  prizePoolAccount.timelockedBalance = prizePoolAccount.timelockedBalance.minus(event.params.amount)
-  
-  prizePoolAccount.save()
-  _prizePool.save()
-}
-
 export function handleDeposited(event: Deposited):void {
   loadOrCreatePrizePoolAccount(event.address, event.params.to.toHex())
+}
+
+// inserted from 3_3_2
+export function handleInitialized(event: Initialized): void {
+
+  log.warning("PrizePool Initialized called for {} ",[event.address.toHexString()])
+
+  const _prizePool = loadOrCreatePrizePool(event.address)
+  _prizePool.reserveRegistry = event.params.reserveRegistry
+  _prizePool.maxExitFeeMantissa = event.params.maxExitFeeMantissa
+  _prizePool.save()
 }

@@ -2,7 +2,7 @@ import { log } from '@graphprotocol/graph-ts'
 
 import {
     ProxyCreated
-} from '../generated/TicketProxyFactory_v3_1_0/TicketProxyFactory_v3_1_0'
+} from '../generated/TicketProxyFactory/TicketProxyFactory'
 
 import {
     ControlledToken as ControlledTokenTemplate

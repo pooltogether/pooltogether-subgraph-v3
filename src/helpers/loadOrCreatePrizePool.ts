@@ -5,8 +5,8 @@ import {
 } from '../../generated/schema'
 
 import {
-  PrizePool_v3 as PrizePoolContract,
-} from '../../generated/templates/PrizePool_v3/PrizePool_v3'
+  PrizePool as PrizePoolContract,
+} from '../../generated/templates/PrizePool/PrizePool'
 
 import {
   ControlledToken as ControlledTokenContract,
@@ -18,9 +18,13 @@ import { ZERO, ONE, ZERO_ADDRESS } from './common'
 export function loadOrCreatePrizePool(
   prizePool: Address
 ): PrizePool {
+
+  log.warning("loadOrCreatePrizePool called for {} ",[prizePool.toHexString()])
+
   let _prizePool = PrizePool.load(prizePool.toHex())
 
   if (!_prizePool) {
+    log.warning("loadOrCreatePrizePool creating a prizePool {} ", [prizePool.toHexString()])
     _prizePool = new PrizePool(prizePool.toHex())
 
     const boundPrizePool = PrizePoolContract.bind(prizePool)
@@ -74,15 +78,6 @@ export function loadOrCreatePrizePool(
       else{
         _prizePool.underlyingCollateralDecimals = BigInt.fromI32(tryDecimalsCall.value)
       }
-  
-      const try_timelockTotalSupplyCall = boundPrizePool.try_timelockTotalSupply()
-      if(try_timelockTotalSupplyCall.reverted){
-        log.warning("try_timelockSupply for {} reverted ", [prizePool.toHexString()])
-        _prizePool.timelockTotalSupply = null
-      }
-      else{
-        _prizePool.timelockTotalSupply = try_timelockTotalSupplyCall.value
-      }
     }
     else{
       log.error("PrizePool {} does not have a token ", [prizePool.toHex()])
@@ -94,7 +89,6 @@ export function loadOrCreatePrizePool(
 
 
     _prizePool.maxExitFeeMantissa = ZERO
-    _prizePool.maxTimelockDuration = ZERO
     _prizePool.liquidityCap = ZERO
 
     _prizePool.currentState = 'Opened'
@@ -106,6 +100,5 @@ export function loadOrCreatePrizePool(
 
     _prizePool.save()
   }
-
   return _prizePool as PrizePool
 }
