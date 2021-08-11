@@ -19,5 +19,9 @@
   "stakePrizePoolProxyFactory": {
     "address": "0x3b694ce9d12F0bF032bF002b3b0473Cb58bbe3F0",
     "startBlock": "11429013"
+  },
+  "singleRandomWinnerProxyFactory":{
+    "address":"0xc79B5D46f010c88f738A00B3bed7757d04dd2a37",
+    "startBlock": "11101039"
   }
 }

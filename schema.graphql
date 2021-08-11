@@ -96,6 +96,49 @@ type YieldSourcePrizePool @entity {
 type PrizeStrategy @entity {
   id: ID!
   multipleWinners: MultipleWinnersPrizeStrategy
+  singleRandomWinner: SingleRandomWinnerPrizeStrategy
+}
+
+# ID: `${singleRandomWinner.address}`   (will be same address as PrizeStrategy)
+type SingleRandomWinnerPrizeStrategy @entity {
+  id: ID!
+
+  owner: Bytes
+
+  tokenListener: Comptroller
+  prizePool: PrizePool
+  rng: Bytes
+  ticket: ControlledToken
+  sponsorship: ControlledToken
+
+  prizePeriodSeconds: BigInt!
+  prizePeriodStartedAt: BigInt!
+  prizePeriodEndAt: BigInt!
+
+  externalErc20Awards: [SingleRandomWinnerExternalErc20Award!]! @derivedFrom(field: "prizeStrategy")
+  externalErc721Awards: [SingleRandomWinnerExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")
+}
+
+# ID: `${prizeStrategy.address}-${token.address}`
+# dynamically generated type, not mapped to a specific contract
+type SingleRandomWinnerExternalErc20Award @entity {
+  id: ID!
+
+  address: Bytes!
+  name: String
+  symbol: String
+  decimals: BigInt
+
+  prizeStrategy: SingleRandomWinnerPrizeStrategy
+}
+
+# ID: `${prizeStrategy.address}-${token.address}`
+# dynamically generated type, not mapped to a specific contract
+type SingleRandomWinnerExternalErc721Award @entity {
+  id: ID!
+  address: Bytes!
+  tokenIds: [BigInt!]
+  prizeStrategy: SingleRandomWinnerPrizeStrategy
 }
 
 

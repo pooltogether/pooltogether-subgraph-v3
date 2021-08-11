@@ -68,6 +68,35 @@ dataSources:
       file: ./src/mappingForCompoundPrizePoolProxyFactory.ts #using existing ProxyCreated event since the ProxyCreated event is the same -- can we join mappingForCompoundPrizePoolFactories together for all versions?
   {{/compoundPrizePoolProxyFactory}}
 
+    {{#singleRandomWinnerProxyFactory}}
+  - name: SingleRandomWinnerProxyFactory
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      address: "{{address}}"
+      abi: SingleRandomWinnerProxyFactory
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - SingleRandomWinnerPrizeStrategy
+      abis:
+        - name: PrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        - name: SingleRandomWinner
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
+        - name: SingleRandomWinnerProxyFactory
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinnerProxyFactory.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
+      eventHandlers:
+        - event: ProxyCreated(address)
+          handler: handleProxyCreated
+      file: ./src/mappingForSingleRandomWinnerProxyFactory.ts
+  {{/singleRandomWinnerProxyFactory}}
+
 
     {{#multipleWinnersProxyFactory}}
   - name: MultipleWinnersProxyFactory
@@ -164,6 +193,55 @@ dataSources:
   {{/ticketProxyFactory}}
 
 templates:
+  - name: SingleRandomWinner
+    kind: ethereum/contract
+    network: {{network}}
+    source:
+      abi: SingleRandomWinner
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mappingForSingleRandomWinner.ts
+      entities:
+        - SingleRandomWinnerPrizeStrategy
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: PrizePool
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/PrizePool.json
+        - name: SingleRandomWinner
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/SingleRandomWinner.json
+        - name: RNGInterface
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/RNGInterface.json
+        - name: Comptroller
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/Comptroller.json
+        - name: ControlledToken
+          file: ./node_modules/@pooltogether/pooltogether-contracts/build/ControlledToken.json
+      eventHandlers:
+        - event: TokenListenerUpdated(indexed address)
+          handler: handleTokenListenerUpdated
+        - event: PrizePoolOpened(indexed address,indexed uint256)
+          handler: handlePrizePoolOpened
+        - event: PrizePoolAwardStarted(indexed address,indexed address,indexed uint32,uint32)
+          handler: handlePrizePoolAwardStarted
+        - event: PrizePoolAwarded(indexed address,uint256)
+          handler: handlePrizePoolAwarded
+        - event: RngServiceUpdated(indexed address)
+          handler: handleRngServiceUpdated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: ExternalErc20AwardAdded(indexed address)
+          handler: handleExternalErc20AwardAdded
+        - event: ExternalErc20AwardRemoved(indexed address)
+          handler: handleExternalErc20AwardRemoved
+        - event: ExternalErc721AwardAdded(indexed address,uint256[])
+          handler: handleExternalErc721AwardAdded
+        - event: ExternalErc721AwardRemoved(indexed address)
+          handler: handleExternalErc721AwardRemoved
+
+
+
   - name: StakePrizePool
     kind: ethereum/contract
     network: {{network}}
