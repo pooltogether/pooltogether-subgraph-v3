@@ -61,35 +61,12 @@ dataSources:
         - CompoundPrizePool
       abis:
         - name: CompoundPrizePoolProxyFactory
-          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/CompoundPrizePoolProxyFactory.json
+          file: ./abis/CompoundPrizePoolProxyFactory.json
       eventHandlers:
         - event: ProxyCreated(address)
           handler: handleProxyCreated
       file: ./src/mappingForCompoundPrizePoolProxyFactory.ts #using existing ProxyCreated event since the ProxyCreated event is the same -- can we join mappingForCompoundPrizePoolFactories together for all versions?
   {{/compoundPrizePoolProxyFactory}}
-
-    {{#yieldSourcePrizePoolProxyFactory}} # doesnt seem to be a way to add to the above
-  - name: YieldSourcePrizePoolProxyFactory
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      address: "{{address}}"
-      abi: YieldSourcePrizePoolProxyFactory
-      startBlock: {{startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - YieldSourcePrizePool
-      abis:
-        - name: YieldSourcePrizePoolProxyFactory
-          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/YieldSourcePrizePoolProxyFactory.json
-      eventHandlers:
-        - event: ProxyCreated(address)
-          handler: handleProxyCreated
-      file: ./src/mappingForYieldSourcePrizePoolProxyFactory.ts #using existing ProxyCreated event
-  {{/yieldSourcePrizePoolProxyFactory}}
 
 
     {{#multipleWinnersProxyFactory}}
@@ -234,30 +211,7 @@ templates:
         - event: CompoundPrizePoolInitialized(indexed address)
           handler: handleCompoundPrizePoolInitialized
 
-  - name: YieldSourcePrizePool
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      abi: YieldSourcePrizePool
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/mappingForYieldSourcePrizePool.ts
-      entities:
-        - YieldSourcePrizePool
-      abis:
-        - name: PrizePool
-          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/PrizePool.json
-        - name: YieldSourcePrizePool
-          file: ./node_modules/@pooltogether/pooltogether-contracts/abis/YieldSourcePrizePool.json
-        - name: ControlledToken
-          file:  ./node_modules/@pooltogether/pooltogether-contracts/abis/ControlledToken.json
-      eventHandlers:
-        - event: YieldSourcePrizePoolInitialized(indexed address)
-          handler: handleYieldSourcePrizePoolInitialized
 
-  
   - name: PrizePool
     kind: ethereum/contract
     network: {{network}}
@@ -274,9 +228,9 @@ templates:
         - name: ERC20
           file: ./abis/ERC20.json
         - name: PrizePool
-          file:  ./node_modules/@pooltogether/pooltogether-contracts/abis/PrizePool.json
+          file:  ./abis/PrizePool_v3_0_1.json
         - name: CompoundPrizePool
-          file:  ./node_modules/@pooltogether/pooltogether-contracts/abis/CompoundPrizePool.json
+          file:  ./abis/CompoundPrizePool_v3_0_1.json
         - name: ControlledToken
           file:  ./node_modules/@pooltogether/pooltogether-contracts/abis/ControlledToken.json
       eventHandlers:
@@ -300,7 +254,7 @@ templates:
           handler: handleOwnershipTransferred
         - event: Deposited(indexed address,indexed address,indexed address,uint256,address)
           handler: handleDeposited
-        - event: Initialized(address,uint256)
+        - event: Initialized(address,address,uint256,uint256)
           handler: handleInitialized
 
   - name: ControlledToken # will one controlled token do all versions?
@@ -374,11 +328,11 @@ templates:
           handler: handlePrizePoolAwardStarted
         - event: SplitExternalErc20AwardsSet(bool)
           handler: handleSplitExternalErc20AwardsSet
-        - event: PrizePeriodSecondsUpdated(uint256)
-          handler: handlePrizePeriodSecondsUpdated
-        - event: PrizeSplitSet(indexed address,uint16,uint8,uint256)
-          handler: handlePrizeSplitSet
-        - event: PrizeSplitRemoved(indexed uint256)
-          handler: handlePrizeSplitRemoved
-        - event: BlocklistSet(indexed address,bool)
-          handler: handleBlockListAddressSet
+        # - event: PrizePeriodSecondsUpdated(uint256)
+        #   handler: handlePrizePeriodSecondsUpdated
+        # - event: PrizeSplitSet(indexed address,uint16,uint8,uint256)
+        #   handler: handlePrizeSplitSet
+        # - event: PrizeSplitRemoved(indexed uint256)
+        #   handler: handlePrizeSplitRemoved
+        # - event: BlocklistSet(indexed address,bool)
+        #   handler: handleBlockListAddressSet

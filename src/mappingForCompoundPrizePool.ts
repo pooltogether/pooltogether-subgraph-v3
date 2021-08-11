@@ -1,3 +1,4 @@
+import { log } from '@graphprotocol/graph-ts'
 import {
   CompoundPrizePoolInitialized,
 } from '../generated/templates/CompoundPrizePool/CompoundPrizePool' // but any should do since its the same event for all
@@ -8,6 +9,9 @@ import { loadOrCreateCompoundPrizePool } from './helpers/loadOrCreateCompoundPri
 // called form the data source template
 
 export function handleCompoundPrizePoolInitialized(event: CompoundPrizePoolInitialized): void {
+
+  log.warning("CompoundPrizePoolInitialized  {}", [event.address.toHexString()])    
+
   const _compoundPrizePool = loadOrCreateCompoundPrizePool(event.address)
   _compoundPrizePool.cToken = event.params.cToken
   _compoundPrizePool.save()

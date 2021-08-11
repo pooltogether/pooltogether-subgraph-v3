@@ -159,8 +159,6 @@ export function handleAwardedExternalERC721(event: AwardedExternalERC721): void 
   // delete ID: `${prizeStrategy.address}-${token.address}`
   const deleteId = externalAwardId(_prizeStrategy.id, event.params.token.toHex())
   store.remove("MultipleWinnersExternalErc721Award", deleteId) // is this a noop if doesnt exist??
-  store.remove("SingleRandomWinnerExternalErc721Award", deleteId )
- 
 }
 
 export function handleDeposited(event: Deposited):void {

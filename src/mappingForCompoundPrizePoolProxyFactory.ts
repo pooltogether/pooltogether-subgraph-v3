@@ -1,4 +1,5 @@
 
+import { log } from '@graphprotocol/graph-ts'
 import {
     ProxyCreated,
   } from '../generated/CompoundPrizePoolProxyFactory/CompoundPrizePoolProxyFactory'
@@ -11,6 +12,8 @@ import {
   export function handleProxyCreated(event: ProxyCreated): void {
     // Start listening for events from the dynamically generated contract
     // PrizePoolV3Template.create(event.params.proxy)
+    log.warning("CompoundProxyFactory created {}", [event.params.proxy.toHexString()])    
+
     PrizePoolTemplate.create(event.params.proxy)
     CompoundPrizePoolTemplate.create(event.params.proxy)
   }

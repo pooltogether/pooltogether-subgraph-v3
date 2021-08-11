@@ -15,13 +15,13 @@ import {
   ExternalErc721AwardRemoved,
   MultipleWinners as MultipleWinnersContract,
   NumberOfWinnersSet,
-  PrizePeriodSecondsUpdated,
+  // PrizePeriodSecondsUpdated,
   PrizePoolAwarded,
   PrizePoolAwardStarted,
-  PrizeSplitRemoved,
-  PrizeSplitSet,
+  // PrizeSplitRemoved,
+  // PrizeSplitSet,
   SplitExternalErc20AwardsSet,
-  BlocklistSet
+  // BlocklistSet
 } from '../generated/templates/MultipleWinners/MultipleWinners'
 
 import {
@@ -55,12 +55,12 @@ export function handleSplitExternalErc20AwardsSet(event: SplitExternalErc20Award
   _prizeStrategy.save()
 }
 
-export function handlePrizePeriodSecondsUpdated(event: PrizePeriodSecondsUpdated): void {
-  let _prizeStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
-  _prizeStrategy.prizePeriodSeconds = event.params.prizePeriodSeconds;
-  _prizeStrategy.save()
-  log.info("debug511 Updated PrizePeriod for {} ", [event.params.prizePeriodSeconds.toHexString()])
-}
+// export function handlePrizePeriodSecondsUpdated(event: PrizePeriodSecondsUpdated): void {
+//   let _prizeStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+//   _prizeStrategy.prizePeriodSeconds = event.params.prizePeriodSeconds;
+//   _prizeStrategy.save()
+//   log.info("debug511 Updated PrizePeriod for {} ", [event.params.prizePeriodSeconds.toHexString()])
+// }
 
 // this is called before the prizepool initializer
 export function handlePeriodicPrizeInitialized(event: Initialized) : void {
@@ -211,36 +211,36 @@ export function handleExternalErc721AwardRemoved(event: ExternalErc721AwardRemov
   store.remove('MultipleWinnersExternalErc721Award', externalAward.id)
 }
 
-export function handlePrizeSplitSet(event: PrizeSplitSet): void {
-  const _prizeStrategyAddress = event.address.toHex()
-  // load or create prize split
-  const prizeSplit = loadOrCreatePrizeSplit(_prizeStrategyAddress, event.params.index.toHexString())
-    prizeSplit.target = event.params.target
-    prizeSplit.percentage = BigInt.fromI32(event.params.percentage)
-    prizeSplit.tokenType = BigInt.fromI32(event.params.token)
-    prizeSplit.save()
-}
+// export function handlePrizeSplitSet(event: PrizeSplitSet): void {
+//   const _prizeStrategyAddress = event.address.toHex()
+//   // load or create prize split
+//   const prizeSplit = loadOrCreatePrizeSplit(_prizeStrategyAddress, event.params.index.toHexString())
+//     prizeSplit.target = event.params.target
+//     prizeSplit.percentage = BigInt.fromI32(event.params.percentage)
+//     prizeSplit.tokenType = BigInt.fromI32(event.params.token)
+//     prizeSplit.save()
+// }
 
-export function handlePrizeSplitRemoved(event: PrizeSplitRemoved): void {
-  const _prizeStrategyAddress = event.address.toHex()
-  const prizeSplit = loadOrCreatePrizeSplit(_prizeStrategyAddress, event.params.target.toHexString())
-  store.remove('PrizeSplit', prizeSplit.id)
-}
+// export function handlePrizeSplitRemoved(event: PrizeSplitRemoved): void {
+//   const _prizeStrategyAddress = event.address.toHex()
+//   const prizeSplit = loadOrCreatePrizeSplit(_prizeStrategyAddress, event.params.target.toHexString())
+//   store.remove('PrizeSplit', prizeSplit.id)
+// }
 
-export function handleBlockListAddressSet(event: BlocklistSet) : void {
-  const _perodicPrizeStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHexString())
-  let existingBlockListedAddresses = _perodicPrizeStrategy.blockListedAddresses
-  const userAddress = event.params.user
-  if(!event.params.blocklisted){ // removed from list
-    const index = existingBlockListedAddresses.indexOf(userAddress)
-    if(index > 1){
-      _perodicPrizeStrategy.blockListedAddresses = existingBlockListedAddresses.splice(index,1) //remove the element
-    }
-  } else{
-    let result = existingBlockListedAddresses
-    result.push(userAddress)
-    _perodicPrizeStrategy.blockListedAddresses = result
-  }
+// export function handleBlockListAddressSet(event: BlocklistSet) : void {
+//   const _perodicPrizeStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHexString())
+//   let existingBlockListedAddresses = _perodicPrizeStrategy.blockListedAddresses
+//   const userAddress = event.params.user
+//   if(!event.params.blocklisted){ // removed from list
+//     const index = existingBlockListedAddresses.indexOf(userAddress)
+//     if(index > 1){
+//       _perodicPrizeStrategy.blockListedAddresses = existingBlockListedAddresses.splice(index,1) //remove the element
+//     }
+//   } else{
+//     let result = existingBlockListedAddresses
+//     result.push(userAddress)
+//     _perodicPrizeStrategy.blockListedAddresses = result
+//   }
 
-  _perodicPrizeStrategy.save()
-}
+//   _perodicPrizeStrategy.save()
+// }

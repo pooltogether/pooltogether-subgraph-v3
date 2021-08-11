@@ -18,7 +18,7 @@
     "gen:polygon": "graph codegen subgraph.polygon.yaml",
     "gen:bsc": "graph codegen subgraph.bsc.yaml",
     "gen:local": "graph codegen subgraph.local.yaml",
-    "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-v3_4_3 subgraph.mainnet.yaml",
+    "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/v3_1_0 subgraph.mainnet.yaml",
     "deploy:mainnet-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-staging-v3_4_3 subgraph.mainnet.yaml",
     "deploy:rinkeby": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-v3_4_3 subgraph.rinkeby.yaml",
     "deploy:rinkeby-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3_3_8 subgraph.rinkeby.yaml",
@@ -45,9 +45,9 @@
     "tag-release": "PACKAGE_VERSION=$(./scripts/package-version.sh) && git tag -ae v$PACKAGE_VERSION && git push --tags"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.21.1",
+    "@graphprotocol/graph-cli": "^0.19",
     "@graphprotocol/graph-ts": "^0.20.1",
-    "@pooltogether/pooltogether-contracts": "3.4.1-alpha.6",
+    "@pooltogether/pooltogether-contracts": "3.1.0",
     "mustache": "^4.0.1"
   }
 }

@@ -1,27 +1,23 @@
 {
   "network": "mainnet",
   "compoundPrizePoolProxyFactory": {
-    "address": "0xFb92015f58B239296c9F13003b75D3B7CFB1111e",
-    "startBlock": "12841066"
+    "address": "0x17CfE08818E8260FAe3a19761668EBc27B24d72A",
+    "startBlock": "11101023"
   },
   "controlledTokenProxyFactory": {
-    "address": "0x97CBd3708CC001a8F7D1c4bC89936207F1FC70C7",
-    "startBlock": "12841069"
+    "address": "0xfB932b0BcFA5208D536600ab23C13Ac55CD69Ba1",
+    "startBlock": "11429010"
   },
   "multipleWinnersProxyFactory": {
-    "address": "0xb789B73ebeA500e797C068C4a3D7B1b490B58475",
-    "startBlock": "12841075"
+    "address": "0x734E677AC3699f63f47c2bAE7a8F3c16aFf5aE70",
+    "startBlock": "11429015"
   },
   "ticketProxyFactory": {
-    "address": "0x67581cC48320d7Ab4EbA57e26D05d665a0Ff31DB",
-    "startBlock": "12841070"
+    "address": "0xa7d0d3C4f96BB896e0878ef4b83e5cA79700aCB9",
+    "startBlock": "11429012"
   },
   "stakePrizePoolProxyFactory": {
-    "address": "0x166F6240a5560a34352b054468Deb85042c85142",
-    "startBlock": "12841072"
-  },
-  "yieldSourcePrizePoolProxyFactory": {
-    "address": "0x0835c8C4Ab282B5dBF06d59E1489eF17F1c40D96",
-    "startBlock": "12841067"
+    "address": "0x3b694ce9d12F0bF032bF002b3b0473Cb58bbe3F0",
+    "startBlock": "11429013"
   }
 }
