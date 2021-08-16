@@ -975,6 +975,26 @@ export class Prize extends Entity {
     }
   }
 
+  get numberOfExternalAwardedErc20Winners(): BigInt | null {
+    let value = this.get("numberOfExternalAwardedErc20Winners");
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set numberOfExternalAwardedErc20Winners(value: BigInt | null) {
+    if (value === null) {
+      this.unset("numberOfExternalAwardedErc20Winners");
+    } else {
+      this.set(
+        "numberOfExternalAwardedErc20Winners",
+        Value.fromBigInt(value as BigInt)
+      );
+    }
+  }
+
   get totalTicketSupply(): BigInt | null {
     let value = this.get("totalTicketSupply");
     if (value === null || value.kind == ValueKind.NULL) {
@@ -2736,6 +2756,15 @@ export class MultipleWinnersPrizeStrategy extends Entity {
 
   set prizePeriodEndAt(value: BigInt) {
     this.set("prizePeriodEndAt", Value.fromBigInt(value));
+  }
+
+  get splitExternalERC20Awards(): boolean {
+    let value = this.get("splitExternalERC20Awards");
+    return value.toBoolean();
+  }
+
+  set splitExternalERC20Awards(value: boolean) {
+    this.set("splitExternalERC20Awards", Value.fromBoolean(value));
   }
 
   get externalErc20Awards(): Array<string> {

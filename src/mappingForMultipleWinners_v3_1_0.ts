@@ -15,6 +15,7 @@ import {
   ExternalErc20AwardRemoved,
   ExternalErc721AwardAdded,
   ExternalErc721AwardRemoved,
+  SplitExternalErc20AwardsSet,
   MultipleWinners as MultipleWinnersContract
 } from '../generated/templates/MultipleWinners/MultipleWinners'
 
@@ -27,6 +28,7 @@ import {Initialized} from "../generated/templates/MultipleWinners/MultipleWinner
 import { ONE } from "./helpers/common"
 import { loadOrCreatePrize } from "./helpers/loadOrCreatePrize"
 import { loadOrCreateControlledToken } from "./helpers/loadOrCreateControlledToken"
+import { loadOrCreatePrizePool } from "./helpers/loadOrCreatePrizePool"
 
 
 
@@ -54,14 +56,17 @@ export function handlePeriodicPrizeInitialized(event: Initialized) : void {
       log.error("multiple winners does not exist for {} ",[event.address.toHexString()])
     }
 
-    const _checkPrizePool = PrizePool.load(prizePool.toHex())
-    if(!_checkPrizePool){
-      log.warning("checkprizepool setting mw prizePool to null!",[])
-      multipleWinners.prizePool = null
-    }
-    else{
-      multipleWinners.prizePool = _checkPrizePool.id
-    }
+    // const _checkPrizePool = PrizePool.load(prizePool.toHex())
+    // if(!_checkPrizePool){
+    //   log.warning("checkprizepool setting mw prizePool to null!",[])
+    //   multipleWinners.prizePool = null
+    // }
+    // else{
+    //   multipleWinners.prizePool = _checkPrizePool.id
+    // }
+
+    const _prizePool = loadOrCreatePrizePool(prizePool)
+    multipleWinners.prizePool = prizePool.toHexString()
 
     
     multipleWinners.prizePeriodStartedAt = startTime
@@ -157,6 +162,12 @@ export function handlePrizePoolAwardStarted(event: PrizePoolAwardStarted): void 
   _prize.lockBlock = event.params.rngLockBlock
   _prize.rngRequestId = event.params.rngRequestId
   _prize.save()
+}
+
+export function handleSplitExternalErc20AwardsSet(event: SplitExternalErc20AwardsSet): void {
+    let _prizeStrategy = MultipleWinnersPrizeStrategy.load(event.address.toHex())
+    _prizeStrategy.splitExternalERC20Awards = event.params.splitExternalErc20Awards;
+    _prizeStrategy.save()
 }
 
 

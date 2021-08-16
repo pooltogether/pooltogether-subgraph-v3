@@ -28,15 +28,17 @@ export function handleTransfer(event: Transfer): void {
     
     if(toBalance == null) {// create case 
       toBalance = new ControlledTokenBalance(generateCompositeId (event.params.to.toHexString(), event.address.toHexString()))
-      controlledToken.numberOfHolders = controlledToken.numberOfHolders.plus(ONE)  // if transfer is to NEW address then increment number of players
-
-      toBalance.balance = event.params.value
+      toBalance.balance = ZERO
       toBalance.controlledToken = controlledToken.id // or event.address
       toBalance.account = loadOrCreateAccount(event.params.to).id
     }
-    else{
-      toBalance.balance = toBalance.balance.plus(event.params.value)
+
+    // if a balance is going from zero to non-zero
+    if (toBalance.balance.equals(ZERO) && event.params.value.gt(ZERO)) {
+      controlledToken.numberOfHolders = controlledToken.numberOfHolders.plus(ONE)
     }
+
+    toBalance.balance = toBalance.balance.plus(event.params.value)
     toBalance.save()
   }
 
@@ -44,17 +46,28 @@ export function handleTransfer(event: Transfer): void {
   if (isMinting) {
     controlledToken.totalSupply = controlledToken.totalSupply.plus(event.params.value)
   } 
-  else{
-    const fromBalance = ControlledTokenBalance.load(generateCompositeId (event.params.from.toHexString(), event.address.toHexString())) // must always exist
-    fromBalance.balance = fromBalance.balance.minus(event.params.value)
+  else {
+    let fromBalance = ControlledTokenBalance.load(generateCompositeId (event.params.from.toHexString(), event.address.toHexString())) // must always exist
+
+    if(fromBalance == null) {// create case 
+      fromBalance = new ControlledTokenBalance(generateCompositeId (event.params.from.toHexString(), event.address.toHexString()))
+      fromBalance.balance = ZERO
+      fromBalance.controlledToken = controlledToken.id // or event.address
+      fromBalance.account = loadOrCreateAccount(event.params.from).id
+    }
+
+    if (fromBalance.balance.gt(event.params.value)) {
+      fromBalance.balance = fromBalance.balance.minus(event.params.value)
+    } else {
+      fromBalance.balance = ZERO
+    }
   
+    fromBalance.save()
+
     // if the balance of the sending account is zero then remove it
-    if(fromBalance.balance.equals(ZERO)){
+    if(fromBalance.balance.equals(ZERO)) {
       controlledToken.numberOfHolders = controlledToken.numberOfHolders.minus(ONE) // if account balance depleted decrement player count
       store.remove("ControlledTokenBalance", fromBalance.id)
-    }
-    else{
-      fromBalance.save()
     }
   }
 

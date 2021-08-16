@@ -19,7 +19,7 @@
     "gen:rinkeby": "graph codegen subgraph.rinkeby.yaml",
     "gen:local": "graph codegen subgraph.local.yaml",
 
-    "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-v3_1_0 subgraph.mainnet.yaml",
+    "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/v3_1_0 subgraph.mainnet.yaml",
     "deploy:mainnet-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-staging-v3_1_0 subgraph.mainnet.yaml",
 
     "deploy:rinkeby": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-v3_1_0 subgraph.rinkeby.yaml",
@@ -31,6 +31,7 @@
     "all-rinkeby-stg" : "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby-stg",
     "all-rinkeby" : "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby",
     "all-mainnet-stg" : "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet-stg",
+    "all-mainnet" : "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet",
     
     "codegen": "graph codegen",
     "build": "graph build",

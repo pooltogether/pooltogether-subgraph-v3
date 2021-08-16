@@ -125,6 +125,7 @@ type Prize @entity {
   randomNumber: BigInt
 
   numberOfSubWinners: BigInt
+  numberOfExternalAwardedErc20Winners: BigInt
 
   totalTicketSupply: BigInt # cache of num tickets sold when this prize was awarded
 
@@ -367,6 +368,8 @@ type MultipleWinnersPrizeStrategy @entity {
   prizePeriodSeconds: BigInt! 
   prizePeriodStartedAt: BigInt! 
   prizePeriodEndAt: BigInt! 
+
+  splitExternalERC20Awards: Boolean
   
   externalErc20Awards: [MultipleWinnersExternalErc20Award!]! @derivedFrom(field: "prizeStrategy") 
   externalErc721Awards: [MultipleWinnersExternalErc721Award!]! @derivedFrom(field: "prizeStrategy")
