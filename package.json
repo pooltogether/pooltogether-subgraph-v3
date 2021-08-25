@@ -1,41 +1,63 @@
 {
   "name": "pooltogether",
   "license": "MIT",
-  "version": "3.4.3",
+  "version": "3.4.5",
   "scripts": {
     "reinstall": "rm -rf node_modules/ && yarn",
     "clean": "rm -rf build/ generated/",
+    
     "prepare:local": "mustache networks/local.json subgraph.template.yaml subgraph.local.yaml",
     "create:local": "graph create --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
     "remove:local": "graph remove --node http://127.0.0.1:8020 pooltogether/ptv3-subgraph subgraph.local.yaml",
     "create:rinkeby-stg": "graph create --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3 subgraph.local.yaml",
+    
     "prepare:mainnet": "mustache networks/mainnet.json subgraph.template.yaml subgraph.mainnet.yaml",
     "prepare:rinkeby": "mustache networks/rinkeby.json subgraph.template.yaml subgraph.rinkeby.yaml",
     "prepare:polygon": "mustache networks/polygon.json subgraph.template.yaml subgraph.polygon.yaml",
+    "prepare:celo": "mustache networks/celo.json subgraph.template.yaml subgraph.celo.yaml",
     "prepare:bsc": "mustache networks/bsc.json subgraph.template.yaml subgraph.bsc.yaml",
+    
     "gen:mainnet": "graph codegen subgraph.mainnet.yaml",
+    "gen:celo": "graph codegen subgraph.celo.yaml",
     "gen:rinkeby": "graph codegen subgraph.rinkeby.yaml",
     "gen:polygon": "graph codegen subgraph.polygon.yaml",
     "gen:bsc": "graph codegen subgraph.bsc.yaml",
     "gen:local": "graph codegen subgraph.local.yaml",
+    
+    "deploy:celo": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/celo-v3_4_5 subgraph.celo.yaml",
+    "deploy:celo-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/celo-staging-v3_4_5 subgraph.celo.yaml",
+
     "deploy:mainnet": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-v3_4_3 subgraph.mainnet.yaml",
     "deploy:mainnet-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/pooltogether-staging-v3_4_3 subgraph.mainnet.yaml",
+    
     "deploy:rinkeby": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-v3_4_3 subgraph.rinkeby.yaml",
     "deploy:rinkeby-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/rinkeby-staging-v3_3_8 subgraph.rinkeby.yaml",
+    
     "deploy:polygon": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/polygon-v3_4_3 subgraph.polygon.yaml",
     "deploy:polygon-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/polygon-staging-v3_4_3 subgraph.polygon.yaml",
+    
     "deploy:bsc": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/bsc-v3_4_3 subgraph.bsc.yaml",
     "deploy:bsc-stg": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ pooltogether/bsc-staging-v3_4_3 subgraph.bsc.yaml",
+    
     "deploy:local": "graph deploy --node http://127.0.0.1:8020 --ipfs http://localhost:5001 pooltogether/ptv3-subgraph subgraph.local.yaml",
+    
     "all-local": "yarn clean && yarn prepare:local && yarn gen:local && yarn deploy:local",
-    "all-rinkeby-stg": "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby-stg",
+    
     "all-rinkeby": "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby",
+    "all-rinkeby-stg": "yarn clean && yarn prepare:rinkeby && yarn gen:rinkeby && yarn deploy:rinkeby-stg",
+
     "all-polygon": "yarn clean && yarn prepare:polygon && yarn gen:polygon && yarn deploy:polygon",
-    "all-bsc": "yarn clean && yarn prepare:bsc && yarn gen:bsc && yarn deploy:bsc",
+    "all-polygon-stg": "yarn clean && yarn prepare:polygon && yarn gen:polygon && yarn deploy:polygon-stg",
+    
     "all-mainnet": "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet",
     "all-mainnet-stg": "yarn clean && yarn prepare:mainnet && yarn gen:mainnet && yarn deploy:mainnet-stg",
-    "all-polygon-stg": "yarn clean && yarn prepare:polygon && yarn gen:polygon && yarn deploy:polygon-stg",
+        
+    "all-bsc": "yarn clean && yarn prepare:bsc && yarn gen:bsc && yarn deploy:bsc",
     "all-bsc-stg": "yarn clean && yarn prepare:bsc && yarn gen:bsc && yarn deploy:bsc-stg",
+    
+    "all-celo": "yarn clean && yarn prepare:celo && yarn gen:celo && yarn deploy:celo",
+    "all-celo-stg": "yarn clean && yarn prepare:celo && yarn gen:celo && yarn deploy:celo-stg",
+    
     "codegen": "graph codegen",
     "build:mainnet": "graph build subgraph.mainnet.yaml",
     "build:rinkeby": "graph build subgraph.rinkeby.yaml",
@@ -45,7 +67,7 @@
     "tag-release": "PACKAGE_VERSION=$(./scripts/package-version.sh) && git tag -ae v$PACKAGE_VERSION && git push --tags"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.21.1",
+    "@graphprotocol/graph-cli": "^0.19.0",
     "@graphprotocol/graph-ts": "^0.20.1",
     "@pooltogether/pooltogether-contracts": "3.4.1-alpha.6",
     "mustache": "^4.0.1"

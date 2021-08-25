@@ -9,6 +9,7 @@ subgraph.rinkeby.yaml
 subgraph.mainnet.yaml
 subgraph.polygon.yaml
 subgraph.bsc.yaml
+subgraph.celo.yaml
 networks/local.json
 generated
 generated/schema.ts
