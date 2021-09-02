@@ -1,0 +1,27 @@
+{
+  "network": "celo",
+  "compoundPrizePoolProxyFactory": {
+    "address": "0x03e75AeEB92adD6f3b168412671360eB94f0dBf7",
+    "startBlock": "8453649"
+  },
+  "controlledTokenProxyFactory": {
+    "address": "0xa6358441F68eD4707E1c4366a0D2E2233bB4841D",
+    "startBlock": "8453653"
+  },
+  "multipleWinnersProxyFactory": {
+    "address": "0x6dc7cA9e2c19Da475B39cce7437994c1725d85C9",
+    "startBlock": "8453656"
+  },
+  "ticketProxyFactory": {
+    "address": "0xCB876f60399897db24058b2d58D0B9f713175eeF",
+    "startBlock": "8453654"
+  },
+  "stakePrizePoolProxyFactory": {
+    "address": "0xef3d36A282e74b5bcba8a45262687DDb31495Cd2",
+    "startBlock": "8453655"
+  },
+  "yieldSourcePrizePoolProxyFactory": {
+    "address": "0xc79B5D46f010c88f738A00B3bed7757d04dd2a37",
+    "startBlock": "8453651"
+  }
+}
