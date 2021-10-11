@@ -857,9 +857,9 @@ asn1@~0.2.3:
   dependencies:
     safer-buffer "~2.1.0"
 
-"assemblyscript@git+https://github.com/AssemblyScript/assemblyscript.git#36040d5b5312f19a025782b5e36663823494c2f3":
+"assemblyscript@git+https://github.com/AssemblyScript/assemblyscript.git#v0.6":
   version "0.6.0"
-  resolved "git+https://github.com/AssemblyScript/assemblyscript.git#36040d5b5312f19a025782b5e36663823494c2f3"
+  resolved "git+https://github.com/AssemblyScript/assemblyscript.git#3ed76a97f05335504166fce1653da75f4face28f"
   dependencies:
     "@protobufjs/utf8" "^1.1.0"
     binaryen "77.0.0-nightly.20190407"
@@ -868,9 +868,10 @@ asn1@~0.2.3:
     opencollective-postinstall "^2.0.0"
     source-map-support "^0.5.11"
 
-"assemblyscript@git+https://github.com/AssemblyScript/assemblyscript.git#v0.6":
+"assemblyscript@https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3":
   version "0.6.0"
-  resolved "git+https://github.com/AssemblyScript/assemblyscript.git#3ed76a97f05335504166fce1653da75f4face28f"
+  uid "36040d5b5312f19a025782b5e36663823494c2f3"
+  resolved "https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3"
   dependencies:
     "@protobufjs/utf8" "^1.1.0"
     binaryen "77.0.0-nightly.20190407"
@@ -5139,9 +5140,9 @@ keccak@3.0.1, keccak@^3.0.0:
     node-gyp-build "^4.2.0"
 
 keypair@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/keypair/-/keypair-1.0.1.tgz#7603719270afb6564ed38a22087a06fc9aa4ea1b"
-  integrity sha1-dgNxknCvtlZO04oiCHoG/Jqk6hs=
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/keypair/-/keypair-1.0.4.tgz#a749a45f388593f3950f18b3757d32a93bd8ce83"
+  integrity sha512-zwhgOhhniaL7oxMgUMKKw5219PWWABMO+dgMnzJOQ2/5L3XJtTJGhW2PEXlxXj9zaccdReZJZ83+4NPhVfNVDg==
 
 keytar@^5.0.0:
   version "5.6.0"
