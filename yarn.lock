@@ -857,9 +857,9 @@ asn1@~0.2.3:
   dependencies:
     safer-buffer "~2.1.0"
 
-"assemblyscript@git+https://github.com/AssemblyScript/assemblyscript.git#36040d5b5312f19a025782b5e36663823494c2f3":
+"assemblyscript@git+https://github.com/AssemblyScript/assemblyscript.git#v0.6":
   version "0.6.0"
-  resolved "git+https://github.com/AssemblyScript/assemblyscript.git#36040d5b5312f19a025782b5e36663823494c2f3"
+  resolved "git+https://github.com/AssemblyScript/assemblyscript.git#3ed76a97f05335504166fce1653da75f4face28f"
   dependencies:
     "@protobufjs/utf8" "^1.1.0"
     binaryen "77.0.0-nightly.20190407"
@@ -868,9 +868,10 @@ asn1@~0.2.3:
     opencollective-postinstall "^2.0.0"
     source-map-support "^0.5.11"
 
-"assemblyscript@git+https://github.com/AssemblyScript/assemblyscript.git#v0.6":
+"assemblyscript@https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3":
   version "0.6.0"
-  resolved "git+https://github.com/AssemblyScript/assemblyscript.git#3ed76a97f05335504166fce1653da75f4face28f"
+  uid "36040d5b5312f19a025782b5e36663823494c2f3"
+  resolved "https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3"
   dependencies:
     "@protobufjs/utf8" "^1.1.0"
     binaryen "77.0.0-nightly.20190407"
@@ -2254,9 +2255,9 @@ cookie@^0.4.1:
   integrity sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==
 
 cookiejar@^2.1.1:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.2.tgz#dd8a235530752f988f9a0844f3fc589e3111125c"
-  integrity sha512-Mw+adcfzPxcPeI+0WlvRrr/3lGVO0bD75SxX6811cxSh1Wbxx7xZBGK1eVtDf6si8rg2lhnUjsVLMFMfbRIuwA==
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.4.tgz#ee669c1fea2cf42dc31585469d193fef0d65771b"
+  integrity sha512-LDx6oHrK+PhzLKJU9j5S7/Y3jM/mUHvD/DeI1WQmJn652iPC5Y4TBzC9l+5OMOXlyTTA+SmVUPm0HQUwpD5Jqw==
 
 copy-descriptor@^0.1.0:
   version "0.1.1"
